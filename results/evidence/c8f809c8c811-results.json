@@ -1,0 +1,709 @@
+{
+  "collected_at_utc": "2026-10-22T18:25:39.194281+00:00",
+  "projects": [
+    {
+      "project": "soc",
+      "source_files": [
+        {
+          "path": "vendor/picorv32/picorv32.v",
+          "sha256": "fd142889e8178ef67f1cff17cb2d18b3adae56fcae2badf7cbcc4c4f5ac7960e",
+          "lines": 3049
+        },
+        {
+          "path": "projects/system-bench/soc/soc_top.v",
+          "sha256": "bcb80001e90a9cd69b9e683172ced025e8ba38ebddd82249496ac42c7e070ae0",
+          "lines": 54
+        }
+      ],
+      "sim": {
+        "project": "soc",
+        "stage": "sim",
+        "pass": true,
+        "exit_code": 0,
+        "wall_seconds": 275.57,
+        "artifact_directory": "${WORKSPACE}\\artifacts\\2026-10-22T18-05-54-612Z-xsim-2e208788",
+        "receipt_directory": "${WORKSPACE}\\artifacts\\system-soc-sim-20261022T180553Z",
+        "other_model_api_calls": 0
+      },
+      "impl": {
+        "project": "soc",
+        "stage": "impl",
+        "pass": true,
+        "exit_code": 0,
+        "wall_seconds": 77.23,
+        "artifact_directory": "${WORKSPACE}\\artifacts\\2026-10-22T17-59-58-182Z-vivado-477913d5",
+        "receipt_directory": "${WORKSPACE}\\artifacts\\system-soc-impl-20261022T175957Z",
+        "other_model_api_calls": 0
+      },
+      "simulation_summary": [
+        "SYSTEM_BENCH_PASS project=soc scenarios=8 algorithm_checks=40 irq_checks=8 cycles=23129899 bus_transactions=2603603"
+      ],
+      "observed_counts": {
+        "scenarios": 8,
+        "algorithm_checks": 40,
+        "irq_checks": 8,
+        "cycles": 23129899,
+        "bus_transactions": 2603603
+      },
+      "elaborated_module_types": [
+        "picorv32",
+        "picorv32_pcpi_div",
+        "picorv32_pcpi_mul",
+        "soc_top"
+      ],
+      "active_module_source_lines": 2373,
+      "active_module_nonblank_code_lines": 2141,
+      "pass_marker_count": 1,
+      "simulation_verified": true,
+      "physical": {
+        "stage": "routed",
+        "top": "soc_top",
+        "version": "2020.2",
+        "part": "xc7a100tfgg676-2",
+        "clock_period_ns": 10,
+        "io_delay_ns": 2,
+        "setup_slack_ns": 2.404,
+        "hold_slack_ns": 0.12,
+        "flip_flops": 1265,
+        "lut_cells": 2157,
+        "dsp48": 0,
+        "ramb18": 0,
+        "ramb36": 16,
+        "implementation_mode": "out_of_context",
+        "black_boxes": 0,
+        "board_io_validated": false,
+        "hardware_tested": false,
+        "model_api_calls": 0
+      },
+      "physical_utilization": {
+        "slice_luts": 1884,
+        "slice_registers": 1265,
+        "ramb36": 16,
+        "ramb18": 0,
+        "dsp48": 0
+      },
+      "timing_checks": {
+        "no_clock": 0,
+        "constant_clock": 0,
+        "pulse_width_clock": 0,
+        "unconstrained_internal_endpoints": 0,
+        "no_input_delay": 0,
+        "no_output_delay": 0,
+        "multiple_clock": 0,
+        "generated_clocks": 0,
+        "loops": 0,
+        "partial_input_delay": 0,
+        "partial_output_delay": 0,
+        "latch_loops": 0
+      },
+      "routing_summary": {
+        "routable_nets": 2710,
+        "fully_routed_nets": 2710,
+        "routing_errors": 0
+      },
+      "auxiliary_results": {
+        "latest-negative.json": {
+          "negative_control": "flip one bit of expected CRC32",
+          "correctly_rejected": true,
+          "artifact_directory": "${WORKSPACE}\\artifacts\\2026-10-22T18-07-07-049Z-xsim-29460ff4",
+          "wall_seconds": 24.99,
+          "tool_exit_code": 0,
+          "positive_scenarios": 0
+        }
+      },
+      "local_file_hashes": {
+        "projects/system-bench/soc/build_firmware.py": "05914937fdffa741d09d0fcde6a845c13238565bc4e1aa4a22ecc0e67cb32d4e",
+        "projects/system-bench/soc/expected.hex": "ad63212701ef0a164ec74d8184f8c6932630d2c9a266f534ea4126f7dea25b16",
+        "projects/system-bench/soc/firmware-build.json": "ed96caf53ab5cf2632dfbd9d014dc121f90357d9f97aa003799378b812f3be9a",
+        "projects/system-bench/soc/firmware.hex": "7bc582865136311a6227136a01ca2b92180723f242d3f2ef19dc9dc51e7f4677",
+        "projects/system-bench/soc/impl.json": "beb850bbfc2cfd6f0a85434113a004e30d744d15310f7be6fc8ecd2c7709fea0",
+        "projects/system-bench/soc/implement.tcl": "5d92b2f8789b84b482ee1f9c990ae30b852fcfaa83227a5d5b5fc313be496f3f",
+        "projects/system-bench/soc/latest-impl.json": "f3c4395d760f646abf679a93813338a782b008a91eedf419283d4e067b3d507a",
+        "projects/system-bench/soc/latest-negative.json": "d40c907398b1dc1c2168f170005138534eea9dd2aced16304715a07f7f88b432",
+        "projects/system-bench/soc/latest-sim.json": "dbf8d9a7dba5f10a0ade3729518633d9271f47f4a1df5ad2007341b4e5d5a076",
+        "projects/system-bench/soc/link.ld": "52683fb91f1f850f1d4d4a65030d02ddf11a4dfd4a062cc53ebe23f60b243503",
+        "projects/system-bench/soc/negative.json": "87cd86f46e6327679fed8f38e30056151c9026ef0f73232737c83a587cd1835d",
+        "projects/system-bench/soc/negative_control.py": "094ddfc5df43c8e53e20e7bccd06918a06f226dc96f6e547dee8afa2174f5711",
+        "projects/system-bench/soc/sim.json": "c2f19cd17cc78f4a589556d25906ef11e7755964d6f67759ef94b4c0144cb117",
+        "projects/system-bench/soc/soc_top.v": "bcb80001e90a9cd69b9e683172ced025e8ba38ebddd82249496ac42c7e070ae0",
+        "projects/system-bench/soc/sources.json": "85aaf15fdf2705704f1312e14249b51dd789a445ac657b512ec3b8a2271d3c00",
+        "projects/system-bench/soc/start.S": "509f16ece3bdaca261324283878c0cdbb426b220f62e8ef3f6ab8e56b1828fd6",
+        "projects/system-bench/soc/tb_soc.sv": "02a7859bdfc370a3e9d1fbc16035d38853aba13392ca2fc301ddf3000578e8a9",
+        "projects/system-bench/soc/tb_soc_bad_reference.sv": "e5c6fa0d7aa74740164ad3c8f2f4eb490ebb05a5bb07d0b4fb77270a2928523f",
+        "projects/system-bench/soc/workload.c": "60efea844eae37d4661c58a169d46be08016b85e4b501b5febab4a93d358aeaf"
+      }
+    },
+    {
+      "project": "dma",
+      "source_files": [
+        {
+          "path": "vendor/verilog-axi/rtl/axi_dma.v",
+          "sha256": "95fce64412c272d949dca41e7d677fb9ae72f15bd1137a65c39eea2f5f50d57f",
+          "lines": 361
+        },
+        {
+          "path": "vendor/verilog-axi/rtl/axi_dma_rd.v",
+          "sha256": "9c733ba0cc5e48f15a91ddf4b5bd569954bbed3c9745b1973920921296c7b6f4",
+          "lines": 692
+        },
+        {
+          "path": "vendor/verilog-axi/rtl/axi_dma_wr.v",
+          "sha256": "161ecaf8ee934a55114b676f52b45bcedad9e5c488f9f3874175ef50457a6e4d",
+          "lines": 942
+        },
+        {
+          "path": "vendor/verilog-ethernet/lib/axis/rtl/axis_fifo.v",
+          "sha256": "8ee436631ece272f478a4396c3819f62e5cd4f9a492b80502562aeb73c9e6294",
+          "lines": 565
+        },
+        {
+          "path": "projects/system-bench/dma/dma_top.v",
+          "sha256": "d7814e0ceb4ac048765b98ed4e66172319ecf85b109afb51ac8d0794cd74aa14",
+          "lines": 172
+        }
+      ],
+      "sim": {
+        "project": "dma",
+        "stage": "sim",
+        "pass": true,
+        "exit_code": 0,
+        "wall_seconds": 67.95,
+        "artifact_directory": "${WORKSPACE}\\artifacts\\2026-10-22T18-13-53-913Z-xsim-e962f1a8",
+        "receipt_directory": "${WORKSPACE}\\artifacts\\system-dma-sim-20261022T181351Z",
+        "other_model_api_calls": 0
+      },
+      "impl": {
+        "project": "dma",
+        "stage": "impl",
+        "pass": true,
+        "exit_code": 0,
+        "wall_seconds": 100.41,
+        "artifact_directory": "${WORKSPACE}\\artifacts\\2026-10-22T18-08-42-733Z-vivado-9d40e947",
+        "receipt_directory": "${WORKSPACE}\\artifacts\\system-dma-impl-20261022T180841Z",
+        "other_model_api_calls": 0
+      },
+      "simulation_summary": [
+        "SYSTEM_BENCH_PASS project=dma scenarios=717 seeds=4 reset_aborts=12 byte_checks=3064242 read_bursts=48608 write_bursts=48512 read_beats=767824 write_beats=766631 protocol_checks=10568464 ar_stalls=5851220 aw_stalls=921936 w_stalls=3794826 r_stalls=28 axis_stalls=454 cycles=5993220"
+      ],
+      "observed_counts": {
+        "scenarios": 717,
+        "seeds": 4,
+        "reset_aborts": 12,
+        "byte_checks": 3064242,
+        "read_bursts": 48608,
+        "write_bursts": 48512,
+        "read_beats": 767824,
+        "write_beats": 766631,
+        "protocol_checks": 10568464,
+        "ar_stalls": 5851220,
+        "aw_stalls": 921936,
+        "w_stalls": 3794826,
+        "r_stalls": 28,
+        "axis_stalls": 454,
+        "cycles": 5993220
+      },
+      "elaborated_module_types": [
+        "axi_dma",
+        "axi_dma_rd",
+        "axi_dma_wr",
+        "axis_fifo",
+        "dma_top"
+      ],
+      "active_module_source_lines": 2591,
+      "active_module_nonblank_code_lines": 1995,
+      "pass_marker_count": 1,
+      "simulation_verified": true,
+      "physical": {
+        "stage": "routed",
+        "top": "dma_top",
+        "version": "2020.2",
+        "part": "xc7a100tfgg676-2",
+        "clock_period_ns": 10,
+        "io_delay_ns": 2,
+        "setup_slack_ns": 2.105,
+        "hold_slack_ns": 0.075,
+        "flip_flops": 584,
+        "lut_cells": 1001,
+        "dsp48": 0,
+        "ramb18": 0,
+        "ramb36": 1,
+        "implementation_mode": "out_of_context",
+        "black_boxes": 0,
+        "board_io_validated": false,
+        "hardware_tested": false,
+        "model_api_calls": 0
+      },
+      "physical_utilization": {
+        "slice_luts": 914,
+        "slice_registers": 584,
+        "ramb36": 1,
+        "ramb18": 0,
+        "dsp48": 0
+      },
+      "timing_checks": {
+        "no_clock": 0,
+        "constant_clock": 0,
+        "pulse_width_clock": 0,
+        "unconstrained_internal_endpoints": 0,
+        "no_input_delay": 0,
+        "no_output_delay": 0,
+        "multiple_clock": 0,
+        "generated_clocks": 0,
+        "loops": 0,
+        "partial_input_delay": 0,
+        "partial_output_delay": 0,
+        "latch_loops": 0
+      },
+      "routing_summary": {
+        "routable_nets": 1215,
+        "fully_routed_nets": 1215,
+        "routing_errors": 0
+      },
+      "auxiliary_results": {
+        "latest-negative.json": {
+          "project": "dma",
+          "stage": "negative_control",
+          "expected_rejection_observed": true,
+          "fault": "one destination data bit flipped before immutable-byte checker",
+          "exit_code": 0,
+          "wall_seconds": 34.68,
+          "artifact_directory": "${WORKSPACE}\\artifacts\\2026-10-22T18-09-28-179Z-xsim-c2911341",
+          "receipt_directory": "${WORKSPACE}\\artifacts\\system-dma-negative-20261022T180926Z",
+          "other_model_api_calls": 0
+        }
+      },
+      "local_file_hashes": {
+        "projects/system-bench/dma/assessment.json": "b06d82ec256e026e606fdb6ca196e3ac333bcdc42c5ca0814c8a8fbdd21d1404",
+        "projects/system-bench/dma/axi-declarations.sv": "9b1ef1b1620752071aca26c1200c41569a4d48703db4b644e4f3339d68444fc3",
+        "projects/system-bench/dma/dma_top.v": "d7814e0ceb4ac048765b98ed4e66172319ecf85b109afb51ac8d0794cd74aa14",
+        "projects/system-bench/dma/impl.json": "50f3d8ce9d1abf968e219405643ba2d09ae66b69c9aa25eda1e67ada5c84e926",
+        "projects/system-bench/dma/implement.tcl": "8f4570ddc96b760ea4a3d124e610f9375a24da1fa8b353ab69dfd94592c4bd9f",
+        "projects/system-bench/dma/latest-impl.json": "2744d8cf7e19e4eeac7b6eb8894257160552a84541131c40752e5c406d0f60fc",
+        "projects/system-bench/dma/latest-negative.json": "f3b9130c1279f0f2db490283982d8bb02d9776d45963971b25c86ccd0f971700",
+        "projects/system-bench/dma/latest-sim.json": "516cb49dadcc6d03e79731db4e0bc9a8aa1bd83f98175fa52eb86be65482822a",
+        "projects/system-bench/dma/negative.json": "81470732f37bfa5cecc9de9d3d8d33d65915831fce0ae9a9aaca65d361a6d898",
+        "projects/system-bench/dma/run_negative.py": "9ae5dce4fec61be38251684fa6fe5ecc9e33097f8113565958942cc3e4fe8a5d",
+        "projects/system-bench/dma/sim.json": "9a07125e7f2fce096c94d0088feb5af2331341bb4ca9a490e2be3ca70007ec55",
+        "projects/system-bench/dma/sources.json": "77d0a2209cfd9d3effa4be7ba7a8d6f7d0f752bb3ffe1285167e9969e6a764b6",
+        "projects/system-bench/dma/summarize.py": "19274896427e61873913b249e5f42b8c9ddc0eb8b35620f175d7198b37779b8d",
+        "projects/system-bench/dma/tb_dma.sv": "802288cd1fdae9ebbdfcd58a9fc4665c77ccdaa13b08fc4e535e422d6d07a47b",
+        "projects/system-bench/dma/tb_dma_negative.sv": "c668dcb44b4147c505e16fe3805cf16e5116c2b0584c13d0d3ef65661b872c98",
+        "projects/system-bench/dma/tb_template.sv": "9bff46fa48b1e84c7c832972982cf428e609bc7776e7fc2aa4aa1a6ae6e2ad96"
+      }
+    },
+    {
+      "project": "udp",
+      "source_files": [
+        {
+          "path": "vendor/verilog-ethernet/rtl/udp_complete.v",
+          "sha256": "94c2f9a93a07256493c2f87e77444cc14cec686247f653d5a769264a43a9faee",
+          "lines": 641
+        },
+        {
+          "path": "vendor/verilog-ethernet/rtl/udp.v",
+          "sha256": "a11fcaaf918868706c2a3ea97ecb5842813b6a21a4bd9d35ad38906be81a4c7f",
+          "lines": 417
+        },
+        {
+          "path": "vendor/verilog-ethernet/rtl/udp_checksum_gen.v",
+          "sha256": "1a5656276e8481fc0f82c128da36bc2a748844ad20651fdc35e7afda6de17f2d",
+          "lines": 561
+        },
+        {
+          "path": "vendor/verilog-ethernet/rtl/udp_ip_rx.v",
+          "sha256": "a3d11dac41e6349e52c9fbe531b9e3345d5688b062157b8c6a85f4b40cc41050",
+          "lines": 536
+        },
+        {
+          "path": "vendor/verilog-ethernet/rtl/udp_ip_tx.v",
+          "sha256": "4df5a48a8eded39d4503923e14aa3f66824bbc830008e2c37b3e767ca345f60a",
+          "lines": 497
+        },
+        {
+          "path": "vendor/verilog-ethernet/rtl/ip_complete.v",
+          "sha256": "c0f5981200d90312065eece7117dd22733d224169af1865760522e38122df120",
+          "lines": 444
+        },
+        {
+          "path": "vendor/verilog-ethernet/rtl/ip.v",
+          "sha256": "0fa6834e1d4eade6641ea6c0dc918bc3fb8d758dd8e0a38c7853d7c10f7853a3",
+          "lines": 345
+        },
+        {
+          "path": "vendor/verilog-ethernet/rtl/ip_eth_rx.v",
+          "sha256": "ad9c44691fe27d76373e64d3aadf8e076d819030266d4569e683030cc67a05bc",
+          "lines": 581
+        },
+        {
+          "path": "vendor/verilog-ethernet/rtl/ip_eth_tx.v",
+          "sha256": "a9d5bdbea9ccecedf7ff513dfe3e34cbfbc505bfc3877d1430a3416b8689fd1c",
+          "lines": 501
+        },
+        {
+          "path": "vendor/verilog-ethernet/rtl/ip_arb_mux.v",
+          "sha256": "429fce396c6d5e311497b419f6d0c930e4e17eea5637efb4f7a4df1299cfea6e",
+          "lines": 406
+        },
+        {
+          "path": "vendor/verilog-ethernet/rtl/arp.v",
+          "sha256": "46d339fe7b4de1ff5c6c881c53f9c0c718ec8eb776673bc4d5916ea230512512",
+          "lines": 452
+        },
+        {
+          "path": "vendor/verilog-ethernet/rtl/arp_cache.v",
+          "sha256": "e7eb3f5fc90c6e5cc9f1f9f3d59afefcfc87fd667a1893de8ddad3aa94309529",
+          "lines": 247
+        },
+        {
+          "path": "vendor/verilog-ethernet/rtl/arp_eth_rx.v",
+          "sha256": "6a49bd6f7c2311baffe1b3985d7eee0b9adee54f7d05ffa4316cf201adb526ee",
+          "lines": 331
+        },
+        {
+          "path": "vendor/verilog-ethernet/rtl/arp_eth_tx.v",
+          "sha256": "8125cf542196132b388c30f4ac3005a0153082c7cd9f87916680c6767db72dfb",
+          "lines": 368
+        },
+        {
+          "path": "vendor/verilog-ethernet/rtl/eth_arb_mux.v",
+          "sha256": "ce578195dc565962e3515d5444d13d6a47c42ee82bd2109d31dd62a7ed0775ea",
+          "lines": 315
+        },
+        {
+          "path": "vendor/verilog-ethernet/rtl/lfsr.v",
+          "sha256": "86362b06f992221f26c8e81ed82bbeb26eeb94edc381fd87d35bf0cca3b23c95",
+          "lines": 447
+        },
+        {
+          "path": "vendor/verilog-ethernet/lib/axis/rtl/arbiter.v",
+          "sha256": "4b4291e2afc5cdb93e261d43c439ea3c9bedce3d628d3db9c6e2ed8f4c27c3f1",
+          "lines": 159
+        },
+        {
+          "path": "vendor/verilog-ethernet/lib/axis/rtl/priority_encoder.v",
+          "sha256": "07c610b8dda24daf67dec36c743f79fca30f9d01d5469e1e7f795a16f4c7aa97",
+          "lines": 92
+        },
+        {
+          "path": "vendor/verilog-ethernet/lib/axis/rtl/axis_fifo.v",
+          "sha256": "8ee436631ece272f478a4396c3819f62e5cd4f9a492b80502562aeb73c9e6294",
+          "lines": 565
+        },
+        {
+          "path": "projects/system-bench/udp/udp_top.v",
+          "sha256": "004f42a3996cc56eace8b7982a49eb70f1300dbc2b23871ba199c26f2b0d9cce",
+          "lines": 254
+        }
+      ],
+      "sim": {
+        "project": "udp",
+        "stage": "sim",
+        "pass": true,
+        "exit_code": 0,
+        "wall_seconds": 26.47,
+        "artifact_directory": "${WORKSPACE}\\artifacts\\2026-10-22T18-10-31-512Z-xsim-eb357a36",
+        "receipt_directory": "${WORKSPACE}\\artifacts\\system-udp-sim-20261022T181029Z",
+        "other_model_api_calls": 0
+      },
+      "impl": {
+        "project": "udp",
+        "stage": "impl",
+        "pass": true,
+        "exit_code": 0,
+        "wall_seconds": 120.19,
+        "artifact_directory": "${WORKSPACE}\\artifacts\\2026-10-22T18-12-38-012Z-vivado-dbccd136",
+        "receipt_directory": "${WORKSPACE}\\artifacts\\system-udp-impl-20261022T181236Z",
+        "other_model_api_calls": 0
+      },
+      "simulation_summary": [
+        "SYSTEM_BENCH_PASS project=udp tx_packets=65 rx_packets=65 payload_bytes=62272 invalid_checksum=8 truncated_header=8 arp_frames=7 arp_failures=1 cycles=94883"
+      ],
+      "observed_counts": {
+        "tx_packets": 65,
+        "rx_packets": 65,
+        "payload_bytes": 62272,
+        "invalid_checksum": 8,
+        "truncated_header": 8,
+        "arp_frames": 7,
+        "arp_failures": 1,
+        "cycles": 94883
+      },
+      "elaborated_module_types": [
+        "arbiter",
+        "arp",
+        "arp_cache",
+        "arp_eth_rx",
+        "arp_eth_tx",
+        "axis_fifo",
+        "eth_arb_mux",
+        "ip",
+        "ip_arb_mux",
+        "ip_complete",
+        "ip_eth_rx",
+        "ip_eth_tx",
+        "lfsr",
+        "priority_encoder",
+        "udp_complete",
+        "udp_ip_rx",
+        "udp_ip_tx",
+        "udp_top"
+      ],
+      "active_module_source_lines": 6585,
+      "active_module_nonblank_code_lines": 5041,
+      "pass_marker_count": 1,
+      "simulation_verified": true,
+      "physical": {
+        "stage": "routed",
+        "top": "udp_top",
+        "version": "2020.2",
+        "part": "xc7a100tfgg676-2",
+        "clock_period_ns": 10,
+        "io_delay_ns": 2,
+        "setup_slack_ns": 1.899,
+        "hold_slack_ns": 0.075,
+        "flip_flops": 2924,
+        "lut_cells": 1763,
+        "dsp48": 0,
+        "ramb18": 0,
+        "ramb36": 1,
+        "implementation_mode": "out_of_context",
+        "black_boxes": 0,
+        "board_io_validated": false,
+        "hardware_tested": false,
+        "model_api_calls": 0
+      },
+      "physical_utilization": {
+        "slice_luts": 1599,
+        "slice_registers": 2924,
+        "ramb36": 1,
+        "ramb18": 0,
+        "dsp48": 0
+      },
+      "timing_checks": {
+        "no_clock": 0,
+        "constant_clock": 0,
+        "pulse_width_clock": 0,
+        "unconstrained_internal_endpoints": 0,
+        "no_input_delay": 0,
+        "no_output_delay": 0,
+        "multiple_clock": 0,
+        "generated_clocks": 0,
+        "loops": 0,
+        "partial_input_delay": 0,
+        "partial_output_delay": 0,
+        "latch_loops": 0
+      },
+      "routing_summary": {
+        "routable_nets": 3779,
+        "fully_routed_nets": 3779,
+        "routing_errors": 0
+      },
+      "auxiliary_results": {},
+      "local_file_hashes": {
+        "projects/system-bench/udp/arp.hex": "2e22c2b30d5d9c393661820e805446d73ee3989e1f3e2373d440263e01feaca4",
+        "projects/system-bench/udp/bad.hex": "30f43582ed90f058e09fdad2d776a096f86c6d5f0ac439428d28c7877dfe0b2b",
+        "projects/system-bench/udp/impl.json": "ff5a3d88659a447b69da9ab31cb474ee2b1acf74f4a206d443396dd13b92fe05",
+        "projects/system-bench/udp/implement.tcl": "3ecfbdd3d50799420db43223566be90eead92a3a3d7c1c16f76599973b7102b7",
+        "projects/system-bench/udp/latest-impl.json": "d6667dbb8cf983bce9e51c7cba16e3ffb0cfef6764f1bc865633ba9777cec6ac",
+        "projects/system-bench/udp/latest-sim.json": "e7a67a8252bb3a2ce88a4d8c7b534c7868660de5615499162fb8e7c951b7a2ee",
+        "projects/system-bench/udp/manifest.json": "ba3e44a186d59f52cd8ad4dec11d2ca022f8eb5bab2509041ab7bad82835e95a",
+        "projects/system-bench/udp/negative-result.json": "27d909e0f021ec746722e1068b4ceda4ea1f026858f0ad07127846528eaa7a64",
+        "projects/system-bench/udp/negative.json": "3b1a037c788c4ff584e4d00e0e2a88ea3cc95536ffa112c462e371ef4695f2ac",
+        "projects/system-bench/udp/negative_control.py": "3f6cb2c7de0015871ed525b6f993945cb52f1ccef7ca720384653a7e6e7d9213",
+        "projects/system-bench/udp/payload.hex": "ccef54f998e46b314a4db1b51bf2da1001388a24685875e94df0af2ed99e419b",
+        "projects/system-bench/udp/rx.hex": "5036e0ef530d0b078d87722de1c8b60ee5f19ad9983f34708709d4838ea3ddf5",
+        "projects/system-bench/udp/sim.json": "0dd0832964a34ef6e4f1bbd8c3290406d2501da3bb4a390aff5457027aadb6ac",
+        "projects/system-bench/udp/sources.json": "116b35fb1601216deca5c7f39ce04b8aedfab71ad9938bde619a5c36284f6178",
+        "projects/system-bench/udp/summary.json": "2d2a0fc6d9ce5038dfdb2610c694c9f03985d5c87c15af17d1b84285415d6228",
+        "projects/system-bench/udp/tb_udp.sv": "7f5699d907d5a4df1cb6933ca3b5830f7ce251815f333bfd34a95eb60e4e6f1d",
+        "projects/system-bench/udp/tb_udp_negative.sv": "fe82746f860b23c6a34806bdd76f8e27d6e9c80de808edb71002a367bc138a2d",
+        "projects/system-bench/udp/tx-corrupt.hex": "5912d4dc42d735f4c7598f31bbfc284bd0fb08a6f35d58f2f376286d7fb7c73d",
+        "projects/system-bench/udp/tx.hex": "b7f6ef86d101e08324005818dc5b8d8e7bc84c03f483ae87a88b0d20cdeaf184",
+        "projects/system-bench/udp/udp_top.v": "004f42a3996cc56eace8b7982a49eb70f1300dbc2b23871ba199c26f2b0d9cce"
+      }
+    },
+    {
+      "project": "aes",
+      "source_files": [
+        {
+          "path": "vendor/aes/src/rtl/aes_core.v",
+          "sha256": "320e1137ac9d8812134a8313d23072e95da7c2dc0316fb24006f4b23132636d9",
+          "lines": 342
+        },
+        {
+          "path": "vendor/aes/src/rtl/aes_encipher_block.v",
+          "sha256": "827b10ca76f99bb1dd99147e414930e12b7d6a1b3269063b909f9d382126e737",
+          "lines": 487
+        },
+        {
+          "path": "vendor/aes/src/rtl/aes_decipher_block.v",
+          "sha256": "ec2879babd84ae5458282c9f5e28db89e71cac18d9a343e1b2e7399062976ff5",
+          "lines": 526
+        },
+        {
+          "path": "vendor/aes/src/rtl/aes_key_mem.v",
+          "sha256": "033fa100410c2e0600251c2787d4496dcb8829c8508fa99a5288f7b26079367b",
+          "lines": 434
+        },
+        {
+          "path": "vendor/aes/src/rtl/aes_sbox.v",
+          "sha256": "12727f8eabfdcdd079088451358ca4ff60a7ebe7fabaea58604e61a1efee8b84",
+          "lines": 327
+        },
+        {
+          "path": "vendor/aes/src/rtl/aes_inv_sbox.v",
+          "sha256": "2fa81ebc3e5ed760288b7144748e037aa9442e88d2111280c6e11eb752b1f946",
+          "lines": 325
+        },
+        {
+          "path": "projects/system-bench/aes/aes_stream_top.sv",
+          "sha256": "fa2ddbaae874f4e32f457df304c01b785d950af693313ff1745af35a71a62868",
+          "lines": 117
+        }
+      ],
+      "sim": {
+        "project": "aes",
+        "stage": "sim",
+        "pass": true,
+        "exit_code": 0,
+        "wall_seconds": 27.14,
+        "artifact_directory": "${WORKSPACE}\\artifacts\\2026-10-22T18-13-10-347Z-xsim-dd7c4d0f",
+        "receipt_directory": "${WORKSPACE}\\artifacts\\system-aes-sim-20261022T181308Z",
+        "other_model_api_calls": 0
+      },
+      "impl": {
+        "project": "aes",
+        "stage": "impl",
+        "pass": true,
+        "exit_code": 0,
+        "wall_seconds": 180.04,
+        "artifact_directory": "${WORKSPACE}\\artifacts\\aes-direct-181959",
+        "receipt_directory": "${WORKSPACE}\\artifacts\\aes-direct-181959",
+        "launcher": "direct subprocess isolation",
+        "other_model_api_calls": 0
+      },
+      "simulation_summary": [
+        "SYSTEM_BENCH_PASS project=aes blocks=532 encrypt=266 decrypt=266 key_groups=20 reset_scenarios=4"
+      ],
+      "observed_counts": {
+        "blocks": 532,
+        "encrypt": 266,
+        "decrypt": 266,
+        "key_groups": 20,
+        "reset_scenarios": 4
+      },
+      "elaborated_module_types": [
+        "aes_core",
+        "aes_decipher_block",
+        "aes_encipher_block",
+        "aes_inv_sbox",
+        "aes_key_mem",
+        "aes_sbox",
+        "aes_stream_top"
+      ],
+      "active_module_source_lines": 2290,
+      "active_module_nonblank_code_lines": 1793,
+      "pass_marker_count": 1,
+      "simulation_verified": true,
+      "physical": {
+        "stage": "routed",
+        "top": "aes_stream_top",
+        "version": "2020.2",
+        "part": "xc7a100tfgg676-2",
+        "clock_period_ns": 10,
+        "io_delay_ns": 2,
+        "setup_slack_ns": 1.084,
+        "hold_slack_ns": 0.105,
+        "flip_flops": 2903,
+        "lut_cells": 3322,
+        "dsp48": 0,
+        "ramb18": 0,
+        "ramb36": 0,
+        "implementation_mode": "out_of_context",
+        "black_boxes": 0,
+        "board_io_validated": false,
+        "hardware_tested": false,
+        "model_api_calls": 0
+      },
+      "physical_utilization": {
+        "slice_luts": 3195,
+        "slice_registers": 2903,
+        "ramb36": 0,
+        "ramb18": 0,
+        "dsp48": 0
+      },
+      "timing_checks": {
+        "no_clock": 0,
+        "constant_clock": 0,
+        "pulse_width_clock": 0,
+        "unconstrained_internal_endpoints": 0,
+        "no_input_delay": 0,
+        "no_output_delay": 0,
+        "multiple_clock": 0,
+        "generated_clocks": 0,
+        "loops": 0,
+        "partial_input_delay": 0,
+        "partial_output_delay": 0,
+        "latch_loops": 0
+      },
+      "routing_summary": {
+        "routable_nets": 5649,
+        "fully_routed_nets": 5649,
+        "routing_errors": 0
+      },
+      "auxiliary_results": {
+        "latest-negative.json": {
+          "negative_control": "corrupt_first_expected_ciphertext_bit",
+          "correctly_rejected": true,
+          "exit_code": 0,
+          "wall_seconds": 23.57,
+          "verdict_uses_fatal_and_missing_pass": true,
+          "process_log": "${WORKSPACE}\\artifacts\\2026-10-22T18-10-43-526Z-xsim-7cc7438b\\process.log",
+          "receipt_directory": "artifacts\\system-aes-negative-20261022T181041Z",
+          "other_model_api_calls": 0
+        }
+      },
+      "local_file_hashes": {
+        "projects/system-bench/aes/aes_sim_sources.sv": "8e6e45fe7c88840d2e34a46f8d940cca507e326a4c27562c57331b29310051bc",
+        "projects/system-bench/aes/aes_stream_top.sv": "fa2ddbaae874f4e32f457df304c01b785d950af693313ff1745af35a71a62868",
+        "projects/system-bench/aes/collect.py": "02710bd15481128a27df23d207b9e9a12e901306a4443754dd6086a35904303b",
+        "projects/system-bench/aes/direct_impl.py": "ddac5b70ae2ec0cc557f061b0ee3e80749b9512ff150ddc9fb1d9995c24c5184",
+        "projects/system-bench/aes/generate.py": "4e9277c7f8aa9eade1b299379473dbc50d3a83685b84507592131a64d53bff31",
+        "projects/system-bench/aes/impl.json": "c14724823a961a6212a465494b65aa1a33edc9b4423800b79102600ce7be789f",
+        "projects/system-bench/aes/implement.tcl": "fbd0799e2e80620c570d06cd701c38ce2ba442c5509408b0e57f51871a61bd5a",
+        "projects/system-bench/aes/latest-impl.json": "7e2614eed7025d32f8d2566777ea66498c82bdb56d9198f51e49103fed572030",
+        "projects/system-bench/aes/latest-negative.json": "ea60dbac3a0079c4424ad740e2777d7302bceb938019e560f5804bcb6b0849de",
+        "projects/system-bench/aes/latest-sim.json": "5cbf6d6f5aefc1853254a33f5922aabc83289072957fe3b880fcfc36cf3368bf",
+        "projects/system-bench/aes/manifest.json": "06d625a07f016669c2ff53d580f140d70008af5f48fcbfd5f4fb8529d237cf97",
+        "projects/system-bench/aes/negative.json": "f45bd37a4c14a51b8ecae06daf346e2b793fd8c65292a7ff47fa439fa3eb9acf",
+        "projects/system-bench/aes/negative.py": "e8e11450a1ec7bc51248a66b034995419135a80a741045dab7beb85a99343c6b",
+        "projects/system-bench/aes/result.json": "e912afd6a06ac18894f05e7ab9f88d55a184f7faffe460c06b96150547fe2fbb",
+        "projects/system-bench/aes/sim.json": "6624e1ac6d73676fe5e6976e3a6c6a19e677bc99324cdafcd8e3929246429a7d",
+        "projects/system-bench/aes/sources.json": "f695833c493409e5b0e70f237cec36cace94e85e7f7bc3fd0a4400beb80145ab",
+        "projects/system-bench/aes/tb_aes.sv": "a483913debded17b0ddb31ed3546a4bfa4087a00d9377944c15073ee8cb67e9e",
+        "projects/system-bench/aes/tb_aes_negative.sv": "d239fe95682450c604647f43fc7699e54dd12aaa47109f1214cc77bb66202dd4"
+      }
+    }
+  ],
+  "upstreams": {
+    "picorv32": {
+      "commit": "ef203c2b0a3fb793280f5114941416c425c5b461",
+      "working_tree_clean": true
+    },
+    "verilog-axi": {
+      "commit": "516bd5dadc3365b7f9e225d2af8fe0b8d804fe53",
+      "working_tree_clean": true
+    },
+    "verilog-ethernet": {
+      "commit": "77320a9471d19c7dd383914bc049e02d9f4f1ffb",
+      "working_tree_clean": true
+    },
+    "aes": {
+      "commit": "80dc4718e1dcbbdb4b0dd1bdb393d8f7b98981dc",
+      "working_tree_clean": true
+    }
+  },
+  "scope": "Local integration/regression of pinned public cores; not pass@1, not a hidden benchmark, no board execution.",
+  "source_line_definition": "Physical text lines within unique module definitions elaborated by XSim; includes comments, interfaces and disabled parameter branches. Nonblank code count is also provided.",
+  "resource_definition": "Physical Slice LUTs from report_utilization. Raw LUT primitive count in build-result.json may differ because of packing."
+}

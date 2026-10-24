@@ -1,0 +1,125 @@
+{
+  "mode": "Codex authored solutions; direct local tools; no external model API",
+  "benchmark": {
+    "benchmark": "VerilogEval v2 spec-to-rtl",
+    "selection": "uniform random.sample over sorted 156 prompts",
+    "seed": 20261023,
+    "size": 8,
+    "task_ids": [
+      "Prob052_gates100",
+      "Prob062_bugs_mux2",
+      "Prob065_7420",
+      "Prob068_countbcd",
+      "Prob091_2012_q2b",
+      "Prob094_gatesv",
+      "Prob137_fsm_serial",
+      "Prob147_circuit10"
+    ],
+    "runtime": "Vivado XSim 2020.2; adapted runner, not official Icarus harness"
+  },
+  "evaluated_ids": [
+    "Prob052_gates100",
+    "Prob062_bugs_mux2",
+    "Prob065_7420",
+    "Prob068_countbcd",
+    "Prob091_2012_q2b",
+    "Prob094_gatesv",
+    "Prob137_fsm_serial",
+    "Prob147_circuit10"
+  ],
+  "model_api_calls": 0,
+  "started": "2026-10-22T16:17:43.339Z",
+  "tasks": [
+    {
+      "id": "Prob052_gates100",
+      "solution_sha256": "a0ddf4ef7451c9697931a4311e2ddce35807e6caaf7762cf8296e2c42a8e954f",
+      "upstream_test_sha256": "657c5474732c707c5a8cd5399f6545bc3ff15f74d1e3a946dd472c43d9fb814f",
+      "upstream_ref_sha256": "cba8f63385fd891c87da0f2c837b0131223d33c8188b5bc0a86eddb1ce10f85d",
+      "directory": "${WORKSPACE}\\artifacts\\2026-10-22T16-17-43-350Z-xsim-15ff9cf6",
+      "mismatches": 0,
+      "samples": 433,
+      "passed": true,
+      "wall_seconds": 12.655
+    },
+    {
+      "id": "Prob062_bugs_mux2",
+      "solution_sha256": "8ab6fc9cba363f3ba25924cc17b12c61bcc6ad1e3387d1bf1153dec14c6701da",
+      "upstream_test_sha256": "dcf290dbb549e7a3eb1205f2264f8d5a2503ca3fb3b55a558e23a50d03196975",
+      "upstream_ref_sha256": "0b7d75ad23841f5f87f4faa86aa9bccd92491ca0ab70d2efb8e0b91870b0f8f4",
+      "directory": "${WORKSPACE}\\artifacts\\2026-10-22T16-17-56-006Z-xsim-fc1c614b",
+      "mismatches": 110,
+      "samples": 114,
+      "passed": false,
+      "wall_seconds": 10.672
+    },
+    {
+      "id": "Prob065_7420",
+      "solution_sha256": "4b711cf4665bc82c6b343efe5e7e30b9769b0b3f7fd99334970f8cb0879e0373",
+      "upstream_test_sha256": "534c9cb45ed87c5cc9fb39b19408da298aec0b7fae870b1e8610374b48de748c",
+      "upstream_ref_sha256": "6db58d33f8ab2597bb9e1102ae873ba42e3949d0216f7fd36e57f9971ce64400",
+      "directory": "${WORKSPACE}\\artifacts\\2026-10-22T16-18-06-677Z-xsim-0e5b43a7",
+      "mismatches": 0,
+      "samples": 239,
+      "passed": true,
+      "wall_seconds": 12.848
+    },
+    {
+      "id": "Prob068_countbcd",
+      "solution_sha256": "b02107e1a389c7f58cc7757ff1b6e21da3f93aa1b18be3806f003d62779774d3",
+      "upstream_test_sha256": "bc8c4c620660972e35a5306a81dbddba521ac0a99bc2fd87992146552c05870a",
+      "upstream_ref_sha256": "643bf6af917813dabe7fea9683590ac6373c526db15d590dc04d5d7ceca39590",
+      "directory": "${WORKSPACE}\\artifacts\\2026-10-22T16-18-19-526Z-xsim-f5b3ea37",
+      "mismatches": 0,
+      "samples": 39805,
+      "passed": true,
+      "wall_seconds": 11.954
+    },
+    {
+      "id": "Prob091_2012_q2b",
+      "solution_sha256": "dce4bfa8ab447ecc54fb78c02d42011955985b45098d3be9585f804f516fd953",
+      "upstream_test_sha256": "36f5f4b28bec2b682a78574a28adb5cf844744fb49d7dc2dd41eaeaddaf39532",
+      "upstream_ref_sha256": "9faf3c00ae963c27c24396bd2f8da03467dab513f49b09772975ba7cb3c82e57",
+      "directory": "${WORKSPACE}\\artifacts\\2026-10-22T16-18-31-481Z-xsim-e68d64e5",
+      "mismatches": 0,
+      "samples": 600,
+      "passed": true,
+      "wall_seconds": 10.642
+    },
+    {
+      "id": "Prob094_gatesv",
+      "solution_sha256": "e0d264d6b93c2b77b2e3179b57c796a9575f424c61d80330255df7e311c7a11f",
+      "upstream_test_sha256": "1ea4bd8690f35e43525c3ccdb6ca4d7b953c5cdaefd197ba18a9b9517cdf5799",
+      "upstream_ref_sha256": "aebc64b46785688c3752b3c875dde5bc414be06e4b6ca1b037e83897d2e49f7d",
+      "directory": "${WORKSPACE}\\artifacts\\2026-10-22T16-18-42-122Z-xsim-6e9a9a93",
+      "mismatches": 0,
+      "samples": 213,
+      "passed": true,
+      "wall_seconds": 10.919
+    },
+    {
+      "id": "Prob137_fsm_serial",
+      "solution_sha256": "2e0d833060d5b9a1ff62896522e716e4a9becebe37704babcb79616f2a407c64",
+      "upstream_test_sha256": "215b46d54b3bd0ba3aad35093ce09a0a1ed5c8e00973781b8fbdcaf2e8f02625",
+      "upstream_ref_sha256": "fc02865818acce2e929e6a103d239301f5d0ea6a7966389b827351b05cb2bbd7",
+      "directory": "${WORKSPACE}\\artifacts\\2026-10-22T16-18-53-041Z-xsim-602a5d9c",
+      "mismatches": 0,
+      "samples": 905,
+      "passed": true,
+      "wall_seconds": 12.674
+    },
+    {
+      "id": "Prob147_circuit10",
+      "solution_sha256": "147f1f8a6fc6791c6637a5d923ff9ff9fdc9403fee408a8fd2366b2271fe39d7",
+      "upstream_test_sha256": "d207c491ea9d6e94ab3c57369123dcf8df4a5ee334b11d47719ceb3a18cdc757",
+      "upstream_ref_sha256": "574c88c0a6304b6228fa84f384520593a0f06daab1df26de81f2057fe205ac03",
+      "directory": "${WORKSPACE}\\artifacts\\2026-10-22T16-19-05-715Z-xsim-47d2ae16",
+      "mismatches": 0,
+      "samples": 232,
+      "passed": true,
+      "wall_seconds": 12.365
+    }
+  ],
+  "passed": 7,
+  "total": 8,
+  "wall_seconds": 94.74
+}

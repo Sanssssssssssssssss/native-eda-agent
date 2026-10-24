@@ -1,0 +1,20 @@
+{
+  "sources": [
+    "vendor/verilog-axi/rtl/axi_crossbar.v",
+    "projects/hard-bench/axi-fabric/axi_crossbar_wr_guarded.v",
+    "vendor/verilog-axi/rtl/axi_crossbar_rd.v",
+    "projects/hard-bench/axi-fabric/axi_crossbar_addr_guarded.v",
+    "vendor/verilog-axi/rtl/axi_register_wr.v",
+    "vendor/verilog-axi/rtl/axi_register_rd.v",
+    "vendor/verilog-axi/rtl/arbiter.v",
+    "vendor/verilog-axi/rtl/priority_encoder.v",
+    "vendor/verilog-axi/rtl/axi_ram.v",
+    "projects/hard-bench/axi-fabric/rv_delay.sv",
+    "projects/hard-bench/axi-fabric/axi_error_target.sv",
+    "projects/hard-bench/axi-fabric/axi_write_completion_guard.sv",
+    "projects/hard-bench/axi-fabric/axi_fabric_top.sv",
+    "projects/hard-bench/axi-fabric/tb_axi_fabric.sv"
+  ],
+  "top": "tb_axi_fabric",
+  "capture_top_wave": false
+}

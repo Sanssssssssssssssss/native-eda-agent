@@ -1,0 +1,11 @@
+* RC low-pass: R=1k, C=100n, theoretical fc=1591.5494309189535 Hz
+V1 in 0 AC 1 PULSE(0 1 0 1n 1n 10m 20m)
+R1 in out 1k
+C1 out 0 100n
+.ac dec 200 10 100k
+.tran 0 1m 0 1u
+.meas AC cutoff_hz WHEN mag(V(out))=0.7071067811865476 FALL=1
+.meas AC gain_1k FIND mag(V(out)) AT=1k
+.meas TRAN v_at_tau FIND V(out) AT=100u
+.meas TRAN v_final FIND V(out) AT=1m
+.end

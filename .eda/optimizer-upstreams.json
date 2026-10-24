@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "sources": [
+    {
+      "name": "RouteAgents",
+      "path": "vendor/routeagents-fpl26",
+      "url": "https://github.com/Geochatz3/routeagents-fpl26",
+      "commit": "4a929b490dad048198e746d15c475a8c19dc5017",
+      "license": "Apache-2.0",
+      "acquisition": "sparse source checkout; no benchmark downloads or submodule initialization"
+    },
+    {
+      "name": "AER",
+      "path": "vendor/aer-fpl26-optimizer",
+      "url": "https://github.com/haeun-josue/fpl26contest-AER-optimizer",
+      "commit": "e325940dd7b5af3e13265f912d4812218cd0ae66",
+      "license": "Apache-2.0",
+      "acquisition": "sparse source checkout; no benchmark downloads or submodule initialization"
+    }
+  ],
+  "runtime_import": "vendor\\routeagents-fpl26\\optimizer\\recipe_router.py",
+  "runtime_import_sha256": "81269651537c747d94c45982c6e62fa6b77d83a7f9e873c0a3c534a0e0486bc9",
+  "model_api_calls": 0
+}

@@ -1,0 +1,25 @@
+{
+  "n": 1024,
+  "scale": 2048,
+  "seed": 20261023,
+  "complex_tolerance_lsb": 4.0,
+  "magnitude_tolerance_lsb": 8.0,
+  "cases": [
+    "zero_first_frame",
+    "impulse",
+    "dc_1000",
+    "sine_bin64",
+    "dual_64_173",
+    "nyquist",
+    "max_positive",
+    "max_negative",
+    "sine_first_after_midframe_reset",
+    "chirp",
+    "random_0",
+    "random_1",
+    "random_2",
+    "random_3",
+    "random_4",
+    "random_5"
+  ]
+}

@@ -1,0 +1,854 @@
+{
+  "collected_at_utc": "2026-10-22T19:04:32.863002+00:00",
+  "projects": [
+    {
+      "project": "axi-fabric",
+      "current_rtl_sha256": {
+        "vendor/verilog-axi/rtl/axi_crossbar.v": "b251ddc6e47ce66cd1c5d8e09539bafae307effc6f73f176d349df9757271c89",
+        "projects/hard-bench/axi-fabric/axi_crossbar_wr_guarded.v": "695ad0578882354e644de52296a2a25589f172cc19cc892e28cc0683bedcc28c",
+        "vendor/verilog-axi/rtl/axi_crossbar_rd.v": "715be9547f9ac6b4a35be065382aa209c3c85455c412bfa4e107d7203487be41",
+        "projects/hard-bench/axi-fabric/axi_crossbar_addr_guarded.v": "6834506eed90ffbf4a44c13e68f6c7dbc6ac0fe3d061490bfb79cdd66374d94f",
+        "vendor/verilog-axi/rtl/axi_register_wr.v": "6bef07487a7d0c03eafde4a755389418a4e71e70dcdb2e60ae697370484fb5d5",
+        "vendor/verilog-axi/rtl/axi_register_rd.v": "f07a5f71a625de6b924c82214e1ff356254d542089792f67057a15deffdda32f",
+        "vendor/verilog-axi/rtl/arbiter.v": "db0ba9a08a7e8eab28b838318139abbcac2dc179032119c04006e0a2dd2a9efe",
+        "vendor/verilog-axi/rtl/priority_encoder.v": "07c610b8dda24daf67dec36c743f79fca30f9d01d5469e1e7f795a16f4c7aa97",
+        "vendor/verilog-axi/rtl/axi_ram.v": "1488318fd46a28f018817dfc61731075721581d9109efa07048a3ff5aff6eb46",
+        "projects/hard-bench/axi-fabric/rv_delay.sv": "43e5ae09a63e584f22ec0ecb40f7a0096cb18f31e5839a50c874fe624ac44661",
+        "projects/hard-bench/axi-fabric/axi_error_target.sv": "570e6f8986d91f03f53ce4fef434679c334edf4938f26b64c303b981a506badc",
+        "projects/hard-bench/axi-fabric/axi_write_completion_guard.sv": "f02ed9bec4f45fdd2fb6fffc68bc11af37d086f472df00d4e6b5e4d7573a902e",
+        "projects/hard-bench/axi-fabric/axi_fabric_top.sv": "876c4bbdbd2662756e4ce29a72e6c127bec76b788706bd16e617366a42bf3b80"
+      },
+      "simulations": [
+        {
+          "receipt": "latest-sim.json",
+          "result": {
+            "project": "axi_fabric",
+            "mode": "sim",
+            "pass": true,
+            "exit_code": 0,
+            "wall_seconds": 35.39,
+            "artifact_directory": "${WORKSPACE}\\artifacts\\2026-10-22T18-57-11-301Z-eda_xsim-d1ba0de1",
+            "receipt_directory": "${WORKSPACE}\\projects\\hard-bench\\axi-fabric\\runs\\20261022T185710Z-sim",
+            "pass_marker": "HARD_BENCH_PASS project=axi_fabric",
+            "other_model_api_calls": 0,
+            "metrics": {
+              "seeds": 4,
+              "write_bursts": 2328,
+              "read_bursts": 2328,
+              "write_beats": 37824,
+              "read_beats": 37824,
+              "bytes_written": 77501,
+              "bytes_read_checked": 100992,
+              "slverr_writes": 384,
+              "decerr_writes": 384,
+              "slverr_reads": 384,
+              "decerr_reads": 384,
+              "max_total_outstanding": 18,
+              "same_write_id_depth": 2,
+              "same_read_id_depth": 2,
+              "simultaneous_master_cycles": 15607,
+              "all_three_active_cycles": 3846,
+              "simultaneous_rw_cycles": 11806,
+              "shared_read_bursts": 24,
+              "boundary_bursts": 339,
+              "protocol_checks": 658158,
+              "aw_stalls": 231460,
+              "w_stalls": 161916,
+              "b_stalls": 795,
+              "ar_stalls": 225781,
+              "r_stalls": 38206,
+              "cycles": 130917,
+              "out_of_order_write_completions": 138,
+              "out_of_order_read_completions": 212,
+              "early_wvalid_cycles": 101996,
+              "w_before_awvalid_cycles": 90,
+              "target_wlast_checks": 31536,
+              "response_valid_checks": 79153
+            },
+            "masters": [
+              {
+                "master": 0,
+                "max_write_outstanding": 4,
+                "max_read_outstanding": 5,
+                "max_combined": 8,
+                "target_writes": 780,
+                "target_reads": 780
+              },
+              {
+                "master": 1,
+                "max_write_outstanding": 4,
+                "max_read_outstanding": 5,
+                "max_combined": 8,
+                "target_writes": 780,
+                "target_reads": 780
+              },
+              {
+                "master": 2,
+                "max_write_outstanding": 4,
+                "max_read_outstanding": 5,
+                "max_combined": 8,
+                "target_writes": 384,
+                "target_reads": 384
+              }
+            ],
+            "manifest": {
+              "upstream_commit": "516bd5dadc3365b7f9e225d2af8fe0b8d804fe53",
+              "sources": [
+                "vendor/verilog-axi/rtl/axi_crossbar.v",
+                "projects/hard-bench/axi-fabric/axi_crossbar_wr_guarded.v",
+                "vendor/verilog-axi/rtl/axi_crossbar_rd.v",
+                "projects/hard-bench/axi-fabric/axi_crossbar_addr_guarded.v",
+                "vendor/verilog-axi/rtl/axi_register_wr.v",
+                "vendor/verilog-axi/rtl/axi_register_rd.v",
+                "vendor/verilog-axi/rtl/arbiter.v",
+                "vendor/verilog-axi/rtl/priority_encoder.v",
+                "vendor/verilog-axi/rtl/axi_ram.v",
+                "projects/hard-bench/axi-fabric/rv_delay.sv",
+                "projects/hard-bench/axi-fabric/axi_error_target.sv",
+                "projects/hard-bench/axi-fabric/axi_write_completion_guard.sv",
+                "projects/hard-bench/axi-fabric/axi_fabric_top.sv"
+              ],
+              "rtl_lines": 4365,
+              "sha256": {
+                "vendor/verilog-axi/rtl/axi_crossbar.v": "b251ddc6e47ce66cd1c5d8e09539bafae307effc6f73f176d349df9757271c89",
+                "projects/hard-bench/axi-fabric/axi_crossbar_wr_guarded.v": "695ad0578882354e644de52296a2a25589f172cc19cc892e28cc0683bedcc28c",
+                "vendor/verilog-axi/rtl/axi_crossbar_rd.v": "715be9547f9ac6b4a35be065382aa209c3c85455c412bfa4e107d7203487be41",
+                "projects/hard-bench/axi-fabric/axi_crossbar_addr_guarded.v": "6834506eed90ffbf4a44c13e68f6c7dbc6ac0fe3d061490bfb79cdd66374d94f",
+                "vendor/verilog-axi/rtl/axi_register_wr.v": "6bef07487a7d0c03eafde4a755389418a4e71e70dcdb2e60ae697370484fb5d5",
+                "vendor/verilog-axi/rtl/axi_register_rd.v": "f07a5f71a625de6b924c82214e1ff356254d542089792f67057a15deffdda32f",
+                "vendor/verilog-axi/rtl/arbiter.v": "db0ba9a08a7e8eab28b838318139abbcac2dc179032119c04006e0a2dd2a9efe",
+                "vendor/verilog-axi/rtl/priority_encoder.v": "07c610b8dda24daf67dec36c743f79fca30f9d01d5469e1e7f795a16f4c7aa97",
+                "vendor/verilog-axi/rtl/axi_ram.v": "1488318fd46a28f018817dfc61731075721581d9109efa07048a3ff5aff6eb46",
+                "projects/hard-bench/axi-fabric/rv_delay.sv": "43e5ae09a63e584f22ec0ecb40f7a0096cb18f31e5839a50c874fe624ac44661",
+                "projects/hard-bench/axi-fabric/axi_error_target.sv": "570e6f8986d91f03f53ce4fef434679c334edf4938f26b64c303b981a506badc",
+                "projects/hard-bench/axi-fabric/axi_write_completion_guard.sv": "f02ed9bec4f45fdd2fb6fffc68bc11af37d086f472df00d4e6b5e4d7573a902e",
+                "projects/hard-bench/axi-fabric/axi_fabric_top.sv": "876c4bbdbd2662756e4ce29a72e6c127bec76b788706bd16e617366a42bf3b80"
+              },
+              "seeds": [
+                "0xc001cafe",
+                "0x5eed1234",
+                "0xdeadbeef",
+                "0x13579bdf"
+              ],
+              "addresses": {
+                "RAM0": "0x0000-0x3fff",
+                "RAM1": "0x4000-0x7fff",
+                "SLVERR_target": "0x8000-0xbfff",
+                "DECERR_unmapped": "0xc000-0xffff"
+              },
+              "expected_total_bursts": 4656
+            },
+            "testbench_sha256": "8ad55e5413df3f53c303d179435661fa068aaff6ad959014d3a91c5e4bdd732f"
+          },
+          "raw_log_pass": true,
+          "markers": [
+            "HARD_BENCH_PASS project=axi_fabric seeds=4 write_bursts=2328 read_bursts=2328 write_beats=37824 read_beats=37824 bytes_written=77501 bytes_read_checked=100992 slverr_writes=384 decerr_writes=384 slverr_reads=384 decerr_reads=384 max_total_outstanding=18 same_write_id_depth=2 same_read_id_depth=2 simultaneous_master_cycles=15607 all_three_active_cycles=3846 simultaneous_rw_cycles=11806 shared_read_bursts=24 boundary_bursts=339 protocol_checks=658158 aw_stalls=231460 w_stalls=161916 b_stalls=795 ar_stalls=225781 r_stalls=38206 cycles=130917"
+          ],
+          "counts": {
+            "seeds": 4,
+            "write_bursts": 2328,
+            "read_bursts": 2328,
+            "write_beats": 37824,
+            "read_beats": 37824,
+            "bytes_written": 77501,
+            "bytes_read_checked": 100992,
+            "slverr_writes": 384,
+            "decerr_writes": 384,
+            "slverr_reads": 384,
+            "decerr_reads": 384,
+            "max_total_outstanding": 18,
+            "same_write_id_depth": 2,
+            "same_read_id_depth": 2,
+            "simultaneous_master_cycles": 15607,
+            "all_three_active_cycles": 3846,
+            "simultaneous_rw_cycles": 11806,
+            "shared_read_bursts": 24,
+            "boundary_bursts": 339,
+            "protocol_checks": 658158,
+            "aw_stalls": 231460,
+            "w_stalls": 161916,
+            "b_stalls": 795,
+            "ar_stalls": 225781,
+            "r_stalls": 38206,
+            "cycles": 130917
+          },
+          "rtl_mismatch": [],
+          "rtl_capture_missing": [],
+          "trace_drift": [],
+          "verified": true
+        }
+      ],
+      "elaborated_module_types": [
+        "arbiter",
+        "axi_crossbar",
+        "axi_crossbar_addr",
+        "axi_crossbar_rd",
+        "axi_crossbar_wr",
+        "axi_error_target",
+        "axi_fabric_top",
+        "axi_ram",
+        "axi_register_rd",
+        "axi_register_wr",
+        "axi_write_completion_guard",
+        "priority_encoder",
+        "rv_delay"
+      ],
+      "active_module_source_lines": 4043,
+      "functional_verified": true,
+      "negative_control": {
+        "project": "axi_fabric",
+        "mode": "negative",
+        "pass": true,
+        "exit_code": 0,
+        "wall_seconds": 51.53,
+        "artifact_directory": "${WORKSPACE}\\artifacts\\2026-10-22T18-58-26-528Z-eda_xsim-0d0c2d06",
+        "receipt_directory": "${WORKSPACE}\\projects\\hard-bench\\axi-fabric\\runs\\20261022T185824Z-negative",
+        "pass_marker": "expected Fatal: FABRIC_READ_DATA",
+        "other_model_api_calls": 0
+      },
+      "negative_control_verified": true,
+      "negative_fatal": [
+        "Fatal: FABRIC_READ_DATA master=1 phase=1 seq=0 beat=0 addr=000057fc got=e6333a57 expected=e6333a56"
+      ],
+      "implementation": {
+        "project": "axi-fabric",
+        "stage": "impl",
+        "pass": true,
+        "exit_code": 0,
+        "started_at_utc": "2026-10-22T18:57:42.838800+00:00",
+        "wall_seconds": 239.59,
+        "artifact_directory": "${WORKSPACE}\\artifacts\\hard-axi-fabric-impl-20261022T185742Z-60704e",
+        "timeout": false,
+        "source_drift": [],
+        "auxiliary_source_drift": [
+          "projects/hard-bench/axi-fabric/generate.py",
+          "projects/hard-bench/axi-fabric/run.py"
+        ],
+        "routing_verified": true,
+        "timing_verified": true,
+        "routing": {
+          "routable": 3155,
+          "fully_routed": 3155,
+          "errors": 0
+        },
+        "build": {
+          "stage": "routed",
+          "top": "axi_fabric_top",
+          "version": "2020.2",
+          "part": "xc7a100tfgg676-2",
+          "clock_period_ns": 10,
+          "io_delay_ns": 2,
+          "setup_slack_ns": 2.109,
+          "hold_slack_ns": 0.058,
+          "flip_flops": 2014,
+          "lut_cells": 2398,
+          "dsp48": 0,
+          "ramb18": 0,
+          "ramb36": 8,
+          "implementation_mode": "out_of_context",
+          "black_boxes": 0,
+          "board_io_validated": false,
+          "hardware_tested": false,
+          "model_api_calls": 0
+        },
+        "other_model_api_calls": 0
+      },
+      "physical_resources": {
+        "slice_luts": 2008,
+        "flip_flops": 2014,
+        "ramb36": 8,
+        "ramb18": 0,
+        "dsp48": 0
+      },
+      "rtl_implementation_mismatch": [],
+      "implementation_verified": true,
+      "timing_checks": {
+        "no_clock": 0,
+        "constant_clock": 0,
+        "pulse_width_clock": 0,
+        "unconstrained_internal_endpoints": 0,
+        "no_input_delay": 0,
+        "no_output_delay": 0,
+        "multiple_clock": 0,
+        "generated_clocks": 0,
+        "loops": 0,
+        "partial_input_delay": 0,
+        "partial_output_delay": 0,
+        "latch_loops": 0
+      },
+      "additional_warm_reset": null
+    },
+    {
+      "project": "ethernet-cdc",
+      "current_rtl_sha256": {
+        "vendor/verilog-ethernet/rtl/udp_complete.v": "94c2f9a93a07256493c2f87e77444cc14cec686247f653d5a769264a43a9faee",
+        "vendor/verilog-ethernet/rtl/udp.v": "a11fcaaf918868706c2a3ea97ecb5842813b6a21a4bd9d35ad38906be81a4c7f",
+        "vendor/verilog-ethernet/rtl/udp_checksum_gen.v": "1a5656276e8481fc0f82c128da36bc2a748844ad20651fdc35e7afda6de17f2d",
+        "vendor/verilog-ethernet/rtl/udp_ip_rx.v": "a3d11dac41e6349e52c9fbe531b9e3345d5688b062157b8c6a85f4b40cc41050",
+        "vendor/verilog-ethernet/rtl/udp_ip_tx.v": "4df5a48a8eded39d4503923e14aa3f66824bbc830008e2c37b3e767ca345f60a",
+        "vendor/verilog-ethernet/rtl/ip_complete.v": "c0f5981200d90312065eece7117dd22733d224169af1865760522e38122df120",
+        "vendor/verilog-ethernet/rtl/ip.v": "0fa6834e1d4eade6641ea6c0dc918bc3fb8d758dd8e0a38c7853d7c10f7853a3",
+        "vendor/verilog-ethernet/rtl/ip_eth_rx.v": "ad9c44691fe27d76373e64d3aadf8e076d819030266d4569e683030cc67a05bc",
+        "vendor/verilog-ethernet/rtl/ip_eth_tx.v": "a9d5bdbea9ccecedf7ff513dfe3e34cbfbc505bfc3877d1430a3416b8689fd1c",
+        "vendor/verilog-ethernet/rtl/ip_arb_mux.v": "429fce396c6d5e311497b419f6d0c930e4e17eea5637efb4f7a4df1299cfea6e",
+        "vendor/verilog-ethernet/rtl/arp.v": "46d339fe7b4de1ff5c6c881c53f9c0c718ec8eb776673bc4d5916ea230512512",
+        "vendor/verilog-ethernet/rtl/arp_cache.v": "e7eb3f5fc90c6e5cc9f1f9f3d59afefcfc87fd667a1893de8ddad3aa94309529",
+        "vendor/verilog-ethernet/rtl/arp_eth_rx.v": "6a49bd6f7c2311baffe1b3985d7eee0b9adee54f7d05ffa4316cf201adb526ee",
+        "vendor/verilog-ethernet/rtl/arp_eth_tx.v": "8125cf542196132b388c30f4ac3005a0153082c7cd9f87916680c6767db72dfb",
+        "vendor/verilog-ethernet/rtl/eth_arb_mux.v": "ce578195dc565962e3515d5444d13d6a47c42ee82bd2109d31dd62a7ed0775ea",
+        "vendor/verilog-ethernet/rtl/lfsr.v": "86362b06f992221f26c8e81ed82bbeb26eeb94edc381fd87d35bf0cca3b23c95",
+        "vendor/verilog-ethernet/rtl/eth_mac_1g_fifo.v": "65d6217f3b0ae020b02acb1d9e45c58a32d871bdef160c5b545c0b6c1887b355",
+        "vendor/verilog-ethernet/rtl/eth_mac_1g.v": "5e53e066ac7b7d5c7699fb4fa97e633766133e499f22c4addb9b3e2d8dd97900",
+        "vendor/verilog-ethernet/rtl/axis_gmii_rx.v": "9fc42a832d36ab6e2f43fb69dcf897a3b38db7a072bdc26ff2e6f8a2fd19aae8",
+        "vendor/verilog-ethernet/rtl/axis_gmii_tx.v": "0afecab08286491137c605b306b034232eb136aa3ba5aec2885027ab3fb02668",
+        "vendor/verilog-ethernet/rtl/eth_axis_rx.v": "394d811d97bb10e865fde1e4820af594313296cf36fb8d1316defca8ba222bb7",
+        "vendor/verilog-ethernet/rtl/eth_axis_tx.v": "633d15019041a2ab8144d0b5d5c76122f2829f6f23d1b45d82ddf1cc00476653",
+        "vendor/verilog-ethernet/lib/axis/rtl/arbiter.v": "4b4291e2afc5cdb93e261d43c439ea3c9bedce3d628d3db9c6e2ed8f4c27c3f1",
+        "vendor/verilog-ethernet/lib/axis/rtl/priority_encoder.v": "07c610b8dda24daf67dec36c743f79fca30f9d01d5469e1e7f795a16f4c7aa97",
+        "vendor/verilog-ethernet/lib/axis/rtl/axis_fifo.v": "8ee436631ece272f478a4396c3819f62e5cd4f9a492b80502562aeb73c9e6294",
+        "vendor/verilog-ethernet/lib/axis/rtl/axis_adapter.v": "94eb7348f2b833126c1b519f28da72fcf3abcc4a6766b3759bce0d828db3bfe1",
+        "vendor/verilog-ethernet/lib/axis/rtl/axis_async_fifo.v": "65f3c86ee1fcb1470fd43291fa80598117e3d7a694e52695c80cb31682113cb2",
+        "vendor/verilog-ethernet/lib/axis/rtl/axis_async_fifo_adapter.v": "3472e2624af75bbc978c15603b78afc9e08a0d61dc9471cbfb4ba4579df5c4d3",
+        "vendor/verilog-ethernet/lib/axis/rtl/sync_reset.v": "3c333fc4596a932c3ec3a1541e3d8ceec91ed1d5119b64724cad9b5fae4b7322",
+        "projects/hard-bench/ethernet-cdc/ethernet_cdc_top.v": "9070aa29a6ee091c6e13725be1f40c57a58e58ae1730d2813748dcd9c5c76997"
+      },
+      "simulations": [
+        {
+          "receipt": "result-a.json",
+          "result": {
+            "mode": "a",
+            "pass": true,
+            "expected_failure": false,
+            "exit_code": 0,
+            "wall_seconds": 68.67,
+            "artifact_directory": "${WORKSPACE}\\artifacts\\2026-10-22T18-42-26-233Z-eda_xsim-b48248ff",
+            "receipt": "${WORKSPACE}\\projects\\hard-bench\\ethernet-cdc\\runs\\20261022T184224Z-a",
+            "completion_marker": "HARD_BENCH_PASS project=ethernet-cdc ratio=a valid_echoes=281 output_frames=283 checked_wire_bytes=201023 negative_classes=6 negative_inputs=24 bad_fcs=8 bad_frame=12 length_rejected=8 ip_checksum_rejected=4 pause_cycles=79240 rx_stall_cycles=2071 echo_stall_cycles=48 rx_app_stall_cycles=0 mac_tx_stall_cycles=0 cycles=490318",
+            "fatal_marker": null,
+            "other_model_API_calls": 0
+          },
+          "raw_log_pass": true,
+          "markers": [
+            "HARD_BENCH_PASS project=ethernet-cdc ratio=a valid_echoes=281 output_frames=283 checked_wire_bytes=201023 negative_classes=6 negative_inputs=24 bad_fcs=8 bad_frame=12 length_rejected=8 ip_checksum_rejected=4 pause_cycles=79240 rx_stall_cycles=2071 echo_stall_cycles=48 rx_app_stall_cycles=0 mac_tx_stall_cycles=0 cycles=490318"
+          ],
+          "counts": {
+            "valid_echoes": 281,
+            "output_frames": 283,
+            "checked_wire_bytes": 201023,
+            "negative_classes": 6,
+            "negative_inputs": 24,
+            "bad_fcs": 8,
+            "bad_frame": 12,
+            "length_rejected": 8,
+            "ip_checksum_rejected": 4,
+            "pause_cycles": 79240,
+            "rx_stall_cycles": 2071,
+            "echo_stall_cycles": 48,
+            "rx_app_stall_cycles": 0,
+            "mac_tx_stall_cycles": 0,
+            "cycles": 490318
+          },
+          "rtl_mismatch": [],
+          "rtl_capture_missing": [],
+          "trace_drift": [
+            {
+              "path": "src\\tools\\eda.ts",
+              "role": "runner"
+            },
+            {
+              "path": "src\\trace.mjs",
+              "role": "runner"
+            },
+            {
+              "path": "package.json",
+              "role": "runner"
+            },
+            {
+              "path": "package-lock.json",
+              "role": "runner"
+            },
+            {
+              "path": "src\\runtime.mjs",
+              "role": "runtime"
+            }
+          ],
+          "verified": true
+        },
+        {
+          "receipt": "result-b.json",
+          "result": {
+            "mode": "b",
+            "pass": true,
+            "expected_failure": false,
+            "exit_code": 0,
+            "wall_seconds": 62.79,
+            "artifact_directory": "${WORKSPACE}\\artifacts\\2026-10-22T18-43-48-222Z-eda_xsim-90c465a2",
+            "receipt": "${WORKSPACE}\\projects\\hard-bench\\ethernet-cdc\\runs\\20261022T184346Z-b",
+            "completion_marker": "HARD_BENCH_PASS project=ethernet-cdc ratio=b valid_echoes=281 output_frames=283 checked_wire_bytes=201023 negative_classes=6 negative_inputs=24 bad_fcs=8 bad_frame=12 length_rejected=8 ip_checksum_rejected=4 pause_cycles=99700 rx_stall_cycles=3841 echo_stall_cycles=48 rx_app_stall_cycles=0 mac_tx_stall_cycles=0 cycles=601150",
+            "fatal_marker": null,
+            "other_model_API_calls": 0
+          },
+          "raw_log_pass": true,
+          "markers": [
+            "HARD_BENCH_PASS project=ethernet-cdc ratio=b valid_echoes=281 output_frames=283 checked_wire_bytes=201023 negative_classes=6 negative_inputs=24 bad_fcs=8 bad_frame=12 length_rejected=8 ip_checksum_rejected=4 pause_cycles=99700 rx_stall_cycles=3841 echo_stall_cycles=48 rx_app_stall_cycles=0 mac_tx_stall_cycles=0 cycles=601150"
+          ],
+          "counts": {
+            "valid_echoes": 281,
+            "output_frames": 283,
+            "checked_wire_bytes": 201023,
+            "negative_classes": 6,
+            "negative_inputs": 24,
+            "bad_fcs": 8,
+            "bad_frame": 12,
+            "length_rejected": 8,
+            "ip_checksum_rejected": 4,
+            "pause_cycles": 99700,
+            "rx_stall_cycles": 3841,
+            "echo_stall_cycles": 48,
+            "rx_app_stall_cycles": 0,
+            "mac_tx_stall_cycles": 0,
+            "cycles": 601150
+          },
+          "rtl_mismatch": [],
+          "rtl_capture_missing": [],
+          "trace_drift": [
+            {
+              "path": "src\\tools\\eda.ts",
+              "role": "runner"
+            }
+          ],
+          "verified": true
+        }
+      ],
+      "elaborated_module_types": [
+        "arbiter",
+        "arp",
+        "arp_cache",
+        "arp_eth_rx",
+        "arp_eth_tx",
+        "axis_async_fifo",
+        "axis_async_fifo_adapter",
+        "axis_fifo",
+        "axis_gmii_rx",
+        "axis_gmii_tx",
+        "eth_arb_mux",
+        "eth_axis_rx",
+        "eth_axis_tx",
+        "eth_mac_1g",
+        "eth_mac_1g_fifo",
+        "ethernet_cdc_top",
+        "ip",
+        "ip_arb_mux",
+        "ip_complete",
+        "ip_eth_rx",
+        "ip_eth_tx",
+        "ipv4_length_guard",
+        "lfsr",
+        "priority_encoder",
+        "sync_reset",
+        "udp",
+        "udp_checksum_gen",
+        "udp_complete",
+        "udp_ip_rx",
+        "udp_ip_tx"
+      ],
+      "active_module_source_lines": 11206,
+      "functional_verified": true,
+      "negative_control": {
+        "mode": "negative",
+        "pass": true,
+        "expected_failure": true,
+        "exit_code": 0,
+        "wall_seconds": 65.47,
+        "artifact_directory": "${WORKSPACE}\\artifacts\\2026-10-22T18-45-02-639Z-eda_xsim-546abd1e",
+        "receipt": "${WORKSPACE}\\projects\\hard-bench\\ethernet-cdc\\runs\\20261022T184501Z-negative",
+        "completion_marker": null,
+        "fatal_marker": "Fatal: GMII_BYTE_MISMATCH frame=0 byte=71 got=9c expected=9d",
+        "other_model_API_calls": 0
+      },
+      "negative_control_verified": true,
+      "negative_fatal": [
+        "Fatal: GMII_BYTE_MISMATCH frame=0 byte=71 got=9c expected=9d"
+      ],
+      "implementation": {
+        "project": "ethernet-cdc",
+        "stage": "impl",
+        "pass": true,
+        "exit_code": 0,
+        "started_at_utc": "2026-10-22T18:42:42.259975+00:00",
+        "wall_seconds": 161.2,
+        "artifact_directory": "${WORKSPACE}\\artifacts\\hard-ethernet-cdc-impl-20261022T184242Z-8aa581",
+        "timeout": false,
+        "source_drift": [],
+        "auxiliary_source_drift": [],
+        "routing_verified": true,
+        "timing_verified": true,
+        "routing": {
+          "routable": 4590,
+          "fully_routed": 4590,
+          "errors": 0
+        },
+        "build": {
+          "stage": "routed",
+          "top": "ethernet_cdc_top",
+          "part": "xc7a100tfgg676-2",
+          "logic_period_ns": 10,
+          "rx_period_ns": 8,
+          "tx_period_ns": 8,
+          "setup_slack_ns": 2.51,
+          "hold_slack_ns": 0.073,
+          "implementation_mode": "out_of_context",
+          "cdc_review_required": true,
+          "board_io_validated": false,
+          "hardware_tested": false,
+          "other_model_API_calls": 0
+        },
+        "other_model_api_calls": 0
+      },
+      "physical_resources": {
+        "slice_luts": 1896,
+        "flip_flops": 2964,
+        "ramb36": 7,
+        "ramb18": 2,
+        "dsp48": 0
+      },
+      "rtl_implementation_mismatch": [],
+      "implementation_verified": true,
+      "timing_checks": {
+        "no_clock": 0,
+        "constant_clock": 0,
+        "pulse_width_clock": 0,
+        "unconstrained_internal_endpoints": 0,
+        "no_input_delay": 1,
+        "no_output_delay": 0,
+        "multiple_clock": 0,
+        "generated_clocks": 0,
+        "loops": 0,
+        "partial_input_delay": 0,
+        "partial_output_delay": 0,
+        "latch_loops": 0
+      },
+      "cdc_summary": [
+        {
+          "id": "CDC-3",
+          "severity": "Info",
+          "count": 10
+        },
+        {
+          "id": "CDC-6",
+          "severity": "Warning",
+          "count": 3
+        },
+        {
+          "id": "CDC-15",
+          "severity": "Warning",
+          "count": 28
+        },
+        {
+          "id": "CDC-26",
+          "severity": "Warning",
+          "count": 3
+        }
+      ],
+      "cdc_review": {
+        "project": "ethernet-cdc",
+        "stage": "routed",
+        "artifact_directory": "artifacts/hard-ethernet-cdc-impl-20261022T184242Z-8aa581",
+        "review_status": "reviewed_with_documented_architecture_exceptions",
+        "formal_cdc_signoff": false,
+        "counts": {
+          "critical": 0,
+          "warning": 34,
+          "info": 10
+        },
+        "rules": [
+          {
+            "rule": "CDC-3",
+            "severity": "Info",
+            "count": 10,
+            "classification": "single_bit_synchronizers",
+            "basis": "Two destination stages with ASYNC_REG for FIFO reset/status/update/ack and MAC TX status; targeted maximum-delay constraints."
+          },
+          {
+            "rule": "CDC-6",
+            "severity": "Warning",
+            "count": 3,
+            "classification": "gray_pointers_and_independent_status_bits",
+            "basis": "Two 14-bit registered Gray read-pointer buses use two-stage synchronization. The remaining two-bit MAC RX status vector carries independent bad-frame and bad-FCS toggle events, not an atomic word."
+          },
+          {
+            "rule": "CDC-15",
+            "severity": "Warning",
+            "count": 28,
+            "classification": "stable_bus_update_ack_handshake",
+            "basis": "Two 14-bit committed-write-pointer buses are held stable until a synchronized acknowledgement; the destination samples the bus only after its synchronized update event. Reviewed axis_async_fifo.v lines 388-394, 450-480 and 586-591."
+          },
+          {
+            "rule": "CDC-26",
+            "severity": "Warning",
+            "count": 3,
+            "classification": "external_async_reset_to_sync_release_chain",
+            "basis": "The reported endpoints are external reset to the first PRE pin in each domain's three-stage sync_reset chain. Routed DCP properties independently show all nine cells are FDPE and ASYNC_REG=1. Asynchronous assertion and synchronous local release are intentional.",
+            "tool_label_discrepancy": "Vivado labels these LUTRAM read/write potential collision, although the endpoints and routed primitive types are reset flip-flops.",
+            "primitive_evidence": "artifacts/hard-bench-assessment-20261023/reset-cell-properties.txt"
+          }
+        ],
+        "bus_skew": {
+          "checks": 4,
+          "all_met": true,
+          "minimum_slack_ns": 6.987,
+          "buses": [
+            {
+              "name": "RX FIFO read Gray pointer",
+              "requirement_ns": 8,
+              "actual_ns": 0.83,
+              "slack_ns": 7.17
+            },
+            {
+              "name": "RX FIFO committed write pointer",
+              "requirement_ns": 10,
+              "actual_ns": 1.117,
+              "slack_ns": 8.883
+            },
+            {
+              "name": "TX FIFO read Gray pointer",
+              "requirement_ns": 10,
+              "actual_ns": 0.863,
+              "slack_ns": 9.137
+            },
+            {
+              "name": "TX FIFO committed write pointer",
+              "requirement_ns": 8,
+              "actual_ns": 1.013,
+              "slack_ns": 6.987
+            }
+          ]
+        },
+        "timing_constraints": {
+          "ignored_exceptions": 0,
+          "blanket_async_clock_groups": false,
+          "missing_clocks": 0,
+          "unconstrained_internal_endpoints": 0,
+          "no_input_delay": 1,
+          "no_input_delay_exemptions": [
+            {
+              "port": "reset",
+              "reason": "External asynchronous reset has no synchronous launch-clock relationship. It asserts local synchronizer preset pins asynchronously and releases through three local-clock stages. Narrow preset/reset-pin exceptions are intentional; no artificial synchronous input delay is assigned."
+            }
+          ],
+          "reset_synchronizer_cells": 9,
+          "reset_synchronizer_primitive": "FDPE",
+          "reset_synchronizer_all_async_reg": true
+        },
+        "evidence": [
+          "cdc.rpt",
+          "bus-skew.rpt",
+          "ignored-exceptions.rpt",
+          "check-timing.rpt"
+        ],
+        "limitations": [
+          "Structural/source, routed timing and two clock-ratio simulation evidence; no formal proof or metastability MTBF analysis.",
+          "Arbitrary clock ratios, reset sequences and event pulse rates are not exhaustively verified.",
+          "Out-of-context clock-source placement is unspecified; 100/125/125 MHz timing is not board clock-distribution or I/O signoff."
+        ],
+        "other_model_api_calls": 0
+      },
+      "additional_warm_reset": null
+    },
+    {
+      "project": "crypto-soc",
+      "current_rtl_sha256": {
+        "vendor/picorv32/picorv32.v": "fd142889e8178ef67f1cff17cb2d18b3adae56fcae2badf7cbcc4c4f5ac7960e",
+        "vendor/aes/src/rtl/aes_core.v": "320e1137ac9d8812134a8313d23072e95da7c2dc0316fb24006f4b23132636d9",
+        "vendor/aes/src/rtl/aes_encipher_block.v": "827b10ca76f99bb1dd99147e414930e12b7d6a1b3269063b909f9d382126e737",
+        "vendor/aes/src/rtl/aes_decipher_block.v": "ec2879babd84ae5458282c9f5e28db89e71cac18d9a343e1b2e7399062976ff5",
+        "vendor/aes/src/rtl/aes_key_mem.v": "033fa100410c2e0600251c2787d4496dcb8829c8508fa99a5288f7b26079367b",
+        "vendor/aes/src/rtl/aes_sbox.v": "12727f8eabfdcdd079088451358ca4ff60a7ebe7fabaea58604e61a1efee8b84",
+        "vendor/aes/src/rtl/aes_inv_sbox.v": "2fa81ebc3e5ed760288b7144748e037aa9442e88d2111280c6e11eb752b1f946",
+        "projects/hard-bench/crypto-soc/shared_ram.sv": "ea1d8f50e2b79c5b3667b282d8e32ce7ffbcbd1ec972cced18b12bd8a7dc9a15",
+        "projects/hard-bench/crypto-soc/ctr_dma.sv": "9c44b83c76326e6aed7335cc07f34de12114e7dbec0e03087155ef2ccd79124f",
+        "projects/hard-bench/crypto-soc/crypto_soc_top.sv": "183a92675d528ab2a8956069836ef53742fcdb7489a119c87560e83985620664"
+      },
+      "simulations": [
+        {
+          "receipt": "latest-sim.json",
+          "result": {
+            "project": "crypto-soc",
+            "stage": "sim",
+            "pass": true,
+            "exit_code": 0,
+            "wall_seconds": 255.34,
+            "artifact_directory": "${WORKSPACE}\\artifacts\\2026-10-22T18-51-13-020Z-eda_xsim-276cd509",
+            "receipt_directory": "${WORKSPACE}\\artifacts\\hard-crypto-soc-sim-20261022T185111Z",
+            "other_model_api_calls": 0,
+            "seed_results": [
+              "CRYPTO_SOC_SEED_PASS seed=00000001 stall_mask=0 cycles=1923958 cpu_grants=421082 dma_grants=5260 both_pending=8240 owner_switches=8150 cpu_during_dma=11474 firmware_work=150 irq=14",
+              "CRYPTO_SOC_SEED_PASS seed=12345678 stall_mask=3 cycles=3562909 cpu_grants=418153 dma_grants=5260 both_pending=45609 owner_switches=9636 cpu_during_dma=8670 firmware_work=112 irq=14",
+              "CRYPTO_SOC_SEED_PASS seed=deadbeef stall_mask=7 cycles=6432218 cpu_grants=416693 dma_grants=5260 both_pending=107558 owner_switches=10272 cpu_during_dma=7139 firmware_work=93 irq=14"
+            ],
+            "pass_line": "HARD_BENCH_PASS project=crypto-soc seeds=3 descriptors=42 ciphertext_bytes=26592 error_recoveries=21 reset_probes=1 ram_preserved_reset=0 cycles=11919085 both_pending=161407 owner_switches=28058 firmware_work=355"
+          },
+          "raw_log_pass": true,
+          "markers": [
+            "HARD_BENCH_PASS project=crypto-soc seeds=3 descriptors=42 ciphertext_bytes=26592 error_recoveries=21 reset_probes=1 ram_preserved_reset=0 cycles=11919085 both_pending=161407 owner_switches=28058 firmware_work=355"
+          ],
+          "counts": {
+            "seeds": 3,
+            "descriptors": 42,
+            "ciphertext_bytes": 26592,
+            "error_recoveries": 21,
+            "reset_probes": 1,
+            "ram_preserved_reset": 0,
+            "cycles": 11919085,
+            "both_pending": 161407,
+            "owner_switches": 28058,
+            "firmware_work": 355
+          },
+          "rtl_mismatch": [],
+          "rtl_capture_missing": [],
+          "trace_drift": [],
+          "verified": true
+        }
+      ],
+      "elaborated_module_types": [
+        "aes_core",
+        "aes_decipher_block",
+        "aes_encipher_block",
+        "aes_inv_sbox",
+        "aes_key_mem",
+        "aes_sbox",
+        "crypto_ctr_dma",
+        "crypto_shared_ram",
+        "crypto_soc_top",
+        "picorv32",
+        "picorv32_pcpi_div",
+        "picorv32_pcpi_mul"
+      ],
+      "active_module_source_lines": 4725,
+      "functional_verified": true,
+      "negative_control": {
+        "project": "crypto-soc",
+        "stage": "negative",
+        "pass": true,
+        "exit_code": 0,
+        "wall_seconds": 68.05,
+        "artifact_directory": "${WORKSPACE}\\artifacts\\2026-10-22T18-51-39-384Z-eda_xsim-f6050952",
+        "receipt_directory": "${WORKSPACE}\\artifacts\\hard-crypto-soc-negative-20261022T185138Z",
+        "other_model_api_calls": 0,
+        "seed_results": [],
+        "pass_line": null
+      },
+      "negative_control_verified": true,
+      "negative_fatal": [
+        "Fatal: FIRMWARE_FAIL run=0 code=badc0000"
+      ],
+      "implementation": {
+        "project": "crypto-soc",
+        "stage": "impl",
+        "pass": true,
+        "exit_code": 0,
+        "started_at_utc": "2026-10-22T18:46:15.738594+00:00",
+        "wall_seconds": 163.08,
+        "artifact_directory": "${WORKSPACE}\\artifacts\\hard-crypto-soc-impl-20261022T184615Z-2a9b4b",
+        "timeout": false,
+        "source_drift": [],
+        "auxiliary_source_drift": [
+          "projects/hard-bench/crypto-soc/run.py",
+          "projects/hard-bench/crypto-soc/tb_crypto_soc.sv"
+        ],
+        "routing_verified": true,
+        "timing_verified": true,
+        "routing": {
+          "routable": 9084,
+          "fully_routed": 9084,
+          "errors": 0
+        },
+        "build": {
+          "stage": "routed",
+          "top": "crypto_soc_top",
+          "version": "2020.2",
+          "part": "xc7a100tfgg676-2",
+          "clock_period_ns": 10,
+          "io_delay_ns": 2,
+          "setup_slack_ns": 0.518,
+          "hold_slack_ns": 0.096,
+          "flip_flops": 4866,
+          "lut_cells": 5692,
+          "dsp48": 0,
+          "ramb18": 0,
+          "ramb36": 16,
+          "implementation_mode": "out_of_context",
+          "black_boxes": 0,
+          "board_io_validated": false,
+          "hardware_tested": false,
+          "model_api_calls": 0
+        },
+        "other_model_api_calls": 0
+      },
+      "physical_resources": {
+        "slice_luts": 5110,
+        "flip_flops": 4866,
+        "ramb36": 16,
+        "ramb18": 0,
+        "dsp48": 0
+      },
+      "rtl_implementation_mismatch": [],
+      "implementation_verified": true,
+      "timing_checks": {
+        "no_clock": 0,
+        "constant_clock": 0,
+        "pulse_width_clock": 0,
+        "unconstrained_internal_endpoints": 0,
+        "no_input_delay": 0,
+        "no_output_delay": 0,
+        "multiple_clock": 0,
+        "generated_clocks": 0,
+        "loops": 0,
+        "partial_input_delay": 0,
+        "partial_output_delay": 0,
+        "latch_loops": 0
+      },
+      "additional_warm_reset": {
+        "project": "crypto-soc",
+        "stage": "warm",
+        "pass": true,
+        "exit_code": 0,
+        "wall_seconds": 78.75,
+        "artifact_directory": "${WORKSPACE}\\artifacts\\2026-10-22T18-52-55-740Z-eda_xsim-640f90e0",
+        "receipt_directory": "${WORKSPACE}\\artifacts\\hard-crypto-soc-warm-20261022T185254Z",
+        "other_model_api_calls": 0,
+        "seed_results": [
+          "CRYPTO_SOC_SEED_PASS seed=00000001 stall_mask=0 cycles=1923958 cpu_grants=421082 dma_grants=5260 both_pending=8240 owner_switches=8150 cpu_during_dma=11474 firmware_work=150 irq=14"
+        ],
+        "pass_line": "HARD_BENCH_PASS project=crypto-soc seeds=1 descriptors=14 ciphertext_bytes=8864 error_recoveries=7 reset_probes=1 ram_preserved_reset=1 cycles=1923958 both_pending=8240 owner_switches=8150 firmware_work=150"
+      }
+    }
+  ],
+  "upstreams": {
+    "picorv32": {
+      "commit": "ef203c2b0a3fb793280f5114941416c425c5b461",
+      "working_tree_clean": true
+    },
+    "verilog-axi": {
+      "commit": "516bd5dadc3365b7f9e225d2af8fe0b8d804fe53",
+      "working_tree_clean": true
+    },
+    "verilog-ethernet": {
+      "commit": "77320a9471d19c7dd383914bc049e02d9f4f1ffb",
+      "working_tree_clean": true
+    },
+    "aes": {
+      "commit": "80dc4718e1dcbbdb4b0dd1bdb393d8f7b98981dc",
+      "working_tree_clean": true
+    }
+  },
+  "totals": {
+    "projects": 3,
+    "functional_pass": 3,
+    "negative_control_pass": 3,
+    "implementation_pass": 3
+  },
+  "scope": "Visible-test integration and repair exercise; not blind benchmark or pass@1; no board execution.",
+  "line_count_definition": "Text lines within unique module definitions actually elaborated, including comments, ports and inactive parameter branches; not all authored by Codex.",
+  "other_model_api_calls": 0
+}

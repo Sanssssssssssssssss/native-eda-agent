@@ -1,0 +1,8 @@
+{
+  "sources": [
+    "projects/hard-bench/crypto-soc/sim_sources.sv",
+    "projects/hard-bench/crypto-soc/tb_crypto_soc.sv"
+  ],
+  "top": "tb_crypto_soc",
+  "capture_top_wave": true
+}

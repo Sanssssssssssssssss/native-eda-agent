@@ -1,0 +1,11 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import { exportTraces } from '../src/trace-export.mjs';
+const args = process.argv.slice(2), index = args.indexOf('--output');
+if (index < 1 || index !== args.length - 2) throw new Error('Usage: node scripts/export-traces.mjs RUN_DIR [...] --output FILE.json');
+const file = path.resolve(args[index + 1]);
+const { payload, summary } = exportTraces(args.slice(0, index));
+fs.mkdirSync(path.dirname(file), { recursive: true });
+fs.writeFileSync(file, JSON.stringify(payload, null, 2) + '\n', { flag: 'wx' });
+fs.writeFileSync(`${file}.summary.json`, JSON.stringify(summary, null, 2) + '\n', { flag: 'wx' });
+console.log(JSON.stringify({ ...summary, output: file }));

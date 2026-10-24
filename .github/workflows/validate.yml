@@ -1,0 +1,29 @@
+name: Offline agent contracts
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+jobs:
+  offline:
+    runs-on: windows-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: npm ci --ignore-scripts
+      - run: pwsh scripts/bootstrap-python.ps1
+      - run: npm run setup:local
+      - run: npm run validate:agent
+      - run: node scripts/benchmark.mjs validate
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: offline-failure-evidence
+          path: artifacts/
+          retention-days: 7

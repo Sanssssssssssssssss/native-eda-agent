@@ -1,0 +1,161 @@
+name: Publish to PyPI
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  # 先运行 CI 检查
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install ruff
+      - run: ruff check src/ tests/
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -e ".[dev]"
+      - run: pytest -v
+
+  # CI 通过后构建
+  build:
+    name: Build distribution
+    needs: [lint, test]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install build tools
+        run: pip install build twine
+      - name: Verify tag matches project version
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          python - <<'PY'
+          import os
+          import tomllib
+          from pathlib import Path
+
+          tag = os.environ["RELEASE_TAG"]
+          if not tag.startswith("v"):
+              raise SystemExit(f"Release tag must start with 'v': {tag}")
+
+          tag_version = tag[1:]
+          project_version = tomllib.loads(
+              Path("pyproject.toml").read_text(encoding="utf-8")
+          )["project"]["version"]
+          if project_version != tag_version:
+              raise SystemExit(
+                  f"Tag version {tag_version} does not match pyproject.toml {project_version}"
+              )
+          print(f"Release version verified: {tag_version}")
+          PY
+      - name: Build
+        run: python -m build
+      - name: Verify distribution metadata
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          python - <<'PY'
+          import os
+          import tarfile
+          import zipfile
+          from email.parser import BytesParser
+          from pathlib import Path
+
+          expected = os.environ["RELEASE_TAG"][1:]
+          wheels = list(Path("dist").glob("*.whl"))
+          sdists = list(Path("dist").glob("*.tar.gz"))
+          if len(wheels) != 1 or len(sdists) != 1:
+              raise SystemExit(
+                  f"Expected one wheel and one sdist, got {len(wheels)} wheel(s) "
+                  f"and {len(sdists)} sdist(s)"
+              )
+
+          with zipfile.ZipFile(wheels[0]) as archive:
+              names = [name for name in archive.namelist() if name.endswith(".dist-info/METADATA")]
+              if len(names) != 1:
+                  raise SystemExit(f"Expected one wheel METADATA file, got {len(names)}")
+              wheel_version = BytesParser().parsebytes(archive.read(names[0]))["Version"]
+
+          with tarfile.open(sdists[0], "r:gz") as archive:
+              members = [member for member in archive.getmembers() if member.name.endswith("/PKG-INFO")]
+              if len(members) != 1:
+                  raise SystemExit(f"Expected one sdist PKG-INFO file, got {len(members)}")
+              metadata_file = archive.extractfile(members[0])
+              if metadata_file is None:
+                  raise SystemExit("Could not read sdist PKG-INFO")
+              sdist_version = BytesParser().parsebytes(metadata_file.read())["Version"]
+
+          for artifact, version in ((wheels[0], wheel_version), (sdists[0], sdist_version)):
+              if version != expected:
+                  raise SystemExit(
+                      f"{artifact.name} metadata version {version} does not match tag {expected}"
+                  )
+              print(f"{artifact.name}: version {version}")
+          PY
+      - name: Check distribution rendering and metadata
+        run: python -m twine check dist/*
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: python-package-distributions
+          path: dist/
+
+  # 发布到 PyPI（Trusted Publisher，无需 API Token）
+  publish:
+    name: Publish to PyPI
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/p/vivado-mcp
+    permissions:
+      id-token: write
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: python-package-distributions
+          path: dist/
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+
+  # 发布完成后回打 PyPI JSON API 校验:
+  # 0.3.9/10/11 三个 tag 因 publish 链路静默失败,
+  # 直到 0.3.12 才修。从此让 PyPI 没真出现新版本时 workflow 红灯。
+  verify:
+    name: Verify PyPI publication
+    needs: publish
+    runs-on: ubuntu-latest
+    steps:
+      - name: Extract version from tag
+        id: ver
+        run: echo "version=${GITHUB_REF#refs/tags/v}" >> "$GITHUB_OUTPUT"
+      - name: Wait + poll PyPI JSON API
+        run: |
+          tag="${{ steps.ver.outputs.version }}"
+          for i in $(seq 1 10); do
+            got=$(curl -fsSL "https://pypi.org/pypi/vivado-mcp/${tag}/json" 2>/dev/null \
+              | jq -r '.info.version // empty' || true)
+            echo "Attempt $i: target release reports ${got:-not available}, expected $tag"
+            if [ "$got" = "$tag" ]; then
+              echo "PyPI release $tag is available"
+              exit 0
+            fi
+            sleep 30
+          done
+          echo "PyPI did not update to $tag within 5 minutes"
+          exit 1

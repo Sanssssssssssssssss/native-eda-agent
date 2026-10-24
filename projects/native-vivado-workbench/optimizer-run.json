@@ -1,0 +1,7 @@
+{
+  "checkpoint": "artifacts/2026-10-24T07-42-04-300Z-eda_vivado_implement-c8f771c6/routed.dcp",
+  "mode": "run",
+  "max_trials": 2,
+  "max_seconds": 180,
+  "min_gain_ns": 0.01
+}

@@ -1,0 +1,90 @@
+{
+  "project": "aes",
+  "functional_pass": true,
+  "blocks_compared": 532,
+  "independent_oracle": "cryptography 48.0.0 AES ECB",
+  "key_groups": 20,
+  "known_answer_block_operations": 20,
+  "random_block_operations": 512,
+  "reset_scenarios": 4,
+  "checker_negative_control_pass": true,
+  "implementation_pass": true,
+  "ppa": {
+    "stage": "routed",
+    "top": "aes_stream_top",
+    "version": "2020.2",
+    "part": "xc7a100tfgg676-2",
+    "clock_period_ns": 10.0,
+    "io_delay_ns": 2.0,
+    "setup_slack_ns": 1.084,
+    "hold_slack_ns": 0.105,
+    "flip_flops": 2903,
+    "lut_cells": 3322,
+    "dsp48": 0,
+    "ramb18": 0,
+    "ramb36": 0,
+    "implementation_mode": "out_of_context",
+    "black_boxes": 0,
+    "board_io_validated": false,
+    "hardware_tested": false,
+    "model_api_calls": 0,
+    "slice_luts_used": 3195,
+    "fully_routed_nets": 5649,
+    "routing_errors": 0,
+    "drc_warning_rules": [
+      "CFGBVS-1",
+      "RTSTAT-10"
+    ]
+  },
+  "metrics": {
+    "cycles": 42012,
+    "input_stalls": 28572,
+    "output_stalls": 14441,
+    "key_stalls": 10485,
+    "input_peak": 8,
+    "output_peak": 8
+  },
+  "source_commit": "80dc4718e1dcbbdb4b0dd1bdb393d8f7b98981dc",
+  "source_license": "BSD-2-Clause",
+  "synthesized_modules": 7,
+  "synthesized_source_lines_including_comments": 2558,
+  "synthesized_noncomment_nonblank_lines": 1802,
+  "sources_match_manifest": true,
+  "sim": {
+    "project": "aes",
+    "stage": "sim",
+    "pass": true,
+    "exit_code": 0,
+    "wall_seconds": 27.14,
+    "artifact_directory": "E:\\GPTProject2\\EDAAgent\\artifacts\\2026-10-22T18-13-10-347Z-xsim-dd7c4d0f",
+    "receipt_directory": "E:\\GPTProject2\\EDAAgent\\artifacts\\system-aes-sim-20261022T181308Z",
+    "other_model_api_calls": 0
+  },
+  "negative": {
+    "negative_control": "corrupt_first_expected_ciphertext_bit",
+    "correctly_rejected": true,
+    "exit_code": 0,
+    "wall_seconds": 23.57,
+    "verdict_uses_fatal_and_missing_pass": true,
+    "process_log": "E:\\GPTProject2\\EDAAgent\\artifacts\\2026-10-22T18-10-43-526Z-xsim-7cc7438b\\process.log",
+    "receipt_directory": "artifacts\\system-aes-negative-20261022T181041Z",
+    "other_model_api_calls": 0
+  },
+  "implementation": {
+    "project": "aes",
+    "stage": "impl",
+    "pass": true,
+    "exit_code": 0,
+    "wall_seconds": 180.04,
+    "artifact_directory": "E:\\GPTProject2\\EDAAgent\\artifacts\\aes-direct-181959",
+    "receipt_directory": "E:\\GPTProject2\\EDAAgent\\artifacts\\aes-direct-181959",
+    "launcher": "direct subprocess isolation",
+    "other_model_api_calls": 0
+  },
+  "limitations": [
+    "AES-128/256 block primitive only; no AES-192 or authenticated modes",
+    "OOC timing at 100 MHz does not establish board timing or physical IO constraints; HD.PARTPIN_LOCS absent",
+    "No board run, side-channel verification, formal proof, or external benchmark ranking"
+  ],
+  "other_model_api_calls": 0
+}

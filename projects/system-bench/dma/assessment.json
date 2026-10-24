@@ -1,0 +1,234 @@
+{
+  "project": "dma",
+  "functional": {
+    "project": "dma",
+    "stage": "sim",
+    "pass": true,
+    "exit_code": 0,
+    "wall_seconds": 67.95,
+    "artifact_directory": "E:\\GPTProject2\\EDAAgent\\artifacts\\2026-10-22T18-13-53-913Z-xsim-e962f1a8",
+    "receipt_directory": "E:\\GPTProject2\\EDAAgent\\artifacts\\system-dma-sim-20261022T181351Z",
+    "other_model_api_calls": 0
+  },
+  "metrics": {
+    "scenarios": 717,
+    "seeds": 4,
+    "reset_aborts": 12,
+    "byte_checks": 3064242,
+    "read_bursts": 48608,
+    "write_bursts": 48512,
+    "read_beats": 767824,
+    "write_beats": 766631,
+    "protocol_checks": 10568464,
+    "ar_stalls": 5851220,
+    "aw_stalls": 921936,
+    "w_stalls": 3794826,
+    "r_stalls": 28,
+    "axis_stalls": 454,
+    "cycles": 5993220
+  },
+  "scenario_families": {
+    "alignment_length": {
+      "cases": 384,
+      "bytes_checked": 40672,
+      "seeds": [
+        "c001cafe"
+      ]
+    },
+    "axi_response_error": {
+      "cases": 16,
+      "bytes_checked": 49168,
+      "seeds": [
+        "13579bdf",
+        "5eed1234",
+        "c001cafe",
+        "deadbeef"
+      ]
+    },
+    "boundary_4k": {
+      "cases": 32,
+      "bytes_checked": 131088,
+      "seeds": [
+        "13579bdf",
+        "5eed1234",
+        "c001cafe",
+        "deadbeef"
+      ]
+    },
+    "error_recovery": {
+      "cases": 16,
+      "bytes_checked": 16408,
+      "seeds": [
+        "13579bdf",
+        "5eed1234",
+        "c001cafe",
+        "deadbeef"
+      ]
+    },
+    "maximum_nonoverlap": {
+      "cases": 1,
+      "bytes_checked": 32760,
+      "seeds": [
+        "13579bdf"
+      ]
+    },
+    "reset_recovery": {
+      "cases": 12,
+      "bytes_checked": 49536,
+      "seeds": [
+        "13579bdf",
+        "5eed1234",
+        "c001cafe",
+        "deadbeef"
+      ]
+    },
+    "seeded_long": {
+      "cases": 256,
+      "bytes_checked": 2744610,
+      "seeds": [
+        "13579bdf",
+        "5eed1234",
+        "c001cafe",
+        "deadbeef"
+      ]
+    }
+  },
+  "negative_control": {
+    "project": "dma",
+    "stage": "negative_control",
+    "expected_rejection_observed": true,
+    "fault": "one destination data bit flipped before immutable-byte checker",
+    "exit_code": 0,
+    "wall_seconds": 34.68,
+    "artifact_directory": "E:\\GPTProject2\\EDAAgent\\artifacts\\2026-10-22T18-09-28-179Z-xsim-c2911341",
+    "receipt_directory": "E:\\GPTProject2\\EDAAgent\\artifacts\\system-dma-negative-20261022T180926Z",
+    "other_model_api_calls": 0
+  },
+  "implementation": {
+    "project": "dma",
+    "stage": "impl",
+    "pass": true,
+    "exit_code": 0,
+    "wall_seconds": 100.41,
+    "artifact_directory": "E:\\GPTProject2\\EDAAgent\\artifacts\\2026-10-22T18-08-42-733Z-vivado-9d40e947",
+    "receipt_directory": "E:\\GPTProject2\\EDAAgent\\artifacts\\system-dma-impl-20261022T180841Z",
+    "other_model_api_calls": 0
+  },
+  "ppa": {
+    "stage": "routed",
+    "top": "dma_top",
+    "version": "2020.2",
+    "part": "xc7a100tfgg676-2",
+    "clock_period_ns": 10.0,
+    "io_delay_ns": 2.0,
+    "setup_slack_ns": 2.105,
+    "hold_slack_ns": 0.075,
+    "flip_flops": 584,
+    "lut_cells": 1001,
+    "dsp48": 0,
+    "ramb18": 0,
+    "ramb36": 1,
+    "implementation_mode": "out_of_context",
+    "black_boxes": 0,
+    "board_io_validated": false,
+    "hardware_tested": false,
+    "model_api_calls": 0,
+    "physical_slice_luts": 914,
+    "physical_slice_registers": 584
+  },
+  "source_files": [
+    {
+      "path": "vendor/verilog-axi/rtl/axi_dma.v",
+      "sha256": "95fce64412c272d949dca41e7d677fb9ae72f15bd1137a65c39eea2f5f50d57f",
+      "lines": 361,
+      "module_declarations": 1
+    },
+    {
+      "path": "vendor/verilog-axi/rtl/axi_dma_rd.v",
+      "sha256": "9c733ba0cc5e48f15a91ddf4b5bd569954bbed3c9745b1973920921296c7b6f4",
+      "lines": 692,
+      "module_declarations": 1
+    },
+    {
+      "path": "vendor/verilog-axi/rtl/axi_dma_wr.v",
+      "sha256": "161ecaf8ee934a55114b676f52b45bcedad9e5c488f9f3874175ef50457a6e4d",
+      "lines": 942,
+      "module_declarations": 1
+    },
+    {
+      "path": "vendor/verilog-ethernet/lib/axis/rtl/axis_fifo.v",
+      "sha256": "8ee436631ece272f478a4396c3819f62e5cd4f9a492b80502562aeb73c9e6294",
+      "lines": 565,
+      "module_declarations": 1
+    },
+    {
+      "path": "projects/system-bench/dma/dma_top.v",
+      "sha256": "d7814e0ceb4ac048765b98ed4e66172319ecf85b109afb51ac8d0794cd74aa14",
+      "lines": 172,
+      "module_declarations": 1
+    },
+    {
+      "path": "projects/system-bench/dma/tb_dma.sv",
+      "sha256": "802288cd1fdae9ebbdfcd58a9fc4665c77ccdaa13b08fc4e535e422d6d07a47b",
+      "lines": 227,
+      "module_declarations": 1
+    },
+    {
+      "path": "projects/system-bench/dma/tb_template.sv",
+      "sha256": "9bff46fa48b1e84c7c832972982cf428e609bc7776e7fc2aa4aa1a6ae6e2ad96",
+      "lines": 193,
+      "module_declarations": 1
+    },
+    {
+      "path": "projects/system-bench/dma/tb_dma_negative.sv",
+      "sha256": "c668dcb44b4147c505e16fe3805cf16e5116c2b0584c13d0d3ef65661b872c98",
+      "lines": 1,
+      "module_declarations": 1
+    },
+    {
+      "path": "projects/system-bench/generate_dma.py",
+      "sha256": "ee0847a10dbf9b70394acaf81f14fcf846e2248a638c3d39e305c4afcb4eb667",
+      "lines": 84,
+      "module_declarations": 0
+    },
+    {
+      "path": "projects/system-bench/dma/run_negative.py",
+      "sha256": "9ae5dce4fec61be38251684fa6fe5ecc9e33097f8113565958942cc3e4fe8a5d",
+      "lines": 25,
+      "module_declarations": 0
+    }
+  ],
+  "compiled_rtl_lines": 2732,
+  "compiled_rtl_module_declarations": 5,
+  "upstream": {
+    "verilog-axi": "516bd5dadc3365b7f9e225d2af8fe0b8d804fe53",
+    "verilog-ethernet": "77320a9471d19c7dd383914bc049e02d9f4f1ffb"
+  },
+  "retained_failed_runs": [
+    {
+      "directory": "E:\\GPTProject2\\EDAAgent\\artifacts\\2026-10-22T18-08-42-736Z-xsim-55168f50",
+      "completed_cases": 716,
+      "reason": "Last test source range overlapped its destination guard by three bytes.",
+      "fix": "Reduce that length from 32763 to 32760 to preserve a four-byte guard gap; no RTL change."
+    },
+    {
+      "directory": "E:\\GPTProject2\\EDAAgent\\artifacts\\2026-10-22T18-10-27-611Z-xsim-3de4e643",
+      "completed_cases": 717,
+      "reason": "Coverage gate rejected missing AXI R and AXIS backpressure before reset."
+    },
+    {
+      "directory": "E:\\GPTProject2\\EDAAgent\\artifacts\\2026-10-22T18-12-20-748Z-xsim-18c39abd",
+      "completed_cases": 717,
+      "reason": "A 32-cycle wait achieved AXIS backpressure but not AXI R backpressure.",
+      "fix": "Wait for an actual AXI R VALID && !READY event before resetting; retain coverage gate."
+    }
+  ],
+  "limits": [
+    "64 KiB single-outstanding AXI memory model, 32-bit data path, non-overlapping copies only.",
+    "Error responses retain data; verified error status/recovery, not fault rollback semantics.",
+    "Zero-length, overlapping copies, asynchronous reset and real DDR/controller integration are not covered.",
+    "100 MHz OOC internal timing only; clock source and interface pin placement are not physically fixed.",
+    "No board/bitstream/hardware test; DRC contains CFGBVS-1 and RTSTAT-10 warnings."
+  ],
+  "other_model_api_calls": 0
+}

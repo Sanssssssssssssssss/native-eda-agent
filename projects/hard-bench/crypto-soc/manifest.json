@@ -1,0 +1,88 @@
+{
+  "project": "crypto-soc",
+  "seeds": [
+    1,
+    305419896,
+    3735928559
+  ],
+  "case_lengths": [
+    4093,
+    4093,
+    1,
+    1,
+    15,
+    15,
+    16,
+    16,
+    17,
+    17,
+    257,
+    257,
+    33,
+    33
+  ],
+  "valid_descriptors_per_seed": 14,
+  "validated_ciphertext_bytes_per_seed": 8864,
+  "validated_ciphertext_bytes_total": 26592,
+  "error_cases": [
+    "unaligned descriptor",
+    "zero length",
+    "33-bit address overflow",
+    "unaligned next",
+    "partial overlap",
+    "invalid flags",
+    "descriptor cycle limit"
+  ],
+  "error_recovery_chains_per_seed": 7,
+  "actual_cpu": "PicoRV32 RV32IM with IRQ",
+  "compiler_command": [
+    "E:\\GPTProject2\\EDAAgent\\runtime\\zig\\ziglang\\zig.exe",
+    "cc",
+    "-target",
+    "riscv32-freestanding",
+    "-mcpu=generic_rv32+m-a-c-d-f",
+    "-mabi=ilp32",
+    "-O2",
+    "-ffreestanding",
+    "-fno-builtin",
+    "-nostdlib",
+    "-mno-relax",
+    "-IE:\\GPTProject2\\EDAAgent\\vendor\\picorv32\\firmware",
+    "-Wl,-T,E:\\GPTProject2\\EDAAgent\\projects\\hard-bench\\crypto-soc\\link.ld",
+    "E:\\GPTProject2\\EDAAgent\\projects\\hard-bench\\crypto-soc\\start.S",
+    "E:\\GPTProject2\\EDAAgent\\projects\\hard-bench\\crypto-soc\\firmware.c",
+    "-o",
+    "E:\\GPTProject2\\EDAAgent\\projects\\hard-bench\\crypto-soc\\firmware.elf"
+  ],
+  "oracle": "cryptography AES CTR plus zlib CRC32",
+  "source_files": [
+    "vendor/picorv32/picorv32.v",
+    "vendor/aes/src/rtl/aes_core.v",
+    "vendor/aes/src/rtl/aes_encipher_block.v",
+    "vendor/aes/src/rtl/aes_decipher_block.v",
+    "vendor/aes/src/rtl/aes_key_mem.v",
+    "vendor/aes/src/rtl/aes_sbox.v",
+    "vendor/aes/src/rtl/aes_inv_sbox.v",
+    "projects/hard-bench/crypto-soc/shared_ram.sv",
+    "projects/hard-bench/crypto-soc/ctr_dma.sv",
+    "projects/hard-bench/crypto-soc/crypto_soc_top.sv"
+  ],
+  "upstreams": {
+    "picorv32": "ef203c2b0a3fb793280f5114941416c425c5b461",
+    "aes": "80dc4718e1dcbbdb4b0dd1bdb393d8f7b98981dc"
+  },
+  "source_sha256": {
+    "vendor/picorv32/picorv32.v": "fd142889e8178ef67f1cff17cb2d18b3adae56fcae2badf7cbcc4c4f5ac7960e",
+    "vendor/aes/src/rtl/aes_core.v": "320e1137ac9d8812134a8313d23072e95da7c2dc0316fb24006f4b23132636d9",
+    "vendor/aes/src/rtl/aes_encipher_block.v": "827b10ca76f99bb1dd99147e414930e12b7d6a1b3269063b909f9d382126e737",
+    "vendor/aes/src/rtl/aes_decipher_block.v": "ec2879babd84ae5458282c9f5e28db89e71cac18d9a343e1b2e7399062976ff5",
+    "vendor/aes/src/rtl/aes_key_mem.v": "033fa100410c2e0600251c2787d4496dcb8829c8508fa99a5288f7b26079367b",
+    "vendor/aes/src/rtl/aes_sbox.v": "12727f8eabfdcdd079088451358ca4ff60a7ebe7fabaea58604e61a1efee8b84",
+    "vendor/aes/src/rtl/aes_inv_sbox.v": "2fa81ebc3e5ed760288b7144748e037aa9442e88d2111280c6e11eb752b1f946",
+    "projects/hard-bench/crypto-soc/shared_ram.sv": "ea1d8f50e2b79c5b3667b282d8e32ce7ffbcbd1ec972cced18b12bd8a7dc9a15",
+    "projects/hard-bench/crypto-soc/ctr_dma.sv": "9c44b83c76326e6aed7335cc07f34de12114e7dbec0e03087155ef2ccd79124f",
+    "projects/hard-bench/crypto-soc/crypto_soc_top.sv": "183a92675d528ab2a8956069836ef53742fcdb7489a119c87560e83985620664"
+  },
+  "firmware_sha256": "f3b50590bd0c7db3ee82d018553117f68fdc8b74ea50894c135e09746e38aca5",
+  "oracle_sha256": "9579a194939a381eab98a07be684aa118c57b1ee40c5f109b487a66dbc339b74"
+}

@@ -1,0 +1,8 @@
+{
+  "sources": [
+    "projects/verilogeval-24/diagnostics/kmap_spec_tb.sv",
+    "artifacts/verilogeval-codex-2026-10-22T16-56-02-984Z/Prob093_ece241_2014_q3_ref.sv",
+    "artifacts/verilogeval-codex-2026-10-22T16-56-02-984Z/Prob093_ece241_2014_q3.sv"
+  ],
+  "top": "kmap_spec_tb"
+}

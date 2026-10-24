@@ -1,0 +1,1689 @@
+{
+  "schema_version": 1,
+  "native_interfaces": 48,
+  "focused_interfaces": 28,
+  "community_interfaces": 45,
+  "community_prompts": 11,
+  "counting": "Interface count, not independent engines, actions or benchmark tasks.",
+  "tools": [
+    {
+      "name": "eda_xsim",
+      "description": "Compile Verilog/SystemVerilog and VHDL, elaborate a testbench and run bounded XSim. Supports include directories, defines, top parameters, libraries, plusargs and SV seed. Optional literal pass_marker yields an explicit verdict; fatal/error/timeout overrides it. Without a marker functional acceptance remains unevaluated.",
+      "inputSchema": {
+        "type": "object",
+        "required": [
+          "sources",
+          "top"
+        ],
+        "properties": {
+          "sources": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1
+          },
+          "top": {
+            "type": "string"
+          },
+          "capture_top_wave": {
+            "type": "boolean"
+          },
+          "include_dirs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "defines": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "generics": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "libraries": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "plusargs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "sv_seed": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 2147483647
+          },
+          "timeout_seconds": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 1800
+          },
+          "pass_marker": {
+            "type": "string",
+            "minLength": 1
+          },
+          "vhdl_2008": {
+            "type": "boolean"
+          }
+        }
+      },
+      "executor": "eda_xsim",
+      "fixed_selector": null,
+      "launches_eda": true,
+      "execution_note": "Requires installed EDA software",
+      "writes_local_evidence": true,
+      "model_api_calls": 0
+    },
+    {
+      "name": "eda_vivado",
+      "description": "Execute an authored Vivado Tcl script in a new output directory. Set EDA_WORKSPACE to the project root for resolving inputs. Supports synthesis and implementation; returns artifacts and logs, not an assumed pass verdict.",
+      "inputSchema": {
+        "type": "object",
+        "required": [
+          "script"
+        ],
+        "properties": {
+          "script": {
+            "type": "string"
+          }
+        }
+      },
+      "executor": "eda_vivado",
+      "fixed_selector": null,
+      "launches_eda": true,
+      "execution_note": "Requires installed EDA software",
+      "writes_local_evidence": true,
+      "model_api_calls": 0
+    },
+    {
+      "name": "eda_ltspice_batch",
+      "description": "Run a self-contained .cir/.net netlist with the real LTspice batch engine and return its .log measurements. Copies the input into a fresh artifact directory. For external models use absolute .include paths or the official LTspice MCP in the original project directory.",
+      "inputSchema": {
+        "type": "object",
+        "required": [
+          "netlist"
+        ],
+        "properties": {
+          "netlist": {
+            "type": "string"
+          }
+        }
+      },
+      "executor": "eda_ltspice_batch",
+      "fixed_selector": null,
+      "launches_eda": true,
+      "execution_note": "Requires installed EDA software",
+      "writes_local_evidence": true,
+      "model_api_calls": 0
+    },
+    {
+      "name": "eda_verify",
+      "description": "Check the provided counter and RC examples against fixed behavioral and mathematical acceptance criteria. Accepts artifact directory paths and one combined analog log. The result is computed independently of the model.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "xsim": {
+            "type": "string"
+          },
+          "vivado": {
+            "type": "string"
+          },
+          "analogLog": {
+            "type": "string"
+          }
+        }
+      },
+      "executor": "eda_verify",
+      "fixed_selector": null,
+      "launches_eda": false,
+      "execution_note": "Offline local inspection/control",
+      "writes_local_evidence": true,
+      "model_api_calls": 0
+    },
+    {
+      "name": "eda_vivado_catalog",
+      "description": "Query the installed Vivado version, available commands, parts or IP VLNVs. Bounded results include total match count; availability is not execution proof.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "commands",
+              "parts",
+              "ips"
+            ]
+          },
+          "pattern": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1024
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 200,
+            "default": 20
+          }
+        },
+        "required": [
+          "kind"
+        ],
+        "additionalProperties": false
+      },
+      "executor": "eda_vivado_catalog",
+      "fixed_selector": null,
+      "launches_eda": true,
+      "execution_note": "Requires installed EDA software",
+      "writes_local_evidence": true,
+      "model_api_calls": 0
+    },
+    {
+      "name": "eda_vivado_synthesize",
+      "description": "Synthesize explicit RTL/XCI sources and XDC into a fresh checkpoint. Supports include directories, defines and top parameters. Defaults to out-of-context; no implicit clocks or timing relaxation. Produces utilization and black-box evidence.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "sources": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 1024
+            },
+            "maxItems": 256,
+            "minItems": 1
+          },
+          "constraints": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 1024
+            },
+            "maxItems": 256
+          },
+          "top": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1024
+          },
+          "part": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1024
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "out_of_context",
+              "default"
+            ]
+          },
+          "include_dirs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 1024
+            },
+            "maxItems": 256
+          },
+          "defines": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 1024
+            },
+            "maxItems": 256
+          },
+          "generics": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 1024
+            },
+            "maxItems": 256
+          },
+          "vhdl_2008": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "sources",
+          "top",
+          "part"
+        ],
+        "additionalProperties": false
+      },
+      "executor": "eda_vivado_synthesize",
+      "fixed_selector": null,
+      "launches_eda": true,
+      "execution_note": "Requires installed EDA software",
+      "writes_local_evidence": true,
+      "model_api_calls": 0
+    },
+    {
+      "name": "eda_vivado_implement",
+      "description": "Open a synthesis checkpoint, optionally apply explicit additional XDC, and run opt/place/route in a fresh directory. Returns routed DCP, timing, route and constraint evidence. Tool completion is separate from timing closure or board signoff.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "checkpoint": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1024
+          },
+          "constraints": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 1024
+            },
+            "maxItems": 256
+          }
+        },
+        "required": [
+          "checkpoint"
+        ],
+        "additionalProperties": false
+      },
+      "executor": "eda_vivado_implement",
+      "fixed_selector": null,
+      "launches_eda": true,
+      "execution_note": "Requires installed EDA software",
+      "writes_local_evidence": true,
+      "model_api_calls": 0
+    },
+    {
+      "name": "eda_vivado_reports",
+      "description": "Generate selected timing, CDC, DRC, methodology, clock, exception, route and utilization reports from a checkpoint. Unknown report formats remain unknown; CDC warnings and missing IO constraints require review.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "checkpoint": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1024
+          },
+          "reports": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "timing",
+                "utilization",
+                "cdc",
+                "drc",
+                "methodology",
+                "clocks",
+                "exceptions",
+                "route"
+              ]
+            },
+            "minItems": 1,
+            "uniqueItems": true
+          }
+        },
+        "required": [
+          "checkpoint",
+          "reports"
+        ],
+        "additionalProperties": false
+      },
+      "executor": "eda_vivado_reports",
+      "fixed_selector": null,
+      "launches_eda": true,
+      "execution_note": "Requires installed EDA software",
+      "writes_local_evidence": true,
+      "model_api_calls": 0
+    },
+    {
+      "name": "eda_vivado_objects",
+      "description": "Inspect bounded matching cells, nets, ports, pins or clocks in a checkpoint. Returns names and selected properties plus total count; query text is passed as data, never evaluated as Tcl.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "checkpoint": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1024
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "cells",
+              "nets",
+              "ports",
+              "pins",
+              "clocks"
+            ]
+          },
+          "pattern": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1024
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 200,
+            "default": 20
+          }
+        },
+        "required": [
+          "checkpoint",
+          "kind"
+        ],
+        "additionalProperties": false
+      },
+      "executor": "eda_vivado_objects",
+      "fixed_selector": null,
+      "launches_eda": true,
+      "execution_note": "Requires installed EDA software",
+      "writes_local_evidence": true,
+      "model_api_calls": 0
+    },
+    {
+      "name": "eda_vivado_timing_paths",
+      "description": "Return setup or hold timing paths with endpoint, slack, requirement and logic depth. Optional from/to clock names must resolve exactly. A bounded path listing does not establish whole-design TNS or signoff.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "checkpoint": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1024
+          },
+          "delay_type": {
+            "type": "string",
+            "enum": [
+              "max",
+              "min"
+            ]
+          },
+          "from_clock": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1024
+          },
+          "to_clock": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1024
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 200,
+            "default": 20
+          }
+        },
+        "required": [
+          "checkpoint"
+        ],
+        "additionalProperties": false
+      },
+      "executor": "eda_vivado_timing_paths",
+      "fixed_selector": null,
+      "launches_eda": true,
+      "execution_note": "Requires installed EDA software",
+      "writes_local_evidence": true,
+      "model_api_calls": 0
+    },
+    {
+      "name": "eda_vivado_find_parts",
+      "description": "Find installed parts; starts Vivado, returns bounded matches.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "pattern": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1024
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 200,
+            "default": 20
+          }
+        },
+        "required": [],
+        "additionalProperties": false
+      },
+      "executor": "eda_vivado_catalog",
+      "fixed_selector": {
+        "kind": "parts"
+      },
+      "launches_eda": true,
+      "execution_note": "Requires installed EDA software",
+      "writes_local_evidence": true,
+      "model_api_calls": 0
+    },
+    {
+      "name": "eda_vivado_find_ips",
+      "description": "Find installed ips; starts Vivado, returns bounded matches.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "pattern": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1024
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 200,
+            "default": 20
+          }
+        },
+        "required": [],
+        "additionalProperties": false
+      },
+      "executor": "eda_vivado_catalog",
+      "fixed_selector": {
+        "kind": "ips"
+      },
+      "launches_eda": true,
+      "execution_note": "Requires installed EDA software",
+      "writes_local_evidence": true,
+      "model_api_calls": 0
+    },
+    {
+      "name": "eda_vivado_find_commands",
+      "description": "Find installed commands; starts Vivado, returns bounded matches.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "pattern": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1024
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 200,
+            "default": 20
+          }
+        },
+        "required": [],
+        "additionalProperties": false
+      },
+      "executor": "eda_vivado_catalog",
+      "fixed_selector": {
+        "kind": "commands"
+      },
+      "launches_eda": true,
+      "execution_note": "Requires installed EDA software",
+      "writes_local_evidence": true,
+      "model_api_calls": 0
+    },
+    {
+      "name": "eda_vivado_report_timing",
+      "description": "Generate timing evidence from an immutable input DCP in a fresh run. Report warnings require review.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "checkpoint": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1024
+          }
+        },
+        "required": [
+          "checkpoint"
+        ],
+        "additionalProperties": false
+      },
+      "executor": "eda_vivado_reports",
+      "fixed_selector": {
+        "reports": [
+          "timing"
+        ]
+      },
+      "launches_eda": true,
+      "execution_note": "Requires installed EDA software",
+      "writes_local_evidence": true,
+      "model_api_calls": 0
+    },
+    {
+      "name": "eda_vivado_report_utilization",
+      "description": "Generate utilization evidence from an immutable input DCP in a fresh run. Report warnings require review.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "checkpoint": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1024
+          }
+        },
+        "required": [
+          "checkpoint"
+        ],
+        "additionalProperties": false
+      },
+      "executor": "eda_vivado_reports",
+      "fixed_selector": {
+        "reports": [
+          "utilization"
+        ]
+      },
+      "launches_eda": true,
+      "execution_note": "Requires installed EDA software",
+      "writes_local_evidence": true,
+      "model_api_calls": 0
+    },
+    {
+      "name": "eda_vivado_report_cdc",
+      "description": "Generate cdc evidence from an immutable input DCP in a fresh run. Report warnings require review.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "checkpoint": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1024
+          }
+        },
+        "required": [
+          "checkpoint"
+        ],
+        "additionalProperties": false
+      },
+      "executor": "eda_vivado_reports",
+      "fixed_selector": {
+        "reports": [
+          "cdc"
+        ]
+      },
+      "launches_eda": true,
+      "execution_note": "Requires installed EDA software",
+      "writes_local_evidence": true,
+      "model_api_calls": 0
+    },
+    {
+      "name": "eda_vivado_report_drc",
+      "description": "Generate drc evidence from an immutable input DCP in a fresh run. Report warnings require review.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "checkpoint": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1024
+          }
+        },
+        "required": [
+          "checkpoint"
+        ],
+        "additionalProperties": false
+      },
+      "executor": "eda_vivado_reports",
+      "fixed_selector": {
+        "reports": [
+          "drc"
+        ]
+      },
+      "launches_eda": true,
+      "execution_note": "Requires installed EDA software",
+      "writes_local_evidence": true,
+      "model_api_calls": 0
+    },
+    {
+      "name": "eda_vivado_report_methodology",
+      "description": "Generate methodology evidence from an immutable input DCP in a fresh run. Report warnings require review.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "checkpoint": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1024
+          }
+        },
+        "required": [
+          "checkpoint"
+        ],
+        "additionalProperties": false
+      },
+      "executor": "eda_vivado_reports",
+      "fixed_selector": {
+        "reports": [
+          "methodology"
+        ]
+      },
+      "launches_eda": true,
+      "execution_note": "Requires installed EDA software",
+      "writes_local_evidence": true,
+      "model_api_calls": 0
+    },
+    {
+      "name": "eda_vivado_report_clocks",
+      "description": "Generate clocks evidence from an immutable input DCP in a fresh run. Report warnings require review.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "checkpoint": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1024
+          }
+        },
+        "required": [
+          "checkpoint"
+        ],
+        "additionalProperties": false
+      },
+      "executor": "eda_vivado_reports",
+      "fixed_selector": {
+        "reports": [
+          "clocks"
+        ]
+      },
+      "launches_eda": true,
+      "execution_note": "Requires installed EDA software",
+      "writes_local_evidence": true,
+      "model_api_calls": 0
+    },
+    {
+      "name": "eda_vivado_report_exceptions",
+      "description": "Generate exceptions evidence from an immutable input DCP in a fresh run. Report warnings require review.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "checkpoint": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1024
+          }
+        },
+        "required": [
+          "checkpoint"
+        ],
+        "additionalProperties": false
+      },
+      "executor": "eda_vivado_reports",
+      "fixed_selector": {
+        "reports": [
+          "exceptions"
+        ]
+      },
+      "launches_eda": true,
+      "execution_note": "Requires installed EDA software",
+      "writes_local_evidence": true,
+      "model_api_calls": 0
+    },
+    {
+      "name": "eda_vivado_report_route",
+      "description": "Generate route evidence from an immutable input DCP in a fresh run. Report warnings require review.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "checkpoint": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1024
+          }
+        },
+        "required": [
+          "checkpoint"
+        ],
+        "additionalProperties": false
+      },
+      "executor": "eda_vivado_reports",
+      "fixed_selector": {
+        "reports": [
+          "route"
+        ]
+      },
+      "launches_eda": true,
+      "execution_note": "Requires installed EDA software",
+      "writes_local_evidence": true,
+      "model_api_calls": 0
+    },
+    {
+      "name": "eda_vivado_query_cells",
+      "description": "Query cells with bounded output and total count. Patterns are Tcl data.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "checkpoint": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1024
+          },
+          "pattern": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1024
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 200,
+            "default": 20
+          }
+        },
+        "required": [
+          "checkpoint"
+        ],
+        "additionalProperties": false
+      },
+      "executor": "eda_vivado_objects",
+      "fixed_selector": {
+        "kind": "cells"
+      },
+      "launches_eda": true,
+      "execution_note": "Requires installed EDA software",
+      "writes_local_evidence": true,
+      "model_api_calls": 0
+    },
+    {
+      "name": "eda_vivado_query_nets",
+      "description": "Query nets with bounded output and total count. Patterns are Tcl data.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "checkpoint": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1024
+          },
+          "pattern": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1024
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 200,
+            "default": 20
+          }
+        },
+        "required": [
+          "checkpoint"
+        ],
+        "additionalProperties": false
+      },
+      "executor": "eda_vivado_objects",
+      "fixed_selector": {
+        "kind": "nets"
+      },
+      "launches_eda": true,
+      "execution_note": "Requires installed EDA software",
+      "writes_local_evidence": true,
+      "model_api_calls": 0
+    },
+    {
+      "name": "eda_vivado_query_ports",
+      "description": "Query ports with bounded output and total count. Patterns are Tcl data.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "checkpoint": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1024
+          },
+          "pattern": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1024
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 200,
+            "default": 20
+          }
+        },
+        "required": [
+          "checkpoint"
+        ],
+        "additionalProperties": false
+      },
+      "executor": "eda_vivado_objects",
+      "fixed_selector": {
+        "kind": "ports"
+      },
+      "launches_eda": true,
+      "execution_note": "Requires installed EDA software",
+      "writes_local_evidence": true,
+      "model_api_calls": 0
+    },
+    {
+      "name": "eda_vivado_query_pins",
+      "description": "Query pins with bounded output and total count. Patterns are Tcl data.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "checkpoint": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1024
+          },
+          "pattern": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1024
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 200,
+            "default": 20
+          }
+        },
+        "required": [
+          "checkpoint"
+        ],
+        "additionalProperties": false
+      },
+      "executor": "eda_vivado_objects",
+      "fixed_selector": {
+        "kind": "pins"
+      },
+      "launches_eda": true,
+      "execution_note": "Requires installed EDA software",
+      "writes_local_evidence": true,
+      "model_api_calls": 0
+    },
+    {
+      "name": "eda_vivado_query_clocks",
+      "description": "Query clocks with bounded output and total count. Patterns are Tcl data.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "checkpoint": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1024
+          },
+          "pattern": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1024
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 200,
+            "default": 20
+          }
+        },
+        "required": [
+          "checkpoint"
+        ],
+        "additionalProperties": false
+      },
+      "executor": "eda_vivado_objects",
+      "fixed_selector": {
+        "kind": "clocks"
+      },
+      "launches_eda": true,
+      "execution_note": "Requires installed EDA software",
+      "writes_local_evidence": true,
+      "model_api_calls": 0
+    },
+    {
+      "name": "eda_vivado_setup_paths",
+      "description": "Inspect worst setup paths. This is not whole-design signoff.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "checkpoint": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1024
+          },
+          "from_clock": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1024
+          },
+          "to_clock": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1024
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 200,
+            "default": 20
+          }
+        },
+        "required": [
+          "checkpoint"
+        ],
+        "additionalProperties": false
+      },
+      "executor": "eda_vivado_timing_paths",
+      "fixed_selector": {
+        "delay_type": "max"
+      },
+      "launches_eda": true,
+      "execution_note": "Requires installed EDA software",
+      "writes_local_evidence": true,
+      "model_api_calls": 0
+    },
+    {
+      "name": "eda_vivado_hold_paths",
+      "description": "Inspect worst hold paths. This is not whole-design signoff.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "checkpoint": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1024
+          },
+          "from_clock": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1024
+          },
+          "to_clock": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1024
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 200,
+            "default": 20
+          }
+        },
+        "required": [
+          "checkpoint"
+        ],
+        "additionalProperties": false
+      },
+      "executor": "eda_vivado_timing_paths",
+      "fixed_selector": {
+        "delay_type": "min"
+      },
+      "launches_eda": true,
+      "execution_note": "Requires installed EDA software",
+      "writes_local_evidence": true,
+      "model_api_calls": 0
+    },
+    {
+      "name": "eda_vivado_optimize",
+      "description": "Provider-free RouteAgents routing plus bounded Vivado candidate loop and AER plateau stopping. Default plan measures a routed DCP; run tries physical recipes. resume_from continues an interrupted run from a verified committed journal in a fresh directory after baseline/winner remeasurement; run recovery-check first. Preserves constraints, logical representation, routing/hold/DRC gates; reports gain and rejections. No formal/board signoff. Shared lease and causal traces.",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "anyOf": [
+          {
+            "required": [
+              "checkpoint"
+            ]
+          },
+          {
+            "required": [
+              "resume_from"
+            ]
+          }
+        ],
+        "properties": {
+          "checkpoint": {
+            "type": "string",
+            "minLength": 1
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "plan",
+              "run"
+            ],
+            "default": "plan"
+          },
+          "resume_from": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Native interrupted optimizer run directory. Continues in a fresh run after ownership/hash checks and independent remeasurement."
+          },
+          "max_trials": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 7,
+            "default": 3
+          },
+          "max_seconds": {
+            "type": "integer",
+            "minimum": 60,
+            "maximum": 3600,
+            "default": 600
+          },
+          "min_gain_ns": {
+            "type": "number",
+            "minimum": 0.001,
+            "maximum": 1,
+            "default": 0.01
+          },
+          "first_play": {
+            "type": "string",
+            "enum": [
+              "route_explore",
+              "route_aggressive",
+              "route_more_global",
+              "rebuild_route",
+              "replace_explore",
+              "replace_timing",
+              "replace_netdelay"
+            ]
+          }
+        }
+      },
+      "executor": "eda_vivado_optimize",
+      "fixed_selector": null,
+      "launches_eda": true,
+      "execution_note": "Both plan and run launch Vivado",
+      "writes_local_evidence": true,
+      "model_api_calls": 0
+    },
+    {
+      "name": "eda_knowledge",
+      "description": "Search small versioned FPGA rules, applicability boundaries and primary sources. No model or internet call.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string",
+            "minLength": 1
+          },
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 40
+          }
+        },
+        "additionalProperties": false
+      },
+      "executor": "eda_knowledge",
+      "fixed_selector": null,
+      "launches_eda": false,
+      "execution_note": "Offline local inspection/control",
+      "writes_local_evidence": true,
+      "model_api_calls": 0
+    },
+    {
+      "name": "eda_trace",
+      "description": "Offline inspect, recovery-check or OTLP JSON export for native/proxy/optimizer traces. Checks hashes, parents, committed state and ownership. Export writes a local file only; never uploads, resumes EDA or infers functional acceptance.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "directory": {
+            "type": "string",
+            "minLength": 1
+          },
+          "action": {
+            "type": "string",
+            "enum": [
+              "inspect",
+              "recovery-check",
+              "export"
+            ]
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "directory"
+        ]
+      },
+      "executor": "eda_trace",
+      "fixed_selector": null,
+      "launches_eda": false,
+      "execution_note": "Offline local inspection/control",
+      "writes_local_evidence": true,
+      "model_api_calls": 0
+    },
+    {
+      "name": "eda_runs",
+      "description": "List persistent runtime jobs. Explicit reconcile archives leases only when their owner and recorded children are absent; never kills or reruns a job.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "action": {
+            "enum": [
+              "list",
+              "reconcile"
+            ],
+            "type": "string"
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 200
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "action"
+        ]
+      },
+      "executor": "eda_runs",
+      "fixed_selector": null,
+      "launches_eda": false,
+      "execution_note": "Offline local inspection/control",
+      "writes_local_evidence": true,
+      "model_api_calls": 0
+    },
+    {
+      "name": "eda_preflight",
+      "description": "Inspect local EDA capability paths, runtime configuration and model API policy. Availability is not a successful validation.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
+      "executor": "eda_preflight",
+      "fixed_selector": null,
+      "launches_eda": false,
+      "execution_note": "Offline local inspection/control",
+      "writes_local_evidence": true,
+      "model_api_calls": 0
+    },
+    {
+      "name": "eda_benchmark",
+      "description": "List, plan, execute, report or compare versioned local benchmarks. Real EDA runs use global resource limits, frozen acceptance and per-case traces. Seeds are variants, not independent tasks.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "action": {
+            "type": "string",
+            "enum": [
+              "list",
+              "plan",
+              "run",
+              "report",
+              "compare"
+            ]
+          },
+          "category": {
+            "type": "string",
+            "minLength": 1
+          },
+          "tier": {
+            "type": "string",
+            "minLength": 1
+          },
+          "tool": {
+            "type": "string",
+            "minLength": 1
+          },
+          "ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 1
+          },
+          "seed": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "concurrency": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 4
+          },
+          "directory": {
+            "type": "string",
+            "minLength": 1
+          },
+          "baseline": {
+            "type": "string",
+            "minLength": 1
+          },
+          "candidate": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "action"
+        ]
+      },
+      "executor": "eda_benchmark",
+      "fixed_selector": null,
+      "launches_eda": true,
+      "execution_note": "Only action=run launches EDA",
+      "writes_local_evidence": true,
+      "model_api_calls": 0
+    },
+    {
+      "name": "eda_trace_inspect",
+      "description": "Inspect hashes, span lineage and terminal evidence; no EDA execution.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "directory": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "directory"
+        ],
+        "additionalProperties": false
+      },
+      "executor": "eda_trace",
+      "fixed_selector": {
+        "action": "inspect"
+      },
+      "launches_eda": false,
+      "execution_note": "Offline local inspection/control",
+      "writes_local_evidence": true,
+      "model_api_calls": 0
+    },
+    {
+      "name": "eda_trace_export",
+      "description": "Export terminal spans to a local OTLP JSON file; no upload.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "directory": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "directory"
+        ],
+        "additionalProperties": false
+      },
+      "executor": "eda_trace",
+      "fixed_selector": {
+        "action": "export"
+      },
+      "launches_eda": false,
+      "execution_note": "Offline local inspection/control",
+      "writes_local_evidence": true,
+      "model_api_calls": 0
+    },
+    {
+      "name": "eda_trace_recovery_check",
+      "description": "Check durable optimizer recovery eligibility and process ownership; does not resume.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "directory": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "directory"
+        ],
+        "additionalProperties": false
+      },
+      "executor": "eda_trace",
+      "fixed_selector": {
+        "action": "recovery-check"
+      },
+      "launches_eda": false,
+      "execution_note": "Offline local inspection/control",
+      "writes_local_evidence": true,
+      "model_api_calls": 0
+    },
+    {
+      "name": "eda_runs_list",
+      "description": "Read persistent run states and counts.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 200
+          }
+        },
+        "required": [],
+        "additionalProperties": false
+      },
+      "executor": "eda_runs",
+      "fixed_selector": {
+        "action": "list"
+      },
+      "launches_eda": false,
+      "execution_note": "Offline local inspection/control",
+      "writes_local_evidence": true,
+      "model_api_calls": 0
+    },
+    {
+      "name": "eda_runs_reconcile",
+      "description": "Release stale leases only after owner and child processes are absent; never terminate a process.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {},
+        "required": [],
+        "additionalProperties": false
+      },
+      "executor": "eda_runs",
+      "fixed_selector": {
+        "action": "reconcile"
+      },
+      "launches_eda": false,
+      "execution_note": "Offline local inspection/control",
+      "writes_local_evidence": true,
+      "model_api_calls": 0
+    },
+    {
+      "name": "eda_benchmark_list",
+      "description": "List cases and execution prerequisites.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "category": {
+            "type": "string",
+            "minLength": 1
+          },
+          "tier": {
+            "type": "string",
+            "minLength": 1
+          },
+          "tool": {
+            "type": "string",
+            "minLength": 1
+          },
+          "ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 1
+          },
+          "seed": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "required": [],
+        "additionalProperties": false
+      },
+      "executor": "eda_benchmark",
+      "fixed_selector": {
+        "action": "list"
+      },
+      "launches_eda": false,
+      "execution_note": "Offline local inspection/control",
+      "writes_local_evidence": true,
+      "model_api_calls": 0
+    },
+    {
+      "name": "eda_benchmark_plan",
+      "description": "Resolve a frozen campaign without starting EDA.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "category": {
+            "type": "string",
+            "minLength": 1
+          },
+          "tier": {
+            "type": "string",
+            "minLength": 1
+          },
+          "tool": {
+            "type": "string",
+            "minLength": 1
+          },
+          "ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 1
+          },
+          "seed": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "required": [],
+        "additionalProperties": false
+      },
+      "executor": "eda_benchmark",
+      "fixed_selector": {
+        "action": "plan"
+      },
+      "launches_eda": false,
+      "execution_note": "Offline local inspection/control",
+      "writes_local_evidence": true,
+      "model_api_calls": 0
+    },
+    {
+      "name": "eda_benchmark_run",
+      "description": "Execute a frozen campaign with shared leases and per-case receipts; starts EDA.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "category": {
+            "type": "string",
+            "minLength": 1
+          },
+          "tier": {
+            "type": "string",
+            "minLength": 1
+          },
+          "tool": {
+            "type": "string",
+            "minLength": 1
+          },
+          "ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 1
+          },
+          "seed": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "concurrency": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 4
+          }
+        },
+        "required": [],
+        "additionalProperties": false
+      },
+      "executor": "eda_benchmark",
+      "fixed_selector": {
+        "action": "run"
+      },
+      "launches_eda": true,
+      "execution_note": "Requires installed EDA software",
+      "writes_local_evidence": true,
+      "model_api_calls": 0
+    },
+    {
+      "name": "eda_benchmark_report",
+      "description": "Read a retained campaign; failures and timeouts remain in the denominator.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "directory": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "directory"
+        ],
+        "additionalProperties": false
+      },
+      "executor": "eda_benchmark",
+      "fixed_selector": {
+        "action": "report"
+      },
+      "launches_eda": false,
+      "execution_note": "Offline local inspection/control",
+      "writes_local_evidence": true,
+      "model_api_calls": 0
+    },
+    {
+      "name": "eda_benchmark_compare",
+      "description": "Compare campaigns only when case acceptance and test inputs are compatible.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "baseline": {
+            "type": "string",
+            "minLength": 1
+          },
+          "candidate": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "baseline",
+          "candidate"
+        ],
+        "additionalProperties": false
+      },
+      "executor": "eda_benchmark",
+      "fixed_selector": {
+        "action": "compare"
+      },
+      "launches_eda": false,
+      "execution_note": "Offline local inspection/control",
+      "writes_local_evidence": true,
+      "model_api_calls": 0
+    },
+    {
+      "name": "eda_results_list",
+      "description": "List retained historical scorecards with original protocols and units. Does not run EDA.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "unit": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          }
+        },
+        "required": [],
+        "additionalProperties": false
+      },
+      "executor": "eda_results_list",
+      "fixed_selector": null,
+      "launches_eda": false,
+      "execution_note": "Offline local inspection/control",
+      "writes_local_evidence": true,
+      "model_api_calls": 0
+    },
+    {
+      "name": "eda_results_get",
+      "description": "Read one historical scorecard, limitations and public/original evidence hashes.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false
+      },
+      "executor": "eda_results_get",
+      "fixed_selector": null,
+      "launches_eda": false,
+      "execution_note": "Offline local inspection/control",
+      "writes_local_evidence": true,
+      "model_api_calls": 0
+    },
+    {
+      "name": "eda_results_verify",
+      "description": "Verify packaged evidence hashes and available local originals. Missing original artifacts are reported, never treated as reproduced.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false
+      },
+      "executor": "eda_results_verify",
+      "fixed_selector": null,
+      "launches_eda": false,
+      "execution_note": "Offline local inspection/control",
+      "writes_local_evidence": true,
+      "model_api_calls": 0
+    },
+    {
+      "name": "eda_results_compare",
+      "description": "Compare historical scores only if task population, protocol, scope, units and evidence integrity match.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "baseline": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          },
+          "candidate": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          }
+        },
+        "required": [
+          "baseline",
+          "candidate"
+        ],
+        "additionalProperties": false
+      },
+      "executor": "eda_results_compare",
+      "fixed_selector": null,
+      "launches_eda": false,
+      "execution_note": "Offline local inspection/control",
+      "writes_local_evidence": true,
+      "model_api_calls": 0
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "defaultProvider": "deepseek",
+  "defaultModel": "deepseek-flash",
+  "defaultThinkingLevel": "medium",
+  "defaultTools": ["read", "write", "edit", "powershell", "grep", "find", "ls"],
+  "cacheWarming": "off"
+}

@@ -1,0 +1,8 @@
+`timescale 1ns/1ps
+`include "E:/GPTProject2/EDAAgent/vendor/aes/src/rtl/aes_core.v"
+`include "E:/GPTProject2/EDAAgent/vendor/aes/src/rtl/aes_encipher_block.v"
+`include "E:/GPTProject2/EDAAgent/vendor/aes/src/rtl/aes_decipher_block.v"
+`include "E:/GPTProject2/EDAAgent/vendor/aes/src/rtl/aes_key_mem.v"
+`include "E:/GPTProject2/EDAAgent/vendor/aes/src/rtl/aes_sbox.v"
+`include "E:/GPTProject2/EDAAgent/vendor/aes/src/rtl/aes_inv_sbox.v"
+`include "E:/GPTProject2/EDAAgent/projects/system-bench/aes/aes_stream_top.sv"

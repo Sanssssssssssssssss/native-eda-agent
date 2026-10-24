@@ -1,0 +1,9 @@
+{
+  "schema_version": 1,
+  "model_api_enabled": false,
+  "resources": { "xsim": 2, "vivado": 1, "ltspice": 1, "verify": 4 },
+  "queue_timeout_ms": 900000,
+  "capture_waves_by_default": false,
+  "retention": { "automatic_delete": false },
+  "hooks": ["preflight", "snapshot", "resource_acquire", "execute", "finalize"]
+}

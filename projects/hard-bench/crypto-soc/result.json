@@ -1,0 +1,249 @@
+{
+  "project": "crypto-soc",
+  "functional_pass": true,
+  "negative_control_pass": true,
+  "warm_reset_pass": true,
+  "seeds": 3,
+  "validated_descriptors": 42,
+  "validated_ciphertext_bytes": 26592,
+  "error_recoveries": 21,
+  "busy_submission_rejections": 3,
+  "completion_and_error_irqs": 42,
+  "aes_blocks_in_valid_descriptors_per_seed": 562,
+  "additional_bounded_loop_descriptors_per_seed": 16,
+  "module_scope": {
+    "picorv32": {
+      "source": "vendor/picorv32/picorv32.v",
+      "module_body_lines": 2106,
+      "noncomment_nonblank_lines": 1900
+    },
+    "picorv32_pcpi_mul": {
+      "source": "vendor/picorv32/picorv32.v",
+      "module_body_lines": 120,
+      "noncomment_nonblank_lines": 106
+    },
+    "picorv32_pcpi_div": {
+      "source": "vendor/picorv32/picorv32.v",
+      "module_body_lines": 91,
+      "noncomment_nonblank_lines": 83
+    },
+    "aes_core": {
+      "source": "vendor/aes/src/rtl/aes_core.v",
+      "module_body_lines": 297,
+      "noncomment_nonblank_lines": 194
+    },
+    "aes_encipher_block": {
+      "source": "vendor/aes/src/rtl/aes_encipher_block.v",
+      "module_body_lines": 441,
+      "noncomment_nonblank_lines": 327
+    },
+    "aes_key_mem": {
+      "source": "vendor/aes/src/rtl/aes_key_mem.v",
+      "module_body_lines": 390,
+      "noncomment_nonblank_lines": 274
+    },
+    "aes_sbox": {
+      "source": "vendor/aes/src/rtl/aes_sbox.v",
+      "module_body_lines": 282,
+      "noncomment_nonblank_lines": 266
+    },
+    "crypto_shared_ram": {
+      "source": "projects/hard-bench/crypto-soc/shared_ram.sv",
+      "module_body_lines": 48,
+      "noncomment_nonblank_lines": 48
+    },
+    "crypto_ctr_dma": {
+      "source": "projects/hard-bench/crypto-soc/ctr_dma.sv",
+      "module_body_lines": 116,
+      "noncomment_nonblank_lines": 116
+    },
+    "crypto_soc_top": {
+      "source": "projects/hard-bench/crypto-soc/crypto_soc_top.sv",
+      "module_body_lines": 63,
+      "noncomment_nonblank_lines": 63
+    }
+  },
+  "expected_active_module_definitions": 10,
+  "active_module_body_lines": 3954,
+  "active_noncomment_nonblank_lines": 3377,
+  "source_hashes_match": true,
+  "firmware_hash_matches": true,
+  "seed_metrics": [
+    {
+      "seed": 1,
+      "stall_mask": 0,
+      "cycles": 1923958,
+      "cpu_grants": 421082,
+      "dma_grants": 5260,
+      "both_pending": 8240,
+      "owner_switches": 8150,
+      "cpu_during_dma": 11474,
+      "firmware_work": 150,
+      "irq": 14
+    },
+    {
+      "seed": 305419896,
+      "stall_mask": 3,
+      "cycles": 3562909,
+      "cpu_grants": 418153,
+      "dma_grants": 5260,
+      "both_pending": 45609,
+      "owner_switches": 9636,
+      "cpu_during_dma": 8670,
+      "firmware_work": 112,
+      "irq": 14
+    },
+    {
+      "seed": 3735928559,
+      "stall_mask": 7,
+      "cycles": 6432218,
+      "cpu_grants": 416693,
+      "dma_grants": 5260,
+      "both_pending": 107558,
+      "owner_switches": 10272,
+      "cpu_during_dma": 7139,
+      "firmware_work": 93,
+      "irq": 14
+    }
+  ],
+  "independent_dma_write_checks_pass": true,
+  "independent_dma_write_checks": [
+    {
+      "seed": 1,
+      "rejected_commands_without_writes": 6,
+      "bounded_loop_bytes": 512,
+      "bounded_loop_ciphertext_bytes": 32,
+      "good_chain_bytes": 8864
+    },
+    {
+      "seed": 305419896,
+      "rejected_commands_without_writes": 6,
+      "bounded_loop_bytes": 512,
+      "bounded_loop_ciphertext_bytes": 32,
+      "good_chain_bytes": 8864
+    },
+    {
+      "seed": 3735928559,
+      "rejected_commands_without_writes": 6,
+      "bounded_loop_bytes": 512,
+      "bounded_loop_ciphertext_bytes": 32,
+      "good_chain_bytes": 8864
+    }
+  ],
+  "receipts": {
+    "sim": {
+      "project": "crypto-soc",
+      "stage": "sim",
+      "pass": true,
+      "exit_code": 0,
+      "wall_seconds": 255.34,
+      "artifact_directory": "E:\\GPTProject2\\EDAAgent\\artifacts\\2026-10-22T18-51-13-020Z-eda_xsim-276cd509",
+      "receipt_directory": "E:\\GPTProject2\\EDAAgent\\artifacts\\hard-crypto-soc-sim-20261022T185111Z",
+      "other_model_api_calls": 0,
+      "seed_results": [
+        "CRYPTO_SOC_SEED_PASS seed=00000001 stall_mask=0 cycles=1923958 cpu_grants=421082 dma_grants=5260 both_pending=8240 owner_switches=8150 cpu_during_dma=11474 firmware_work=150 irq=14",
+        "CRYPTO_SOC_SEED_PASS seed=12345678 stall_mask=3 cycles=3562909 cpu_grants=418153 dma_grants=5260 both_pending=45609 owner_switches=9636 cpu_during_dma=8670 firmware_work=112 irq=14",
+        "CRYPTO_SOC_SEED_PASS seed=deadbeef stall_mask=7 cycles=6432218 cpu_grants=416693 dma_grants=5260 both_pending=107558 owner_switches=10272 cpu_during_dma=7139 firmware_work=93 irq=14"
+      ],
+      "pass_line": "HARD_BENCH_PASS project=crypto-soc seeds=3 descriptors=42 ciphertext_bytes=26592 error_recoveries=21 reset_probes=1 ram_preserved_reset=0 cycles=11919085 both_pending=161407 owner_switches=28058 firmware_work=355"
+    },
+    "negative": {
+      "project": "crypto-soc",
+      "stage": "negative",
+      "pass": true,
+      "exit_code": 0,
+      "wall_seconds": 68.05,
+      "artifact_directory": "E:\\GPTProject2\\EDAAgent\\artifacts\\2026-10-22T18-51-39-384Z-eda_xsim-f6050952",
+      "receipt_directory": "E:\\GPTProject2\\EDAAgent\\artifacts\\hard-crypto-soc-negative-20261022T185138Z",
+      "other_model_api_calls": 0,
+      "seed_results": [],
+      "pass_line": null
+    },
+    "warm": {
+      "project": "crypto-soc",
+      "stage": "warm",
+      "pass": true,
+      "exit_code": 0,
+      "wall_seconds": 78.75,
+      "artifact_directory": "E:\\GPTProject2\\EDAAgent\\artifacts\\2026-10-22T18-52-55-740Z-eda_xsim-640f90e0",
+      "receipt_directory": "E:\\GPTProject2\\EDAAgent\\artifacts\\hard-crypto-soc-warm-20261022T185254Z",
+      "other_model_api_calls": 0,
+      "seed_results": [
+        "CRYPTO_SOC_SEED_PASS seed=00000001 stall_mask=0 cycles=1923958 cpu_grants=421082 dma_grants=5260 both_pending=8240 owner_switches=8150 cpu_during_dma=11474 firmware_work=150 irq=14"
+      ],
+      "pass_line": "HARD_BENCH_PASS project=crypto-soc seeds=1 descriptors=14 ciphertext_bytes=8864 error_recoveries=7 reset_probes=1 ram_preserved_reset=1 cycles=1923958 both_pending=8240 owner_switches=8150 firmware_work=150"
+    },
+    "impl": {
+      "project": "crypto-soc",
+      "stage": "impl",
+      "pass": true,
+      "exit_code": 0,
+      "started_at_utc": "2026-10-22T18:46:15.738594+00:00",
+      "wall_seconds": 163.08,
+      "artifact_directory": "E:\\GPTProject2\\EDAAgent\\artifacts\\hard-crypto-soc-impl-20261022T184615Z-2a9b4b",
+      "timeout": false,
+      "source_drift": [],
+      "auxiliary_source_drift": [
+        "projects/hard-bench/crypto-soc/run.py",
+        "projects/hard-bench/crypto-soc/tb_crypto_soc.sv"
+      ],
+      "routing_verified": true,
+      "timing_verified": true,
+      "routing": {
+        "routable": 9084,
+        "fully_routed": 9084,
+        "errors": 0
+      },
+      "build": {
+        "stage": "routed",
+        "top": "crypto_soc_top",
+        "version": "2020.2",
+        "part": "xc7a100tfgg676-2",
+        "clock_period_ns": 10.0,
+        "io_delay_ns": 2.0,
+        "setup_slack_ns": 0.518,
+        "hold_slack_ns": 0.096,
+        "flip_flops": 4866,
+        "lut_cells": 5692,
+        "dsp48": 0,
+        "ramb18": 0,
+        "ramb36": 16,
+        "implementation_mode": "out_of_context",
+        "black_boxes": 0,
+        "board_io_validated": false,
+        "hardware_tested": false,
+        "model_api_calls": 0
+      },
+      "other_model_api_calls": 0
+    }
+  },
+  "ppa": {
+    "stage": "routed",
+    "top": "crypto_soc_top",
+    "version": "2020.2",
+    "part": "xc7a100tfgg676-2",
+    "clock_period_ns": 10.0,
+    "io_delay_ns": 2.0,
+    "setup_slack_ns": 0.518,
+    "hold_slack_ns": 0.096,
+    "flip_flops": 4866,
+    "lut_cells": 5692,
+    "dsp48": 0,
+    "ramb18": 0,
+    "ramb36": 16,
+    "implementation_mode": "out_of_context",
+    "black_boxes": 0,
+    "board_io_validated": false,
+    "hardware_tested": false,
+    "model_api_calls": 0,
+    "physical_slice_luts": 5110
+  },
+  "implementation_status": "passed",
+  "other_model_api_calls": 0,
+  "limits": [
+    "Native shared-memory request/response bus, not AXI compliance",
+    "Warm reset is an extra single-seed check, not added to the main scenario count",
+    "Active module scope excludes unused PicoRV32 wrappers and AES decrypt datapath; final optimization can remove more logic",
+    "No board run, formal proof, cache coherency, operating system or authenticated encryption"
+  ]
+}

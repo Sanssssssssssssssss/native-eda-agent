@@ -1,0 +1,123 @@
+{
+  "schema_version": 1,
+  "recorded_at": "2026-10-24T07:46:10.333Z",
+  "scope": "Adapter integration tests on existing projects; not new independent design benchmark problems.",
+  "environment": {
+    "vivado": "2020.2",
+    "part": "xc7a100tfgg676-2"
+  },
+  "tools": {
+    "before": 9,
+    "after": 15,
+    "added": 6
+  },
+  "integration": {
+    "passed": 12,
+    "total": 12,
+    "wall_duration_ms": 231508,
+    "scheduling": "serial-xsim-then-vivado"
+  },
+  "offline_tests": {
+    "node_passed": 68,
+    "python_passed": 12,
+    "log": "${WORKSPACE}\\artifacts\\fpga-native-tools-tests-final-20261024.log"
+  },
+  "trace": {
+    "valid": true,
+    "unchanged": true,
+    "runs": 12,
+    "unresolved": 0
+  },
+  "axi": {
+    "functional": {
+      "seeds": 4,
+      "write_bursts": 2328,
+      "read_bursts": 2328,
+      "write_beats": 37824,
+      "read_beats": 37824,
+      "bytes_written": 77501,
+      "bytes_read_checked": 100992,
+      "slverr_writes": 384,
+      "decerr_writes": 384,
+      "slverr_reads": 384,
+      "decerr_reads": 384,
+      "max_total_outstanding": 18,
+      "same_write_id_depth": 2,
+      "same_read_id_depth": 2,
+      "simultaneous_master_cycles": 15607,
+      "all_three_active_cycles": 3846,
+      "simultaneous_rw_cycles": 11806,
+      "shared_read_bursts": 24,
+      "boundary_bursts": 339,
+      "protocol_checks": 658158,
+      "aw_stalls": 231460,
+      "w_stalls": 161916,
+      "b_stalls": 795,
+      "ar_stalls": 225781,
+      "r_stalls": 38206,
+      "cycles": 130917
+    },
+    "period_ns": 10,
+    "setup_slack_ns": 2.393,
+    "hold_slack_ns": 0.058,
+    "utilization": {
+      "Slice LUTs": 2018,
+      "Slice Registers": 2014,
+      "Block RAM Tile": 8,
+      "RAMB36/FIFO*": 8,
+      "RAMB18": 0,
+      "DSPs": 0
+    },
+    "routing": {
+      "routable": 3159,
+      "fully_routed": 3159,
+      "errors": 0,
+      "status": "pass"
+    },
+    "assessment": {
+      "setup_hold": "pass",
+      "clock_and_internal_constraints": "pass",
+      "io_constraints": "pass",
+      "routing": "pass",
+      "cdc": "unknown",
+      "overall_design_acceptance": "not_evaluated",
+      "board_signoff": false,
+      "scope": "Per-report diagnostics only. Positive setup/hold slack does not validate CDC, IO timing, functional correctness or hardware."
+    }
+  },
+  "existing_checkpoint_analysis": {
+    "ethernet": {
+      "cdc_warning_count": 34,
+      "no_input_delay": 1,
+      "assessment": {
+        "setup_hold": "pass",
+        "clock_and_internal_constraints": "pass",
+        "io_constraints": "review_required",
+        "routing": "pass",
+        "cdc": "review_required",
+        "overall_design_acceptance": "not_evaluated",
+        "board_signoff": false,
+        "scope": "Per-report diagnostics only. Positive setup/hold slack does not validate CDC, IO timing, functional correctness or hardware."
+      }
+    },
+    "crypto": {
+      "queried_timing_paths": 5,
+      "queried_objects": 10
+    }
+  },
+  "usage": {
+    "extra_model_api_calls": 0,
+    "codex_token_usage": null,
+    "codex_token_usage_note": "Not measured for this change; zero additional model API calls does not mean zero Codex tokens."
+  },
+  "preserved_failure_campaigns": [
+    "fpga-tools-validation-2026-10-24T07-28-53-197Z-5fc2f5",
+    "fpga-tools-validation-2026-10-24T07-37-24-093Z-a68827"
+  ],
+  "limitations": [
+    "Vivado native retarget_vhdl.tcl read failure root cause remains unknown; serial rerun passed.",
+    "No new independent benchmark design count; existing AXI rebuilt, Ethernet and Crypto existing DCPs inspected.",
+    "OOC flow without board or bitstream validation.",
+    "Official AMD Ross MCP executable is unavailable."
+  ]
+}

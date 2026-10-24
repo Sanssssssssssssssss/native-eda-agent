@@ -1,0 +1,36 @@
+{
+  "name": "native-eda-agent",
+  "private": true,
+  "version": "0.3.0",
+  "type": "module",
+  "description": "Local EDA agent with reproducible benchmarks, traces, resource scheduling and MCP",
+  "scripts": {
+    "eda": "node src/agent.mjs",
+    "doctor": "node src/agent.mjs doctor",
+    "verify": "node src/agent.mjs verify",
+    "test": "python scripts/test-measurements.py && node --test scripts/verilogeval-verdict.test.mjs tests/*.test.mjs && python -m unittest discover -s tests -p test_*.py && python tests/test-system-evidence.py",
+    "benchmark": "node scripts/benchmark.mjs",
+    "validate:platform": "node scripts/validate-platform.mjs",
+    "validate:agent": "node scripts/validate-agent-offline.mjs",
+    "setup:local": "node scripts/setup-local.mjs",
+    "tools": "node scripts/tool-catalog.mjs",
+    "results": "node scripts/results.mjs",
+    "knowledge:check": "node scripts/check-knowledge.mjs",
+    "mcp": "node src/mcp-server.mjs"
+  },
+  "dependencies": {
+    "@earendil-works/pi-ai": "1.3.0",
+    "@earendil-works/pi-coding-agent": "1.3.0",
+    "@modelcontextprotocol/client": "2.3.1",
+    "@modelcontextprotocol/server": "2.3.1",
+    "cross-spawn": "7.0.6",
+    "jiti": "2.7.0"
+  },
+  "engines": {
+    "node": ">=24"
+  },
+  "license": "MIT",
+  "overrides": {
+    "undici": "8.12.2"
+  }
+}

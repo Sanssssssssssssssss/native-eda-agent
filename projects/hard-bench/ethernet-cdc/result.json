@@ -1,0 +1,233 @@
+{
+  "project": "ethernet-cdc",
+  "functional_pass": true,
+  "negative_control_rejected": true,
+  "physical_OOC_timing_routing_pass": true,
+  "source_files": 30,
+  "compiled_RTL_lines": 12513,
+  "valid_echoes_total": 562,
+  "distinct_baseline_payload_lengths": 251,
+  "output_frames_total": 566,
+  "checked_wire_bytes_total": 402046,
+  "malformed_input_total": 48,
+  "distinct_fault_classes": 6,
+  "recovery_echoes_total": 48,
+  "mid_ingress_reset_recoveries": 2,
+  "runs": {
+    "a": {
+      "mode": "a",
+      "pass": true,
+      "expected_failure": false,
+      "exit_code": 0,
+      "wall_seconds": 68.67,
+      "artifact_directory": "E:\\GPTProject2\\EDAAgent\\artifacts\\2026-10-22T18-42-26-233Z-eda_xsim-b48248ff",
+      "receipt": "E:\\GPTProject2\\EDAAgent\\projects\\hard-bench\\ethernet-cdc\\runs\\20261022T184224Z-a",
+      "completion_marker": "HARD_BENCH_PASS project=ethernet-cdc ratio=a valid_echoes=281 output_frames=283 checked_wire_bytes=201023 negative_classes=6 negative_inputs=24 bad_fcs=8 bad_frame=12 length_rejected=8 ip_checksum_rejected=4 pause_cycles=79240 rx_stall_cycles=2071 echo_stall_cycles=48 rx_app_stall_cycles=0 mac_tx_stall_cycles=0 cycles=490318",
+      "fatal_marker": null,
+      "other_model_API_calls": 0,
+      "metrics": {
+        "valid_echoes": 281,
+        "output_frames": 283,
+        "checked_wire_bytes": 201023,
+        "negative_classes": 6,
+        "negative_inputs": 24,
+        "bad_fcs": 8,
+        "bad_frame": 12,
+        "length_rejected": 8,
+        "ip_checksum_rejected": 4,
+        "pause_cycles": 79240,
+        "rx_stall_cycles": 2071,
+        "echo_stall_cycles": 48,
+        "rx_app_stall_cycles": 0,
+        "mac_tx_stall_cycles": 0,
+        "cycles": 490318
+      }
+    },
+    "b": {
+      "mode": "b",
+      "pass": true,
+      "expected_failure": false,
+      "exit_code": 0,
+      "wall_seconds": 62.79,
+      "artifact_directory": "E:\\GPTProject2\\EDAAgent\\artifacts\\2026-10-22T18-43-48-222Z-eda_xsim-90c465a2",
+      "receipt": "E:\\GPTProject2\\EDAAgent\\projects\\hard-bench\\ethernet-cdc\\runs\\20261022T184346Z-b",
+      "completion_marker": "HARD_BENCH_PASS project=ethernet-cdc ratio=b valid_echoes=281 output_frames=283 checked_wire_bytes=201023 negative_classes=6 negative_inputs=24 bad_fcs=8 bad_frame=12 length_rejected=8 ip_checksum_rejected=4 pause_cycles=99700 rx_stall_cycles=3841 echo_stall_cycles=48 rx_app_stall_cycles=0 mac_tx_stall_cycles=0 cycles=601150",
+      "fatal_marker": null,
+      "other_model_API_calls": 0,
+      "metrics": {
+        "valid_echoes": 281,
+        "output_frames": 283,
+        "checked_wire_bytes": 201023,
+        "negative_classes": 6,
+        "negative_inputs": 24,
+        "bad_fcs": 8,
+        "bad_frame": 12,
+        "length_rejected": 8,
+        "ip_checksum_rejected": 4,
+        "pause_cycles": 99700,
+        "rx_stall_cycles": 3841,
+        "echo_stall_cycles": 48,
+        "rx_app_stall_cycles": 0,
+        "mac_tx_stall_cycles": 0,
+        "cycles": 601150
+      }
+    },
+    "negative": {
+      "mode": "negative",
+      "pass": true,
+      "expected_failure": true,
+      "exit_code": 0,
+      "wall_seconds": 65.47,
+      "artifact_directory": "E:\\GPTProject2\\EDAAgent\\artifacts\\2026-10-22T18-45-02-639Z-eda_xsim-546abd1e",
+      "receipt": "E:\\GPTProject2\\EDAAgent\\projects\\hard-bench\\ethernet-cdc\\runs\\20261022T184501Z-negative",
+      "completion_marker": null,
+      "fatal_marker": "Fatal: GMII_BYTE_MISMATCH frame=0 byte=71 got=9c expected=9d",
+      "other_model_API_calls": 0
+    }
+  },
+  "implementation": {
+    "project": "ethernet-cdc",
+    "stage": "impl",
+    "pass": true,
+    "exit_code": 0,
+    "started_at_utc": "2026-10-22T18:42:42.259975+00:00",
+    "wall_seconds": 161.2,
+    "artifact_directory": "E:\\GPTProject2\\EDAAgent\\artifacts\\hard-ethernet-cdc-impl-20261022T184242Z-8aa581",
+    "timeout": false,
+    "source_drift": [],
+    "auxiliary_source_drift": [],
+    "routing_verified": true,
+    "timing_verified": true,
+    "routing": {
+      "routable": 4590,
+      "fully_routed": 4590,
+      "errors": 0
+    },
+    "build": {
+      "stage": "routed",
+      "top": "ethernet_cdc_top",
+      "part": "xc7a100tfgg676-2",
+      "logic_period_ns": 10.0,
+      "rx_period_ns": 8.0,
+      "tx_period_ns": 8.0,
+      "setup_slack_ns": 2.51,
+      "hold_slack_ns": 0.073,
+      "implementation_mode": "out_of_context",
+      "cdc_review_required": true,
+      "board_io_validated": false,
+      "hardware_tested": false,
+      "other_model_API_calls": 0
+    },
+    "other_model_api_calls": 0
+  },
+  "resources": {
+    "physical_slice_luts": 1896,
+    "flip_flops": 2964,
+    "ramb36": 7,
+    "ramb18": 2,
+    "dsp": 0
+  },
+  "cdc": {
+    "critical": 0,
+    "info": 10,
+    "warnings": 34,
+    "rules": {
+      "CDC-3": 10,
+      "CDC-6": 3,
+      "CDC-15": 28,
+      "CDC-26": 3
+    },
+    "ignored_timing_exceptions": 0,
+    "unconstrained_internal_endpoints": 0,
+    "missing_input_delay": [
+      "reset (intentional asynchronous external input)"
+    ],
+    "minimum_bus_skew_slack_ns": 6.987,
+    "review": "projects/hard-bench/ethernet-cdc/CDC-REVIEW.md",
+    "formal_signoff": false
+  },
+  "independent_oracle_audit": "artifacts/hard-bench-assessment-20261023/network-oracle-audit.json",
+  "other_model_API_calls": 0,
+  "limits": [
+    "same packet vectors replayed at two clock ratios",
+    "non-125 MHz GMII clocks are CDC simulation stress configurations, not measured gigabit throughput",
+    "RX UDP checksum verification is not implemented",
+    "reset during incomplete RX ingress tested; arbitrary TX/reset sequencing untested",
+    "no PHY, board, external network, formal CDC proof or metastability MTBF proof",
+    "OOC clock-source placement unspecified; not board timing signoff"
+  ],
+  "history": [
+    {
+      "mode": "a",
+      "pass": true,
+      "expected_failure": false,
+      "exit_code": 0,
+      "wall_seconds": 75.85,
+      "artifact_directory": "E:\\GPTProject2\\EDAAgent\\artifacts\\2026-10-22T18-37-51-112Z-eda_xsim-824e0d67",
+      "receipt": "E:\\GPTProject2\\EDAAgent\\projects\\hard-bench\\ethernet-cdc\\runs\\20261022T183749Z-a",
+      "completion_marker": "HARD_BENCH_PASS project=ethernet-cdc ratio=a valid_echoes=281 output_frames=283 checked_wire_bytes=201023 negative_classes=6 negative_inputs=24 bad_fcs=8 bad_frame=12 length_rejected=8 ip_checksum_rejected=4 pause_cycles=74382 rx_stall_cycles=0 cycles=492206",
+      "fatal_marker": null,
+      "other_model_API_calls": 0
+    },
+    {
+      "mode": "b",
+      "pass": true,
+      "expected_failure": false,
+      "exit_code": 0,
+      "wall_seconds": 53.46,
+      "artifact_directory": "E:\\GPTProject2\\EDAAgent\\artifacts\\2026-10-22T18-39-12-783Z-eda_xsim-15ebcc20",
+      "receipt": "E:\\GPTProject2\\EDAAgent\\projects\\hard-bench\\ethernet-cdc\\runs\\20261022T183911Z-b",
+      "completion_marker": "HARD_BENCH_PASS project=ethernet-cdc ratio=b valid_echoes=281 output_frames=283 checked_wire_bytes=201023 negative_classes=6 negative_inputs=24 bad_fcs=8 bad_frame=12 length_rejected=8 ip_checksum_rejected=4 pause_cycles=91000 rx_stall_cycles=0 cycles=602392",
+      "fatal_marker": null,
+      "other_model_API_calls": 0
+    },
+    {
+      "mode": "a",
+      "pass": false,
+      "expected_failure": false,
+      "exit_code": 0,
+      "wall_seconds": 55.36,
+      "artifact_directory": "E:\\GPTProject2\\EDAAgent\\artifacts\\2026-10-22T18-40-31-975Z-eda_xsim-d36083a0",
+      "receipt": "E:\\GPTProject2\\EDAAgent\\projects\\hard-bench\\ethernet-cdc\\runs\\20261022T184029Z-a",
+      "completion_marker": null,
+      "fatal_marker": "Fatal: No actual MAC RX backpressure observed",
+      "other_model_API_calls": 0
+    },
+    {
+      "mode": "a",
+      "pass": true,
+      "expected_failure": false,
+      "exit_code": 0,
+      "wall_seconds": 68.67,
+      "artifact_directory": "E:\\GPTProject2\\EDAAgent\\artifacts\\2026-10-22T18-42-26-233Z-eda_xsim-b48248ff",
+      "receipt": "E:\\GPTProject2\\EDAAgent\\projects\\hard-bench\\ethernet-cdc\\runs\\20261022T184224Z-a",
+      "completion_marker": "HARD_BENCH_PASS project=ethernet-cdc ratio=a valid_echoes=281 output_frames=283 checked_wire_bytes=201023 negative_classes=6 negative_inputs=24 bad_fcs=8 bad_frame=12 length_rejected=8 ip_checksum_rejected=4 pause_cycles=79240 rx_stall_cycles=2071 echo_stall_cycles=48 rx_app_stall_cycles=0 mac_tx_stall_cycles=0 cycles=490318",
+      "fatal_marker": null,
+      "other_model_API_calls": 0
+    },
+    {
+      "mode": "b",
+      "pass": true,
+      "expected_failure": false,
+      "exit_code": 0,
+      "wall_seconds": 62.79,
+      "artifact_directory": "E:\\GPTProject2\\EDAAgent\\artifacts\\2026-10-22T18-43-48-222Z-eda_xsim-90c465a2",
+      "receipt": "E:\\GPTProject2\\EDAAgent\\projects\\hard-bench\\ethernet-cdc\\runs\\20261022T184346Z-b",
+      "completion_marker": "HARD_BENCH_PASS project=ethernet-cdc ratio=b valid_echoes=281 output_frames=283 checked_wire_bytes=201023 negative_classes=6 negative_inputs=24 bad_fcs=8 bad_frame=12 length_rejected=8 ip_checksum_rejected=4 pause_cycles=99700 rx_stall_cycles=3841 echo_stall_cycles=48 rx_app_stall_cycles=0 mac_tx_stall_cycles=0 cycles=601150",
+      "fatal_marker": null,
+      "other_model_API_calls": 0
+    },
+    {
+      "mode": "negative",
+      "pass": true,
+      "expected_failure": true,
+      "exit_code": 0,
+      "wall_seconds": 65.47,
+      "artifact_directory": "E:\\GPTProject2\\EDAAgent\\artifacts\\2026-10-22T18-45-02-639Z-eda_xsim-546abd1e",
+      "receipt": "E:\\GPTProject2\\EDAAgent\\projects\\hard-bench\\ethernet-cdc\\runs\\20261022T184501Z-negative",
+      "completion_marker": null,
+      "fatal_marker": "Fatal: GMII_BYTE_MISMATCH frame=0 byte=71 got=9c expected=9d",
+      "other_model_API_calls": 0
+    }
+  ]
+}

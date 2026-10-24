@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "sources": [
+    {
+      "name": "vivado-mcp-community",
+      "url": "https://github.com/mapleleavessssssss-wq/vivado-mcp.git",
+      "commit": "41745b29af31a34d9b6756a9105313215d9f568e",
+      "bundled": true
+    },
+    {
+      "name": "routeagents-fpl26",
+      "url": "https://github.com/Geochatz3/routeagents-fpl26.git",
+      "commit": "4a929b490dad048198e746d15c475a8c19dc5017",
+      "bundled": true
+    },
+    {
+      "name": "picorv32",
+      "url": "https://github.com/YosysHQ/picorv32.git",
+      "commit": "ef203c2b0a3fb793280f5114941416c425c5b461",
+      "bundled": false
+    },
+    {
+      "name": "verilog-axi",
+      "url": "https://github.com/alexforencich/verilog-axi.git",
+      "commit": "516bd5dadc3365b7f9e225d2af8fe0b8d804fe53",
+      "bundled": false
+    },
+    {
+      "name": "verilog-ethernet",
+      "url": "https://github.com/alexforencich/verilog-ethernet.git",
+      "commit": "77320a9471d19c7dd383914bc049e02d9f4f1ffb",
+      "bundled": false
+    },
+    {
+      "name": "aes",
+      "url": "https://github.com/secworks/aes.git",
+      "commit": "80dc4718e1dcbbdb4b0dd1bdb393d8f7b98981dc",
+      "bundled": false
+    },
+    {
+      "name": "verilog-eval",
+      "url": "https://github.com/NVlabs/verilog-eval.git",
+      "commit": "c498220d0a52248f8e3fdffe279075215bde2da6",
+      "bundled": false
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "benchmark": "VerilogEval v2 spec-to-rtl",
+  "selection": "uniform random.sample over sorted 156 prompts",
+  "seed": 20261023,
+  "size": 8,
+  "task_ids": [
+    "Prob052_gates100",
+    "Prob062_bugs_mux2",
+    "Prob065_7420",
+    "Prob068_countbcd",
+    "Prob091_2012_q2b",
+    "Prob094_gatesv",
+    "Prob137_fsm_serial",
+    "Prob147_circuit10"
+  ],
+  "runtime": "Vivado XSim 2020.2; adapted runner, not official Icarus harness"
+}

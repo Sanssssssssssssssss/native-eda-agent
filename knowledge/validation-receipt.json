@@ -1,0 +1,89 @@
+{
+  "schema_version": 1,
+  "captured_at_utc": "2026-10-22T18:44:28Z",
+  "workspace": "E:\\GPTProject2\\EDAAgent",
+  "validator": {
+    "command": [
+      "node",
+      "scripts/check-knowledge.mjs"
+    ],
+    "exit_code": 0,
+    "result": {
+      "valid": true,
+      "errors": [],
+      "counts": {
+        "sources": 21,
+        "rules": 36,
+        "tools": 11,
+        "skills": 4
+      },
+      "boundary": "Offline structural and cross-reference validation only. Does not verify source truth, remote link reachability, HDL correctness, formal proof, tool installation or hardware behavior.",
+      "checked_at_utc": "2026-10-22T18:43:49.922Z",
+      "files": [
+        {
+          "path": "knowledge/sources.json",
+          "sha256_at_check": "cd1061791b8060799d852be4c33c6a7768e6723a13a6baacafefc0b70a8ff4c3"
+        },
+        {
+          "path": "knowledge/rules.json",
+          "sha256_at_check": "b15361d8585df1f2406a7f55f1ae5f1b0483a2edc2021a467b6e8afd5c77d704"
+        },
+        {
+          "path": "knowledge/tools.json",
+          "sha256_at_check": "f71cdfacf95faac633d5afb79e4487483d813842eb4c8e9cd3f51a7705ee3968"
+        },
+        {
+          "path": ".pi/skills/fpga-plan/SKILL.md",
+          "sha256_at_check": "37a4bd2dcbd10754bc38b59474daa6be0a75ce26132c1b3cf4b8cc9e1657aad2"
+        },
+        {
+          "path": ".pi/skills/fpga-reproduce/SKILL.md",
+          "sha256_at_check": "0f293f55335403482e8552ebefaaecd29bef2cbc37ba10ca9518d65ba3b144a8"
+        },
+        {
+          "path": ".pi/skills/fpga-rtl-verify/SKILL.md",
+          "sha256_at_check": "a9ed7c94416feb7a65f58cee026efa1896421eea38d7e5a8c2267aa73e9f88a4"
+        },
+        {
+          "path": ".pi/skills/fpga-timing-triage/SKILL.md",
+          "sha256_at_check": "065c2c1ba53e653d240ab8346958241a803fa5f95d920460a1b32b72e97fff34"
+        }
+      ]
+    }
+  },
+  "tests": {
+    "command": [
+      "node",
+      "--test",
+      "tests/knowledge.test.mjs"
+    ],
+    "exit_code": 0,
+    "output": "✔ checked-in sources, rules, tools and skill links are consistent (6.1465ms)\n✔ a rule cannot cite an absent source or substitute a different URL (4.5706ms)\n✔ rules retain applicability, version, evidence and proof boundary (9.684ms)\n✔ classification and IDs prevent silent rule promotion or duplicate retrieval (2.364ms)\n✔ source provenance requires an observed version and UTC verification time (2.2314ms)\n✔ skills reject broken local links and invented knowledge IDs (2.2005ms)\n✔ missing or malformed catalogs fail closed with diagnostics (2.3391ms)\n✔ tool availability claims retain evidence and known sources (2.6284ms)\nℹ tests 8\nℹ suites 0\nℹ pass 8\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 143.8823\n"
+  },
+  "skill_creator_validation": {
+    "command": "python C:/Users/ROG/.codex/skills/.system/skill-creator/scripts/quick_validate.py <each .pi/skills/fpga-* directory>",
+    "observed_output": "Skill is valid! (four successful results)",
+    "status": "passed",
+    "boundary": "Observed before this receipt; this field does not invent individual command start/end times."
+  },
+  "tool_probe_attempts": [
+    {
+      "scope": "PATH results succeeded; Python -c quoting failed",
+      "exit_code": 1,
+      "output": "[\r\n  {\r\n    \"name\": \"vivado\",\r\n    \"detected\": true,\r\n    \"paths\": [\r\n      \"E:\\\\Xilinx\\\\Vivado\\\\2020.2\\\\bin\\\\vivado.bat\"\r\n    ]\r\n  },\r\n  {\r\n    \"name\": \"verilator\",\r\n    \"detected\": false,\r\n    \"paths\": []\r\n  },\r\n  {\r\n    \"name\": \"yosys\",\r\n    \"detected\": false,\r\n    \"paths\": []\r\n  },\r\n  {\r\n    \"name\": \"sby\",\r\n    \"detected\": false,\r\n    \"paths\": []\r\n  },\r\n  {\r\n    \"name\": \"fusesoc\",\r\n    \"detected\": false,\r\n    \"paths\": []\r\n  },\r\n  {\r\n    \"name\": \"bender\",\r\n    \"detected\": false,\r\n    \"paths\": []\r\n  },\r\n  {\r\n    \"name\": \"cocotb-config\",\r\n    \"detected\": false,\r\n    \"paths\": []\r\n  },\r\n  {\r\n    \"name\": \"edalize\",\r\n    \"detected\": false,\r\n    \"paths\": []\r\n  }\r\n]\r\n  File \"<string>\", line 1\r\n    import importlib.metadata,json; result={}; exec('for name in [\\\r\n                                                    ^\r\nSyntaxError: unterminated string literal (detected at line 1)\r\n"
+    },
+    {
+      "scope": "current Python package metadata retry via stdin",
+      "exit_code": 0,
+      "output": "{\"python\": \"C:\\\\Users\\\\ROG\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python313\\\\python.exe\", \"packages\": {\"cocotb\": null, \"edalize\": null, \"fusesoc\": null}}\r\n"
+    }
+  ],
+  "checker_sha256": "718166ddef12eb0e468ccb821bcee696376168025354c8606938537b234716e2",
+  "test_sha256": "86e1177c2127b4046857aa42bc7706787f523b0d79b3e10a2316b4be271b55ca",
+  "usage": {
+    "external_model_api_calls": 0,
+    "codex_tokens": null,
+    "note": "Codex usage is measured separately by the session usage collector; null is not zero."
+  },
+  "boundary": "This receipt validates local content structure and references. It does not certify remote source accuracy, actual HDL behavior or installed tools outside the probe scope."
+}

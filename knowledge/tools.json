@@ -1,0 +1,197 @@
+{
+  "schema_version": 1,
+  "checked_at_utc": "2026-10-22T18:39:40Z",
+  "detection_boundary": "Get-Command on current Windows PATH; Python importlib.metadata in current interpreter; selected workspace paths. Not a full-machine inventory. LTspice connectivity was separately checked through Pi MCP discovery and has its own timestamp. No new EDA packages installed; no model-provider API calls or EDA execution in this research/probe.",
+  "tools": [
+    {
+      "id": "vivado-xsim",
+      "name": "AMD Vivado / XSim",
+      "source_ids": [
+        "amd-ug901",
+        "amd-ug903",
+        "amd-ug906-cdc",
+        "amd-ug949-timing"
+      ],
+      "version": "2020.2",
+      "license": "AMD/Xilinx proprietary tool terms; edition/device license availability is run-specific",
+      "availability": "detected",
+      "evidence": [
+        "Get-Command vivado => E:\\Xilinx\\Vivado\\2020.2\\bin\\vivado.bat",
+        "retained system-bench build-result version 2020.2",
+        "docs/fpga-native-tools-2026-10-24.md; fresh MCP tool listing: 15 local tools"
+      ],
+      "integration": "eda_xsim plus 6 typed Vivado operations; eda_vivado retains custom Tcl workflows",
+      "priority": "current baseline",
+      "next_step": "继续使用已验证 XSim + Vivado，按 run 保存器件、约束、日志与验收边界。",
+      "native_adapter_update_utc": "2026-10-24T07:37:00Z"
+    },
+    {
+      "id": "ltspice",
+      "name": "Analog Devices LTspice MCP bridge",
+      "source_ids": [],
+      "version": "not re-probed in this research",
+      "license": "existing vendor installation terms; not reassessed",
+      "availability": "mcp_connected_discovery_only",
+      "connectivity_evidence_captured_at_utc": "2026-10-22T18:47:32Z",
+      "evidence": [
+        ".pi/mcp.json ltspice entry",
+        "runtime/ltspice/ltspice-mcp-bridge.exe exists",
+        "artifacts/system-evidence-integration-20261022T184547Z/mcp-discovery.json: state=connected, 18 tools"
+      ],
+      "integration": "existing official bridge configuration retained",
+      "priority": "current analog baseline",
+      "next_step": "独立发现已确认 connected 与 18 tools；具体模拟/波形调用仍需各自回执。"
+    },
+    {
+      "id": "ross",
+      "name": "AMD Ross AI Assistant",
+      "source_ids": [
+        "ross"
+      ],
+      "version": "2026.9.1 checkout; 2cdc9eef1b6b5b17fa45f5e4d468e5483a1c92de",
+      "license": "MIT (repository)",
+      "availability": "documentation_only",
+      "evidence": [
+        "vendor/ross-ai-assistant/manifest.yaml",
+        "vendor/ross-ai-assistant/LICENSE",
+        "artifacts/ross-integration/skills.json: 49 skills, binary_present=false"
+      ],
+      "integration": "49 project skills loaded by Pi/Codex; official Ross MCP not connected",
+      "priority": "adapt compatible guidance",
+      "next_step": "采用官方方法与命令结构，逐项校验 2020.2 兼容性；新增二进制/服务需要真实安装与连通证据。"
+    },
+    {
+      "id": "verilator",
+      "name": "Verilator",
+      "source_ids": [
+        "verilator-language",
+        "verilator-warnings"
+      ],
+      "version": "reference docs 5.052; local version unavailable",
+      "license": "LGPL-3.0-only OR Artistic-2.0",
+      "availability": "not_detected_current_path",
+      "evidence": [
+        "Get-Command verilator: no result"
+      ],
+      "integration": "recommended optional lint adapter",
+      "priority": "first increment",
+      "next_step": "锁定可运行发行版后，从 --lint-only 的独立诊断回执开始；保留 XSim 四态仿真。"
+    },
+    {
+      "id": "cocotb",
+      "name": "cocotb",
+      "source_ids": [
+        "cocotb"
+      ],
+      "version": "upstream release v2.1.0; not installed in current Python",
+      "license": "BSD-3-Clause",
+      "availability": "not_detected_current_python_or_path",
+      "evidence": [
+        "Get-Command cocotb-config: no result",
+        "importlib.metadata.version('cocotb'): PackageNotFoundError"
+      ],
+      "integration": "optional independent Python scoreboard layer",
+      "priority": "after supported simulator",
+      "next_step": "在隔离环境选受支持模拟器并跑最小桥接测试，再加入协议 scoreboard；不假定 XSim 后端存在。"
+    },
+    {
+      "id": "yosys",
+      "name": "Yosys",
+      "source_ids": [
+        "yosys"
+      ],
+      "version": "upstream v0.70; local unavailable",
+      "license": "ISC",
+      "availability": "not_detected_current_path",
+      "evidence": [
+        "Get-Command yosys: no result"
+      ],
+      "integration": "optional portable synthesis/formal front end",
+      "priority": "after lint",
+      "next_step": "先验证项目语言子集/原语模型；不把 Yosys 网表替代 Vivado 器件实现结果。"
+    },
+    {
+      "id": "sby",
+      "name": "SymbiYosys / SBY",
+      "source_ids": [
+        "sby-reference",
+        "sby-quickstart"
+      ],
+      "version": "repo 79fc9eddca5e33a28cc2f2cd19c9825efd9a7255",
+      "license": "ISC; solvers have separate licenses",
+      "availability": "not_detected_current_path",
+      "evidence": [
+        "Get-Command sby: no result"
+      ],
+      "integration": "optional small protocol/FIFO property tasks",
+      "priority": "with Yosys and solver",
+      "next_step": "锁定 Yosys、SBY、求解器，先跑小设计的 bmc/prove/cover 与预期反例，保存模式和假设。"
+    },
+    {
+      "id": "fusesoc",
+      "name": "FuseSoC",
+      "source_ids": [
+        "fusesoc"
+      ],
+      "version": "upstream 2.4.7",
+      "license": "BSD-2-Clause",
+      "availability": "not_detected_current_python_or_path",
+      "evidence": [
+        "Get-Command fusesoc: no result",
+        "importlib.metadata.version('fusesoc'): PackageNotFoundError"
+      ],
+      "integration": "optional versioned core and target manifests",
+      "priority": "only when dependency reuse grows",
+      "next_step": "多 IP/多后端需求明确时选一个试点核心；当前脚本已能跑四项系统，暂无整体迁移必要。"
+    },
+    {
+      "id": "edalize",
+      "name": "Edalize",
+      "source_ids": [
+        "edalize"
+      ],
+      "version": "upstream v0.6.7",
+      "license": "BSD-2-Clause",
+      "availability": "not_detected_current_python_or_path",
+      "evidence": [
+        "Get-Command edalize: no result",
+        "importlib.metadata.version('edalize'): PackageNotFoundError"
+      ],
+      "integration": "EDA backend library, often paired with FuseSoC",
+      "priority": "with concrete orchestration need",
+      "next_step": "复用后端接口时仍保留 native 工具的结果验收与 trace；库本身不是模拟器。"
+    },
+    {
+      "id": "bender",
+      "name": "Bender",
+      "source_ids": [
+        "bender"
+      ],
+      "version": "upstream v0.32.1",
+      "license": "Apache-2.0",
+      "availability": "not_detected_current_path",
+      "evidence": [
+        "Get-Command bender: no result"
+      ],
+      "integration": "alternative HDL dependency/ordered source management",
+      "priority": "alternative to broad FuseSoC adoption",
+      "next_step": "偏向源码依赖/有序文件清单时评估 Bender；避免同时引入两套重复依赖管理。"
+    },
+    {
+      "id": "lowrisc-style",
+      "name": "lowRISC / OpenTitan style reference",
+      "source_ids": [
+        "lowrisc-style"
+      ],
+      "version": "9c15ff5dce23eef969e00ab3715153967419eadd",
+      "license": "CC-BY-4.0",
+      "availability": "reference_only",
+      "evidence": [
+        "official pinned VerilogCodingStyle.md read through GitHub"
+      ],
+      "integration": "knowledge guidance; no executable checker implied",
+      "priority": "use selected rules now",
+      "next_step": "采用宽度、赋值、组合逻辑与断言建议；复位和语言版本要求需按 FPGA 工具适配。"
+    }
+  ]
+}

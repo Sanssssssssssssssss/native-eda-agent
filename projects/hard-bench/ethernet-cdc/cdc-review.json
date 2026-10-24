@@ -1,0 +1,39 @@
+{
+  "project": "ethernet-cdc",
+  "stage": "routed",
+  "artifact_directory": "artifacts/hard-ethernet-cdc-impl-20261022T184242Z-8aa581",
+  "review_status": "reviewed_with_documented_architecture_exceptions",
+  "formal_cdc_signoff": false,
+  "counts": {"critical": 0, "warning": 34, "info": 10},
+  "rules": [
+    {"rule": "CDC-3", "severity": "Info", "count": 10, "classification": "single_bit_synchronizers", "basis": "Two destination stages with ASYNC_REG for FIFO reset/status/update/ack and MAC TX status; targeted maximum-delay constraints."},
+    {"rule": "CDC-6", "severity": "Warning", "count": 3, "classification": "gray_pointers_and_independent_status_bits", "basis": "Two 14-bit registered Gray read-pointer buses use two-stage synchronization. The remaining two-bit MAC RX status vector carries independent bad-frame and bad-FCS toggle events, not an atomic word."},
+    {"rule": "CDC-15", "severity": "Warning", "count": 28, "classification": "stable_bus_update_ack_handshake", "basis": "Two 14-bit committed-write-pointer buses are held stable until a synchronized acknowledgement; the destination samples the bus only after its synchronized update event. Reviewed axis_async_fifo.v lines 388-394, 450-480 and 586-591."},
+    {"rule": "CDC-26", "severity": "Warning", "count": 3, "classification": "external_async_reset_to_sync_release_chain", "basis": "The reported endpoints are external reset to the first PRE pin in each domain's three-stage sync_reset chain. Routed DCP properties independently show all nine cells are FDPE and ASYNC_REG=1. Asynchronous assertion and synchronous local release are intentional.", "tool_label_discrepancy": "Vivado labels these LUTRAM read/write potential collision, although the endpoints and routed primitive types are reset flip-flops.", "primitive_evidence": "artifacts/hard-bench-assessment-20261023/reset-cell-properties.txt"}
+  ],
+  "bus_skew": {
+    "checks": 4,
+    "all_met": true,
+    "minimum_slack_ns": 6.987,
+    "buses": [
+      {"name": "RX FIFO read Gray pointer", "requirement_ns": 8.0, "actual_ns": 0.830, "slack_ns": 7.170},
+      {"name": "RX FIFO committed write pointer", "requirement_ns": 10.0, "actual_ns": 1.117, "slack_ns": 8.883},
+      {"name": "TX FIFO read Gray pointer", "requirement_ns": 10.0, "actual_ns": 0.863, "slack_ns": 9.137},
+      {"name": "TX FIFO committed write pointer", "requirement_ns": 8.0, "actual_ns": 1.013, "slack_ns": 6.987}
+    ]
+  },
+  "timing_constraints": {
+    "ignored_exceptions": 0,
+    "blanket_async_clock_groups": false,
+    "missing_clocks": 0,
+    "unconstrained_internal_endpoints": 0,
+    "no_input_delay": 1,
+    "no_input_delay_exemptions": [{"port": "reset", "reason": "External asynchronous reset has no synchronous launch-clock relationship. It asserts local synchronizer preset pins asynchronously and releases through three local-clock stages. Narrow preset/reset-pin exceptions are intentional; no artificial synchronous input delay is assigned."}],
+    "reset_synchronizer_cells": 9,
+    "reset_synchronizer_primitive": "FDPE",
+    "reset_synchronizer_all_async_reg": true
+  },
+  "evidence": ["cdc.rpt", "bus-skew.rpt", "ignored-exceptions.rpt", "check-timing.rpt"],
+  "limitations": ["Structural/source, routed timing and two clock-ratio simulation evidence; no formal proof or metastability MTBF analysis.", "Arbitrary clock ratios, reset sequences and event pulse rates are not exhaustively verified.", "Out-of-context clock-source placement is unspecified; 100/125/125 MHz timing is not board clock-distribution or I/O signoff."],
+  "other_model_api_calls": 0
+}

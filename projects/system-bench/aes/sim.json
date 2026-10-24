@@ -1,0 +1,8 @@
+{
+  "sources": [
+    "projects/system-bench/aes/aes_sim_sources.sv",
+    "projects/system-bench/aes/tb_aes.sv"
+  ],
+  "top": "tb_aes",
+  "capture_top_wave": true
+}

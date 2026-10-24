@@ -1,0 +1,12 @@
+{
+  "sources": [
+    "vendor/verilog-axi/rtl/axi_dma.v",
+    "vendor/verilog-axi/rtl/axi_dma_rd.v",
+    "vendor/verilog-axi/rtl/axi_dma_wr.v",
+    "vendor/verilog-ethernet/lib/axis/rtl/axis_fifo.v",
+    "projects/system-bench/dma/dma_top.v",
+    "projects/system-bench/dma/tb_dma.sv"
+  ],
+  "top": "tb_dma",
+  "capture_top_wave": true
+}

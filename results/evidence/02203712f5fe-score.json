@@ -1,0 +1,78 @@
+{
+  "date": "2026-10-23",
+  "passed": 20,
+  "total": 24,
+  "percent": 83.33333333333333,
+  "original_runner_reported_passed": 22,
+  "scoring_correction": "Reject TIMEOUT even if mismatch count is zero",
+  "categories": [
+    {
+      "category": "combinational_arithmetic",
+      "label": "组合与位运算",
+      "passed": 3,
+      "total": 4,
+      "extended_passed": 3
+    },
+    {
+      "category": "registers_edges",
+      "label": "寄存器与边沿",
+      "passed": 4,
+      "total": 4,
+      "extended_passed": 4
+    },
+    {
+      "category": "counters_timers",
+      "label": "计数与定时",
+      "passed": 3,
+      "total": 4,
+      "extended_passed": 4
+    },
+    {
+      "category": "shifts_lfsr_cellular",
+      "label": "移位与迭代逻辑",
+      "passed": 3,
+      "total": 4,
+      "extended_passed": 4
+    },
+    {
+      "category": "control_fsm",
+      "label": "状态控制",
+      "passed": 3,
+      "total": 4,
+      "extended_passed": 4
+    },
+    {
+      "category": "protocol_prediction",
+      "label": "协议与分支预测",
+      "passed": 4,
+      "total": 4,
+      "extended_passed": 4
+    }
+  ],
+  "samples": 440533,
+  "tool_failures": 1,
+  "wall_seconds": 255.577,
+  "frozen_candidates_verified": true,
+  "previous_8_overlap": 0,
+  "model_api_calls": 0,
+  "scope": "Purposive 24-task coverage sample; one Codex conversation; XSim adapted runner; functional simulation only",
+  "failed_ids": [
+    "Prob093_ece241_2014_q3",
+    "Prob141_count_clock",
+    "Prob082_lfsr32",
+    "Prob156_review2015_fancytimer"
+  ],
+  "evidence": "${WORKSPACE}\\artifacts\\verilogeval-codex-2026-10-22T16-56-02-984Z\\result.json",
+  "extended_watchdog": {
+    "passed": 23,
+    "total": 24,
+    "percent": 95.83333333333334,
+    "watchdog_ps": 10000000,
+    "original_watchdog_ps": 1000000,
+    "samples": 1028806,
+    "additional_wall_seconds": 38.799,
+    "candidate_rtl_changes": 0,
+    "functional_stimulus_or_comparison_changes": 0,
+    "evidence": "${WORKSPACE}\\artifacts\\verilogeval-codex-2026-10-22T17-03-30-819Z\\result.json"
+  }
+}

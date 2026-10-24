@@ -1,0 +1,113 @@
+Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2020.2 (win64) Build 3064766 Wed Nov 18 09:12:45 MST 2020
+| Date         : Fri Oct 23 02:45:14 2026
+| Host         : LAPTOP-0E9PGF4N running 64-bit major release  (build 9200)
+| Command      : report_cdc -details -file cdc.rpt
+| Design       : ethernet_cdc_top
+| Device       : 7a100t-fgg676
+| Speed File   : -2  PRODUCTION 1.23 2018-06-13
+------------------------------------------------------------------------------------
+
+CDC Report
+
+ID      Severity  Count  Description
+------  --------  -----  ----------------------------------------------
+CDC-3   Info         10  1-bit synchronized with ASYNC_REG property
+CDC-6   Warning       3  Multi-bit synchronized with ASYNC_REG property
+CDC-15  Warning      28  Clock enable controlled CDC structure detected
+CDC-26  Warning       3  LUTRAM read/write potential collision
+
+Source Clock: input port clock
+Destination Clock: logic_clk
+CDC Type: No Common Primary Clock
+
+Row  ID      Severity  Description                            Depth  Exception   Source (From)  Destination (To)
+---  ------  --------  -------------------------------------  -----  ----------  -------------  ------------------------------------
+  1  CDC-26  Warning   LUTRAM read/write potential collision      0  False Path  reset          logic_reset_sync/sync_reg_reg[0]/PRE
+
+Source Clock: rx_clk
+Destination Clock: logic_clk
+CDC Type: No Common Primary Clock
+
+Row  ID      Severity  Description                                     Depth  Exception                Source (From)                                           Destination (To)
+---  ------  --------  ----------------------------------------------  -----  -----------------------  ------------------------------------------------------  ------------------------------------------------------
+  1  CDC-3   Info      1-bit synchronized with ASYNC_REG property          2  Max Delay Datapath Only  mac/rx_fifo/fifo_inst/m_rst_sync1_reg_reg/C             mac/rx_fifo/fifo_inst/m_rst_sync2_reg_reg/D
+  2  CDC-3   Info      1-bit synchronized with ASYNC_REG property          2  Max Delay Datapath Only  mac/rx_fifo/fifo_inst/overflow_sync1_reg_reg/C          mac/rx_fifo/fifo_inst/overflow_sync2_reg_reg/D
+  3  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  mac/rx_fifo/fifo_inst/wr_ptr_sync_commit_reg_reg[0]/C   mac/rx_fifo/fifo_inst/wr_ptr_commit_sync_reg_reg[0]/D
+  4  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  mac/rx_fifo/fifo_inst/wr_ptr_sync_commit_reg_reg[1]/C   mac/rx_fifo/fifo_inst/wr_ptr_commit_sync_reg_reg[1]/D
+  5  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  mac/rx_fifo/fifo_inst/wr_ptr_sync_commit_reg_reg[2]/C   mac/rx_fifo/fifo_inst/wr_ptr_commit_sync_reg_reg[2]/D
+  6  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  mac/rx_fifo/fifo_inst/wr_ptr_sync_commit_reg_reg[3]/C   mac/rx_fifo/fifo_inst/wr_ptr_commit_sync_reg_reg[3]/D
+  7  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  mac/rx_fifo/fifo_inst/wr_ptr_sync_commit_reg_reg[4]/C   mac/rx_fifo/fifo_inst/wr_ptr_commit_sync_reg_reg[4]/D
+  8  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  mac/rx_fifo/fifo_inst/wr_ptr_sync_commit_reg_reg[5]/C   mac/rx_fifo/fifo_inst/wr_ptr_commit_sync_reg_reg[5]/D
+  9  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  mac/rx_fifo/fifo_inst/wr_ptr_sync_commit_reg_reg[6]/C   mac/rx_fifo/fifo_inst/wr_ptr_commit_sync_reg_reg[6]/D
+ 10  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  mac/rx_fifo/fifo_inst/wr_ptr_sync_commit_reg_reg[7]/C   mac/rx_fifo/fifo_inst/wr_ptr_commit_sync_reg_reg[7]/D
+ 11  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  mac/rx_fifo/fifo_inst/wr_ptr_sync_commit_reg_reg[8]/C   mac/rx_fifo/fifo_inst/wr_ptr_commit_sync_reg_reg[8]/D
+ 12  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  mac/rx_fifo/fifo_inst/wr_ptr_sync_commit_reg_reg[9]/C   mac/rx_fifo/fifo_inst/wr_ptr_commit_sync_reg_reg[9]/D
+ 13  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  mac/rx_fifo/fifo_inst/wr_ptr_sync_commit_reg_reg[10]/C  mac/rx_fifo/fifo_inst/wr_ptr_commit_sync_reg_reg[10]/D
+ 14  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  mac/rx_fifo/fifo_inst/wr_ptr_sync_commit_reg_reg[11]/C  mac/rx_fifo/fifo_inst/wr_ptr_commit_sync_reg_reg[11]/D
+ 15  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  mac/rx_fifo/fifo_inst/wr_ptr_sync_commit_reg_reg[12]/C  mac/rx_fifo/fifo_inst/wr_ptr_commit_sync_reg_reg[12]/D
+ 16  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  mac/rx_fifo/fifo_inst/wr_ptr_sync_commit_reg_reg[13]/C  mac/rx_fifo/fifo_inst/wr_ptr_commit_sync_reg_reg[13]/D
+ 17  CDC-3   Info      1-bit synchronized with ASYNC_REG property          2  Max Delay Datapath Only  mac/rx_fifo/fifo_inst/wr_ptr_update_reg_reg/C           mac/rx_fifo/fifo_inst/wr_ptr_update_sync1_reg_reg/D
+ 18  CDC-6   Warning   Multi-bit synchronized with ASYNC_REG property      2  Max Delay Datapath Only  mac/rx_sync_reg_1_reg[1:0]/C                            mac/rx_sync_reg_2_reg[1:0]/D
+
+Source Clock: tx_clk
+Destination Clock: logic_clk
+CDC Type: No Common Primary Clock
+
+Row  ID     Severity  Description                                     Depth  Exception                Source (From)                                        Destination (To)
+---  -----  --------  ----------------------------------------------  -----  -----------------------  ---------------------------------------------------  -------------------------------------------------------
+  1  CDC-6  Warning   Multi-bit synchronized with ASYNC_REG property      2  Max Delay Datapath Only  mac/tx_fifo/fifo_inst/rd_ptr_gray_reg_reg[13:0]/C    mac/tx_fifo/fifo_inst/rd_ptr_gray_sync1_reg_reg[13:0]/D
+  2  CDC-3  Info      1-bit synchronized with ASYNC_REG property          2  Max Delay Datapath Only  mac/tx_fifo/fifo_inst/s_rst_sync1_reg_reg/C          mac/tx_fifo/fifo_inst/s_rst_sync2_reg_reg/D
+  3  CDC-3  Info      1-bit synchronized with ASYNC_REG property          2  Max Delay Datapath Only  mac/tx_fifo/fifo_inst/wr_ptr_update_sync3_reg_reg/C  mac/tx_fifo/fifo_inst/wr_ptr_update_ack_sync1_reg_reg/D
+  4  CDC-3  Info      1-bit synchronized with ASYNC_REG property          2  Max Delay Datapath Only  mac/tx_sync_reg_1_reg[0]/C                           mac/tx_sync_reg_2_reg[0]/D
+
+Source Clock: input port clock
+Destination Clock: rx_clk
+CDC Type: No Common Primary Clock
+
+Row  ID      Severity  Description                            Depth  Exception   Source (From)  Destination (To)
+---  ------  --------  -------------------------------------  -----  ----------  -------------  ---------------------------------
+  1  CDC-26  Warning   LUTRAM read/write potential collision      0  False Path  reset          rx_reset_sync/sync_reg_reg[0]/PRE
+
+Source Clock: logic_clk
+Destination Clock: rx_clk
+CDC Type: No Common Primary Clock
+
+Row  ID     Severity  Description                                     Depth  Exception                Source (From)                                        Destination (To)
+---  -----  --------  ----------------------------------------------  -----  -----------------------  ---------------------------------------------------  -------------------------------------------------------
+  1  CDC-6  Warning   Multi-bit synchronized with ASYNC_REG property      2  Max Delay Datapath Only  mac/rx_fifo/fifo_inst/rd_ptr_gray_reg_reg[13:0]/C    mac/rx_fifo/fifo_inst/rd_ptr_gray_sync1_reg_reg[13:0]/D
+  2  CDC-3  Info      1-bit synchronized with ASYNC_REG property          2  Max Delay Datapath Only  mac/tx_fifo/fifo_inst/m_rst_sync1_reg_reg/C          mac/rx_fifo/fifo_inst/s_rst_sync2_reg_reg/D
+  3  CDC-3  Info      1-bit synchronized with ASYNC_REG property          2  Max Delay Datapath Only  mac/rx_fifo/fifo_inst/wr_ptr_update_sync3_reg_reg/C  mac/rx_fifo/fifo_inst/wr_ptr_update_ack_sync1_reg_reg/D
+
+Source Clock: input port clock
+Destination Clock: tx_clk
+CDC Type: No Common Primary Clock
+
+Row  ID      Severity  Description                            Depth  Exception   Source (From)  Destination (To)
+---  ------  --------  -------------------------------------  -----  ----------  -------------  ---------------------------------
+  1  CDC-26  Warning   LUTRAM read/write potential collision      0  False Path  reset          tx_reset_sync/sync_reg_reg[0]/PRE
+
+Source Clock: logic_clk
+Destination Clock: tx_clk
+CDC Type: No Common Primary Clock
+
+Row  ID      Severity  Description                                     Depth  Exception                Source (From)                                           Destination (To)
+---  ------  --------  ----------------------------------------------  -----  -----------------------  ------------------------------------------------------  ------------------------------------------------------
+  1  CDC-3   Info      1-bit synchronized with ASYNC_REG property          2  Max Delay Datapath Only  mac/tx_fifo/fifo_inst/m_rst_sync1_reg_reg/C             mac/tx_fifo/fifo_inst/m_rst_sync2_reg_reg/D
+  2  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  mac/tx_fifo/fifo_inst/wr_ptr_sync_commit_reg_reg[0]/C   mac/tx_fifo/fifo_inst/wr_ptr_commit_sync_reg_reg[0]/D
+  3  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  mac/tx_fifo/fifo_inst/wr_ptr_sync_commit_reg_reg[1]/C   mac/tx_fifo/fifo_inst/wr_ptr_commit_sync_reg_reg[1]/D
+  4  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  mac/tx_fifo/fifo_inst/wr_ptr_sync_commit_reg_reg[2]/C   mac/tx_fifo/fifo_inst/wr_ptr_commit_sync_reg_reg[2]/D
+  5  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  mac/tx_fifo/fifo_inst/wr_ptr_sync_commit_reg_reg[3]/C   mac/tx_fifo/fifo_inst/wr_ptr_commit_sync_reg_reg[3]/D
+  6  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  mac/tx_fifo/fifo_inst/wr_ptr_sync_commit_reg_reg[4]/C   mac/tx_fifo/fifo_inst/wr_ptr_commit_sync_reg_reg[4]/D
+  7  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  mac/tx_fifo/fifo_inst/wr_ptr_sync_commit_reg_reg[5]/C   mac/tx_fifo/fifo_inst/wr_ptr_commit_sync_reg_reg[5]/D
+  8  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  mac/tx_fifo/fifo_inst/wr_ptr_sync_commit_reg_reg[6]/C   mac/tx_fifo/fifo_inst/wr_ptr_commit_sync_reg_reg[6]/D
+  9  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  mac/tx_fifo/fifo_inst/wr_ptr_sync_commit_reg_reg[7]/C   mac/tx_fifo/fifo_inst/wr_ptr_commit_sync_reg_reg[7]/D
+ 10  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  mac/tx_fifo/fifo_inst/wr_ptr_sync_commit_reg_reg[8]/C   mac/tx_fifo/fifo_inst/wr_ptr_commit_sync_reg_reg[8]/D
+ 11  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  mac/tx_fifo/fifo_inst/wr_ptr_sync_commit_reg_reg[9]/C   mac/tx_fifo/fifo_inst/wr_ptr_commit_sync_reg_reg[9]/D
+ 12  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  mac/tx_fifo/fifo_inst/wr_ptr_sync_commit_reg_reg[10]/C  mac/tx_fifo/fifo_inst/wr_ptr_commit_sync_reg_reg[10]/D
+ 13  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  mac/tx_fifo/fifo_inst/wr_ptr_sync_commit_reg_reg[11]/C  mac/tx_fifo/fifo_inst/wr_ptr_commit_sync_reg_reg[11]/D
+ 14  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  mac/tx_fifo/fifo_inst/wr_ptr_sync_commit_reg_reg[12]/C  mac/tx_fifo/fifo_inst/wr_ptr_commit_sync_reg_reg[12]/D
+ 15  CDC-15  Warning   Clock enable controlled CDC structure detected      0  Max Delay Datapath Only  mac/tx_fifo/fifo_inst/wr_ptr_sync_commit_reg_reg[13]/C  mac/tx_fifo/fifo_inst/wr_ptr_commit_sync_reg_reg[13]/D
+ 16  CDC-3   Info      1-bit synchronized with ASYNC_REG property          2  Max Delay Datapath Only  mac/tx_fifo/fifo_inst/wr_ptr_update_reg_reg/C           mac/tx_fifo/fifo_inst/wr_ptr_update_sync1_reg_reg/D
+

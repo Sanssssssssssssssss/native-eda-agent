@@ -1,0 +1,12 @@
+{
+  "mode": "negative",
+  "pass": true,
+  "expected_failure": true,
+  "exit_code": 0,
+  "wall_seconds": 65.47,
+  "artifact_directory": "E:\\GPTProject2\\EDAAgent\\artifacts\\2026-10-22T18-45-02-639Z-eda_xsim-546abd1e",
+  "receipt": "E:\\GPTProject2\\EDAAgent\\projects\\hard-bench\\ethernet-cdc\\runs\\20261022T184501Z-negative",
+  "completion_marker": null,
+  "fatal_marker": "Fatal: GMII_BYTE_MISMATCH frame=0 byte=71 got=9c expected=9d",
+  "other_model_API_calls": 0
+}

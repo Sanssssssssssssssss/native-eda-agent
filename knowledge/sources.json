@@ -1,0 +1,247 @@
+{
+  "schema_version": 1,
+  "verified_at_utc": "2026-10-22T18:36:38Z",
+  "policy": "Original summaries, not copied manuals. License describes upstream source, not a claim that AMD documentation is open source. Mutable URLs retain observed version; repository commit is not proof that a separately hosted documentation build uses that commit.",
+  "sources": [
+    {
+      "id": "amd-ug901",
+      "title": "Vivado Synthesis UG901",
+      "url": "https://docs.amd.com/v/u/2020.2-English/ug901-vivado-synthesis",
+      "version": "2020.2; released 2021-01-28",
+      "license": "AMD documentation terms",
+      "license_url": "https://docs.amd.com/v/u/2020.2-English/ug901-vivado-synthesis",
+      "verified_at_utc": "2026-10-22T18:36:38Z",
+      "verification": "official title/version metadata read; PDF content endpoint unavailable in this browsing pass; no detailed rule derived from unread PDF",
+      "local_status": "reference only"
+    },
+    {
+      "id": "amd-ug903",
+      "title": "Vivado Using Constraints UG903",
+      "url": "https://docs.amd.com/api/khub/documents/qfSFSG1429Fdy4AW8zDF3A/content",
+      "version": "2020.2; released 2021-02-09",
+      "license": "AMD documentation terms",
+      "license_url": "https://docs.amd.com/api/khub/documents/qfSFSG1429Fdy4AW8zDF3A/content",
+      "verified_at_utc": "2026-10-22T18:36:38Z",
+      "verification": "official content read",
+      "local_status": "reference only"
+    },
+    {
+      "id": "amd-ug906-cdc",
+      "title": "UG906 Report Clock Domain Crossings",
+      "url": "https://docs.amd.com/r/2020.2-English/ug906-vivado-design-analysis/Report-Clock-Domain-Crossings",
+      "version": "2020.2; released 2021-01-25",
+      "license": "AMD documentation terms",
+      "license_url": "https://docs.amd.com/r/2020.2-English/ug906-vivado-design-analysis/Report-Clock-Domain-Crossings",
+      "verified_at_utc": "2026-10-22T18:36:38Z",
+      "verification": "official content read",
+      "local_status": "reference only"
+    },
+    {
+      "id": "amd-ug835-cdc",
+      "title": "UG835 report_cdc",
+      "url": "https://docs.amd.com/r/2020.2-English/ug835-vivado-tcl-commands/report_cdc",
+      "version": "2020.2; released 2020-11-18",
+      "license": "AMD documentation terms",
+      "license_url": "https://docs.amd.com/r/2020.2-English/ug835-vivado-tcl-commands/report_cdc",
+      "verified_at_utc": "2026-10-22T18:36:38Z",
+      "verification": "official content read",
+      "local_status": "reference only"
+    },
+    {
+      "id": "amd-ug906-analysis",
+      "title": "UG906 report_design_analysis",
+      "url": "https://docs.amd.com/r/2020.2-English/ug906-vivado-design-analysis/Using-the-report_design_analysis-Command",
+      "version": "2020.2",
+      "license": "AMD documentation terms",
+      "license_url": "https://docs.amd.com/r/2020.2-English/ug906-vivado-design-analysis/Using-the-report_design_analysis-Command",
+      "verified_at_utc": "2026-10-22T18:36:38Z",
+      "verification": "official content read",
+      "local_status": "reference only"
+    },
+    {
+      "id": "amd-ug949-reset",
+      "title": "UG949 Reset selection",
+      "url": "https://docs.amd.com/r/2020.2-English/ug949-vivado-design-methodology/Synchronous-Reset-vs.-Asynchronous-Reset",
+      "version": "2020.2; released 2021-02-18",
+      "license": "AMD documentation terms",
+      "license_url": "https://docs.amd.com/r/2020.2-English/ug949-vivado-design-methodology/Synchronous-Reset-vs.-Asynchronous-Reset",
+      "verified_at_utc": "2026-10-22T18:36:38Z",
+      "verification": "official indexed text read; Jina route initially returned Content not found, subsequently verified through official web result",
+      "local_status": "reference only"
+    },
+    {
+      "id": "amd-ug949-reset-ce",
+      "title": "UG949 Reset and Clock Enable Precedence",
+      "url": "https://docs.amd.com/r/2020.2-English/ug949-vivado-design-methodology/Reset-and-Clock-Enable-Precedence",
+      "version": "2020.2",
+      "license": "AMD documentation terms",
+      "license_url": "https://docs.amd.com/r/2020.2-English/ug949-vivado-design-methodology/Reset-and-Clock-Enable-Precedence",
+      "verified_at_utc": "2026-10-22T18:36:38Z",
+      "verification": "official content read",
+      "local_status": "reference only"
+    },
+    {
+      "id": "amd-ug949-ram",
+      "title": "UG949 RAM reset inference",
+      "url": "https://docs.amd.com/r/2020.2-English/ug949-vivado-design-methodology/Checking-for-Reset-Signals-on-the-Address/Read-Data-Registers",
+      "version": "2020.2",
+      "license": "AMD documentation terms",
+      "license_url": "https://docs.amd.com/r/2020.2-English/ug949-vivado-design-methodology/Checking-for-Reset-Signals-on-the-Address/Read-Data-Registers",
+      "verified_at_utc": "2026-10-22T18:36:38Z",
+      "verification": "official content read",
+      "local_status": "reference only"
+    },
+    {
+      "id": "amd-ug949-timing",
+      "title": "UG949 Understanding Timing Reports",
+      "url": "https://docs.amd.com/r/2020.2-English/ug949-vivado-design-methodology/Understanding-Timing-Reports",
+      "version": "2020.2",
+      "license": "AMD documentation terms",
+      "license_url": "https://docs.amd.com/r/2020.2-English/ug949-vivado-design-methodology/Understanding-Timing-Reports",
+      "verified_at_utc": "2026-10-22T18:36:38Z",
+      "verification": "official content read",
+      "local_status": "reference only"
+    },
+    {
+      "id": "amd-pg145",
+      "title": "AXI4-Stream Protocol Checker PG145",
+      "url": "https://docs.amd.com/api/khub/documents/B18GeWPD8fFG6f4ogHK96g/content",
+      "version": "v2.0; 2018-04-04",
+      "license": "AMD documentation terms",
+      "license_url": "https://docs.amd.com/api/khub/documents/B18GeWPD8fFG6f4ogHK96g/content",
+      "verified_at_utc": "2026-10-22T18:36:38Z",
+      "verification": "official content read",
+      "local_status": "reference only"
+    },
+    {
+      "id": "lowrisc-style",
+      "title": "lowRISC Verilog Coding Style Guide",
+      "url": "https://github.com/lowRISC/style-guides/blob/9c15ff5dce23eef969e00ab3715153967419eadd/VerilogCodingStyle.md",
+      "version": "commit 9c15ff5dce23eef969e00ab3715153967419eadd",
+      "license": "CC-BY-4.0",
+      "license_url": "https://github.com/lowRISC/style-guides/blob/9c15ff5dce23eef969e00ab3715153967419eadd/LICENSE",
+      "verified_at_utc": "2026-10-22T18:36:38Z",
+      "verification": "official content read",
+      "local_status": "reference only"
+    },
+    {
+      "id": "verilator-language",
+      "title": "Verilator language semantics",
+      "url": "https://verilator.org/guide/latest/languages.html",
+      "version": "observed documentation 5.052; latest alias mutable",
+      "license": "LGPL-3.0-only OR Artistic-2.0",
+      "license_url": "https://github.com/verilator/verilator/blob/master/README.rst",
+      "verified_at_utc": "2026-10-22T18:36:38Z",
+      "verification": "official content read",
+      "local_status": "reference only"
+    },
+    {
+      "id": "verilator-warnings",
+      "title": "Verilator lint diagnostics",
+      "url": "https://verilator.org/guide/latest/warnings.html",
+      "version": "observed documentation 5.052; latest alias mutable",
+      "license": "LGPL-3.0-only OR Artistic-2.0",
+      "license_url": "https://github.com/verilator/verilator/blob/master/README.rst",
+      "verified_at_utc": "2026-10-22T18:36:38Z",
+      "verification": "official content read",
+      "local_status": "reference only"
+    },
+    {
+      "id": "cocotb",
+      "title": "cocotb simulator support",
+      "url": "https://docs.cocotb.org/en/v2.1.0/simulator_support.html",
+      "version": "release v2.1.0; rendered doc banner 2.1.0.dev3+re85fae95 observed",
+      "license": "BSD-3-Clause",
+      "license_url": "https://github.com/cocotb/cocotb/blob/v2.1.0/LICENSE",
+      "verified_at_utc": "2026-10-22T18:36:38Z",
+      "verification": "official content read",
+      "local_status": "reference only",
+      "release_url": "https://github.com/cocotb/cocotb/releases/tag/v2.1.0"
+    },
+    {
+      "id": "yosys",
+      "title": "Yosys synthesis framework",
+      "url": "https://yosyshq.readthedocs.io/projects/yosys/en/latest/introduction.html",
+      "version": "release v0.70; rendered docs 0.70-dev",
+      "license": "ISC",
+      "license_url": "https://github.com/YosysHQ/yosys/blob/v0.70/COPYING",
+      "verified_at_utc": "2026-10-22T18:36:38Z",
+      "verification": "official content read",
+      "local_status": "reference only",
+      "release_url": "https://github.com/YosysHQ/yosys/releases/tag/v0.70"
+    },
+    {
+      "id": "sby-reference",
+      "title": "SBY task modes and engine options",
+      "url": "https://symbiyosys.readthedocs.io/en/latest/reference.html",
+      "version": "latest docs observed; repo commit 79fc9eddca5e33a28cc2f2cd19c9825efd9a7255",
+      "license": "ISC",
+      "license_url": "https://github.com/YosysHQ/sby/blob/79fc9eddca5e33a28cc2f2cd19c9825efd9a7255/COPYING",
+      "verified_at_utc": "2026-10-22T18:36:38Z",
+      "verification": "official content read",
+      "local_status": "reference only"
+    },
+    {
+      "id": "sby-quickstart",
+      "title": "SBY FIFO counterexample tutorial",
+      "url": "https://symbiyosys.readthedocs.io/en/latest/quickstart.html",
+      "version": "latest docs observed; repo commit 79fc9eddca5e33a28cc2f2cd19c9825efd9a7255",
+      "license": "ISC",
+      "license_url": "https://github.com/YosysHQ/sby/blob/79fc9eddca5e33a28cc2f2cd19c9825efd9a7255/COPYING",
+      "verified_at_utc": "2026-10-22T18:36:38Z",
+      "verification": "official content read",
+      "local_status": "reference only"
+    },
+    {
+      "id": "fusesoc",
+      "title": "FuseSoC introduction",
+      "url": "https://fusesoc.readthedocs.io/en/stable/user/introduction.html",
+      "version": "2.4.7",
+      "license": "BSD-2-Clause",
+      "license_url": "https://github.com/olofk/fusesoc/blob/2.4.7/LICENSE",
+      "verified_at_utc": "2026-10-22T18:36:38Z",
+      "verification": "official content read",
+      "local_status": "reference only",
+      "release_url": "https://github.com/olofk/fusesoc/releases/tag/2.4.7"
+    },
+    {
+      "id": "edalize",
+      "title": "Edalize EDA abstraction library",
+      "url": "https://edalize.readthedocs.io/en/latest/",
+      "version": "release v0.6.7; latest documentation mutable",
+      "license": "BSD-2-Clause",
+      "license_url": "https://github.com/olofk/edalize/blob/v0.6.7/LICENSE",
+      "verified_at_utc": "2026-10-22T18:36:38Z",
+      "verification": "official content read",
+      "local_status": "reference only",
+      "release_url": "https://github.com/olofk/edalize/releases/tag/v0.6.7"
+    },
+    {
+      "id": "bender",
+      "title": "Bender HDL dependency manager",
+      "url": "https://github.com/pulp-platform/bender/tree/v0.32.1",
+      "version": "v0.32.1",
+      "license": "Apache-2.0",
+      "license_url": "https://github.com/pulp-platform/bender/blob/v0.32.1/LICENSE",
+      "verified_at_utc": "2026-10-22T18:36:38Z",
+      "verification": "official content read",
+      "local_status": "reference only",
+      "release_url": "https://github.com/pulp-platform/bender/releases/tag/v0.32.1"
+    },
+    {
+      "id": "ross",
+      "title": "AMD Ross AI Assistant",
+      "url": "https://github.com/Xilinx/ross-ai-assistant/tree/2cdc9eef1b6b5b17fa45f5e4d468e5483a1c92de",
+      "version": "release_tag 2026.9.1; commit 2cdc9eef1b6b5b17fa45f5e4d468e5483a1c92de",
+      "license": "MIT",
+      "license_url": "https://github.com/Xilinx/ross-ai-assistant/blob/2cdc9eef1b6b5b17fa45f5e4d468e5483a1c92de/LICENSE",
+      "verified_at_utc": "2026-10-22T18:36:38Z",
+      "verification": "official content read",
+      "local_status": "vendor/ross-ai-assistant documentation checkout; Ross binary/MCP not connected",
+      "local_paths": [
+        "vendor/ross-ai-assistant/manifest.yaml",
+        "vendor/ross-ai-assistant/skills/vivado-timing-methodology-checks/SKILL.md"
+      ]
+    }
+  ]
+}

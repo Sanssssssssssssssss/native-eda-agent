@@ -1,0 +1,9 @@
+{
+  "sources": [
+    "vendor/picorv32/picorv32.v",
+    "projects/system-bench/soc/soc_top.v",
+    "projects/system-bench/soc/tb_soc.sv"
+  ],
+  "top": "tb_soc",
+  "capture_top_wave": true
+}

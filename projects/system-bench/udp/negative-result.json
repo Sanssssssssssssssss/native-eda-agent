@@ -1,0 +1,8 @@
+{
+  "test": "corrupted expected IPv4 checksum byte",
+  "negative_control_rejected": true,
+  "tool_exit_code": 0,
+  "artifact_directory": "E:\\GPTProject2\\EDAAgent\\artifacts\\2026-10-22T18-09-35-003Z-xsim-a322af61",
+  "wall_seconds": 34.94,
+  "other_model_api_calls": 0
+}

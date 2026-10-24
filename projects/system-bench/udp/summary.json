@@ -1,0 +1,151 @@
+{
+  "project": "udp",
+  "status": "functional_and_OOC_implementation_pass",
+  "upstream_commit": "77320a9471d19c7dd383914bc049e02d9f4f1ffb",
+  "compiled_RTL_lines": 8159,
+  "compiled_source_files": 20,
+  "compiled_module_definitions": 20,
+  "scenario_families": [
+    "bidirectional packet byte correctness: 64 baseline vector entries, 61 distinct payload lengths",
+    "generated UDP and IPv4 checksums",
+    "AXIS backpressure stability",
+    "cold and cached ARP resolution with selected key field checks",
+    "ARP responder with selected key field checks",
+    "one invalid IPv4 checksum case repeated eight times",
+    "one truncated IPv4 header case repeated eight times",
+    "ARP timeout retry and no leaked IP frame",
+    "idle reset after timeout and cold-cache recovery"
+  ],
+  "valid_transmitted_packets": 65,
+  "valid_received_packets": 65,
+  "total_checked_payload_bytes": 62272,
+  "invalid_checksum_frames_rejected": 8,
+  "truncated_ipv4_headers_rejected": 8,
+  "arp_output_frames": 7,
+  "arp_timeout_errors": 1,
+  "reset_recovery": true,
+  "simulation_cycles": 94883,
+  "simulation": {
+    "project": "udp",
+    "stage": "sim",
+    "pass": true,
+    "exit_code": 0,
+    "wall_seconds": 26.47,
+    "artifact_directory": "E:\\GPTProject2\\EDAAgent\\artifacts\\2026-10-22T18-10-31-512Z-xsim-eb357a36",
+    "receipt_directory": "E:\\GPTProject2\\EDAAgent\\artifacts\\system-udp-sim-20261022T181029Z",
+    "other_model_api_calls": 0
+  },
+  "negative_control": {
+    "test": "corrupted expected IPv4 checksum byte",
+    "negative_control_rejected": true,
+    "tool_exit_code": 0,
+    "artifact_directory": "E:\\GPTProject2\\EDAAgent\\artifacts\\2026-10-22T18-09-35-003Z-xsim-a322af61",
+    "wall_seconds": 34.94,
+    "other_model_api_calls": 0
+  },
+  "implementation": {
+    "project": "udp",
+    "stage": "impl",
+    "pass": true,
+    "exit_code": 0,
+    "wall_seconds": 120.19,
+    "artifact_directory": "E:\\GPTProject2\\EDAAgent\\artifacts\\2026-10-22T18-12-38-012Z-vivado-dbccd136",
+    "receipt_directory": "E:\\GPTProject2\\EDAAgent\\artifacts\\system-udp-impl-20261022T181236Z",
+    "other_model_api_calls": 0
+  },
+  "timing": {
+    "stage": "routed",
+    "top": "udp_top",
+    "version": "2020.2",
+    "part": "xc7a100tfgg676-2",
+    "clock_period_ns": 10.0,
+    "io_delay_ns": 2.0,
+    "setup_slack_ns": 1.899,
+    "hold_slack_ns": 0.075,
+    "flip_flops": 2924,
+    "lut_cells": 1763,
+    "dsp48": 0,
+    "ramb18": 0,
+    "ramb36": 1,
+    "implementation_mode": "out_of_context",
+    "black_boxes": 0,
+    "board_io_validated": false,
+    "hardware_tested": false,
+    "model_api_calls": 0
+  },
+  "physical_resources": {
+    "slice_luts": 1599,
+    "flip_flops": 2924,
+    "ramb36": 1,
+    "ramb18": 0,
+    "dsp48": 0,
+    "fully_routed_nets": 3779,
+    "routing_errors": 0
+  },
+  "hashes": {
+    "vendor/verilog-ethernet/rtl/udp_complete.v": "94c2f9a93a07256493c2f87e77444cc14cec686247f653d5a769264a43a9faee",
+    "vendor/verilog-ethernet/rtl/udp.v": "a11fcaaf918868706c2a3ea97ecb5842813b6a21a4bd9d35ad38906be81a4c7f",
+    "vendor/verilog-ethernet/rtl/udp_checksum_gen.v": "1a5656276e8481fc0f82c128da36bc2a748844ad20651fdc35e7afda6de17f2d",
+    "vendor/verilog-ethernet/rtl/udp_ip_rx.v": "a3d11dac41e6349e52c9fbe531b9e3345d5688b062157b8c6a85f4b40cc41050",
+    "vendor/verilog-ethernet/rtl/udp_ip_tx.v": "4df5a48a8eded39d4503923e14aa3f66824bbc830008e2c37b3e767ca345f60a",
+    "vendor/verilog-ethernet/rtl/ip_complete.v": "c0f5981200d90312065eece7117dd22733d224169af1865760522e38122df120",
+    "vendor/verilog-ethernet/rtl/ip.v": "0fa6834e1d4eade6641ea6c0dc918bc3fb8d758dd8e0a38c7853d7c10f7853a3",
+    "vendor/verilog-ethernet/rtl/ip_eth_rx.v": "ad9c44691fe27d76373e64d3aadf8e076d819030266d4569e683030cc67a05bc",
+    "vendor/verilog-ethernet/rtl/ip_eth_tx.v": "a9d5bdbea9ccecedf7ff513dfe3e34cbfbc505bfc3877d1430a3416b8689fd1c",
+    "vendor/verilog-ethernet/rtl/ip_arb_mux.v": "429fce396c6d5e311497b419f6d0c930e4e17eea5637efb4f7a4df1299cfea6e",
+    "vendor/verilog-ethernet/rtl/arp.v": "46d339fe7b4de1ff5c6c881c53f9c0c718ec8eb776673bc4d5916ea230512512",
+    "vendor/verilog-ethernet/rtl/arp_cache.v": "e7eb3f5fc90c6e5cc9f1f9f3d59afefcfc87fd667a1893de8ddad3aa94309529",
+    "vendor/verilog-ethernet/rtl/arp_eth_rx.v": "6a49bd6f7c2311baffe1b3985d7eee0b9adee54f7d05ffa4316cf201adb526ee",
+    "vendor/verilog-ethernet/rtl/arp_eth_tx.v": "8125cf542196132b388c30f4ac3005a0153082c7cd9f87916680c6767db72dfb",
+    "vendor/verilog-ethernet/rtl/eth_arb_mux.v": "ce578195dc565962e3515d5444d13d6a47c42ee82bd2109d31dd62a7ed0775ea",
+    "vendor/verilog-ethernet/rtl/lfsr.v": "86362b06f992221f26c8e81ed82bbeb26eeb94edc381fd87d35bf0cca3b23c95",
+    "vendor/verilog-ethernet/lib/axis/rtl/arbiter.v": "4b4291e2afc5cdb93e261d43c439ea3c9bedce3d628d3db9c6e2ed8f4c27c3f1",
+    "vendor/verilog-ethernet/lib/axis/rtl/priority_encoder.v": "07c610b8dda24daf67dec36c743f79fca30f9d01d5469e1e7f795a16f4c7aa97",
+    "vendor/verilog-ethernet/lib/axis/rtl/axis_fifo.v": "8ee436631ece272f478a4396c3819f62e5cd4f9a492b80502562aeb73c9e6294",
+    "projects/system-bench/udp/udp_top.v": "004f42a3996cc56eace8b7982a49eb70f1300dbc2b23871ba199c26f2b0d9cce",
+    "projects/system-bench/udp/tb_udp.sv": "7f5699d907d5a4df1cb6933ca3b5830f7ce251815f333bfd34a95eb60e4e6f1d",
+    "projects/system-bench/generate_udp.py": "e23d1f8dc5fe7975e9929b7b5dd0bb292e866234d93c446aa197ac7497bda89b"
+  },
+  "failed_attempts": [
+    {
+      "type": "testbench_header_payload_pairing",
+      "artifact": "artifacts/2026-10-22T18-07-07-928Z-xsim-a4162759",
+      "resolution": "sink accepts header before enabling payload; upstream RTL unchanged"
+    },
+    {
+      "type": "Vivado_existing_installation_script_read_failure",
+      "artifact": "artifacts/2026-10-22T18-09-04-304Z-vivado-d5a43925"
+    },
+    {
+      "type": "Vivado_existing_installation_script_read_failure",
+      "artifact": "artifacts/2026-10-22T18-11-37-833Z-vivado-3b82c548",
+      "resolution": "isolated batch launch passed; root cause unestablished"
+    }
+  ],
+  "other_model_API_calls": 0,
+  "limits": [
+    "upstream integration, not blind RTL generation benchmark",
+    "frame interface, no MAC/PHY/FCS or board test",
+    "received UDP checksum is exposed but not validated by core",
+    "OOC clock source is unplaced; no board clock skew timing signoff",
+    "ARP timing intervals shortened to 1000/2000 cycles",
+    "64 baseline vector entries cover 61 distinct payload lengths",
+    "16 malformed IPv4 inputs comprise two cases repeated eight times each",
+    "ARP byte comparison covers selected key fields only",
+    "reset is idle after timeout; active-transfer reset is untested"
+  ],
+  "baseline_vector_entries": 64,
+  "distinct_baseline_payload_lengths": 61,
+  "repeated_baseline_payload_lengths": {
+    "2": 2,
+    "8": 2,
+    "32": 2
+  },
+  "malformed_ipv4_coverage": {
+    "distinct_fault_cases": 2,
+    "repetitions_per_case": 8,
+    "total_inputs": 16
+  },
+  "arp_check_scope": "selected format, source MAC/IP and opcode fields plus expected request/reply counts; not a complete ARP byte oracle",
+  "reset_coverage": "reset while idle after timeout, followed by cold ARP lookup and one transmit/receive; no reset during active transfer"
+}

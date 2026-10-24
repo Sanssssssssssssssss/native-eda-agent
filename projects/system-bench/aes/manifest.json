@@ -1,0 +1,178 @@
+{
+  "upstream": "https://github.com/secworks/aes",
+  "commit": "80dc4718e1dcbbdb4b0dd1bdb393d8f7b98981dc",
+  "license": "BSD-2-Clause",
+  "oracle": "cryptography 48.0.0 AES ECB",
+  "random_seed": "0xEDA20261023",
+  "blocks": 532,
+  "encryption_blocks": 266,
+  "decryption_blocks": 266,
+  "groups": [
+    {
+      "group": 0,
+      "name": "FIPS197-AES128",
+      "key_bits": 128,
+      "start": 0,
+      "count": 2
+    },
+    {
+      "group": 1,
+      "name": "FIPS197-AES256",
+      "key_bits": 256,
+      "start": 2,
+      "count": 2
+    },
+    {
+      "group": 2,
+      "name": "SP800-38A-AES128",
+      "key_bits": 128,
+      "start": 4,
+      "count": 8
+    },
+    {
+      "group": 3,
+      "name": "SP800-38A-AES256",
+      "key_bits": 256,
+      "start": 12,
+      "count": 8
+    },
+    {
+      "group": 4,
+      "name": "Random-00",
+      "key_bits": 128,
+      "start": 20,
+      "count": 32
+    },
+    {
+      "group": 5,
+      "name": "Random-01",
+      "key_bits": 256,
+      "start": 52,
+      "count": 32
+    },
+    {
+      "group": 6,
+      "name": "Random-02",
+      "key_bits": 128,
+      "start": 84,
+      "count": 32
+    },
+    {
+      "group": 7,
+      "name": "Random-03",
+      "key_bits": 256,
+      "start": 116,
+      "count": 32
+    },
+    {
+      "group": 8,
+      "name": "Random-04",
+      "key_bits": 128,
+      "start": 148,
+      "count": 32
+    },
+    {
+      "group": 9,
+      "name": "Random-05",
+      "key_bits": 256,
+      "start": 180,
+      "count": 32
+    },
+    {
+      "group": 10,
+      "name": "Random-06",
+      "key_bits": 128,
+      "start": 212,
+      "count": 32
+    },
+    {
+      "group": 11,
+      "name": "Random-07",
+      "key_bits": 256,
+      "start": 244,
+      "count": 32
+    },
+    {
+      "group": 12,
+      "name": "Random-08",
+      "key_bits": 128,
+      "start": 276,
+      "count": 32
+    },
+    {
+      "group": 13,
+      "name": "Random-09",
+      "key_bits": 256,
+      "start": 308,
+      "count": 32
+    },
+    {
+      "group": 14,
+      "name": "Random-10",
+      "key_bits": 128,
+      "start": 340,
+      "count": 32
+    },
+    {
+      "group": 15,
+      "name": "Random-11",
+      "key_bits": 256,
+      "start": 372,
+      "count": 32
+    },
+    {
+      "group": 16,
+      "name": "Random-12",
+      "key_bits": 128,
+      "start": 404,
+      "count": 32
+    },
+    {
+      "group": 17,
+      "name": "Random-13",
+      "key_bits": 256,
+      "start": 436,
+      "count": 32
+    },
+    {
+      "group": 18,
+      "name": "Random-14",
+      "key_bits": 128,
+      "start": 468,
+      "count": 32
+    },
+    {
+      "group": 19,
+      "name": "Random-15",
+      "key_bits": 256,
+      "start": 500,
+      "count": 32
+    }
+  ],
+  "vectors_sha256": "532ce7a1d2a1665119f07eecf3c23b5bcf31f1676ed195bdac97fd0ccb5f6e51",
+  "synthesized_source_files": [
+    "vendor/aes/src/rtl/aes_core.v",
+    "vendor/aes/src/rtl/aes_encipher_block.v",
+    "vendor/aes/src/rtl/aes_decipher_block.v",
+    "vendor/aes/src/rtl/aes_key_mem.v",
+    "vendor/aes/src/rtl/aes_sbox.v",
+    "vendor/aes/src/rtl/aes_inv_sbox.v",
+    "projects/system-bench/aes/aes_stream_top.sv"
+  ],
+  "synthesized_source_lines": 2558,
+  "synthesized_noncomment_nonblank_lines": 1802,
+  "synthesized_module_definitions": 7,
+  "source_sha256": {
+    "vendor/aes/src/rtl/aes_core.v": "320e1137ac9d8812134a8313d23072e95da7c2dc0316fb24006f4b23132636d9",
+    "vendor/aes/src/rtl/aes_encipher_block.v": "827b10ca76f99bb1dd99147e414930e12b7d6a1b3269063b909f9d382126e737",
+    "vendor/aes/src/rtl/aes_decipher_block.v": "ec2879babd84ae5458282c9f5e28db89e71cac18d9a343e1b2e7399062976ff5",
+    "vendor/aes/src/rtl/aes_key_mem.v": "033fa100410c2e0600251c2787d4496dcb8829c8508fa99a5288f7b26079367b",
+    "vendor/aes/src/rtl/aes_sbox.v": "12727f8eabfdcdd079088451358ca4ff60a7ebe7fabaea58604e61a1efee8b84",
+    "vendor/aes/src/rtl/aes_inv_sbox.v": "2fa81ebc3e5ed760288b7144748e037aa9442e88d2111280c6e11eb752b1f946",
+    "projects/system-bench/aes/aes_stream_top.sv": "fa2ddbaae874f4e32f457df304c01b785d950af693313ff1745af35a71a62868"
+  },
+  "references": [
+    "https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.197-upd1.pdf",
+    "https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication800-38a.pdf"
+  ]
+}

@@ -1,0 +1,80 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+*.egg
+dist/
+build/
+*.whl
+.venv/
+venv/
+.env
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# Ruff
+.ruff_cache/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Vivado 生成文件
+*.jou
+*.log
+*.bit
+*.bin
+*.ltx
+*.mcs
+*.prm
+*.xpr.bak
+.Xil/
+*.runs/
+
+# 例外:离线 parser 的测试 fixture 是合成的小样本(真实格式),必须入库,
+# 否则上面的 *.bit/*.ltx 规则会把它们排除 → CI 在干净检出上找不到 fixture。
+!tests/fixtures/*.bit
+!tests/fixtures/*.ltx
+*.cache/
+*.hw/
+*.ip_user_files/
+*.sim/
+*.srcs/
+vivado_*.backup.jou
+vivado_*.backup.log
+webtalk*.jou
+webtalk*.log
+usage_statistics_webtalk.*
+# Vivado GUI TCP server 运行时 PID/Port 快照
+vivado_pid*.str
+
+# Vivado xvlog / xelab 调用产生的 protobuf log
+*.pb
+
+# 本地编辑器/工具配置目录(各机器自定义,不入库)
+.claude/
+.trellis/
+.mcp.json
+AGENTS.md
+
+# 内部文档
+.spec-workflow/
+vivado_mcp_requirements.md
+
+# 本地竞品评估材料（包含第三方分发包与展开内容，不进入版本控制）
+/research/synthpilot-analysis/
+
+# 本地启动脚本(含个人 API token,各自维护)
+claude-start.bat

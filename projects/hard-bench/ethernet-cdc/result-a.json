@@ -1,0 +1,12 @@
+{
+  "mode": "a",
+  "pass": true,
+  "expected_failure": false,
+  "exit_code": 0,
+  "wall_seconds": 68.67,
+  "artifact_directory": "E:\\GPTProject2\\EDAAgent\\artifacts\\2026-10-22T18-42-26-233Z-eda_xsim-b48248ff",
+  "receipt": "E:\\GPTProject2\\EDAAgent\\projects\\hard-bench\\ethernet-cdc\\runs\\20261022T184224Z-a",
+  "completion_marker": "HARD_BENCH_PASS project=ethernet-cdc ratio=a valid_echoes=281 output_frames=283 checked_wire_bytes=201023 negative_classes=6 negative_inputs=24 bad_fcs=8 bad_frame=12 length_rejected=8 ip_checksum_rejected=4 pause_cycles=79240 rx_stall_cycles=2071 echo_stall_cycles=48 rx_app_stall_cycles=0 mac_tx_stall_cycles=0 cycles=490318",
+  "fatal_marker": null,
+  "other_model_API_calls": 0
+}

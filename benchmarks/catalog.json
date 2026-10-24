@@ -1,0 +1,1899 @@
+{
+  "schema_version": 1,
+  "catalog_version": "2026-10-23.2",
+  "description": "Local deterministic tool benchmark; family variants are not independent research problems.",
+  "categories": [
+    "rtl.combinational",
+    "rtl.sequential",
+    "rtl.fsm",
+    "protocol",
+    "bus",
+    "memory",
+    "arithmetic",
+    "dsp",
+    "system",
+    "analog",
+    "tool_error",
+    "timeout",
+    "trace",
+    "reproducibility"
+  ],
+  "tiers": [
+    "smoke",
+    "light",
+    "system",
+    "implementation",
+    "external"
+  ],
+  "cases": [
+    {
+      "availability": "runnable",
+      "seed": 1,
+      "variant": "original",
+      "timeout_ms": 180000,
+      "id": "counter",
+      "family": "counter-example",
+      "title": "Counter reset, enable, overflow and hold",
+      "category": "rtl.sequential",
+      "tier": "smoke",
+      "tool": "eda_xsim",
+      "origin": "existing",
+      "input": {
+        "kind": "tool",
+        "args": {
+          "sources": [
+            "examples/digital/counter.v",
+            "examples/digital/tb_counter.sv"
+          ],
+          "top": "tb_counter"
+        }
+      },
+      "acceptance": {
+        "kind": "marker",
+        "pattern": "COUNTER_PASS checks=(321) wraps=1 holds=7 resets=3",
+        "checks": 321
+      }
+    },
+    {
+      "availability": "runnable",
+      "seed": 1,
+      "variant": "rc-ac",
+      "timeout_ms": 180000,
+      "id": "rc-ac",
+      "family": "rc-lowpass",
+      "title": "rc-ac",
+      "category": "analog",
+      "tier": "smoke",
+      "tool": "eda_ltspice_batch",
+      "origin": "existing",
+      "input": {
+        "kind": "tool",
+        "args": {
+          "netlist": "examples/analog/rc_ac.cir"
+        }
+      },
+      "acceptance": {
+        "kind": "rc",
+        "names": [
+          "cutoff_hz",
+          "gain_1k"
+        ],
+        "relative_tolerance": 0.002
+      }
+    },
+    {
+      "availability": "runnable",
+      "seed": 1,
+      "variant": "rc-transient",
+      "timeout_ms": 180000,
+      "id": "rc-transient",
+      "family": "rc-lowpass",
+      "title": "rc-transient",
+      "category": "analog",
+      "tier": "smoke",
+      "tool": "eda_ltspice_batch",
+      "origin": "existing",
+      "input": {
+        "kind": "tool",
+        "args": {
+          "netlist": "examples/analog/rc_tran.cir"
+        }
+      },
+      "acceptance": {
+        "kind": "rc",
+        "names": [
+          "v_at_tau",
+          "v_final"
+        ],
+        "relative_tolerance": 0.002
+      }
+    },
+    {
+      "availability": "runnable",
+      "seed": 20261023,
+      "variant": "width-4",
+      "timeout_ms": 180000,
+      "id": "gen-adder-w4",
+      "family": "generated-adder",
+      "title": "adder, 4 bits, seeded vectors",
+      "category": "arithmetic",
+      "tier": "light",
+      "tool": "eda_xsim",
+      "origin": "generated",
+      "input": {
+        "kind": "generated",
+        "generator": "adder",
+        "width": 4,
+        "samples": 40
+      },
+      "acceptance": {
+        "kind": "marker",
+        "pattern": "BENCH_PASS checks=(\\d+)",
+        "checks": 40
+      }
+    },
+    {
+      "availability": "runnable",
+      "seed": 20261023,
+      "variant": "width-8",
+      "timeout_ms": 180000,
+      "id": "gen-adder-w8",
+      "family": "generated-adder",
+      "title": "adder, 8 bits, seeded vectors",
+      "category": "arithmetic",
+      "tier": "light",
+      "tool": "eda_xsim",
+      "origin": "generated",
+      "input": {
+        "kind": "generated",
+        "generator": "adder",
+        "width": 8,
+        "samples": 40
+      },
+      "acceptance": {
+        "kind": "marker",
+        "pattern": "BENCH_PASS checks=(\\d+)",
+        "checks": 40
+      }
+    },
+    {
+      "availability": "runnable",
+      "seed": 20261023,
+      "variant": "width-4",
+      "timeout_ms": 180000,
+      "id": "gen-mux-w4",
+      "family": "generated-mux",
+      "title": "mux, 4 bits, seeded vectors",
+      "category": "rtl.combinational",
+      "tier": "light",
+      "tool": "eda_xsim",
+      "origin": "generated",
+      "input": {
+        "kind": "generated",
+        "generator": "mux",
+        "width": 4,
+        "samples": 40
+      },
+      "acceptance": {
+        "kind": "marker",
+        "pattern": "BENCH_PASS checks=(\\d+)",
+        "checks": 40
+      }
+    },
+    {
+      "availability": "runnable",
+      "seed": 20261023,
+      "variant": "width-8",
+      "timeout_ms": 180000,
+      "id": "gen-mux-w8",
+      "family": "generated-mux",
+      "title": "mux, 8 bits, seeded vectors",
+      "category": "rtl.combinational",
+      "tier": "light",
+      "tool": "eda_xsim",
+      "origin": "generated",
+      "input": {
+        "kind": "generated",
+        "generator": "mux",
+        "width": 8,
+        "samples": 40
+      },
+      "acceptance": {
+        "kind": "marker",
+        "pattern": "BENCH_PASS checks=(\\d+)",
+        "checks": 40
+      }
+    },
+    {
+      "availability": "runnable",
+      "seed": 20261023,
+      "variant": "width-4",
+      "timeout_ms": 180000,
+      "id": "gen-popcount-w4",
+      "family": "generated-popcount",
+      "title": "popcount, 4 bits, seeded vectors",
+      "category": "arithmetic",
+      "tier": "light",
+      "tool": "eda_xsim",
+      "origin": "generated",
+      "input": {
+        "kind": "generated",
+        "generator": "popcount",
+        "width": 4,
+        "samples": 40
+      },
+      "acceptance": {
+        "kind": "marker",
+        "pattern": "BENCH_PASS checks=(\\d+)",
+        "checks": 40
+      }
+    },
+    {
+      "availability": "runnable",
+      "seed": 20261023,
+      "variant": "width-8",
+      "timeout_ms": 180000,
+      "id": "gen-popcount-w8",
+      "family": "generated-popcount",
+      "title": "popcount, 8 bits, seeded vectors",
+      "category": "arithmetic",
+      "tier": "light",
+      "tool": "eda_xsim",
+      "origin": "generated",
+      "input": {
+        "kind": "generated",
+        "generator": "popcount",
+        "width": 8,
+        "samples": 40
+      },
+      "acceptance": {
+        "kind": "marker",
+        "pattern": "BENCH_PASS checks=(\\d+)",
+        "checks": 40
+      }
+    },
+    {
+      "availability": "runnable",
+      "seed": 20261023,
+      "variant": "width-4",
+      "timeout_ms": 180000,
+      "id": "gen-priority-w4",
+      "family": "generated-priority",
+      "title": "priority, 4 bits, seeded vectors",
+      "category": "rtl.combinational",
+      "tier": "light",
+      "tool": "eda_xsim",
+      "origin": "generated",
+      "input": {
+        "kind": "generated",
+        "generator": "priority",
+        "width": 4,
+        "samples": 40
+      },
+      "acceptance": {
+        "kind": "marker",
+        "pattern": "BENCH_PASS checks=(\\d+)",
+        "checks": 40
+      }
+    },
+    {
+      "availability": "runnable",
+      "seed": 20261023,
+      "variant": "width-8",
+      "timeout_ms": 180000,
+      "id": "gen-priority-w8",
+      "family": "generated-priority",
+      "title": "priority, 8 bits, seeded vectors",
+      "category": "rtl.combinational",
+      "tier": "light",
+      "tool": "eda_xsim",
+      "origin": "generated",
+      "input": {
+        "kind": "generated",
+        "generator": "priority",
+        "width": 8,
+        "samples": 40
+      },
+      "acceptance": {
+        "kind": "marker",
+        "pattern": "BENCH_PASS checks=(\\d+)",
+        "checks": 40
+      }
+    },
+    {
+      "availability": "runnable",
+      "seed": 20261023,
+      "variant": "width-4",
+      "timeout_ms": 180000,
+      "id": "gen-counter-w4",
+      "family": "generated-counter",
+      "title": "counter, 4 bits, seeded vectors",
+      "category": "rtl.sequential",
+      "tier": "light",
+      "tool": "eda_xsim",
+      "origin": "generated",
+      "input": {
+        "kind": "generated",
+        "generator": "counter",
+        "width": 4,
+        "samples": 40
+      },
+      "acceptance": {
+        "kind": "marker",
+        "pattern": "BENCH_PASS checks=(\\d+)",
+        "checks": 40
+      }
+    },
+    {
+      "availability": "runnable",
+      "seed": 20261023,
+      "variant": "width-8",
+      "timeout_ms": 180000,
+      "id": "gen-counter-w8",
+      "family": "generated-counter",
+      "title": "counter, 8 bits, seeded vectors",
+      "category": "rtl.sequential",
+      "tier": "light",
+      "tool": "eda_xsim",
+      "origin": "generated",
+      "input": {
+        "kind": "generated",
+        "generator": "counter",
+        "width": 8,
+        "samples": 40
+      },
+      "acceptance": {
+        "kind": "marker",
+        "pattern": "BENCH_PASS checks=(\\d+)",
+        "checks": 40
+      }
+    },
+    {
+      "availability": "runnable",
+      "seed": 20261023,
+      "variant": "width-4",
+      "timeout_ms": 180000,
+      "id": "gen-shift-w4",
+      "family": "generated-shift",
+      "title": "shift, 4 bits, seeded vectors",
+      "category": "rtl.sequential",
+      "tier": "light",
+      "tool": "eda_xsim",
+      "origin": "generated",
+      "input": {
+        "kind": "generated",
+        "generator": "shift",
+        "width": 4,
+        "samples": 40
+      },
+      "acceptance": {
+        "kind": "marker",
+        "pattern": "BENCH_PASS checks=(\\d+)",
+        "checks": 40
+      }
+    },
+    {
+      "availability": "runnable",
+      "seed": 20261023,
+      "variant": "width-8",
+      "timeout_ms": 180000,
+      "id": "gen-shift-w8",
+      "family": "generated-shift",
+      "title": "shift, 8 bits, seeded vectors",
+      "category": "rtl.sequential",
+      "tier": "light",
+      "tool": "eda_xsim",
+      "origin": "generated",
+      "input": {
+        "kind": "generated",
+        "generator": "shift",
+        "width": 8,
+        "samples": 40
+      },
+      "acceptance": {
+        "kind": "marker",
+        "pattern": "BENCH_PASS checks=(\\d+)",
+        "checks": 40
+      }
+    },
+    {
+      "availability": "runnable",
+      "seed": 20261023,
+      "variant": "width-4",
+      "timeout_ms": 180000,
+      "id": "gen-pattern-w4",
+      "family": "generated-pattern",
+      "title": "pattern, 4 bits, seeded vectors",
+      "category": "rtl.fsm",
+      "tier": "light",
+      "tool": "eda_xsim",
+      "origin": "generated",
+      "input": {
+        "kind": "generated",
+        "generator": "pattern",
+        "width": 4,
+        "samples": 40
+      },
+      "acceptance": {
+        "kind": "marker",
+        "pattern": "BENCH_PASS checks=(\\d+)",
+        "checks": 40
+      }
+    },
+    {
+      "availability": "runnable",
+      "seed": 20261023,
+      "variant": "width-8",
+      "timeout_ms": 180000,
+      "id": "gen-pattern-w8",
+      "family": "generated-pattern",
+      "title": "pattern, 8 bits, seeded vectors",
+      "category": "rtl.fsm",
+      "tier": "light",
+      "tool": "eda_xsim",
+      "origin": "generated",
+      "input": {
+        "kind": "generated",
+        "generator": "pattern",
+        "width": 8,
+        "samples": 40
+      },
+      "acceptance": {
+        "kind": "marker",
+        "pattern": "BENCH_PASS checks=(\\d+)",
+        "checks": 40
+      }
+    },
+    {
+      "availability": "runnable",
+      "seed": 20261023,
+      "variant": "width-4",
+      "timeout_ms": 180000,
+      "id": "gen-handshake-w4",
+      "family": "generated-handshake",
+      "title": "handshake, 4 bits, seeded vectors",
+      "category": "protocol",
+      "tier": "light",
+      "tool": "eda_xsim",
+      "origin": "generated",
+      "input": {
+        "kind": "generated",
+        "generator": "handshake",
+        "width": 4,
+        "samples": 40
+      },
+      "acceptance": {
+        "kind": "marker",
+        "pattern": "BENCH_PASS checks=(\\d+)",
+        "checks": 40
+      }
+    },
+    {
+      "availability": "runnable",
+      "seed": 20261023,
+      "variant": "width-8",
+      "timeout_ms": 180000,
+      "id": "gen-handshake-w8",
+      "family": "generated-handshake",
+      "title": "handshake, 8 bits, seeded vectors",
+      "category": "protocol",
+      "tier": "light",
+      "tool": "eda_xsim",
+      "origin": "generated",
+      "input": {
+        "kind": "generated",
+        "generator": "handshake",
+        "width": 8,
+        "samples": 40
+      },
+      "acceptance": {
+        "kind": "marker",
+        "pattern": "BENCH_PASS checks=(\\d+)",
+        "checks": 40
+      }
+    },
+    {
+      "availability": "runnable",
+      "seed": 20261023,
+      "variant": "width-4",
+      "timeout_ms": 180000,
+      "id": "gen-regfile-w4",
+      "family": "generated-regfile",
+      "title": "regfile, 4 bits, seeded vectors",
+      "category": "bus",
+      "tier": "light",
+      "tool": "eda_xsim",
+      "origin": "generated",
+      "input": {
+        "kind": "generated",
+        "generator": "regfile",
+        "width": 4,
+        "samples": 40
+      },
+      "acceptance": {
+        "kind": "marker",
+        "pattern": "BENCH_PASS checks=(\\d+)",
+        "checks": 40
+      }
+    },
+    {
+      "availability": "runnable",
+      "seed": 20261023,
+      "variant": "width-8",
+      "timeout_ms": 180000,
+      "id": "gen-regfile-w8",
+      "family": "generated-regfile",
+      "title": "regfile, 8 bits, seeded vectors",
+      "category": "bus",
+      "tier": "light",
+      "tool": "eda_xsim",
+      "origin": "generated",
+      "input": {
+        "kind": "generated",
+        "generator": "regfile",
+        "width": 8,
+        "samples": 40
+      },
+      "acceptance": {
+        "kind": "marker",
+        "pattern": "BENCH_PASS checks=(\\d+)",
+        "checks": 40
+      }
+    },
+    {
+      "availability": "runnable",
+      "seed": 20261023,
+      "variant": "width-4",
+      "timeout_ms": 180000,
+      "id": "gen-fifo-w4",
+      "family": "generated-fifo",
+      "title": "fifo, 4 bits, seeded vectors",
+      "category": "memory",
+      "tier": "light",
+      "tool": "eda_xsim",
+      "origin": "generated",
+      "input": {
+        "kind": "generated",
+        "generator": "fifo",
+        "width": 4,
+        "samples": 40
+      },
+      "acceptance": {
+        "kind": "marker",
+        "pattern": "BENCH_PASS checks=(\\d+)",
+        "checks": 40
+      }
+    },
+    {
+      "availability": "runnable",
+      "seed": 20261023,
+      "variant": "width-8",
+      "timeout_ms": 180000,
+      "id": "gen-fifo-w8",
+      "family": "generated-fifo",
+      "title": "fifo, 8 bits, seeded vectors",
+      "category": "memory",
+      "tier": "light",
+      "tool": "eda_xsim",
+      "origin": "generated",
+      "input": {
+        "kind": "generated",
+        "generator": "fifo",
+        "width": 8,
+        "samples": 40
+      },
+      "acceptance": {
+        "kind": "marker",
+        "pattern": "BENCH_PASS checks=(\\d+)",
+        "checks": 40
+      }
+    },
+    {
+      "availability": "runnable",
+      "seed": 20261023,
+      "variant": "width-4",
+      "timeout_ms": 180000,
+      "id": "gen-multiply-w4",
+      "family": "generated-multiply",
+      "title": "multiply, 4 bits, seeded vectors",
+      "category": "arithmetic",
+      "tier": "light",
+      "tool": "eda_xsim",
+      "origin": "generated",
+      "input": {
+        "kind": "generated",
+        "generator": "multiply",
+        "width": 4,
+        "samples": 40
+      },
+      "acceptance": {
+        "kind": "marker",
+        "pattern": "BENCH_PASS checks=(\\d+)",
+        "checks": 40
+      }
+    },
+    {
+      "availability": "runnable",
+      "seed": 20261023,
+      "variant": "width-8",
+      "timeout_ms": 180000,
+      "id": "gen-multiply-w8",
+      "family": "generated-multiply",
+      "title": "multiply, 8 bits, seeded vectors",
+      "category": "arithmetic",
+      "tier": "light",
+      "tool": "eda_xsim",
+      "origin": "generated",
+      "input": {
+        "kind": "generated",
+        "generator": "multiply",
+        "width": 8,
+        "samples": 40
+      },
+      "acceptance": {
+        "kind": "marker",
+        "pattern": "BENCH_PASS checks=(\\d+)",
+        "checks": 40
+      }
+    },
+    {
+      "availability": "runnable",
+      "seed": 20261023,
+      "variant": "width-4",
+      "timeout_ms": 180000,
+      "id": "gen-fir-w4",
+      "family": "generated-fir",
+      "title": "fir, 4 bits, seeded vectors",
+      "category": "dsp",
+      "tier": "light",
+      "tool": "eda_xsim",
+      "origin": "generated",
+      "input": {
+        "kind": "generated",
+        "generator": "fir",
+        "width": 4,
+        "samples": 40
+      },
+      "acceptance": {
+        "kind": "marker",
+        "pattern": "BENCH_PASS checks=(\\d+)",
+        "checks": 40
+      }
+    },
+    {
+      "availability": "runnable",
+      "seed": 20261023,
+      "variant": "width-8",
+      "timeout_ms": 180000,
+      "id": "gen-fir-w8",
+      "family": "generated-fir",
+      "title": "fir, 8 bits, seeded vectors",
+      "category": "dsp",
+      "tier": "light",
+      "tool": "eda_xsim",
+      "origin": "generated",
+      "input": {
+        "kind": "generated",
+        "generator": "fir",
+        "width": 8,
+        "samples": 40
+      },
+      "acceptance": {
+        "kind": "marker",
+        "pattern": "BENCH_PASS checks=(\\d+)",
+        "checks": 40
+      }
+    },
+    {
+      "availability": "runnable",
+      "seed": 1,
+      "variant": "original",
+      "timeout_ms": 180000,
+      "id": "ve-Prob052_gates100",
+      "family": "verilogeval-Prob052_gates100",
+      "title": "Prob052_gates100",
+      "category": "rtl.combinational",
+      "tier": "light",
+      "tool": "eda_xsim",
+      "origin": "existing",
+      "input": {
+        "kind": "verilogeval",
+        "task": "Prob052_gates100",
+        "project": "projects/verilogeval-mini"
+      },
+      "acceptance": {
+        "kind": "verilogeval"
+      },
+      "provenance": {
+        "upstream": "NVIDIA VerilogEval v2",
+        "selection": "projects/verilogeval-mini/selection.json",
+        "policy": "Original watchdog; compiler declaration adapter; no timeout extension; no model generation."
+      }
+    },
+    {
+      "availability": "runnable",
+      "seed": 1,
+      "variant": "original",
+      "timeout_ms": 180000,
+      "id": "ve-Prob062_bugs_mux2",
+      "family": "verilogeval-Prob062_bugs_mux2",
+      "title": "Prob062_bugs_mux2",
+      "category": "rtl.combinational",
+      "tier": "light",
+      "tool": "eda_xsim",
+      "origin": "existing",
+      "input": {
+        "kind": "verilogeval",
+        "task": "Prob062_bugs_mux2",
+        "project": "projects/verilogeval-mini"
+      },
+      "acceptance": {
+        "kind": "verilogeval"
+      },
+      "provenance": {
+        "upstream": "NVIDIA VerilogEval v2",
+        "selection": "projects/verilogeval-mini/selection.json",
+        "policy": "Original watchdog; compiler declaration adapter; no timeout extension; no model generation."
+      }
+    },
+    {
+      "availability": "runnable",
+      "seed": 1,
+      "variant": "original",
+      "timeout_ms": 180000,
+      "id": "ve-Prob065_7420",
+      "family": "verilogeval-Prob065_7420",
+      "title": "Prob065_7420",
+      "category": "rtl.combinational",
+      "tier": "light",
+      "tool": "eda_xsim",
+      "origin": "existing",
+      "input": {
+        "kind": "verilogeval",
+        "task": "Prob065_7420",
+        "project": "projects/verilogeval-mini"
+      },
+      "acceptance": {
+        "kind": "verilogeval"
+      },
+      "provenance": {
+        "upstream": "NVIDIA VerilogEval v2",
+        "selection": "projects/verilogeval-mini/selection.json",
+        "policy": "Original watchdog; compiler declaration adapter; no timeout extension; no model generation."
+      }
+    },
+    {
+      "availability": "runnable",
+      "seed": 1,
+      "variant": "original",
+      "timeout_ms": 180000,
+      "id": "ve-Prob068_countbcd",
+      "family": "verilogeval-Prob068_countbcd",
+      "title": "Prob068_countbcd",
+      "category": "rtl.sequential",
+      "tier": "light",
+      "tool": "eda_xsim",
+      "origin": "existing",
+      "input": {
+        "kind": "verilogeval",
+        "task": "Prob068_countbcd",
+        "project": "projects/verilogeval-mini"
+      },
+      "acceptance": {
+        "kind": "verilogeval"
+      },
+      "provenance": {
+        "upstream": "NVIDIA VerilogEval v2",
+        "selection": "projects/verilogeval-mini/selection.json",
+        "policy": "Original watchdog; compiler declaration adapter; no timeout extension; no model generation."
+      }
+    },
+    {
+      "availability": "runnable",
+      "seed": 1,
+      "variant": "original",
+      "timeout_ms": 180000,
+      "id": "ve-Prob091_2012_q2b",
+      "family": "verilogeval-Prob091_2012_q2b",
+      "title": "Prob091_2012_q2b",
+      "category": "rtl.combinational",
+      "tier": "light",
+      "tool": "eda_xsim",
+      "origin": "existing",
+      "input": {
+        "kind": "verilogeval",
+        "task": "Prob091_2012_q2b",
+        "project": "projects/verilogeval-mini"
+      },
+      "acceptance": {
+        "kind": "verilogeval"
+      },
+      "provenance": {
+        "upstream": "NVIDIA VerilogEval v2",
+        "selection": "projects/verilogeval-mini/selection.json",
+        "policy": "Original watchdog; compiler declaration adapter; no timeout extension; no model generation."
+      }
+    },
+    {
+      "availability": "runnable",
+      "seed": 1,
+      "variant": "original",
+      "timeout_ms": 180000,
+      "id": "ve-Prob094_gatesv",
+      "family": "verilogeval-Prob094_gatesv",
+      "title": "Prob094_gatesv",
+      "category": "rtl.combinational",
+      "tier": "light",
+      "tool": "eda_xsim",
+      "origin": "existing",
+      "input": {
+        "kind": "verilogeval",
+        "task": "Prob094_gatesv",
+        "project": "projects/verilogeval-mini"
+      },
+      "acceptance": {
+        "kind": "verilogeval"
+      },
+      "provenance": {
+        "upstream": "NVIDIA VerilogEval v2",
+        "selection": "projects/verilogeval-mini/selection.json",
+        "policy": "Original watchdog; compiler declaration adapter; no timeout extension; no model generation."
+      }
+    },
+    {
+      "availability": "runnable",
+      "seed": 1,
+      "variant": "original",
+      "timeout_ms": 180000,
+      "id": "ve-Prob137_fsm_serial",
+      "family": "verilogeval-Prob137_fsm_serial",
+      "title": "Prob137_fsm_serial",
+      "category": "rtl.fsm",
+      "tier": "light",
+      "tool": "eda_xsim",
+      "origin": "existing",
+      "input": {
+        "kind": "verilogeval",
+        "task": "Prob137_fsm_serial",
+        "project": "projects/verilogeval-mini"
+      },
+      "acceptance": {
+        "kind": "verilogeval"
+      },
+      "provenance": {
+        "upstream": "NVIDIA VerilogEval v2",
+        "selection": "projects/verilogeval-mini/selection.json",
+        "policy": "Original watchdog; compiler declaration adapter; no timeout extension; no model generation."
+      }
+    },
+    {
+      "availability": "runnable",
+      "seed": 1,
+      "variant": "original",
+      "timeout_ms": 180000,
+      "id": "ve-Prob147_circuit10",
+      "family": "verilogeval-Prob147_circuit10",
+      "title": "Prob147_circuit10",
+      "category": "rtl.combinational",
+      "tier": "light",
+      "tool": "eda_xsim",
+      "origin": "existing",
+      "input": {
+        "kind": "verilogeval",
+        "task": "Prob147_circuit10",
+        "project": "projects/verilogeval-mini"
+      },
+      "acceptance": {
+        "kind": "verilogeval"
+      },
+      "provenance": {
+        "upstream": "NVIDIA VerilogEval v2",
+        "selection": "projects/verilogeval-mini/selection.json",
+        "policy": "Original watchdog; compiler declaration adapter; no timeout extension; no model generation."
+      }
+    },
+    {
+      "availability": "runnable",
+      "seed": 1,
+      "variant": "original",
+      "timeout_ms": 180000,
+      "id": "ve-Prob021_mux256to1v",
+      "family": "verilogeval-Prob021_mux256to1v",
+      "title": "Prob021_mux256to1v",
+      "category": "rtl.combinational",
+      "tier": "light",
+      "tool": "eda_xsim",
+      "origin": "existing",
+      "input": {
+        "kind": "verilogeval",
+        "task": "Prob021_mux256to1v",
+        "project": "projects/verilogeval-24"
+      },
+      "acceptance": {
+        "kind": "verilogeval"
+      },
+      "provenance": {
+        "upstream": "NVIDIA VerilogEval v2",
+        "selection": "projects/verilogeval-24/selection.json",
+        "policy": "Original watchdog; compiler declaration adapter; no timeout extension; no model generation."
+      }
+    },
+    {
+      "availability": "runnable",
+      "seed": 1,
+      "variant": "original",
+      "timeout_ms": 180000,
+      "id": "ve-Prob030_popcount255",
+      "family": "verilogeval-Prob030_popcount255",
+      "title": "Prob030_popcount255",
+      "category": "rtl.combinational",
+      "tier": "light",
+      "tool": "eda_xsim",
+      "origin": "existing",
+      "input": {
+        "kind": "verilogeval",
+        "task": "Prob030_popcount255",
+        "project": "projects/verilogeval-24"
+      },
+      "acceptance": {
+        "kind": "verilogeval"
+      },
+      "provenance": {
+        "upstream": "NVIDIA VerilogEval v2",
+        "selection": "projects/verilogeval-24/selection.json",
+        "policy": "Original watchdog; compiler declaration adapter; no timeout extension; no model generation."
+      }
+    },
+    {
+      "availability": "runnable",
+      "seed": 1,
+      "variant": "original",
+      "timeout_ms": 180000,
+      "id": "ve-Prob071_always_casez",
+      "family": "verilogeval-Prob071_always_casez",
+      "title": "Prob071_always_casez",
+      "category": "rtl.combinational",
+      "tier": "light",
+      "tool": "eda_xsim",
+      "origin": "existing",
+      "input": {
+        "kind": "verilogeval",
+        "task": "Prob071_always_casez",
+        "project": "projects/verilogeval-24"
+      },
+      "acceptance": {
+        "kind": "verilogeval"
+      },
+      "provenance": {
+        "upstream": "NVIDIA VerilogEval v2",
+        "selection": "projects/verilogeval-24/selection.json",
+        "policy": "Original watchdog; compiler declaration adapter; no timeout extension; no model generation."
+      }
+    },
+    {
+      "availability": "runnable",
+      "seed": 1,
+      "variant": "original",
+      "timeout_ms": 180000,
+      "id": "ve-Prob093_ece241_2014_q3",
+      "family": "verilogeval-Prob093_ece241_2014_q3",
+      "title": "Prob093_ece241_2014_q3",
+      "category": "rtl.combinational",
+      "tier": "light",
+      "tool": "eda_xsim",
+      "origin": "existing",
+      "input": {
+        "kind": "verilogeval",
+        "task": "Prob093_ece241_2014_q3",
+        "project": "projects/verilogeval-24"
+      },
+      "acceptance": {
+        "kind": "verilogeval"
+      },
+      "provenance": {
+        "upstream": "NVIDIA VerilogEval v2",
+        "selection": "projects/verilogeval-24/selection.json",
+        "policy": "Original watchdog; compiler declaration adapter; no timeout extension; no model generation."
+      }
+    },
+    {
+      "availability": "runnable",
+      "seed": 1,
+      "variant": "original",
+      "timeout_ms": 180000,
+      "id": "ve-Prob047_dff8ar",
+      "family": "verilogeval-Prob047_dff8ar",
+      "title": "Prob047_dff8ar",
+      "category": "rtl.sequential",
+      "tier": "light",
+      "tool": "eda_xsim",
+      "origin": "existing",
+      "input": {
+        "kind": "verilogeval",
+        "task": "Prob047_dff8ar",
+        "project": "projects/verilogeval-24"
+      },
+      "acceptance": {
+        "kind": "verilogeval"
+      },
+      "provenance": {
+        "upstream": "NVIDIA VerilogEval v2",
+        "selection": "projects/verilogeval-24/selection.json",
+        "policy": "Original watchdog; compiler declaration adapter; no timeout extension; no model generation."
+      }
+    },
+    {
+      "availability": "runnable",
+      "seed": 1,
+      "variant": "original",
+      "timeout_ms": 180000,
+      "id": "ve-Prob066_edgecapture",
+      "family": "verilogeval-Prob066_edgecapture",
+      "title": "Prob066_edgecapture",
+      "category": "rtl.sequential",
+      "tier": "light",
+      "tool": "eda_xsim",
+      "origin": "existing",
+      "input": {
+        "kind": "verilogeval",
+        "task": "Prob066_edgecapture",
+        "project": "projects/verilogeval-24"
+      },
+      "acceptance": {
+        "kind": "verilogeval"
+      },
+      "provenance": {
+        "upstream": "NVIDIA VerilogEval v2",
+        "selection": "projects/verilogeval-24/selection.json",
+        "policy": "Original watchdog; compiler declaration adapter; no timeout extension; no model generation."
+      }
+    },
+    {
+      "availability": "runnable",
+      "seed": 1,
+      "variant": "original",
+      "timeout_ms": 180000,
+      "id": "ve-Prob073_dff16e",
+      "family": "verilogeval-Prob073_dff16e",
+      "title": "Prob073_dff16e",
+      "category": "rtl.sequential",
+      "tier": "light",
+      "tool": "eda_xsim",
+      "origin": "existing",
+      "input": {
+        "kind": "verilogeval",
+        "task": "Prob073_dff16e",
+        "project": "projects/verilogeval-24"
+      },
+      "acceptance": {
+        "kind": "verilogeval"
+      },
+      "provenance": {
+        "upstream": "NVIDIA VerilogEval v2",
+        "selection": "projects/verilogeval-24/selection.json",
+        "policy": "Original watchdog; compiler declaration adapter; no timeout extension; no model generation."
+      }
+    },
+    {
+      "availability": "runnable",
+      "seed": 1,
+      "variant": "original",
+      "timeout_ms": 180000,
+      "id": "ve-Prob078_dualedge",
+      "family": "verilogeval-Prob078_dualedge",
+      "title": "Prob078_dualedge",
+      "category": "rtl.sequential",
+      "tier": "light",
+      "tool": "eda_xsim",
+      "origin": "existing",
+      "input": {
+        "kind": "verilogeval",
+        "task": "Prob078_dualedge",
+        "project": "projects/verilogeval-24"
+      },
+      "acceptance": {
+        "kind": "verilogeval"
+      },
+      "provenance": {
+        "upstream": "NVIDIA VerilogEval v2",
+        "selection": "projects/verilogeval-24/selection.json",
+        "policy": "Original watchdog; compiler declaration adapter; no timeout extension; no model generation."
+      }
+    },
+    {
+      "availability": "runnable",
+      "seed": 1,
+      "variant": "original",
+      "timeout_ms": 180000,
+      "id": "ve-Prob037_review2015_count1k",
+      "family": "verilogeval-Prob037_review2015_count1k",
+      "title": "Prob037_review2015_count1k",
+      "category": "rtl.sequential",
+      "tier": "light",
+      "tool": "eda_xsim",
+      "origin": "existing",
+      "input": {
+        "kind": "verilogeval",
+        "task": "Prob037_review2015_count1k",
+        "project": "projects/verilogeval-24"
+      },
+      "acceptance": {
+        "kind": "verilogeval"
+      },
+      "provenance": {
+        "upstream": "NVIDIA VerilogEval v2",
+        "selection": "projects/verilogeval-24/selection.json",
+        "policy": "Original watchdog; compiler declaration adapter; no timeout extension; no model generation."
+      }
+    },
+    {
+      "availability": "runnable",
+      "seed": 1,
+      "variant": "original",
+      "timeout_ms": 180000,
+      "id": "ve-Prob075_counter_2bc",
+      "family": "verilogeval-Prob075_counter_2bc",
+      "title": "Prob075_counter_2bc",
+      "category": "rtl.sequential",
+      "tier": "light",
+      "tool": "eda_xsim",
+      "origin": "existing",
+      "input": {
+        "kind": "verilogeval",
+        "task": "Prob075_counter_2bc",
+        "project": "projects/verilogeval-24"
+      },
+      "acceptance": {
+        "kind": "verilogeval"
+      },
+      "provenance": {
+        "upstream": "NVIDIA VerilogEval v2",
+        "selection": "projects/verilogeval-24/selection.json",
+        "policy": "Original watchdog; compiler declaration adapter; no timeout extension; no model generation."
+      }
+    },
+    {
+      "availability": "runnable",
+      "seed": 1,
+      "variant": "original",
+      "timeout_ms": 180000,
+      "id": "ve-Prob080_timer",
+      "family": "verilogeval-Prob080_timer",
+      "title": "Prob080_timer",
+      "category": "rtl.sequential",
+      "tier": "light",
+      "tool": "eda_xsim",
+      "origin": "existing",
+      "input": {
+        "kind": "verilogeval",
+        "task": "Prob080_timer",
+        "project": "projects/verilogeval-24"
+      },
+      "acceptance": {
+        "kind": "verilogeval"
+      },
+      "provenance": {
+        "upstream": "NVIDIA VerilogEval v2",
+        "selection": "projects/verilogeval-24/selection.json",
+        "policy": "Original watchdog; compiler declaration adapter; no timeout extension; no model generation."
+      }
+    },
+    {
+      "availability": "runnable",
+      "seed": 1,
+      "variant": "original",
+      "timeout_ms": 180000,
+      "id": "ve-Prob141_count_clock",
+      "family": "verilogeval-Prob141_count_clock",
+      "title": "Prob141_count_clock",
+      "category": "rtl.sequential",
+      "tier": "light",
+      "tool": "eda_xsim",
+      "origin": "existing",
+      "input": {
+        "kind": "verilogeval",
+        "task": "Prob141_count_clock",
+        "project": "projects/verilogeval-24"
+      },
+      "acceptance": {
+        "kind": "verilogeval"
+      },
+      "provenance": {
+        "upstream": "NVIDIA VerilogEval v2",
+        "selection": "projects/verilogeval-24/selection.json",
+        "policy": "Original watchdog; compiler declaration adapter; no timeout extension; no model generation."
+      }
+    },
+    {
+      "availability": "runnable",
+      "seed": 1,
+      "variant": "original",
+      "timeout_ms": 180000,
+      "id": "ve-Prob082_lfsr32",
+      "family": "verilogeval-Prob082_lfsr32",
+      "title": "Prob082_lfsr32",
+      "category": "rtl.sequential",
+      "tier": "light",
+      "tool": "eda_xsim",
+      "origin": "existing",
+      "input": {
+        "kind": "verilogeval",
+        "task": "Prob082_lfsr32",
+        "project": "projects/verilogeval-24"
+      },
+      "acceptance": {
+        "kind": "verilogeval"
+      },
+      "provenance": {
+        "upstream": "NVIDIA VerilogEval v2",
+        "selection": "projects/verilogeval-24/selection.json",
+        "policy": "Original watchdog; compiler declaration adapter; no timeout extension; no model generation."
+      }
+    },
+    {
+      "availability": "runnable",
+      "seed": 1,
+      "variant": "original",
+      "timeout_ms": 180000,
+      "id": "ve-Prob105_rotate100",
+      "family": "verilogeval-Prob105_rotate100",
+      "title": "Prob105_rotate100",
+      "category": "rtl.sequential",
+      "tier": "light",
+      "tool": "eda_xsim",
+      "origin": "existing",
+      "input": {
+        "kind": "verilogeval",
+        "task": "Prob105_rotate100",
+        "project": "projects/verilogeval-24"
+      },
+      "acceptance": {
+        "kind": "verilogeval"
+      },
+      "provenance": {
+        "upstream": "NVIDIA VerilogEval v2",
+        "selection": "projects/verilogeval-24/selection.json",
+        "policy": "Original watchdog; compiler declaration adapter; no timeout extension; no model generation."
+      }
+    },
+    {
+      "availability": "runnable",
+      "seed": 1,
+      "variant": "original",
+      "timeout_ms": 180000,
+      "id": "ve-Prob115_shift18",
+      "family": "verilogeval-Prob115_shift18",
+      "title": "Prob115_shift18",
+      "category": "rtl.sequential",
+      "tier": "light",
+      "tool": "eda_xsim",
+      "origin": "existing",
+      "input": {
+        "kind": "verilogeval",
+        "task": "Prob115_shift18",
+        "project": "projects/verilogeval-24"
+      },
+      "acceptance": {
+        "kind": "verilogeval"
+      },
+      "provenance": {
+        "upstream": "NVIDIA VerilogEval v2",
+        "selection": "projects/verilogeval-24/selection.json",
+        "policy": "Original watchdog; compiler declaration adapter; no timeout extension; no model generation."
+      }
+    },
+    {
+      "availability": "runnable",
+      "seed": 1,
+      "variant": "original",
+      "timeout_ms": 180000,
+      "id": "ve-Prob124_rule110",
+      "family": "verilogeval-Prob124_rule110",
+      "title": "Prob124_rule110",
+      "category": "rtl.sequential",
+      "tier": "light",
+      "tool": "eda_xsim",
+      "origin": "existing",
+      "input": {
+        "kind": "verilogeval",
+        "task": "Prob124_rule110",
+        "project": "projects/verilogeval-24"
+      },
+      "acceptance": {
+        "kind": "verilogeval"
+      },
+      "provenance": {
+        "upstream": "NVIDIA VerilogEval v2",
+        "selection": "projects/verilogeval-24/selection.json",
+        "policy": "Original watchdog; compiler declaration adapter; no timeout extension; no model generation."
+      }
+    },
+    {
+      "availability": "runnable",
+      "seed": 1,
+      "variant": "original",
+      "timeout_ms": 180000,
+      "id": "ve-Prob079_fsm3onehot",
+      "family": "verilogeval-Prob079_fsm3onehot",
+      "title": "Prob079_fsm3onehot",
+      "category": "rtl.fsm",
+      "tier": "light",
+      "tool": "eda_xsim",
+      "origin": "existing",
+      "input": {
+        "kind": "verilogeval",
+        "task": "Prob079_fsm3onehot",
+        "project": "projects/verilogeval-24"
+      },
+      "acceptance": {
+        "kind": "verilogeval"
+      },
+      "provenance": {
+        "upstream": "NVIDIA VerilogEval v2",
+        "selection": "projects/verilogeval-24/selection.json",
+        "policy": "Original watchdog; compiler declaration adapter; no timeout extension; no model generation."
+      }
+    },
+    {
+      "availability": "runnable",
+      "seed": 1,
+      "variant": "original",
+      "timeout_ms": 180000,
+      "id": "ve-Prob138_2012_q2fsm",
+      "family": "verilogeval-Prob138_2012_q2fsm",
+      "title": "Prob138_2012_q2fsm",
+      "category": "rtl.fsm",
+      "tier": "light",
+      "tool": "eda_xsim",
+      "origin": "existing",
+      "input": {
+        "kind": "verilogeval",
+        "task": "Prob138_2012_q2fsm",
+        "project": "projects/verilogeval-24"
+      },
+      "acceptance": {
+        "kind": "verilogeval"
+      },
+      "provenance": {
+        "upstream": "NVIDIA VerilogEval v2",
+        "selection": "projects/verilogeval-24/selection.json",
+        "policy": "Original watchdog; compiler declaration adapter; no timeout extension; no model generation."
+      }
+    },
+    {
+      "availability": "runnable",
+      "seed": 1,
+      "variant": "original",
+      "timeout_ms": 180000,
+      "id": "ve-Prob155_lemmings4",
+      "family": "verilogeval-Prob155_lemmings4",
+      "title": "Prob155_lemmings4",
+      "category": "rtl.fsm",
+      "tier": "light",
+      "tool": "eda_xsim",
+      "origin": "existing",
+      "input": {
+        "kind": "verilogeval",
+        "task": "Prob155_lemmings4",
+        "project": "projects/verilogeval-24"
+      },
+      "acceptance": {
+        "kind": "verilogeval"
+      },
+      "provenance": {
+        "upstream": "NVIDIA VerilogEval v2",
+        "selection": "projects/verilogeval-24/selection.json",
+        "policy": "Original watchdog; compiler declaration adapter; no timeout extension; no model generation."
+      }
+    },
+    {
+      "availability": "runnable",
+      "seed": 1,
+      "variant": "original",
+      "timeout_ms": 180000,
+      "id": "ve-Prob156_review2015_fancytimer",
+      "family": "verilogeval-Prob156_review2015_fancytimer",
+      "title": "Prob156_review2015_fancytimer",
+      "category": "rtl.fsm",
+      "tier": "light",
+      "tool": "eda_xsim",
+      "origin": "existing",
+      "input": {
+        "kind": "verilogeval",
+        "task": "Prob156_review2015_fancytimer",
+        "project": "projects/verilogeval-24"
+      },
+      "acceptance": {
+        "kind": "verilogeval"
+      },
+      "provenance": {
+        "upstream": "NVIDIA VerilogEval v2",
+        "selection": "projects/verilogeval-24/selection.json",
+        "policy": "Original watchdog; compiler declaration adapter; no timeout extension; no model generation."
+      }
+    },
+    {
+      "availability": "runnable",
+      "seed": 1,
+      "variant": "original",
+      "timeout_ms": 180000,
+      "id": "ve-Prob140_fsm_hdlc",
+      "family": "verilogeval-Prob140_fsm_hdlc",
+      "title": "Prob140_fsm_hdlc",
+      "category": "protocol",
+      "tier": "light",
+      "tool": "eda_xsim",
+      "origin": "existing",
+      "input": {
+        "kind": "verilogeval",
+        "task": "Prob140_fsm_hdlc",
+        "project": "projects/verilogeval-24"
+      },
+      "acceptance": {
+        "kind": "verilogeval"
+      },
+      "provenance": {
+        "upstream": "NVIDIA VerilogEval v2",
+        "selection": "projects/verilogeval-24/selection.json",
+        "policy": "Original watchdog; compiler declaration adapter; no timeout extension; no model generation."
+      }
+    },
+    {
+      "availability": "runnable",
+      "seed": 1,
+      "variant": "original",
+      "timeout_ms": 180000,
+      "id": "ve-Prob146_fsm_serialdata",
+      "family": "verilogeval-Prob146_fsm_serialdata",
+      "title": "Prob146_fsm_serialdata",
+      "category": "protocol",
+      "tier": "light",
+      "tool": "eda_xsim",
+      "origin": "existing",
+      "input": {
+        "kind": "verilogeval",
+        "task": "Prob146_fsm_serialdata",
+        "project": "projects/verilogeval-24"
+      },
+      "acceptance": {
+        "kind": "verilogeval"
+      },
+      "provenance": {
+        "upstream": "NVIDIA VerilogEval v2",
+        "selection": "projects/verilogeval-24/selection.json",
+        "policy": "Original watchdog; compiler declaration adapter; no timeout extension; no model generation."
+      }
+    },
+    {
+      "availability": "runnable",
+      "seed": 1,
+      "variant": "original",
+      "timeout_ms": 180000,
+      "id": "ve-Prob153_gshare",
+      "family": "verilogeval-Prob153_gshare",
+      "title": "Prob153_gshare",
+      "category": "protocol",
+      "tier": "light",
+      "tool": "eda_xsim",
+      "origin": "existing",
+      "input": {
+        "kind": "verilogeval",
+        "task": "Prob153_gshare",
+        "project": "projects/verilogeval-24"
+      },
+      "acceptance": {
+        "kind": "verilogeval"
+      },
+      "provenance": {
+        "upstream": "NVIDIA VerilogEval v2",
+        "selection": "projects/verilogeval-24/selection.json",
+        "policy": "Original watchdog; compiler declaration adapter; no timeout extension; no model generation."
+      }
+    },
+    {
+      "availability": "runnable",
+      "seed": 1,
+      "variant": "original",
+      "timeout_ms": 180000,
+      "id": "ve-Prob154_fsm_ps2data",
+      "family": "verilogeval-Prob154_fsm_ps2data",
+      "title": "Prob154_fsm_ps2data",
+      "category": "protocol",
+      "tier": "light",
+      "tool": "eda_xsim",
+      "origin": "existing",
+      "input": {
+        "kind": "verilogeval",
+        "task": "Prob154_fsm_ps2data",
+        "project": "projects/verilogeval-24"
+      },
+      "acceptance": {
+        "kind": "verilogeval"
+      },
+      "provenance": {
+        "upstream": "NVIDIA VerilogEval v2",
+        "selection": "projects/verilogeval-24/selection.json",
+        "policy": "Original watchdog; compiler declaration adapter; no timeout extension; no model generation."
+      }
+    },
+    {
+      "availability": "runnable",
+      "seed": 1,
+      "variant": "simulation",
+      "timeout_ms": 600000,
+      "id": "soc-simulation",
+      "family": "system-soc",
+      "title": "soc existing integrated simulation",
+      "category": "system",
+      "tier": "system",
+      "tool": "eda_xsim",
+      "origin": "existing",
+      "input": {
+        "kind": "call_file",
+        "path": "projects/system-bench/soc/sim.json"
+      },
+      "acceptance": {
+        "kind": "marker",
+        "pattern": "SYSTEM_BENCH_PASS project=soc .+"
+      }
+    },
+    {
+      "availability": "runnable",
+      "seed": 1,
+      "variant": "implementation",
+      "timeout_ms": 600000,
+      "id": "soc-implementation",
+      "family": "system-soc",
+      "title": "soc 100 MHz OOC implementation",
+      "category": "system",
+      "tier": "implementation",
+      "tool": "eda_vivado",
+      "origin": "existing",
+      "input": {
+        "kind": "call_file",
+        "path": "projects/system-bench/soc/impl.json"
+      },
+      "acceptance": {
+        "kind": "routed"
+      }
+    },
+    {
+      "availability": "runnable",
+      "seed": 1,
+      "variant": "simulation",
+      "timeout_ms": 600000,
+      "id": "dma-simulation",
+      "family": "system-dma",
+      "title": "dma existing integrated simulation",
+      "category": "bus",
+      "tier": "system",
+      "tool": "eda_xsim",
+      "origin": "existing",
+      "input": {
+        "kind": "call_file",
+        "path": "projects/system-bench/dma/sim.json"
+      },
+      "acceptance": {
+        "kind": "marker",
+        "pattern": "SYSTEM_BENCH_PASS project=dma .+"
+      }
+    },
+    {
+      "availability": "runnable",
+      "seed": 1,
+      "variant": "implementation",
+      "timeout_ms": 600000,
+      "id": "dma-implementation",
+      "family": "system-dma",
+      "title": "dma 100 MHz OOC implementation",
+      "category": "bus",
+      "tier": "implementation",
+      "tool": "eda_vivado",
+      "origin": "existing",
+      "input": {
+        "kind": "call_file",
+        "path": "projects/system-bench/dma/impl.json"
+      },
+      "acceptance": {
+        "kind": "routed"
+      }
+    },
+    {
+      "availability": "runnable",
+      "seed": 1,
+      "variant": "simulation",
+      "timeout_ms": 600000,
+      "id": "udp-simulation",
+      "family": "system-udp",
+      "title": "udp existing integrated simulation",
+      "category": "protocol",
+      "tier": "system",
+      "tool": "eda_xsim",
+      "origin": "existing",
+      "input": {
+        "kind": "call_file",
+        "path": "projects/system-bench/udp/sim.json"
+      },
+      "acceptance": {
+        "kind": "marker",
+        "pattern": "SYSTEM_BENCH_PASS project=udp .+"
+      }
+    },
+    {
+      "availability": "runnable",
+      "seed": 1,
+      "variant": "implementation",
+      "timeout_ms": 600000,
+      "id": "udp-implementation",
+      "family": "system-udp",
+      "title": "udp 100 MHz OOC implementation",
+      "category": "protocol",
+      "tier": "implementation",
+      "tool": "eda_vivado",
+      "origin": "existing",
+      "input": {
+        "kind": "call_file",
+        "path": "projects/system-bench/udp/impl.json"
+      },
+      "acceptance": {
+        "kind": "routed"
+      }
+    },
+    {
+      "availability": "runnable",
+      "seed": 1,
+      "variant": "simulation",
+      "timeout_ms": 600000,
+      "id": "aes-simulation",
+      "family": "system-aes",
+      "title": "aes existing integrated simulation",
+      "category": "arithmetic",
+      "tier": "system",
+      "tool": "eda_xsim",
+      "origin": "existing",
+      "input": {
+        "kind": "call_file",
+        "path": "projects/system-bench/aes/sim.json"
+      },
+      "acceptance": {
+        "kind": "marker",
+        "pattern": "SYSTEM_BENCH_PASS project=aes .+"
+      }
+    },
+    {
+      "availability": "runnable",
+      "seed": 1,
+      "variant": "implementation",
+      "timeout_ms": 600000,
+      "id": "aes-implementation",
+      "family": "system-aes",
+      "title": "aes 100 MHz OOC implementation",
+      "category": "arithmetic",
+      "tier": "implementation",
+      "tool": "eda_vivado",
+      "origin": "existing",
+      "input": {
+        "kind": "call_file",
+        "path": "projects/system-bench/aes/impl.json"
+      },
+      "acceptance": {
+        "kind": "routed"
+      }
+    },
+    {
+      "availability": "runnable",
+      "seed": 1,
+      "variant": "implementation",
+      "timeout_ms": 600000,
+      "id": "counter-implementation",
+      "family": "counter-example",
+      "title": "Counter 100 MHz OOC implementation",
+      "category": "rtl.sequential",
+      "tier": "implementation",
+      "tool": "eda_vivado",
+      "origin": "existing",
+      "input": {
+        "kind": "tool",
+        "args": {
+          "script": "examples/digital/build-core.tcl"
+        }
+      },
+      "acceptance": {
+        "kind": "routed"
+      }
+    },
+    {
+      "availability": "runnable",
+      "seed": 1,
+      "variant": "simulation",
+      "timeout_ms": 600000,
+      "id": "fft-simulation",
+      "family": "fft-spectrum",
+      "title": "1024 point FFT simulation",
+      "category": "dsp",
+      "tier": "system",
+      "tool": "eda_vivado",
+      "origin": "existing",
+      "input": {
+        "kind": "fft",
+        "stage": "simulation"
+      },
+      "acceptance": {
+        "kind": "fft"
+      },
+      "adaptation": "Run-local Tcl copy removes project latest pointer writes and explicit waveform logging."
+    },
+    {
+      "availability": "runnable",
+      "seed": 1,
+      "variant": "implementation",
+      "timeout_ms": 600000,
+      "id": "fft-implementation",
+      "family": "fft-spectrum",
+      "title": "1024 point FFT implementation",
+      "category": "dsp",
+      "tier": "implementation",
+      "tool": "eda_vivado",
+      "origin": "existing",
+      "input": {
+        "kind": "fft",
+        "stage": "implementation"
+      },
+      "acceptance": {
+        "kind": "routed"
+      },
+      "adaptation": "Run-local Tcl copy removes project latest pointer writes and explicit waveform logging."
+    },
+    {
+      "availability": "runnable",
+      "seed": 1,
+      "variant": "original",
+      "timeout_ms": 180000,
+      "id": "reject-multiple-analysis",
+      "family": "tool-validation",
+      "title": "Reject multiple SPICE analyses",
+      "category": "tool_error",
+      "tier": "light",
+      "tool": "eda_ltspice_batch",
+      "origin": "existing",
+      "negative_control": true,
+      "input": {
+        "kind": "tool",
+        "args": {
+          "netlist": "examples/analog/rc_lowpass.cir"
+        }
+      },
+      "acceptance": {
+        "kind": "expected_failure",
+        "error_pattern": "Choose exactly one analysis"
+      }
+    },
+    {
+      "availability": "runnable",
+      "seed": 1,
+      "variant": "syntax",
+      "timeout_ms": 180000,
+      "id": "reject-invalid-rtl",
+      "family": "tool-validation",
+      "title": "Reject intentionally invalid Verilog",
+      "category": "tool_error",
+      "tier": "light",
+      "tool": "eda_xsim",
+      "origin": "generated",
+      "negative_control": true,
+      "input": {
+        "kind": "invalid_rtl"
+      },
+      "acceptance": {
+        "kind": "expected_failure",
+        "error_pattern": "syntax error"
+      }
+    },
+    {
+      "availability": "runnable",
+      "seed": 1,
+      "variant": "original",
+      "timeout_ms": 180000,
+      "id": "trace-contract",
+      "family": "trace-contract",
+      "title": "Trace process lifecycle and dependency contract",
+      "category": "trace",
+      "tier": "light",
+      "tool": "node_test",
+      "origin": "existing",
+      "input": {
+        "kind": "node_test",
+        "path": "tests/trace.test.mjs"
+      },
+      "acceptance": {
+        "kind": "node_tests"
+      }
+    },
+    {
+      "availability": "runnable",
+      "seed": 1,
+      "variant": "original",
+      "timeout_ms": 180000,
+      "id": "benchmark-contract",
+      "family": "benchmark-contract",
+      "title": "Benchmark acceptance, concurrency and comparability contract",
+      "category": "reproducibility",
+      "tier": "light",
+      "tool": "node_test",
+      "origin": "generated",
+      "input": {
+        "kind": "node_test",
+        "path": "tests/benchmark.test.mjs"
+      },
+      "acceptance": {
+        "kind": "node_tests"
+      }
+    },
+    {
+      "availability": "runnable",
+      "seed": 1,
+      "variant": "original",
+      "timeout_ms": 2000,
+      "id": "owned-process-timeout",
+      "family": "process-watchdog",
+      "title": "Owned local process deliberately exceeds its budget",
+      "category": "timeout",
+      "tier": "light",
+      "tool": "node_test",
+      "origin": "generated",
+      "negative_control": true,
+      "input": {
+        "kind": "timeout_fixture",
+        "path": "benchmarks/fixtures/timeout.mjs",
+        "process_timeout_ms": 150
+      },
+      "acceptance": {
+        "kind": "expected_timeout"
+      }
+    },
+    {
+      "availability": "external_not_downloaded",
+      "seed": 1,
+      "variant": "original",
+      "timeout_ms": 180000,
+      "id": "external-riscv-dv",
+      "family": "external-riscv-dv",
+      "title": "riscv-dv integration placeholder",
+      "category": "system",
+      "tier": "external",
+      "tool": "eda_xsim",
+      "origin": "external",
+      "input": {
+        "kind": "external",
+        "required": "vendor/riscv-dv"
+      },
+      "acceptance": {
+        "kind": "marker",
+        "pattern": "INTEGRATION_NOT_IMPLEMENTED"
+      },
+      "note": "Not integrated, downloaded by this benchmark, or run. This placeholder contributes no score."
+    },
+    {
+      "availability": "external_not_downloaded",
+      "seed": 1,
+      "variant": "original",
+      "timeout_ms": 180000,
+      "id": "external-openram",
+      "family": "external-openram",
+      "title": "openram integration placeholder",
+      "category": "memory",
+      "tier": "external",
+      "tool": "eda_xsim",
+      "origin": "external",
+      "input": {
+        "kind": "external",
+        "required": "vendor/openram"
+      },
+      "acceptance": {
+        "kind": "marker",
+        "pattern": "INTEGRATION_NOT_IMPLEMENTED"
+      },
+      "note": "Not integrated, downloaded by this benchmark, or run. This placeholder contributes no score."
+    }
+  ]
+}

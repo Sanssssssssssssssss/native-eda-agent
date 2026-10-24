@@ -1,0 +1,10 @@
+import { McpServer, fromJsonSchema } from '@modelcontextprotocol/server';
+import { serveStdio } from '@modelcontextprotocol/server/stdio';
+const server = new McpServer({name:'synthetic-eda-backend',version:'1'});
+const inputSchema = fromJsonSchema({type:'object',properties:{text:{type:'string'},delay:{type:'integer'}},additionalProperties:false});
+server.registerTool('echo',{inputSchema},async args=>{if(args.delay) await new Promise(r=>setTimeout(r,args.delay)); return {content:[{type:'text',text:args.text || 'ok'}]};});
+server.registerTool('failed',{inputSchema},async()=>({content:[{type:'text',text:'[ERROR] synthetic failure'}]}));
+server.registerTool('slow',{inputSchema},async args=>{ await new Promise(r=>setTimeout(r,args.delay||10000)); return {content:[{type:'text',text:'late'}]}; });
+server.registerPrompt('fixture_prompt',{description:'offline fixture'},async()=>({messages:[{role:'user',content:{type:'text',text:'fixture'}}]}));
+server.registerResource('fixture','fixture://status',{description:'offline fixture'},async()=>({contents:[{uri:'fixture://status',text:'ready'}]}));
+serveStdio(()=>server);

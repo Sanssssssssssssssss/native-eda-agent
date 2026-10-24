@@ -1,0 +1,508 @@
+{
+  "schema_version": 1,
+  "imported_at": "2026-10-24T18:14:33.783Z",
+  "aggregate_score": null,
+  "policy": "Preserve frozen protocols, failed outcomes and separate evidence units. Import does not rerun designs.",
+  "records": [
+    {
+      "id": "verilogeval-8-original",
+      "title": "VerilogEval initial fixed eight",
+      "recorded_on": "2026-10-23",
+      "kind": "historical",
+      "unit": "rtl_task",
+      "task_set": "verilogeval-selected-eight",
+      "protocol": "xsim-original-reference",
+      "scope": "functional_visible_tests",
+      "passed": 7,
+      "total": 8,
+      "limitations": "Primary score remains 7/8; reference-aligned diagnostic repair is not a blind score.",
+      "other_model_api_calls": 0,
+      "outer_codex_tokens": null,
+      "evidence": [
+        {
+          "path": "results/evidence/4bb46c527bd1-score.json",
+          "sha256": "015a634abb36064a22f713d155330743df19fb65f5eb8ed087ccb9e033fa056c",
+          "original_path": "artifacts/codex-eda-assessment-20261023/score.json",
+          "original_sha256": "4ad5fac50bd02698f35b7ce27eb9f5fcb8b69e713ef79323b177ec39568ded85",
+          "transformation": "Workspace/user paths normalized; session identifiers and usage details omitted when present. Public and original hashes are distinct."
+        },
+        {
+          "path": "results/evidence/f5871e526baa-result.json",
+          "sha256": "b8bb457cebe01fc073003c19feaab4db2ba53ad45c55101000d98c4304996fde",
+          "original_path": "artifacts/verilogeval-codex-2026-10-22T16-17-42-454Z/result.json",
+          "original_sha256": "d15753015c35236fa10e9e77dc7848602e66f028b8d7bcdbcc4e6ddd10921d90",
+          "transformation": "Workspace/user paths normalized; session identifiers and usage details omitted when present. Public and original hashes are distinct."
+        }
+      ]
+    },
+    {
+      "id": "fft-1024",
+      "title": "1024-point FFT spectrum pipeline",
+      "recorded_on": "2026-10-23",
+      "kind": "historical",
+      "unit": "system_project",
+      "task_set": "fft-1024-spectrum",
+      "protocol": "vivado-2020.2-100mhz-ooc",
+      "scope": "visible_integration_and_ooc",
+      "passed": 1,
+      "total": 1,
+      "frames": 16,
+      "bins": 16384,
+      "setup_ns": 1.6425225734710693,
+      "hold_ns": 0.04589506611227989,
+      "negative_controls": 4,
+      "limitations": "Vendor FFT IP with local wrapper and numerical oracle; OOC only, no hardware signoff.",
+      "other_model_api_calls": 0,
+      "outer_codex_tokens": null,
+      "evidence": [
+        {
+          "path": "results/evidence/4bb46c527bd1-score.json",
+          "sha256": "015a634abb36064a22f713d155330743df19fb65f5eb8ed087ccb9e033fa056c",
+          "original_path": "artifacts/codex-eda-assessment-20261023/score.json",
+          "original_sha256": "4ad5fac50bd02698f35b7ce27eb9f5fcb8b69e713ef79323b177ec39568ded85",
+          "transformation": "Workspace/user paths normalized; session identifiers and usage details omitted when present. Public and original hashes are distinct."
+        },
+        {
+          "path": "results/evidence/55dbb9d279ea-oracle-result.json",
+          "sha256": "2b538216450f78cdd5d867179250774a030eb76521f337cfaf1ad8a11d93a248",
+          "original_path": "artifacts/2026-10-22T16-19-24-402Z-vivado-ee6aadf3/oracle-result.json",
+          "original_sha256": "f33fb04c698471aa214791ca45edcbb7ab15b2dd8a2d9d72e601cefedde22176",
+          "transformation": "Workspace/user paths normalized; session identifiers and usage details omitted when present. Public and original hashes are distinct."
+        }
+      ]
+    },
+    {
+      "id": "verilogeval-24-original",
+      "title": "VerilogEval fixed 24: original watchdog",
+      "recorded_on": "2026-10-23",
+      "kind": "historical",
+      "unit": "rtl_task",
+      "task_set": "verilogeval-selected-24",
+      "protocol": "xsim-original-watchdog-1000000ps",
+      "scope": "functional_visible_tests",
+      "passed": 20,
+      "total": 24,
+      "limitations": "Purposive sample, not pass@1; corrected TIMEOUT verdict retained.",
+      "other_model_api_calls": 0,
+      "outer_codex_tokens": null,
+      "evidence": [
+        {
+          "path": "results/evidence/02203712f5fe-score.json",
+          "sha256": "71fe8c7edc356f80135fe7e1a54fe024d8c1675e2f943ad0c5ab81b995540463",
+          "original_path": "artifacts/verilogeval-codex-2026-10-22T16-56-02-984Z/score.json",
+          "original_sha256": "6284a584bc4a8b9682925287ccf0f9a91e78218c3fd5d6666b0e4391fcb914a7",
+          "transformation": "Workspace/user paths normalized; session identifiers and usage details omitted when present. Public and original hashes are distinct."
+        },
+        {
+          "path": "results/evidence/46bdb2649aac-selection.json",
+          "sha256": "df9bf9a72096ea053da88a2a63de3ddfeff8743b40c48c86ee93f72b532de7b2",
+          "original_path": "projects/verilogeval-24/selection.json",
+          "original_sha256": "b779b6d788b46455c482de32fd9be8e1facf17de4ae931b0f20507c560877a02",
+          "transformation": "Workspace/user paths normalized; session identifiers and usage details omitted when present. Public and original hashes are distinct."
+        }
+      ]
+    },
+    {
+      "id": "verilogeval-24-extended",
+      "title": "VerilogEval same RTL: extended watchdog",
+      "recorded_on": "2026-10-23",
+      "kind": "historical",
+      "unit": "rtl_task",
+      "task_set": "verilogeval-selected-24",
+      "protocol": "xsim-extended-watchdog-10000000ps",
+      "scope": "functional_visible_tests",
+      "passed": 23,
+      "total": 24,
+      "rtl_changes": 0,
+      "derived_from": "verilogeval-24-original",
+      "limitations": "Same task set with three long-case reruns and changed watchdog; not 24 new tasks. One upstream-reference mismatch remains.",
+      "other_model_api_calls": 0,
+      "outer_codex_tokens": null,
+      "evidence": [
+        {
+          "path": "results/evidence/02203712f5fe-score.json",
+          "sha256": "71fe8c7edc356f80135fe7e1a54fe024d8c1675e2f943ad0c5ab81b995540463",
+          "original_path": "artifacts/verilogeval-codex-2026-10-22T16-56-02-984Z/score.json",
+          "original_sha256": "6284a584bc4a8b9682925287ccf0f9a91e78218c3fd5d6666b0e4391fcb914a7",
+          "transformation": "Workspace/user paths normalized; session identifiers and usage details omitted when present. Public and original hashes are distinct."
+        },
+        {
+          "path": "results/evidence/1044e3a36744-result.json",
+          "sha256": "04cb6e2eccb05917ca140fc55514049ff7664b0fef961270a88efa51704f4a2c",
+          "original_path": "artifacts/verilogeval-codex-2026-10-22T17-03-30-819Z/result.json",
+          "original_sha256": "d8d50c686cfc4b6899fdd9d35e6be7688d32f3423ff07cf70ca710d3c04a94a3",
+          "transformation": "Workspace/user paths normalized; session identifiers and usage details omitted when present. Public and original hashes are distinct."
+        }
+      ]
+    },
+    {
+      "id": "campaign-61-frozen",
+      "title": "Frozen mixed benchmark campaign",
+      "recorded_on": "2026-10-23",
+      "kind": "historical",
+      "unit": "case_variant",
+      "task_set": "campaign-61-48-families",
+      "protocol": "catalog-982c4ad3a554da0d527c79a8fdd0693508242fd641b13d5e4a52131bd4fa38bb",
+      "scope": "functional_and_negative_controls",
+      "total": 61,
+      "counts": {
+        "PASS": 51,
+        "FAIL": 1,
+        "EXPECTED_FAILURE": 2,
+        "EXPECTED_TIMEOUT": 1,
+        "TIMEOUT": 6,
+        "INCOMPLETE": 0,
+        "BLOCKED": 0
+      },
+      "families": 48,
+      "limitations": "Mixed variants and expected failures; queue timeouts remain. Never add this population to the selected VerilogEval tasks.",
+      "other_model_api_calls": 0,
+      "outer_codex_tokens": null,
+      "evidence": [
+        {
+          "path": "results/evidence/c5bbe4ae2d5b-summary.json",
+          "sha256": "6bee98cbcad3057b3f233c87d14798bca06f5cd2e9f51d6a7dfb2c24011e9aa6",
+          "original_path": "artifacts/benchmark-2026-10-22T18-44-46-676Z-55880096/summary.json",
+          "original_sha256": "5452476ef648fc155846d7efe23753e16733a3433c3d0623f83fe5303adb9e3b",
+          "transformation": "Workspace/user paths normalized; session identifiers and usage details omitted when present. Public and original hashes are distinct."
+        }
+      ]
+    },
+    {
+      "id": "system-projects-4",
+      "title": "SoC / DMA / UDP / AES integration",
+      "recorded_on": "2026-10-23",
+      "kind": "historical",
+      "unit": "system_project",
+      "task_set": "system-bench-four",
+      "protocol": "vivado-2020.2-100mhz-ooc",
+      "scope": "visible_integration_and_ooc",
+      "passed": 4,
+      "total": 4,
+      "projects": [
+        {
+          "id": "soc",
+          "functional": true,
+          "implementation": true,
+          "setup_ns": 2.404,
+          "hold_ns": 0.12,
+          "resources": {
+            "slice_luts": 1884,
+            "slice_registers": 1265,
+            "ramb36": 16,
+            "ramb18": 0,
+            "dsp48": 0
+          }
+        },
+        {
+          "id": "dma",
+          "functional": true,
+          "implementation": true,
+          "setup_ns": 2.105,
+          "hold_ns": 0.075,
+          "resources": {
+            "slice_luts": 914,
+            "slice_registers": 584,
+            "ramb36": 1,
+            "ramb18": 0,
+            "dsp48": 0
+          }
+        },
+        {
+          "id": "udp",
+          "functional": true,
+          "implementation": true,
+          "setup_ns": 1.899,
+          "hold_ns": 0.075,
+          "resources": {
+            "slice_luts": 1599,
+            "slice_registers": 2924,
+            "ramb36": 1,
+            "ramb18": 0,
+            "dsp48": 0
+          }
+        },
+        {
+          "id": "aes",
+          "functional": true,
+          "implementation": true,
+          "setup_ns": 1.084,
+          "hold_ns": 0.105,
+          "resources": {
+            "slice_luts": 3195,
+            "slice_registers": 2903,
+            "ramb36": 0,
+            "ramb18": 0,
+            "dsp48": 0
+          }
+        }
+      ],
+      "limitations": "Pinned public IP integrated and debugged; no board, formal proof or blind generation score.",
+      "other_model_api_calls": 0,
+      "outer_codex_tokens": null,
+      "evidence": [
+        {
+          "path": "results/evidence/c8f809c8c811-results.json",
+          "sha256": "698971c03597d3259843bf645f19ffee64ec2f9911dc6a3300a12af585f40d5d",
+          "original_path": "artifacts/system-bench-assessment-20261023/results.json",
+          "original_sha256": "a276da876a3a67ee6a907052b769ff11fc440456e9faae4dbd8003c324cc52cf",
+          "transformation": "Workspace/user paths normalized; session identifiers and usage details omitted when present. Public and original hashes are distinct."
+        }
+      ]
+    },
+    {
+      "id": "hard-projects-3",
+      "title": "AXI 3x3 / three-clock Ethernet / RV32IM AES DMA",
+      "recorded_on": "2026-10-23",
+      "kind": "historical",
+      "unit": "system_project",
+      "task_set": "hard-bench-three",
+      "protocol": "vivado-2020.2-fixed-xdc-ooc",
+      "scope": "visible_integration_and_ooc",
+      "passed": 3,
+      "total": 3,
+      "negative_controls": 3,
+      "implementation_pass": 3,
+      "projects": [
+        {
+          "id": "axi-fabric",
+          "functional": true,
+          "negative_control": true,
+          "implementation": true,
+          "setup_ns": 2.109,
+          "hold_ns": 0.058,
+          "resources": {
+            "slice_luts": 2008,
+            "flip_flops": 2014,
+            "ramb36": 8,
+            "ramb18": 0,
+            "dsp48": 0
+          }
+        },
+        {
+          "id": "ethernet-cdc",
+          "functional": true,
+          "negative_control": true,
+          "implementation": true,
+          "setup_ns": 2.51,
+          "hold_ns": 0.073,
+          "resources": {
+            "slice_luts": 1896,
+            "flip_flops": 2964,
+            "ramb36": 7,
+            "ramb18": 2,
+            "dsp48": 0
+          },
+          "cdc": [
+            {
+              "id": "CDC-3",
+              "severity": "Info",
+              "count": 10
+            },
+            {
+              "id": "CDC-6",
+              "severity": "Warning",
+              "count": 3
+            },
+            {
+              "id": "CDC-15",
+              "severity": "Warning",
+              "count": 28
+            },
+            {
+              "id": "CDC-26",
+              "severity": "Warning",
+              "count": 3
+            }
+          ]
+        },
+        {
+          "id": "crypto-soc",
+          "functional": true,
+          "negative_control": true,
+          "implementation": true,
+          "setup_ns": 0.518,
+          "hold_ns": 0.096,
+          "resources": {
+            "slice_luts": 5110,
+            "flip_flops": 4866,
+            "ramb36": 16,
+            "ramb18": 0,
+            "dsp48": 0
+          }
+        }
+      ],
+      "limitations": "Ethernet retains 34 CDC warnings; no formal CDC, MTBF or board signoff. Seeds and transactions are coverage, not independent projects.",
+      "other_model_api_calls": 0,
+      "outer_codex_tokens": null,
+      "evidence": [
+        {
+          "path": "results/evidence/1302cb7fa0f5-results.json",
+          "sha256": "4c660620f4740d28c2a364f33b5208fc426d47508d66e1e3da1fb033a3952f27",
+          "original_path": "artifacts/hard-bench-assessment-20261023/results.json",
+          "original_sha256": "9979693889581f327ef2a81f66165835de03029e1817a1c6cba776e7db9e9366",
+          "transformation": "Workspace/user paths normalized; session identifiers and usage details omitted when present. Public and original hashes are distinct."
+        }
+      ]
+    },
+    {
+      "id": "optimizer-axi-smoke",
+      "title": "AXI physical optimizer: two candidates",
+      "recorded_on": "2026-10-24",
+      "kind": "historical",
+      "unit": "optimization_run",
+      "task_set": "axi-fabric-native-tools-dcp",
+      "protocol": "fixed-input-route-explore-aggressive-2-trials",
+      "scope": "physical_optimization",
+      "trials": 2,
+      "accepted_candidates": 0,
+      "wns_gain_ns": 0,
+      "winner_recheck": {
+        "passed": true,
+        "reasons": []
+      },
+      "input_unchanged": true,
+      "limitations": "Zero measured gain. Historical run predates new recovery/trace implementation; not FPL leaderboard reproduction.",
+      "other_model_api_calls": 0,
+      "outer_codex_tokens": null,
+      "evidence": [
+        {
+          "path": "results/evidence/3b02e71edb1a-optimizer-result.json",
+          "sha256": "a311616b9b8ea3cdf44d6f4a27d04bf6589f977684af1cdac5f4739c45f6555d",
+          "original_path": "artifacts/2026-10-24T08-54-15-928Z-eda_vivado_optimize-babf5915/optimizer/optimizer-result.json",
+          "original_sha256": "b2fb018c13c2a49b9aa152d5427367e82096117303949a33b9c76ec38b6d631d",
+          "transformation": "Workspace/user paths normalized; session identifiers and usage details omitted when present. Public and original hashes are distinct."
+        }
+      ]
+    },
+    {
+      "id": "workbench-integration-33",
+      "title": "Project / IP / Block Design tool integration",
+      "recorded_on": "2026-10-24",
+      "kind": "historical",
+      "unit": "tool_check",
+      "task_set": "workbench-13-operations",
+      "protocol": "vivado-2020.2-workbench",
+      "scope": "tool_integration",
+      "passed": 33,
+      "total": 33,
+      "limitations": "Tool checks, not additional FPGA designs.",
+      "other_model_api_calls": 0,
+      "outer_codex_tokens": null,
+      "evidence": [
+        {
+          "path": "results/evidence/2e5962511af6-result.json",
+          "sha256": "4a96cc1e2c7aec17ae0e0cfb7b5df0f8176775a2f39609454ef3b41b33a47da1",
+          "original_path": "artifacts/vivado-workbench-validation-20261024T082414Z/result.json",
+          "original_sha256": "c06d4161d3cd09e570edb308e7f1d5e6c9d5cb3771f8bcfbdd904b2129f22390",
+          "transformation": "Workspace/user paths normalized; session identifiers and usage details omitted when present. Public and original hashes are distinct."
+        }
+      ]
+    },
+    {
+      "id": "native-integration-12",
+      "title": "Native FPGA tools integration",
+      "recorded_on": "2026-10-24",
+      "kind": "historical",
+      "unit": "tool_check",
+      "task_set": "native-fpga-six-operations",
+      "protocol": "vivado-2020.2-fixed-inputs",
+      "scope": "tool_integration",
+      "passed": 12,
+      "total": 12,
+      "axi": {
+        "functional": {
+          "seeds": 4,
+          "write_bursts": 2328,
+          "read_bursts": 2328,
+          "write_beats": 37824,
+          "read_beats": 37824,
+          "bytes_written": 77501,
+          "bytes_read_checked": 100992,
+          "slverr_writes": 384,
+          "decerr_writes": 384,
+          "slverr_reads": 384,
+          "decerr_reads": 384,
+          "max_total_outstanding": 18,
+          "same_write_id_depth": 2,
+          "same_read_id_depth": 2,
+          "simultaneous_master_cycles": 15607,
+          "all_three_active_cycles": 3846,
+          "simultaneous_rw_cycles": 11806,
+          "shared_read_bursts": 24,
+          "boundary_bursts": 339,
+          "protocol_checks": 658158,
+          "aw_stalls": 231460,
+          "w_stalls": 161916,
+          "b_stalls": 795,
+          "ar_stalls": 225781,
+          "r_stalls": 38206,
+          "cycles": 130917
+        },
+        "period_ns": 10,
+        "setup_slack_ns": 2.393,
+        "hold_slack_ns": 0.058,
+        "utilization": {
+          "Slice LUTs": 2018,
+          "Slice Registers": 2014,
+          "Block RAM Tile": 8,
+          "RAMB36/FIFO*": 8,
+          "RAMB18": 0,
+          "DSPs": 0
+        },
+        "routing": {
+          "routable": 3159,
+          "fully_routed": 3159,
+          "errors": 0,
+          "status": "pass"
+        },
+        "assessment": {
+          "setup_hold": "pass",
+          "clock_and_internal_constraints": "pass",
+          "io_constraints": "pass",
+          "routing": "pass",
+          "cdc": "unknown",
+          "overall_design_acceptance": "not_evaluated",
+          "board_signoff": false,
+          "scope": "Per-report diagnostics only. Positive setup/hold slack does not validate CDC, IO timing, functional correctness or hardware."
+        }
+      },
+      "limitations": "Existing designs exercised through new adapters; not 12 new design tasks.",
+      "other_model_api_calls": 0,
+      "outer_codex_tokens": null,
+      "evidence": [
+        {
+          "path": "results/evidence/63383da22a7c-scorecard.json",
+          "sha256": "c1aa52a0fe7df7d87cd8eeb88d9e732fe2b938f54830443f3c05caa0ef9cd7de",
+          "original_path": "artifacts/fpga-tools-validation-2026-10-24T07-39-55-676Z-e8a611/scorecard.json",
+          "original_sha256": "3e6d0029534eac34798672be05dfb70b776214322ad3922086d5f82cdd1f21e4",
+          "transformation": "Workspace/user paths normalized; session identifiers and usage details omitted when present. Public and original hashes are distinct."
+        }
+      ]
+    },
+    {
+      "id": "agent-offline-20261024",
+      "title": "Agent framework offline acceptance",
+      "recorded_on": "2026-10-24",
+      "kind": "historical",
+      "unit": "software_test",
+      "task_set": "agent-offline-20261024",
+      "protocol": "source-hashes-in-receipt",
+      "scope": "synthetic_control_plane",
+      "passed": 64,
+      "total": 64,
+      "limitations": "Fake EDA, local subprocesses and MCP control plane only; no new FPGA run.",
+      "other_model_api_calls": 0,
+      "outer_codex_tokens": null,
+      "evidence": [
+        {
+          "path": "results/evidence/6c8aabb9768d-result.json",
+          "sha256": "78f256c4c8b9470a522938e39a7bf4de628d491875af411c05bedcbebacb4883",
+          "original_path": "artifacts/agent-offline-2026-10-24T10-37-24-616Z-be93aa/result.json",
+          "original_sha256": "cde93d27aec88da8ba0dc4b86ee6e74b253e0d1c7d57d78c665d51191a3b1c77",
+          "transformation": "Workspace/user paths normalized; session identifiers and usage details omitted when present. Public and original hashes are distinct."
+        }
+      ]
+    }
+  ]
+}

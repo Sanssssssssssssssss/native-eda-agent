@@ -1,0 +1,7 @@
+{
+  "top": "soc_top",
+  "sources": [
+    "vendor/picorv32/picorv32.v",
+    "projects/system-bench/soc/soc_top.v"
+  ]
+}

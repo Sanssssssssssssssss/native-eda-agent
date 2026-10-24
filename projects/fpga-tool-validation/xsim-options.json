@@ -1,0 +1,12 @@
+{
+  "sources": ["projects/fpga-tool-validation/xor_vhdl.vhd", "projects/fpga-tool-validation/tb_options.sv"],
+  "top": "tb_fpga_options",
+  "include_dirs": ["projects/fpga-tool-validation/include files"],
+  "defines": ["BUILD_VALUE=37"],
+  "generics": ["CYCLES=23"],
+  "libraries": ["unisims_ver"],
+  "plusargs": ["SEED=17"],
+  "sv_seed": 123,
+  "timeout_seconds": 60,
+  "pass_marker": "FPGA_OPTIONS_PASS"
+}

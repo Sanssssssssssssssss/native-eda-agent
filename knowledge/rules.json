@@ -1,0 +1,1117 @@
+{
+  "schema_version": 1,
+  "scope": "Research-derived FPGA guidance. Entries do not certify RTL, formal proofs, timing closure or hardware operation.",
+  "rules": [
+    {
+      "id": "FPGA-RESET-001",
+      "title": "复位形式按目标器件选择",
+      "tags": [
+        "reset",
+        "复位",
+        "inference"
+      ],
+      "classification": "recommendation",
+      "statement": "AMD FPGA 中需要复位的寄存器优先评估同步复位；DSP/BRAM 推断和布线开销应纳入选择。",
+      "scope": "AMD Vivado FPGA；不强制改写既有接口复位契约",
+      "versions": [
+        "2020.2; released 2021-02-18"
+      ],
+      "static_proof_boundary": "代码风格无法证明时钟存在、复位脉宽足够或器件映射正确。",
+      "evidence_required": [
+        "复位契约",
+        "综合资源/推断报告",
+        "复位边界仿真"
+      ],
+      "source_refs": [
+        {
+          "source_id": "amd-ug949-reset",
+          "url": "https://docs.amd.com/r/2020.2-English/ug949-vivado-design-methodology/Synchronous-Reset-vs.-Asynchronous-Reset",
+          "section": "Synchronous Reset vs. Asynchronous Reset"
+        }
+      ],
+      "local_paths": [],
+      "derivation": "source paraphrase"
+    },
+    {
+      "id": "FPGA-RESET-002",
+      "title": "异步复位释放须同步",
+      "tags": [
+        "reset",
+        "复位",
+        "CDC",
+        "metastability"
+      ],
+      "classification": "rule",
+      "statement": "采用异步复位时，将释放过程同步到每个接收时钟域，并审查 recovery/removal。",
+      "scope": "异步复位寄存器及多时钟域",
+      "versions": [
+        "2020.2; released 2021-02-18"
+      ],
+      "static_proof_boundary": "RTL 扫描不能证明模拟亚稳态概率或真实复位引脚时序。",
+      "evidence_required": [
+        "各时钟域复位同步结构",
+        "CDC/RDC 审查",
+        "恢复/移除时序报告"
+      ],
+      "source_refs": [
+        {
+          "source_id": "amd-ug949-reset",
+          "url": "https://docs.amd.com/r/2020.2-English/ug949-vivado-design-methodology/Synchronous-Reset-vs.-Asynchronous-Reset",
+          "section": "Additional considerations"
+        }
+      ],
+      "local_paths": [],
+      "derivation": "source paraphrase"
+    },
+    {
+      "id": "FPGA-RESET-003",
+      "title": "复位优先级匹配硬件",
+      "tags": [
+        "reset",
+        "enable",
+        "复位"
+      ],
+      "classification": "recommendation",
+      "statement": "同时使用复位和时钟使能时，优先用 reset 分支再处理 enable，以匹配 AMD 寄存器控制优先级。",
+      "scope": "AMD 寄存器推断",
+      "versions": [
+        "2020.2"
+      ],
+      "static_proof_boundary": "分支结构只能提示意图；等价性及实际映射需工具确认。",
+      "evidence_required": [
+        "综合网表",
+        "复位与使能同时激活测试"
+      ],
+      "source_refs": [
+        {
+          "source_id": "amd-ug949-reset-ce",
+          "url": "https://docs.amd.com/r/2020.2-English/ug949-vivado-design-methodology/Reset-and-Clock-Enable-Precedence",
+          "section": "Reset and Clock Enable Precedence"
+        }
+      ],
+      "local_paths": [],
+      "derivation": "source paraphrase"
+    },
+    {
+      "id": "FPGA-RESET-004",
+      "title": "RAM 复位影响存储资源推断",
+      "tags": [
+        "reset",
+        "BRAM",
+        "memory",
+        "inference"
+      ],
+      "classification": "recommendation",
+      "statement": "避免用逐项复位清空存储数组；RAM 输出寄存器能否吸收复位取决于原语允许的同步复位形式。",
+      "scope": "希望推断 AMD RAM 原语的 RTL",
+      "versions": [
+        "2020.2"
+      ],
+      "static_proof_boundary": "静态模式匹配不能证明 BRAM 推断，也不能确定读写冲突语义。",
+      "evidence_required": [
+        "RAM/LUTRAM 利用率",
+        "综合推断信息",
+        "复位后有效位/读写测试"
+      ],
+      "source_refs": [
+        {
+          "source_id": "amd-ug949-ram",
+          "url": "https://docs.amd.com/r/2020.2-English/ug949-vivado-design-methodology/Checking-for-Reset-Signals-on-the-Address/Read-Data-Registers",
+          "section": "Checking for Reset Signals on the Address/Read Data Registers"
+        }
+      ],
+      "local_paths": [],
+      "derivation": "source paraphrase"
+    },
+    {
+      "id": "FPGA-RESET-005",
+      "title": "lowRISC 复位风格有项目边界",
+      "tags": [
+        "reset",
+        "style",
+        "复位"
+      ],
+      "classification": "limitation",
+      "statement": "lowRISC 的低有效异步复位要求属于其芯片/标准单元约定；迁入 AMD FPGA 时必须重新选择复位实现。",
+      "scope": "复用 lowRISC/OpenTitan 风格或 IP",
+      "versions": [
+        "commit 9c15ff5dce23eef969e00ab3715153967419eadd"
+      ],
+      "static_proof_boundary": "风格一致性不等于 FPGA 器件适配。",
+      "evidence_required": [
+        "原 IP 复位接口契约",
+        "目标器件复位选择依据"
+      ],
+      "source_refs": [
+        {
+          "source_id": "lowrisc-style",
+          "url": "https://github.com/lowRISC/style-guides/blob/9c15ff5dce23eef969e00ab3715153967419eadd/VerilogCodingStyle.md",
+          "section": "Resets"
+        }
+      ],
+      "local_paths": [],
+      "derivation": "comparison with AMD reset guidance; engineering recommendation"
+    },
+    {
+      "id": "FPGA-CDC-001",
+      "title": "CDC 报告是结构检查",
+      "tags": [
+        "CDC",
+        "跨时钟",
+        "metastability"
+      ],
+      "classification": "limitation",
+      "statement": "report_cdc 检查跨域结构与约束，报告中没有异步路径时序裕量；结构通过也不构成协议或硬件证明。",
+      "scope": "Vivado CDC 分析",
+      "versions": [
+        "2020.2; released 2021-01-25"
+      ],
+      "static_proof_boundary": "结构检查不能穷举传输协议行为或模拟亚稳态。",
+      "evidence_required": [
+        "report_cdc",
+        "跨域协议测试/断言",
+        "时钟关系"
+      ],
+      "source_refs": [
+        {
+          "source_id": "amd-ug906-cdc",
+          "url": "https://docs.amd.com/r/2020.2-English/ug906-vivado-design-analysis/Report-Clock-Domain-Crossings",
+          "section": "Report Clock Domain Crossings"
+        }
+      ],
+      "local_paths": [],
+      "derivation": "source paraphrase"
+    },
+    {
+      "id": "FPGA-CDC-002",
+      "title": "先补齐时钟再检查 CDC",
+      "tags": [
+        "CDC",
+        "clock",
+        "constraint",
+        "约束"
+      ],
+      "classification": "rule",
+      "statement": "report_cdc 只检查源端和目的端时钟均已定义的路径；先检查时钟覆盖，涉及 IO 时补齐对应延迟约束。",
+      "scope": "Vivado report_cdc",
+      "versions": [
+        "2020.2; released 2020-11-18"
+      ],
+      "static_proof_boundary": "未报告路径可能是缺少约束，不能解释为没有 CDC。",
+      "evidence_required": [
+        "check_timing",
+        "report_clocks",
+        "输入输出延迟",
+        "report_cdc"
+      ],
+      "source_refs": [
+        {
+          "source_id": "amd-ug835-cdc",
+          "url": "https://docs.amd.com/r/2020.2-English/ug835-vivado-tcl-commands/report_cdc",
+          "section": "Description / clock definition prerequisite"
+        }
+      ],
+      "local_paths": [],
+      "derivation": "source paraphrase"
+    },
+    {
+      "id": "FPGA-CDC-003",
+      "title": "同步链属性与拓扑共同审查",
+      "tags": [
+        "CDC",
+        "ASYNC_REG",
+        "synchronizer"
+      ],
+      "classification": "recommendation",
+      "statement": "审查同步链级数、ASYNC_REG 属性、同步前组合逻辑与扇出；属性存在不能单独证明跨域安全。",
+      "scope": "单比特同步及 Vivado CDC 诊断",
+      "versions": [
+        "2020.2; released 2020-11-18"
+      ],
+      "static_proof_boundary": "正则不能可靠识别展开后的同步链或目的域扇出。",
+      "evidence_required": [
+        "展开/综合网表",
+        "CDC 诊断详情",
+        "同步器实现/约束"
+      ],
+      "source_refs": [
+        {
+          "source_id": "amd-ug835-cdc",
+          "url": "https://docs.amd.com/r/2020.2-English/ug835-vivado-tcl-commands/report_cdc",
+          "section": "CDC checks and classifications"
+        }
+      ],
+      "local_paths": [],
+      "derivation": "source paraphrase"
+    },
+    {
+      "id": "FPGA-CDC-004",
+      "title": "总线跨域需要一致性协议",
+      "tags": [
+        "CDC",
+        "bus",
+        "handshake",
+        "FIFO"
+      ],
+      "classification": "recommendation",
+      "statement": "多位数据跨域应说明数据保持、握手或 FIFO 协议；逐位寄存器同步不能自行证明一个字被一致采样。",
+      "scope": "具有相关位语义的跨时钟总线",
+      "versions": [
+        "2020.2; released 2021-01-25"
+      ],
+      "static_proof_boundary": "结构报告与静态代码检查均不能单独证明数据一致性。",
+      "evidence_required": [
+        "总线协议说明",
+        "并发/背压测试",
+        "一致性断言"
+      ],
+      "source_refs": [
+        {
+          "source_id": "amd-ug906-cdc",
+          "url": "https://docs.amd.com/r/2020.2-English/ug906-vivado-design-analysis/Report-Clock-Domain-Crossings",
+          "section": "Structural analysis and data coherency issues"
+        }
+      ],
+      "local_paths": [],
+      "derivation": "engineering inference from structural CDC/data-coherency boundary"
+    },
+    {
+      "id": "FPGA-CLOCK-001",
+      "title": "主时钟定义在真实起点",
+      "tags": [
+        "clock",
+        "constraint",
+        "时钟"
+      ],
+      "classification": "rule",
+      "statement": "主时钟应定义在输入端口或器件要求的合法起点；在时钟树中途创建主时钟会遗漏上游延迟。",
+      "scope": "Vivado 时钟约束",
+      "versions": [
+        "2020.2; released 2021-02-09"
+      ],
+      "static_proof_boundary": "匹配到 create_clock 文本不能证明对象选择正确。",
+      "evidence_required": [
+        "report_clocks",
+        "时钟网络",
+        "XDC 命中对象"
+      ],
+      "source_refs": [
+        {
+          "source_id": "amd-ug903",
+          "url": "https://docs.amd.com/api/khub/documents/qfSFSG1429Fdy4AW8zDF3A/content",
+          "section": "Primary Clocks, p.83"
+        }
+      ],
+      "local_paths": [],
+      "derivation": "source paraphrase"
+    },
+    {
+      "id": "FPGA-CLOCK-002",
+      "title": "派生时钟保留主从关系",
+      "tags": [
+        "clock",
+        "generated-clock",
+        "时钟"
+      ],
+      "classification": "rule",
+      "statement": "派生时钟描述相对主时钟的变换；先定义主时钟并核对自动派生结果，避免误用独立主时钟覆盖相关性。",
+      "scope": "分频、MMCM/PLL、相移时钟",
+      "versions": [
+        "2020.2; released 2021-02-09"
+      ],
+      "static_proof_boundary": "静态扫描不能重建实际时钟传播和自动派生。",
+      "evidence_required": [
+        "report_clocks",
+        "generated clock source/master",
+        "clock interaction"
+      ],
+      "source_refs": [
+        {
+          "source_id": "amd-ug903",
+          "url": "https://docs.amd.com/api/khub/documents/qfSFSG1429Fdy4AW8zDF3A/content",
+          "section": "Generated Clocks, p.87"
+        }
+      ],
+      "local_paths": [],
+      "derivation": "source paraphrase"
+    },
+    {
+      "id": "FPGA-CONSTRAINT-001",
+      "title": "异步分组不会实现同步器",
+      "tags": [
+        "constraint",
+        "CDC",
+        "false-path",
+        "约束"
+      ],
+      "classification": "limitation",
+      "statement": "set_clock_groups 会关闭组间双向时序分析；被忽略的路径仍需可靠跨域协议。",
+      "scope": "Vivado 异步或互斥时钟分组",
+      "versions": [
+        "2020.2; released 2021-02-09"
+      ],
+      "static_proof_boundary": "约束成功不证明硬件跨域正确。",
+      "evidence_required": [
+        "跨域结构",
+        "分组对象命中",
+        "report_clock_interaction"
+      ],
+      "source_refs": [
+        {
+          "source_id": "amd-ug903",
+          "url": "https://docs.amd.com/api/khub/documents/qfSFSG1429Fdy4AW8zDF3A/content",
+          "section": "About Clock Groups, p.96"
+        }
+      ],
+      "local_paths": [],
+      "derivation": "source paraphrase"
+    },
+    {
+      "id": "FPGA-CONSTRAINT-002",
+      "title": "IO 延迟需要最早和最晚边界",
+      "tags": [
+        "constraint",
+        "IO",
+        "setup",
+        "hold"
+      ],
+      "classification": "recommendation",
+      "statement": "按外部器件与板级时序给出输入/输出 min 和 max 延迟；说明虚拟时钟和采样沿。",
+      "scope": "有外部同步接口的实现；OOC 常数仅是实验假设",
+      "versions": [
+        "2020.2; released 2021-02-09"
+      ],
+      "static_proof_boundary": "XDC 数字存在不能证明符合板级真实预算。",
+      "evidence_required": [
+        "外设/板卡时序依据",
+        "min/max IO 约束",
+        "IO timing paths"
+      ],
+      "source_refs": [
+        {
+          "source_id": "amd-ug903",
+          "url": "https://docs.amd.com/api/khub/documents/qfSFSG1429Fdy4AW8zDF3A/content",
+          "section": "Constraining I/O Delay, pp.102-108"
+        }
+      ],
+      "local_paths": [],
+      "derivation": "source paraphrase"
+    },
+    {
+      "id": "FPGA-CONSTRAINT-003",
+      "title": "多周期约束同时审查 hold",
+      "tags": [
+        "constraint",
+        "multicycle",
+        "setup",
+        "hold"
+      ],
+      "classification": "recommendation",
+      "statement": "放宽 setup 的多周期约束时同时检查 hold 边沿关系，并证明功能确实按该周期采样。",
+      "scope": "有明确多周期功能契约的路径",
+      "versions": [
+        "2020.2; released 2021-02-09"
+      ],
+      "static_proof_boundary": "不能从路径很慢推导应添加多周期约束。",
+      "evidence_required": [
+        "采样使能/协议证据",
+        "setup 与 hold 路径",
+        "report_exceptions"
+      ],
+      "source_refs": [
+        {
+          "source_id": "amd-ug903",
+          "url": "https://docs.amd.com/api/khub/documents/qfSFSG1429Fdy4AW8zDF3A/content",
+          "section": "Multicycle Paths, pp.110-124"
+        }
+      ],
+      "local_paths": [],
+      "derivation": "source paraphrase"
+    },
+    {
+      "id": "FPGA-CONSTRAINT-004",
+      "title": "例外优先级可能遮蔽约束",
+      "tags": [
+        "constraint",
+        "exceptions",
+        "false-path"
+      ],
+      "classification": "rule",
+      "statement": "检查重叠例外及被忽略的约束；clock groups、false path 与 min/max、multicycle 的优先级不同。",
+      "scope": "Vivado XDC 例外",
+      "versions": [
+        "2020.2; released 2021-02-09"
+      ],
+      "static_proof_boundary": "文本顺序不能独立说明最终有效约束。",
+      "evidence_required": [
+        "report_exceptions",
+        "有效 XDC",
+        "端点对象列表"
+      ],
+      "source_refs": [
+        {
+          "source_id": "amd-ug903",
+          "url": "https://docs.amd.com/api/khub/documents/qfSFSG1429Fdy4AW8zDF3A/content",
+          "section": "Exceptions Priority, pp.147-149"
+        }
+      ],
+      "local_paths": [],
+      "derivation": "source paraphrase"
+    },
+    {
+      "id": "FPGA-TIMING-001",
+      "title": "setup 与 hold 分别验收",
+      "tags": [
+        "timing",
+        "setup",
+        "hold",
+        "时序"
+      ],
+      "classification": "rule",
+      "statement": "读取 WNS/TNS 与 WHS/THS，并检查 pulse-width 项；记录器件、速度等级、时钟周期和实现阶段。",
+      "scope": "受约束的 Vivado 时序验收",
+      "versions": [
+        "2020.2"
+      ],
+      "static_proof_boundary": "一个正 slack 不代表所有路径、所有检查或板级时序通过。",
+      "evidence_required": [
+        "routed timing summary",
+        "check_timing",
+        "part/clock/constraints"
+      ],
+      "source_refs": [
+        {
+          "source_id": "amd-ug949-timing",
+          "url": "https://docs.amd.com/r/2020.2-English/ug949-vivado-design-methodology/Understanding-Timing-Reports",
+          "section": "Understanding Timing Reports"
+        }
+      ],
+      "local_paths": [
+        "projects/system-bench/implement-common.tcl"
+      ],
+      "derivation": "source paraphrase"
+    },
+    {
+      "id": "FPGA-TIMING-002",
+      "title": "时序结论先确认约束覆盖",
+      "tags": [
+        "timing",
+        "constraint",
+        "unconstrained"
+      ],
+      "classification": "rule",
+      "statement": "使用 check_timing、report_exceptions 和 methodology 检查约束完整性，再解释关键路径。",
+      "scope": "Vivado 设计分析与时序收敛",
+      "versions": [
+        "2020.2"
+      ],
+      "static_proof_boundary": "report_design_analysis 本身不验证全部约束。",
+      "evidence_required": [
+        "check_timing",
+        "report_exceptions",
+        "report_methodology",
+        "timing summary"
+      ],
+      "source_refs": [
+        {
+          "source_id": "amd-ug906-analysis",
+          "url": "https://docs.amd.com/r/2020.2-English/ug906-vivado-design-analysis/Using-the-report_design_analysis-Command",
+          "section": "Using the report_design_analysis Command"
+        }
+      ],
+      "local_paths": [],
+      "derivation": "source paraphrase"
+    },
+    {
+      "id": "FPGA-TIMING-003",
+      "title": "按路径分解延迟定位问题",
+      "tags": [
+        "timing",
+        "latency",
+        "routing",
+        "resource"
+      ],
+      "classification": "recommendation",
+      "statement": "区分逻辑深度、布线延迟、扇出、拥塞、时钟偏差与不确定度，再选择流水或布局修改。",
+      "scope": "Vivado timing triage",
+      "versions": [
+        "2020.2"
+      ],
+      "static_proof_boundary": "源码行数和算子数不能直接预测布局布线时延。",
+      "evidence_required": [
+        "关键路径明细",
+        "利用率/拥塞报告",
+        "修改前后同约束结果"
+      ],
+      "source_refs": [
+        {
+          "source_id": "amd-ug906-analysis",
+          "url": "https://docs.amd.com/r/2020.2-English/ug906-vivado-design-analysis/Using-the-report_design_analysis-Command",
+          "section": "Using the report_design_analysis Command"
+        }
+      ],
+      "local_paths": [],
+      "derivation": "source paraphrase"
+    },
+    {
+      "id": "FPGA-RTL-001",
+      "title": "时序与组合赋值风格清晰",
+      "tags": [
+        "RTL",
+        "nonblocking",
+        "blocking",
+        "仿真"
+      ],
+      "classification": "recommendation",
+      "statement": "时钟触发状态更新使用非阻塞赋值；纯组合过程使用阻塞赋值，避免同一过程混用。",
+      "scope": "采用 lowRISC 风格的可综合 Verilog/SystemVerilog",
+      "versions": [
+        "commit 9c15ff5dce23eef969e00ab3715153967419eadd"
+      ],
+      "static_proof_boundary": "局部风格检查不能证明跨过程竞态不存在。",
+      "evidence_required": [
+        "lint 诊断",
+        "边沿采样测试"
+      ],
+      "source_refs": [
+        {
+          "source_id": "lowrisc-style",
+          "url": "https://github.com/lowRISC/style-guides/blob/9c15ff5dce23eef969e00ab3715153967419eadd/VerilogCodingStyle.md",
+          "section": "Blocking and Non-blocking Assignments"
+        }
+      ],
+      "local_paths": [],
+      "derivation": "source paraphrase"
+    },
+    {
+      "id": "FPGA-RTL-002",
+      "title": "组合过程覆盖所有赋值分支",
+      "tags": [
+        "RTL",
+        "latch",
+        "always_comb",
+        "综合"
+      ],
+      "classification": "recommendation",
+      "statement": "用 always_comb 或 Verilog always @* 描述组合逻辑，并明确默认输出与 case 分支，避免意外锁存。",
+      "scope": "组合 RTL",
+      "versions": [
+        "commit 9c15ff5dce23eef969e00ab3715153967419eadd"
+      ],
+      "static_proof_boundary": "关键字存在不证明赋值完整或读写顺序正确。",
+      "evidence_required": [
+        "lint/elaboration",
+        "综合 latch 报告",
+        "分支测试"
+      ],
+      "source_refs": [
+        {
+          "source_id": "lowrisc-style",
+          "url": "https://github.com/lowRISC/style-guides/blob/9c15ff5dce23eef969e00ab3715153967419eadd/VerilogCodingStyle.md",
+          "section": "Combinational Logic / Case Statements"
+        }
+      ],
+      "local_paths": [],
+      "derivation": "source paraphrase"
+    },
+    {
+      "id": "FPGA-RTL-003",
+      "title": "延迟控制留在测试环境",
+      "tags": [
+        "RTL",
+        "delay",
+        "simulation",
+        "synthesis"
+      ],
+      "classification": "recommendation",
+      "statement": "可综合设计不依赖 #delay 表达物理延迟；延迟/时钟激励放入测试环境并记录时间单位。",
+      "scope": "零延迟同步 RTL 设计",
+      "versions": [
+        "commit 9c15ff5dce23eef969e00ab3715153967419eadd"
+      ],
+      "static_proof_boundary": "文本出现 # 也可能是参数实例化，不能据此判定违规。",
+      "evidence_required": [
+        "编译/综合日志",
+        "testbench 时间单位",
+        "功能测试"
+      ],
+      "source_refs": [
+        {
+          "source_id": "lowrisc-style",
+          "url": "https://github.com/lowRISC/style-guides/blob/9c15ff5dce23eef969e00ab3715153967419eadd/VerilogCodingStyle.md",
+          "section": "Delay Modeling"
+        }
+      ],
+      "local_paths": [],
+      "derivation": "source paraphrase"
+    },
+    {
+      "id": "FPGA-WIDTH-001",
+      "title": "字面量与端口位宽明确",
+      "tags": [
+        "width",
+        "sizing",
+        "truncation",
+        "位宽"
+      ],
+      "classification": "recommendation",
+      "statement": "为位向量字面量和端口连接显式表达宽度，审查截断、扩展与参数边界。",
+      "scope": "Verilog/SystemVerilog 位向量",
+      "versions": [
+        "commit 9c15ff5dce23eef969e00ab3715153967419eadd"
+      ],
+      "static_proof_boundary": "静态文本检查不能计算全部参数展开后的宽度。",
+      "evidence_required": [
+        "elaboration/lint 宽度诊断",
+        "最小/最大参数用例"
+      ],
+      "source_refs": [
+        {
+          "source_id": "lowrisc-style",
+          "url": "https://github.com/lowRISC/style-guides/blob/9c15ff5dce23eef969e00ab3715153967419eadd/VerilogCodingStyle.md",
+          "section": "Signal Widths"
+        }
+      ],
+      "local_paths": [],
+      "derivation": "source paraphrase"
+    },
+    {
+      "id": "FPGA-WIDTH-002",
+      "title": "有符号运算显式表达",
+      "tags": [
+        "width",
+        "signed",
+        "arithmetic",
+        "算术"
+      ],
+      "classification": "recommendation",
+      "statement": "混合 signed/unsigned 算术前明确操作数类型与扩展方式，测试负数、极值与比较边界。",
+      "scope": "有符号加减、比较和转换",
+      "versions": [
+        "commit 9c15ff5dce23eef969e00ab3715153967419eadd"
+      ],
+      "static_proof_boundary": "signed 关键字出现不能证明表达式所有子项的符号。",
+      "evidence_required": [
+        "类型/宽度诊断",
+        "负数与极值 oracle"
+      ],
+      "source_refs": [
+        {
+          "source_id": "lowrisc-style",
+          "url": "https://github.com/lowRISC/style-guides/blob/9c15ff5dce23eef969e00ab3715153967419eadd/VerilogCodingStyle.md",
+          "section": "Signed Arithmetic"
+        }
+      ],
+      "local_paths": [],
+      "derivation": "source paraphrase"
+    },
+    {
+      "id": "FPGA-WIDTH-003",
+      "title": "溢出语义写入契约",
+      "tags": [
+        "width",
+        "overflow",
+        "arithmetic",
+        "算术"
+      ],
+      "classification": "recommendation",
+      "statement": "说明结果应回绕、截断、饱和或保留进位；按该语义设计中间位宽和参考结果。",
+      "scope": "有限位宽计数器与数据通路",
+      "versions": [
+        "commit 9c15ff5dce23eef969e00ab3715153967419eadd"
+      ],
+      "static_proof_boundary": "位宽一致不证明数学精度符合需求。",
+      "evidence_required": [
+        "算术契约",
+        "进位/边界向量",
+        "独立参考模型"
+      ],
+      "source_refs": [
+        {
+          "source_id": "lowrisc-style",
+          "url": "https://github.com/lowRISC/style-guides/blob/9c15ff5dce23eef969e00ab3715153967419eadd/VerilogCodingStyle.md",
+          "section": "Handling Width Overflow"
+        }
+      ],
+      "local_paths": [],
+      "derivation": "engineering application of width overflow guidance"
+    },
+    {
+      "id": "FPGA-XPROP-001",
+      "title": "未知值应由断言暴露",
+      "tags": [
+        "Xprop",
+        "X",
+        "simulation",
+        "synthesis"
+      ],
+      "classification": "recommendation",
+      "statement": "避免用 X 赋值表示综合 don't-care；非法条件使用明确行为和断言，并测试复位前后未知值。",
+      "scope": "采用 lowRISC 风格的 RTL",
+      "versions": [
+        "commit 9c15ff5dce23eef969e00ab3715153967419eadd"
+      ],
+      "static_proof_boundary": "确定输出不等于非法状态已覆盖，断言未触发可能是未激活。",
+      "evidence_required": [
+        "四态仿真",
+        "未知值断言",
+        "非法状态负控"
+      ],
+      "source_refs": [
+        {
+          "source_id": "lowrisc-style",
+          "url": "https://github.com/lowRISC/style-guides/blob/9c15ff5dce23eef969e00ab3715153967419eadd/VerilogCodingStyle.md",
+          "section": "Don't Cares (X's)"
+        }
+      ],
+      "local_paths": [],
+      "derivation": "source paraphrase"
+    },
+    {
+      "id": "FPGA-XPROP-002",
+      "title": "Verilator 两态结论有边界",
+      "tags": [
+        "Xprop",
+        "Verilator",
+        "simulation"
+      ],
+      "classification": "limitation",
+      "statement": "Verilator 主要为两态仿真；其初始化随机化可辅助找错，但不能当作完整四态未知传播证明。",
+      "scope": "Verilator 文档观察版本 5.052",
+      "versions": [
+        "observed documentation 5.052; latest alias mutable"
+      ],
+      "static_proof_boundary": "两态 lint/仿真通过不能证明 X/Z 行为。",
+      "evidence_required": [
+        "实际 Verilator 版本与选项",
+        "四态仿真交叉检查"
+      ],
+      "source_refs": [
+        {
+          "source_id": "verilator-language",
+          "url": "https://verilator.org/guide/latest/languages.html",
+          "section": "Unknown States"
+        }
+      ],
+      "local_paths": [],
+      "derivation": "source paraphrase"
+    },
+    {
+      "id": "FPGA-LINT-001",
+      "title": "保留局部 lint 例外依据",
+      "tags": [
+        "lint",
+        "waiver",
+        "width"
+      ],
+      "classification": "recommendation",
+      "statement": "逐项处理宽度、锁存和顺序等 lint 诊断；确需抑制时记录最小范围、原因和验证证据。",
+      "scope": "Verilator lint 或同类静态检查",
+      "versions": [
+        "observed documentation 5.052; latest alias mutable"
+      ],
+      "static_proof_boundary": "lint clean 只反映启用的规则和可解析语言子集。",
+      "evidence_required": [
+        "完整命令/版本",
+        "原始诊断",
+        "局部 waiver"
+      ],
+      "source_refs": [
+        {
+          "source_id": "verilator-warnings",
+          "url": "https://verilator.org/guide/latest/warnings.html",
+          "section": "Disabling Warnings / ALWCOMBORDER"
+        }
+      ],
+      "local_paths": [],
+      "derivation": "source paraphrase"
+    },
+    {
+      "id": "FPGA-HANDSHAKE-001",
+      "title": "背压期间保持 valid",
+      "tags": [
+        "handshake",
+        "ready",
+        "valid",
+        "AXI"
+      ],
+      "classification": "rule",
+      "statement": "AXI4-Stream TVALID 已置位且未完成握手时，应持续保持至 TREADY 接收。",
+      "scope": "启用 TREADY 的 AXI4-Stream；其他协议先核对契约",
+      "versions": [
+        "v2.0; 2018-04-04"
+      ],
+      "static_proof_boundary": "代码扫描不能证明任意背压序列下的时序行为。",
+      "evidence_required": [
+        "valid 稳定断言",
+        "随机长背压",
+        "reset-in-flight 用例"
+      ],
+      "source_refs": [
+        {
+          "source_id": "amd-pg145",
+          "url": "https://docs.amd.com/api/khub/documents/B18GeWPD8fFG6f4ogHK96g/content",
+          "section": "Table 2-4, TVALID_STABLE, p.10"
+        }
+      ],
+      "local_paths": [],
+      "derivation": "source paraphrase"
+    },
+    {
+      "id": "FPGA-HANDSHAKE-002",
+      "title": "背压期间保持数据和边带",
+      "tags": [
+        "handshake",
+        "backpressure",
+        "data",
+        "TLAST"
+      ],
+      "classification": "rule",
+      "statement": "TVALID 为高且 TREADY 为低时，数据以及启用的 TLAST/TKEEP/TUSER 等边带保持稳定。",
+      "scope": "AXI4-Stream 有效负载与边带",
+      "versions": [
+        "v2.0; 2018-04-04"
+      ],
+      "static_proof_boundary": "数据值在两次采样相同不能证明整个有效区间稳定。",
+      "evidence_required": [
+        "payload/sideband 稳定断言",
+        "逐拍 scoreboard",
+        "背压覆盖"
+      ],
+      "source_refs": [
+        {
+          "source_id": "amd-pg145",
+          "url": "https://docs.amd.com/api/khub/documents/B18GeWPD8fFG6f4ogHK96g/content",
+          "section": "Table 2-4, STABLE checks, pp.9-10"
+        }
+      ],
+      "local_paths": [],
+      "derivation": "source paraphrase"
+    },
+    {
+      "id": "FPGA-FORMAL-001",
+      "title": "有界检查注明深度",
+      "tags": [
+        "formal",
+        "bmc",
+        "proof",
+        "形式验证"
+      ],
+      "classification": "limitation",
+      "statement": "SBY bmc 仅检查配置深度；prove、live、cover 是不同任务，分别记录模式、引擎、深度与终态。",
+      "scope": "Yosys/SBY 形式验证",
+      "versions": [
+        "latest docs observed; repo commit 79fc9eddca5e33a28cc2f2cd19c9825efd9a7255"
+      ],
+      "static_proof_boundary": "有限深度 PASS 不能报告为无界证明；超时不等于 PASS。",
+      "evidence_required": [
+        ".sby 配置",
+        "solver/version",
+        "status 与完整日志"
+      ],
+      "source_refs": [
+        {
+          "source_id": "sby-reference",
+          "url": "https://symbiyosys.readthedocs.io/en/latest/reference.html",
+          "section": "Options section / mode / depth"
+        }
+      ],
+      "local_paths": [],
+      "derivation": "source paraphrase"
+    },
+    {
+      "id": "FPGA-FORMAL-002",
+      "title": "检查假设与可达性",
+      "tags": [
+        "formal",
+        "assume",
+        "cover",
+        "vacuity"
+      ],
+      "classification": "recommendation",
+      "statement": "审查环境假设是否排除了合法行为，并用 cover 检查关键状态可达；保留求解器的假设一致性检查。",
+      "scope": "含 assume 的 formal harness",
+      "versions": [
+        "latest docs observed; repo commit 79fc9eddca5e33a28cc2f2cd19c9825efd9a7255"
+      ],
+      "static_proof_boundary": "存在 cover 不自动证明所有断言非空泛，覆盖目标仍需设计。",
+      "evidence_required": [
+        "假设清单",
+        "cover traces",
+        "presat/solver 日志"
+      ],
+      "source_refs": [
+        {
+          "source_id": "sby-reference",
+          "url": "https://symbiyosys.readthedocs.io/en/latest/reference.html",
+          "section": "smtbmc --nopresat / cover mode"
+        }
+      ],
+      "local_paths": [],
+      "derivation": "engineering application of documented cover and assumption-consistency behavior"
+    },
+    {
+      "id": "FPGA-NEGATIVE-001",
+      "title": "负控必须击中预期检查",
+      "tags": [
+        "negative-control",
+        "formal",
+        "simulation",
+        "负控"
+      ],
+      "classification": "recommendation",
+      "statement": "构造一个已知错误变体或错误参考，确认目标断言/scoreboard 拒绝，并保留失败原因。",
+      "scope": "测试 harness 与 formal 属性验证",
+      "versions": [
+        "latest docs observed; repo commit 79fc9eddca5e33a28cc2f2cd19c9825efd9a7255"
+      ],
+      "static_proof_boundary": "编译错误、找不到文件或超时不能冒充目标负控成功。",
+      "evidence_required": [
+        "正控通过结果",
+        "故障注入 diff/hash",
+        "预期断言失败和 trace"
+      ],
+      "source_refs": [
+        {
+          "source_id": "sby-quickstart",
+          "url": "https://symbiyosys.readthedocs.io/en/latest/quickstart.html",
+          "section": "nofullskip task and counterexample"
+        }
+      ],
+      "local_paths": [
+        "projects/system-bench/run.py",
+        "scripts/eda-tool.mjs"
+      ],
+      "derivation": "project acceptance rule inspired by official failing-model tutorial"
+    },
+    {
+      "id": "FPGA-SIM-001",
+      "title": "cocotb 需要受支持的模拟器",
+      "tags": [
+        "simulation",
+        "cocotb",
+        "XSim"
+      ],
+      "classification": "limitation",
+      "statement": "cocotb 是测试框架，仍需受支持模拟器；已核验列表未列 XSim，不能假定现有 XSim 能直接运行 cocotb。",
+      "scope": "准备增量接入 cocotb 2.1.0",
+      "versions": [
+        "release v2.1.0; rendered doc banner 2.1.0.dev3+re85fae95 observed"
+      ],
+      "static_proof_boundary": "安装 Python 包不证明 simulator bridge 或语言接口可用。",
+      "evidence_required": [
+        "锁定版本",
+        "官方支持矩阵",
+        "最小集成测试"
+      ],
+      "source_refs": [
+        {
+          "source_id": "cocotb",
+          "url": "https://docs.cocotb.org/en/v2.1.0/simulator_support.html",
+          "section": "Simulator Support"
+        }
+      ],
+      "local_paths": [],
+      "derivation": "source paraphrase"
+    },
+    {
+      "id": "FPGA-TOOL-001",
+      "title": "依赖管理与 EDA 结果分开",
+      "tags": [
+        "tools",
+        "FuseSoC",
+        "Edalize",
+        "reproducibility"
+      ],
+      "classification": "limitation",
+      "statement": "FuseSoC 管理核心/构建配置；实际模拟和实现仍由后端工具完成，编排成功不能代替测试验收。",
+      "scope": "引入可复用 HDL 包和多后端流程",
+      "versions": [
+        "2.4.7"
+      ],
+      "static_proof_boundary": "清单可复现不代表工具版本、IP 或许可相同。",
+      "evidence_required": [
+        "核心清单/版本",
+        "后端版本",
+        "原始测试/实现日志"
+      ],
+      "source_refs": [
+        {
+          "source_id": "fusesoc",
+          "url": "https://fusesoc.readthedocs.io/en/stable/user/introduction.html",
+          "section": "Why FuseSoC?"
+        }
+      ],
+      "local_paths": [],
+      "derivation": "source paraphrase"
+    },
+    {
+      "id": "FPGA-TOOL-002",
+      "title": "Ross skill 先检查版本",
+      "tags": [
+        "tools",
+        "Ross",
+        "Vivado",
+        "version"
+      ],
+      "classification": "limitation",
+      "statement": "本地 Ross timing-methodology skill 标注 Vivado 2026.1+；本机 2020.2 需核对命令帮助并改写流程。",
+      "scope": "vendor/ross-ai-assistant 的文档复用",
+      "versions": [
+        "release_tag 2026.9.1; commit 2cdc9eef1b6b5b17fa45f5e4d468e5483a1c92de"
+      ],
+      "static_proof_boundary": "文档仓库存在不证明 Ross MCP 服务或二进制已安装/连通。",
+      "evidence_required": [
+        "本机 Vivado 版本",
+        "skill compatibility",
+        "命令 help"
+      ],
+      "source_refs": [
+        {
+          "source_id": "ross",
+          "url": "https://github.com/Xilinx/ross-ai-assistant/tree/2cdc9eef1b6b5b17fa45f5e4d468e5483a1c92de",
+          "section": "skills/vivado-timing-methodology-checks/SKILL.md compatibility"
+        }
+      ],
+      "local_paths": [
+        "vendor/ross-ai-assistant/skills/vivado-timing-methodology-checks/SKILL.md"
+      ],
+      "derivation": "source paraphrase"
+    },
+    {
+      "id": "FPGA-TRACE-001",
+      "title": "复现实验记录输入和环境",
+      "tags": [
+        "trace",
+        "reproducibility",
+        "seed",
+        "日志"
+      ],
+      "classification": "recommendation",
+      "statement": "保存输入快照/哈希、命令、工具版本、器件、约束、seed、退出状态与原始报告；复跑产生独立 run。",
+      "scope": "本项目原生 EDA 工具与测试编排",
+      "versions": [
+        "2.4.7"
+      ],
+      "static_proof_boundary": "采集时哈希不能反推历史输入已冻结；静态依赖发现可能遗漏动态输入。",
+      "evidence_required": [
+        "run.json/events.jsonl",
+        "输入快照",
+        "process.log",
+        "结果/报告"
+      ],
+      "source_refs": [
+        {
+          "source_id": "fusesoc",
+          "url": "https://fusesoc.readthedocs.io/en/stable/user/introduction.html",
+          "section": "Versioned cores and configured build flows"
+        }
+      ],
+      "local_paths": [
+        "scripts/replay-experiment.mjs",
+        "scripts/collect-system-evidence.py"
+      ],
+      "derivation": "local evidence policy informed by reproducible build configuration; not an upstream normative requirement"
+    }
+  ]
+}

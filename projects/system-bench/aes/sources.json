@@ -1,0 +1,12 @@
+{
+  "top": "aes_stream_top",
+  "sources": [
+    "vendor/aes/src/rtl/aes_core.v",
+    "vendor/aes/src/rtl/aes_encipher_block.v",
+    "vendor/aes/src/rtl/aes_decipher_block.v",
+    "vendor/aes/src/rtl/aes_key_mem.v",
+    "vendor/aes/src/rtl/aes_sbox.v",
+    "vendor/aes/src/rtl/aes_inv_sbox.v",
+    "projects/system-bench/aes/aes_stream_top.sv"
+  ]
+}

@@ -1,0 +1,8 @@
+* RC step response: R=1k, C=100n, tau=100us
+V1 in 0 PULSE(0 1 0 1n 1n 10m 20m)
+R1 in out 1k
+C1 out 0 100n
+.tran 0 1m 0 1u
+.meas TRAN v_at_tau FIND V(out) AT=100u
+.meas TRAN v_final FIND V(out) AT=1m
+.end

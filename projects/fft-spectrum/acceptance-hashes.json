@@ -1,0 +1,5 @@
+{
+  "projects/fft-spectrum/oracle.py": "010201f4a0806213700b053302ea53e6093f54255aa3565d6b69435fe351db2f",
+  "projects/fft-spectrum/tb_spectrum.sv": "3bc1927e91b521202675f04b503437664fa5de10de3752dc8f3714660b813114",
+  "projects/fft-spectrum/vectors/input.hex": "f8a3aa4f4edb5f80ec5993fe97082c2c36b2afd339c5de9eef66649c8607e1bb"
+}

@@ -1,0 +1,35 @@
+{
+  "frozen_at_utc": "2026-10-22T16:56:02.918375+00:00",
+  "count": 24,
+  "candidate_sha256": {
+    "Prob021_mux256to1v": "5448ca8078e962e6028c6548f0d4b750e943a98cf422a6d38e1b1a5e36476946",
+    "Prob030_popcount255": "96a2ee299b7afbdb97a0bc804d352e0afaffbcd4269aebd13b2c5e1f7ca1cabb",
+    "Prob071_always_casez": "401866bd662d69a179e0b3250d008d7237c877e1f2898f418f9db2a6514e1e99",
+    "Prob093_ece241_2014_q3": "d34cc8ec04cc9337b6aa5d4aabcf76a561bc2adadb4d275423f6f823186fbd78",
+    "Prob047_dff8ar": "fb201d7ae80d5814346867af33e55106a0c29cba5b9da239ba4890e225b4d515",
+    "Prob066_edgecapture": "fb781f382a36eeeb88c4fca6dffb7b02d6ea8072309705befb5cc00a82c90ba0",
+    "Prob073_dff16e": "fc23e287237560496ab53639dd6ec73f9e775c0e067be6c32ca8214762b5bf2f",
+    "Prob078_dualedge": "9715fd324e502ce25c43574752a60c460d35492af5cb438d2f447f1f7a1c07ec",
+    "Prob037_review2015_count1k": "87156b22d816a3bdf0d841f5cc001d022cca7fa5dcdcdf4ccf8704570a45c1a2",
+    "Prob075_counter_2bc": "d94da97415f9725bdb0d2945d17b6214e6a718ec40dc27cdefa3049f36638785",
+    "Prob080_timer": "005ccc6a5c106f00a66285a2325835a25e386a11eb127437d57231853ecb6c10",
+    "Prob141_count_clock": "b2bdbcfa3b5a844217d35c218e1cd38e6ad4e3f98d668db334c403951929f53b",
+    "Prob082_lfsr32": "f18d9505de91d9dc7d2852a5bf1c3ebf72c958ec8213fd041295d22f74a05778",
+    "Prob105_rotate100": "4ab84bd6b2d45ee55e0534d28d3890c3fb499b4cb9e6d71f278b5d068c0af789",
+    "Prob115_shift18": "b988540fe404e288e59d8239e829b01061c0d6a65d7a00ca00aa6a729949e62c",
+    "Prob124_rule110": "65a681b3a3ff83c6e7f26c4bdc4ad33b7b16cbedb8105273224e7ed32a926f18",
+    "Prob079_fsm3onehot": "3d496fc73396d233f6ec36be2f58afa4ebea2038388a57aa74860fb1b15f4e81",
+    "Prob138_2012_q2fsm": "239d4a8d3f5977a2bfb8cbc84c83d789005efeae04909f9596fdf01f79cf7515",
+    "Prob155_lemmings4": "798e55aacdcb5416354430faf8f40b49a80010a1fec5e8af30c763d7be756793",
+    "Prob156_review2015_fancytimer": "6bdd8bfe18a5b50f2fcef314bddc993693b92d8995c0a7f21f07002934dc18fe",
+    "Prob140_fsm_hdlc": "415a278ae0b20d88195eb47eaebbcad5f8d1af2021606d7a6e7dab8e5bcf49f6",
+    "Prob146_fsm_serialdata": "c0eeda4df2cb0a2e30b59c283dc3336f80ec59b5eebc2d652e159f3399c7351a",
+    "Prob153_gshare": "76e8f246199e3cb7e5d36ac6acb311c6ff0cee9387bc45e44b3877a3ad105c1e",
+    "Prob154_fsm_ps2data": "bca1381843c0606aea08e0879f9597bafdcf3a0c1ae33c9cbcdd70e8d8998fdd"
+  },
+  "reference_or_test_logic_read_by_codex_before_freeze": false,
+  "assumptions": {
+    "Prob153_gshare": "Prompt omits reset values: initialize history to 0 and PHT to weakly not-taken (01).",
+    "Prob080_timer": "Implement the explicit 10-bit countdown requirements; the final single-DFF sentence is inconsistent with them."
+  }
+}

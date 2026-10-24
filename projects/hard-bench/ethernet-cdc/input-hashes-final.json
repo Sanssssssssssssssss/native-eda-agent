@@ -1,0 +1,18 @@
+{
+  "projects/hard-bench/ethernet-cdc/arp.hex": "1e6440d1e8b395dc5226ba291c1e4cc2a0fbb9d49d72649736d30375c92f7be4",
+  "projects/hard-bench/ethernet-cdc/constraints.tcl": "03256824007342659ed3d74b795bf3ed754371f8d45801b96725f666c40cdacc",
+  "projects/hard-bench/ethernet-cdc/ethernet_cdc_top.v": "9070aa29a6ee091c6e13725be1f40c57a58e58ae1730d2813748dcd9c5c76997",
+  "projects/hard-bench/ethernet-cdc/expected-corrupt.hex": "e19e2f6ea5f50d55844e667b7b87cd92cf29f5494cba552c3465bf1a21c41b49",
+  "projects/hard-bench/ethernet-cdc/expected.hex": "61e56fa156c89d65435fc8fe3775e6accca2b4e84cabca7109eacd63abd5f82a",
+  "projects/hard-bench/ethernet-cdc/generate.py": "50f9d719143c397cfb7db15efe7c7ce1c1593c27de0bf32cefa6af70dd9daedd",
+  "projects/hard-bench/ethernet-cdc/implement.tcl": "2a7ee8338860acc6fa9bc8dd5caee23c81a77c64629e10e4b01f9455b5d2c3d7",
+  "projects/hard-bench/ethernet-cdc/negative.hex": "be8caa0c326c7b61662fd433a8fc5ae52e1db48fa48cb6c5cbe8773cd68fb875",
+  "projects/hard-bench/ethernet-cdc/read-sources.tcl": "eae014740f26e2051e87e4df6c4af901948109e60d983f4234274629cb74cb6a",
+  "projects/hard-bench/ethernet-cdc/run.py": "00bcd1df0a4793dbb20ef9705ec6da2dc5c690f7669748044a070bc41a1a4da2",
+  "projects/hard-bench/ethernet-cdc/tb_a.sv": "50fe3a54c2a3c4fb22976ea3f23b49d5756ae912a52a583b840f2d61ef019a8e",
+  "projects/hard-bench/ethernet-cdc/tb_b.sv": "f29bf903cc55ef265229e0a25f2e75ce5c16e40aee1222404dc8c3f48b4a2724",
+  "projects/hard-bench/ethernet-cdc/tb_negative.sv": "6b5504a37934713e99457c96df5c901a5575d3373bd75c4582177c1e88640291",
+  "projects/hard-bench/ethernet-cdc/valid.hex": "f11797a3b55cbb12b9100fdc0dc9d97f81d6db7757659cf77bb4e84d5e349134",
+  "vendor/verilog-ethernet/lib/axis/syn/vivado/axis_async_fifo.tcl": "dac186d4035022b61f942f1fe8d6149f69f504482376bcee6ce440ba7a341dc3",
+  "vendor/verilog-ethernet/lib/axis/syn/vivado/sync_reset.tcl": "5b377bc4470e4d4af0c1bbf352f0f7be48a91e26fe15df4cde1436f6a197f8f3"
+}

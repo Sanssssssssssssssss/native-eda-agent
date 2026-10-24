@@ -1,0 +1,85 @@
+{
+  "date": "2026-10-23",
+  "executor": "Current Codex conversation driving local native tools",
+  "additional_model_api_calls_after_user_stop": 0,
+  "current_codex_token_usage": "Not exposed by this environment; not estimated",
+  "verilog_eval_subset": {
+    "upstream_commit": "c498220d0a52248f8e3fdffe279075215bde2da6",
+    "seed": 20261023,
+    "total": 8,
+    "primary_passed": 7,
+    "primary_percent": 87.5,
+    "test_samples": 42541,
+    "wall_seconds": 94.74,
+    "diagnostic_reference_aligned_passed": 8,
+    "diagnostic_note": "Only the failed mux was changed after inspecting the reference. This is not a blind repair score.",
+    "runtime_adaptations": [
+      "Reference copies prepend timescale 1ps/1ps",
+      "Move tb_match/tb_mismatch declarations before dumpvars; no stimulus/check changes"
+    ],
+    "official_harness": false,
+    "full_benchmark": false,
+    "primary_evidence": "${WORKSPACE}\\artifacts\\verilogeval-codex-2026-10-22T16-17-42-454Z\\result.json",
+    "diagnostic_evidence": "${WORKSPACE}\\artifacts\\verilogeval-codex-2026-10-22T16-20-53-056Z\\result.json"
+  },
+  "fft": {
+    "upstream_commit": "c415ec77d296b38c2bb384141eb9952f1eb84344",
+    "frames_passed": 16,
+    "bins_checked": 16384,
+    "max_component_error_lsb": 1.0535414076719007,
+    "max_l1_error_lsb": 1.7988425483039236,
+    "protocol": "SPECTRUM_PROTOCOL_PASS frames=16 bins=16384 resets=2 input_stalls=5820 output_stalls=7520",
+    "negative_controls_rejected": 4,
+    "simulation_wall_seconds": 88,
+    "implementation_wall_seconds": 156,
+    "implementation": {
+      "stage": "routed",
+      "version": "2020.2",
+      "part": "xc7a100tfgg676-2",
+      "clock_period_ns": 10,
+      "io_delay_ns": 2,
+      "setup_slack_ns": 1.6425225734710693,
+      "hold_slack_ns": 0.04589506611227989,
+      "flip_flops": 4472,
+      "lut_cells": 2481,
+      "dsp48": 12,
+      "ramb18": 6,
+      "ramb36": 0,
+      "implementation_mode": "out_of_context",
+      "black_boxes": 0,
+      "board_io_validated": false,
+      "bitstream_generated": false,
+      "hardware_tested": false,
+      "model_api_calls": 0
+    },
+    "slice_luts": 2703,
+    "fully_routed_nets": 5477,
+    "route_errors": 0,
+    "timing_check_issues": {
+      "no_clock": "0",
+      "constant_clock": "0",
+      "pulse_width_clock": "0",
+      "unconstrained_internal_endpoints": "0",
+      "no_input_delay": "0",
+      "no_output_delay": "0",
+      "multiple_clock": "0",
+      "generated_clocks": "0",
+      "loops": "0",
+      "partial_input_delay": "0",
+      "partial_output_delay": "0",
+      "latch_loops": "0"
+    },
+    "drc_errors": 0,
+    "drc_warnings": [
+      "CFGBVS-1: board configuration voltage unspecified"
+    ],
+    "physical_timing_limitations": [
+      "HD.CLK_SRC unset: external clock delay/skew not fully modeled",
+      "HD.PARTPIN_LOCS unset: boundary port routes not fixed"
+    ],
+    "timing_signoff": false,
+    "acceptance_hashes_unchanged": true,
+    "simulation_evidence": "${WORKSPACE}\\artifacts\\2026-10-22T16-19-24-402Z-vivado-ee6aadf3",
+    "implementation_evidence": "${WORKSPACE}\\artifacts\\2026-10-22T16-19-01-064Z-vivado-5f56d598"
+  }
+}

@@ -1,0 +1,435 @@
+{
+  "scope": "MCP project/IP/Block Design integration, not a design benchmark",
+  "model_api_calls": 0,
+  "checks": [
+    {
+      "label": "start",
+      "tool": "start_session",
+      "arguments": {
+        "mode": "tcl",
+        "timeout": 60
+      },
+      "passed": true,
+      "seconds": 3.512
+    },
+    {
+      "label": "create-project",
+      "tool": "wb_project_create",
+      "arguments": {
+        "project_dir": "${WORKSPACE}\\projects\\wb test-1024-082415",
+        "name": "axi_workbench",
+        "part": "xc7a100tfgg676-2"
+      },
+      "passed": true,
+      "seconds": 3.296,
+      "artifact_directory": "${WORKSPACE}\\artifacts\\vivado-workbench-20261024T082419456156Z-wb_project_create-b59a6b"
+    },
+    {
+      "label": "duplicate-project-rejected",
+      "tool": "wb_project_create",
+      "arguments": {
+        "project_dir": "${WORKSPACE}\\projects\\wb test-1024-082415",
+        "name": "axi_workbench",
+        "part": "xc7a100tfgg676-2"
+      },
+      "passed": true,
+      "seconds": 0.003,
+      "artifact_directory": "${WORKSPACE}\\artifacts\\vivado-workbench-20261024T082422751991Z-wb_project_create-807b74"
+    },
+    {
+      "label": "vivado-illegal-filename-rejected",
+      "tool": "wb_project_add_files",
+      "arguments": {
+        "project_dir": "${WORKSPACE}\\projects\\wb test-1024-082415",
+        "paths": [
+          "${WORKSPACE}\\artifacts\\vivado-workbench-validation-20261024T082414Z\\source [literal] $name.v"
+        ]
+      },
+      "passed": true,
+      "seconds": 0.076,
+      "artifact_directory": "${WORKSPACE}\\artifacts\\vivado-workbench-20261024T082422754766Z-wb_project_add_files-f802ea"
+    },
+    {
+      "label": "add-source-with-special-path",
+      "tool": "wb_project_add_files",
+      "arguments": {
+        "project_dir": "${WORKSPACE}\\projects\\wb test-1024-082415",
+        "paths": [
+          "${WORKSPACE}\\artifacts\\vivado-workbench-validation-20261024T082414Z\\source with spaces.v"
+        ]
+      },
+      "passed": true,
+      "seconds": 1.052,
+      "artifact_directory": "${WORKSPACE}\\artifacts\\vivado-workbench-20261024T082422831078Z-wb_project_add_files-6997ad"
+    },
+    {
+      "label": "wrong-project-rejected",
+      "tool": "wb_project_add_files",
+      "arguments": {
+        "project_dir": "${WORKSPACE}\\artifacts\\vivado-workbench-validation-20261024T082414Z",
+        "paths": [
+          "${WORKSPACE}\\artifacts\\vivado-workbench-validation-20261024T082414Z\\source with spaces.v"
+        ]
+      },
+      "passed": true,
+      "seconds": 0.008,
+      "artifact_directory": "${WORKSPACE}\\artifacts\\vivado-workbench-20261024T082423883553Z-wb_project_add_files-2f21a9"
+    },
+    {
+      "label": "create-clock-ip",
+      "tool": "wb_ip_create",
+      "arguments": {
+        "project_dir": "${WORKSPACE}\\projects\\wb test-1024-082415",
+        "name": "standalone_clock",
+        "vlnv": "xilinx.com:ip:clk_wiz:6.0"
+      },
+      "passed": true,
+      "seconds": 1.756,
+      "artifact_directory": "${WORKSPACE}\\artifacts\\vivado-workbench-20261024T082423891518Z-wb_ip_create-97d07c"
+    },
+    {
+      "label": "invalid-ip-property-rejected",
+      "tool": "wb_ip_configure",
+      "arguments": {
+        "project_dir": "${WORKSPACE}\\projects\\wb test-1024-082415",
+        "name": "standalone_clock",
+        "config": {
+          "CONFIG.NONEXISTENT_EDA": "1"
+        }
+      },
+      "passed": true,
+      "seconds": 0.011,
+      "artifact_directory": "${WORKSPACE}\\artifacts\\vivado-workbench-20261024T082425647411Z-wb_ip_configure-9da405"
+    },
+    {
+      "label": "configure-clock-ip",
+      "tool": "wb_ip_configure",
+      "arguments": {
+        "project_dir": "${WORKSPACE}\\projects\\wb test-1024-082415",
+        "name": "standalone_clock",
+        "config": {
+          "CONFIG.CLKOUT1_REQUESTED_OUT_FREQ": "50.000"
+        }
+      },
+      "passed": true,
+      "seconds": 0.107,
+      "artifact_directory": "${WORKSPACE}\\artifacts\\vivado-workbench-20261024T082425658697Z-wb_ip_configure-f673db"
+    },
+    {
+      "label": "generate-clock-ip",
+      "tool": "wb_ip_generate",
+      "arguments": {
+        "project_dir": "${WORKSPACE}\\projects\\wb test-1024-082415",
+        "name": "standalone_clock"
+      },
+      "passed": true,
+      "seconds": 0.445,
+      "artifact_directory": "${WORKSPACE}\\artifacts\\vivado-workbench-20261024T082425765784Z-wb_ip_generate-e7174f"
+    },
+    {
+      "label": "create-bd",
+      "tool": "wb_bd_create",
+      "arguments": {
+        "project_dir": "${WORKSPACE}\\projects\\wb test-1024-082415",
+        "name": "control_system"
+      },
+      "passed": true,
+      "seconds": 0.836,
+      "artifact_directory": "${WORKSPACE}\\artifacts\\vivado-workbench-20261024T082426210923Z-wb_bd_create-d4080c"
+    },
+    {
+      "label": "add-axi-interconnect",
+      "tool": "wb_bd_add_ip",
+      "arguments": {
+        "project_dir": "${WORKSPACE}\\projects\\wb test-1024-082415",
+        "bd_name": "control_system",
+        "name": "fabric",
+        "vlnv": "xilinx.com:ip:axi_interconnect:2.1",
+        "config": {
+          "CONFIG.NUM_MI": "2"
+        }
+      },
+      "passed": true,
+      "seconds": 0.857,
+      "artifact_directory": "${WORKSPACE}\\artifacts\\vivado-workbench-20261024T082427047586Z-wb_bd_add_ip-8a9307"
+    },
+    {
+      "label": "add-gpio-0",
+      "tool": "wb_bd_add_ip",
+      "arguments": {
+        "project_dir": "${WORKSPACE}\\projects\\wb test-1024-082415",
+        "bd_name": "control_system",
+        "name": "gpio_0",
+        "vlnv": "xilinx.com:ip:axi_gpio:2.0",
+        "config": {
+          "CONFIG.C_GPIO_WIDTH": "8",
+          "CONFIG.C_ALL_OUTPUTS": "1"
+        }
+      },
+      "passed": true,
+      "seconds": 0.093,
+      "artifact_directory": "${WORKSPACE}\\artifacts\\vivado-workbench-20261024T082427905063Z-wb_bd_add_ip-923546"
+    },
+    {
+      "label": "connect-axi-0",
+      "tool": "wb_bd_connect",
+      "arguments": {
+        "project_dir": "${WORKSPACE}\\projects\\wb test-1024-082415",
+        "bd_name": "control_system",
+        "endpoints": [
+          "fabric/M00_AXI",
+          "gpio_0/S_AXI"
+        ],
+        "interface": true
+      },
+      "passed": true,
+      "seconds": 0.047,
+      "artifact_directory": "${WORKSPACE}\\artifacts\\vivado-workbench-20261024T082427998840Z-wb_bd_connect-8b8549"
+    },
+    {
+      "label": "expose-gpio-0",
+      "tool": "wb_bd_external",
+      "arguments": {
+        "project_dir": "${WORKSPACE}\\projects\\wb test-1024-082415",
+        "bd_name": "control_system",
+        "pin": "gpio_0/GPIO",
+        "interface": true
+      },
+      "passed": true,
+      "seconds": 0.043,
+      "artifact_directory": "${WORKSPACE}\\artifacts\\vivado-workbench-20261024T082428045924Z-wb_bd_external-9ab606"
+    },
+    {
+      "label": "add-gpio-1",
+      "tool": "wb_bd_add_ip",
+      "arguments": {
+        "project_dir": "${WORKSPACE}\\projects\\wb test-1024-082415",
+        "bd_name": "control_system",
+        "name": "gpio_1",
+        "vlnv": "xilinx.com:ip:axi_gpio:2.0",
+        "config": {
+          "CONFIG.C_GPIO_WIDTH": "16",
+          "CONFIG.C_ALL_OUTPUTS": "1"
+        }
+      },
+      "passed": true,
+      "seconds": 0.06,
+      "artifact_directory": "${WORKSPACE}\\artifacts\\vivado-workbench-20261024T082428088875Z-wb_bd_add_ip-2fad27"
+    },
+    {
+      "label": "connect-axi-1",
+      "tool": "wb_bd_connect",
+      "arguments": {
+        "project_dir": "${WORKSPACE}\\projects\\wb test-1024-082415",
+        "bd_name": "control_system",
+        "endpoints": [
+          "fabric/M01_AXI",
+          "gpio_1/S_AXI"
+        ],
+        "interface": true
+      },
+      "passed": true,
+      "seconds": 0.041,
+      "artifact_directory": "${WORKSPACE}\\artifacts\\vivado-workbench-20261024T082428149314Z-wb_bd_connect-bb02c5"
+    },
+    {
+      "label": "expose-gpio-1",
+      "tool": "wb_bd_external",
+      "arguments": {
+        "project_dir": "${WORKSPACE}\\projects\\wb test-1024-082415",
+        "bd_name": "control_system",
+        "pin": "gpio_1/GPIO",
+        "interface": true
+      },
+      "passed": true,
+      "seconds": 0.054,
+      "artifact_directory": "${WORKSPACE}\\artifacts\\vivado-workbench-20261024T082428190539Z-wb_bd_external-9111e9"
+    },
+    {
+      "label": "invalid-endpoint-rejected",
+      "tool": "wb_bd_connect",
+      "arguments": {
+        "project_dir": "${WORKSPACE}\\projects\\wb test-1024-082415",
+        "bd_name": "control_system",
+        "endpoints": [
+          "fabric/MISSING",
+          "gpio_0/s_axi_aclk"
+        ]
+      },
+      "passed": true,
+      "seconds": 0.006,
+      "artifact_directory": "${WORKSPACE}\\artifacts\\vivado-workbench-20261024T082428245320Z-wb_bd_connect-cc3c08"
+    },
+    {
+      "label": "expose-slave-axi",
+      "tool": "wb_bd_external",
+      "arguments": {
+        "project_dir": "${WORKSPACE}\\projects\\wb test-1024-082415",
+        "bd_name": "control_system",
+        "pin": "fabric/S00_AXI",
+        "interface": true
+      },
+      "passed": true,
+      "seconds": 0.071,
+      "artifact_directory": "${WORKSPACE}\\artifacts\\vivado-workbench-20261024T082428251651Z-wb_bd_external-84139f"
+    },
+    {
+      "label": "expose-clock",
+      "tool": "wb_bd_external",
+      "arguments": {
+        "project_dir": "${WORKSPACE}\\projects\\wb test-1024-082415",
+        "bd_name": "control_system",
+        "pin": "fabric/ACLK"
+      },
+      "passed": true,
+      "seconds": 0.041,
+      "artifact_directory": "${WORKSPACE}\\artifacts\\vivado-workbench-20261024T082428323074Z-wb_bd_external-6875e1"
+    },
+    {
+      "label": "expose-reset",
+      "tool": "wb_bd_external",
+      "arguments": {
+        "project_dir": "${WORKSPACE}\\projects\\wb test-1024-082415",
+        "bd_name": "control_system",
+        "pin": "fabric/ARESETN"
+      },
+      "passed": true,
+      "seconds": 0.043,
+      "artifact_directory": "${WORKSPACE}\\artifacts\\vivado-workbench-20261024T082428364023Z-wb_bd_external-8ed02e"
+    },
+    {
+      "label": "connect-clocks",
+      "tool": "wb_bd_connect",
+      "arguments": {
+        "project_dir": "${WORKSPACE}\\projects\\wb test-1024-082415",
+        "bd_name": "control_system",
+        "endpoints": [
+          "fabric/ACLK",
+          "fabric/S00_ACLK",
+          "fabric/M00_ACLK",
+          "fabric/M01_ACLK",
+          "gpio_0/s_axi_aclk",
+          "gpio_1/s_axi_aclk"
+        ]
+      },
+      "passed": true,
+      "seconds": 0.044,
+      "artifact_directory": "${WORKSPACE}\\artifacts\\vivado-workbench-20261024T082428407448Z-wb_bd_connect-6eb1b0"
+    },
+    {
+      "label": "connect-resets",
+      "tool": "wb_bd_connect",
+      "arguments": {
+        "project_dir": "${WORKSPACE}\\projects\\wb test-1024-082415",
+        "bd_name": "control_system",
+        "endpoints": [
+          "fabric/ARESETN",
+          "fabric/S00_ARESETN",
+          "fabric/M00_ARESETN",
+          "fabric/M01_ARESETN",
+          "gpio_0/s_axi_aresetn",
+          "gpio_1/s_axi_aresetn"
+        ]
+      },
+      "passed": true,
+      "seconds": 0.045,
+      "artifact_directory": "${WORKSPACE}\\artifacts\\vivado-workbench-20261024T082428451306Z-wb_bd_connect-f21d22"
+    },
+    {
+      "label": "assign-addresses",
+      "tool": "wb_bd_assign_address",
+      "arguments": {
+        "project_dir": "${WORKSPACE}\\projects\\wb test-1024-082415",
+        "bd_name": "control_system"
+      },
+      "passed": true,
+      "seconds": 0.048,
+      "artifact_directory": "${WORKSPACE}\\artifacts\\vivado-workbench-20261024T082428496311Z-wb_bd_assign_address-e53017"
+    },
+    {
+      "label": "validate-generate-export-bd",
+      "tool": "wb_bd_validate_export",
+      "arguments": {
+        "project_dir": "${WORKSPACE}\\projects\\wb test-1024-082415",
+        "bd_name": "control_system"
+      },
+      "passed": true,
+      "seconds": 4.63,
+      "artifact_directory": "${WORKSPACE}\\artifacts\\vivado-workbench-20261024T082428545607Z-wb_bd_validate_export-095ea0"
+    },
+    {
+      "label": "export-project",
+      "tool": "wb_project_export",
+      "arguments": {
+        "project_dir": "${WORKSPACE}\\projects\\wb test-1024-082415"
+      },
+      "passed": true,
+      "seconds": 5.897,
+      "artifact_directory": "${WORKSPACE}\\artifacts\\vivado-workbench-20261024T082433175976Z-wb_project_export-79fee8"
+    },
+    {
+      "label": "close-project",
+      "tool": "run_tcl",
+      "arguments": {
+        "command": "close_project; puts EDA_PROJECT_CLOSED"
+      },
+      "passed": true,
+      "seconds": 0.051
+    },
+    {
+      "label": "reopen-project",
+      "tool": "wb_project_open",
+      "arguments": {
+        "project_file": "${WORKSPACE}\\projects\\wb test-1024-082415\\axi_workbench.xpr"
+      },
+      "passed": true,
+      "seconds": 0.815,
+      "artifact_directory": "${WORKSPACE}\\artifacts\\vivado-workbench-20261024T082439124412Z-wb_project_open-826b96"
+    },
+    {
+      "label": "reopen-validate-bd",
+      "tool": "run_tcl",
+      "arguments": {
+        "command": "open_bd_design [get_files */control_system.bd]; validate_bd_design; puts EDA_BD_REOPEN_VALID"
+      },
+      "passed": true,
+      "seconds": 0.213
+    },
+    {
+      "label": "reconstruct-exported-project",
+      "tool": "run_tcl",
+      "arguments": {
+        "command": "close_project; source {${WORKSPACE}/artifacts/vivado-workbench-20261024T082433175976Z-wb_project_export-79fee8/project.tcl}; puts EDA_RECONSTRUCTED"
+      },
+      "passed": true,
+      "seconds": 2.178
+    },
+    {
+      "label": "stop",
+      "tool": "stop_session",
+      "arguments": {},
+      "passed": true,
+      "seconds": 0.318
+    },
+    {
+      "label": "sessions-closed",
+      "tool": "list_sessions",
+      "arguments": {},
+      "passed": true,
+      "seconds": 0.315
+    }
+  ],
+  "tool_count": 45,
+  "prompt_count": 11,
+  "project_directory": "${WORKSPACE}\\projects\\wb test-1024-082415",
+  "addresses": [
+    "/S00_AXI_0/SEG_gpio_0_Reg|0x40000000|0x00010000",
+    "/S00_AXI_0/SEG_gpio_1_Reg|0x40010000|0x00010000"
+  ],
+  "wrapper_files": [
+    "e:/GPTProject2/EDAAgent/projects/wb test-1024-082415/axi_workbench.gen/sources_1/bd/control_system/hdl/control_system_wrapper.v"
+  ],
+  "source_unchanged": true,
+  "passed": true,
+  "finished_at": "2026-10-24T08:24:43.119223+00:00"
+}

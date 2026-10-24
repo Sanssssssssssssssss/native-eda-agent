@@ -1,0 +1,367 @@
+{
+  "project": "axi_fabric",
+  "mode": "sim",
+  "pass": true,
+  "exit_code": 0,
+  "wall_seconds": 35.39,
+  "artifact_directory": "E:\\GPTProject2\\EDAAgent\\artifacts\\2026-10-22T18-57-11-301Z-eda_xsim-d1ba0de1",
+  "receipt_directory": "E:\\GPTProject2\\EDAAgent\\projects\\hard-bench\\axi-fabric\\runs\\20261022T185710Z-sim",
+  "pass_marker": "HARD_BENCH_PASS project=axi_fabric",
+  "other_model_api_calls": 0,
+  "metrics": {
+    "seeds": 4,
+    "write_bursts": 2328,
+    "read_bursts": 2328,
+    "write_beats": 37824,
+    "read_beats": 37824,
+    "bytes_written": 77501,
+    "bytes_read_checked": 100992,
+    "slverr_writes": 384,
+    "decerr_writes": 384,
+    "slverr_reads": 384,
+    "decerr_reads": 384,
+    "max_total_outstanding": 18,
+    "same_write_id_depth": 2,
+    "same_read_id_depth": 2,
+    "simultaneous_master_cycles": 15607,
+    "all_three_active_cycles": 3846,
+    "simultaneous_rw_cycles": 11806,
+    "shared_read_bursts": 24,
+    "boundary_bursts": 339,
+    "protocol_checks": 658158,
+    "aw_stalls": 231460,
+    "w_stalls": 161916,
+    "b_stalls": 795,
+    "ar_stalls": 225781,
+    "r_stalls": 38206,
+    "cycles": 130917,
+    "out_of_order_write_completions": 138,
+    "out_of_order_read_completions": 212,
+    "early_wvalid_cycles": 101996,
+    "w_before_awvalid_cycles": 90,
+    "target_wlast_checks": 31536,
+    "response_valid_checks": 79153
+  },
+  "masters": [
+    {
+      "master": 0,
+      "max_write_outstanding": 4,
+      "max_read_outstanding": 5,
+      "max_combined": 8
+    },
+    {
+      "master": 1,
+      "max_write_outstanding": 4,
+      "max_read_outstanding": 5,
+      "max_combined": 8
+    },
+    {
+      "master": 2,
+      "max_write_outstanding": 4,
+      "max_read_outstanding": 5,
+      "max_combined": 8
+    }
+  ],
+  "manifest": {
+    "upstream_commit": "516bd5dadc3365b7f9e225d2af8fe0b8d804fe53",
+    "sources": [
+      "vendor/verilog-axi/rtl/axi_crossbar.v",
+      "projects/hard-bench/axi-fabric/axi_crossbar_wr_guarded.v",
+      "vendor/verilog-axi/rtl/axi_crossbar_rd.v",
+      "projects/hard-bench/axi-fabric/axi_crossbar_addr_guarded.v",
+      "vendor/verilog-axi/rtl/axi_register_wr.v",
+      "vendor/verilog-axi/rtl/axi_register_rd.v",
+      "vendor/verilog-axi/rtl/arbiter.v",
+      "vendor/verilog-axi/rtl/priority_encoder.v",
+      "vendor/verilog-axi/rtl/axi_ram.v",
+      "projects/hard-bench/axi-fabric/rv_delay.sv",
+      "projects/hard-bench/axi-fabric/axi_error_target.sv",
+      "projects/hard-bench/axi-fabric/axi_write_completion_guard.sv",
+      "projects/hard-bench/axi-fabric/axi_fabric_top.sv"
+    ],
+    "rtl_lines": 4365,
+    "sha256": {
+      "vendor/verilog-axi/rtl/axi_crossbar.v": "b251ddc6e47ce66cd1c5d8e09539bafae307effc6f73f176d349df9757271c89",
+      "projects/hard-bench/axi-fabric/axi_crossbar_wr_guarded.v": "695ad0578882354e644de52296a2a25589f172cc19cc892e28cc0683bedcc28c",
+      "vendor/verilog-axi/rtl/axi_crossbar_rd.v": "715be9547f9ac6b4a35be065382aa209c3c85455c412bfa4e107d7203487be41",
+      "projects/hard-bench/axi-fabric/axi_crossbar_addr_guarded.v": "6834506eed90ffbf4a44c13e68f6c7dbc6ac0fe3d061490bfb79cdd66374d94f",
+      "vendor/verilog-axi/rtl/axi_register_wr.v": "6bef07487a7d0c03eafde4a755389418a4e71e70dcdb2e60ae697370484fb5d5",
+      "vendor/verilog-axi/rtl/axi_register_rd.v": "f07a5f71a625de6b924c82214e1ff356254d542089792f67057a15deffdda32f",
+      "vendor/verilog-axi/rtl/arbiter.v": "db0ba9a08a7e8eab28b838318139abbcac2dc179032119c04006e0a2dd2a9efe",
+      "vendor/verilog-axi/rtl/priority_encoder.v": "07c610b8dda24daf67dec36c743f79fca30f9d01d5469e1e7f795a16f4c7aa97",
+      "vendor/verilog-axi/rtl/axi_ram.v": "1488318fd46a28f018817dfc61731075721581d9109efa07048a3ff5aff6eb46",
+      "projects/hard-bench/axi-fabric/rv_delay.sv": "43e5ae09a63e584f22ec0ecb40f7a0096cb18f31e5839a50c874fe624ac44661",
+      "projects/hard-bench/axi-fabric/axi_error_target.sv": "570e6f8986d91f03f53ce4fef434679c334edf4938f26b64c303b981a506badc",
+      "projects/hard-bench/axi-fabric/axi_write_completion_guard.sv": "f02ed9bec4f45fdd2fb6fffc68bc11af37d086f472df00d4e6b5e4d7573a902e",
+      "projects/hard-bench/axi-fabric/axi_fabric_top.sv": "876c4bbdbd2662756e4ce29a72e6c127bec76b788706bd16e617366a42bf3b80"
+    },
+    "seeds": [
+      "0xc001cafe",
+      "0x5eed1234",
+      "0xdeadbeef",
+      "0x13579bdf"
+    ],
+    "addresses": {
+      "RAM0": "0x0000-0x3fff",
+      "RAM1": "0x4000-0x7fff",
+      "SLVERR_target": "0x8000-0xbfff",
+      "DECERR_unmapped": "0xc000-0xffff"
+    },
+    "expected_total_bursts": 4656
+  },
+  "testbench_sha256": "8ad55e5413df3f53c303d179435661fa068aaff6ad959014d3a91c5e4bdd732f",
+  "schema_version": 1,
+  "targets": [
+    {
+      "target": 0,
+      "write_bursts": 780,
+      "read_bursts": 780
+    },
+    {
+      "target": 1,
+      "write_bursts": 780,
+      "read_bursts": 780
+    },
+    {
+      "target": 2,
+      "write_bursts": 384,
+      "read_bursts": 384
+    }
+  ],
+  "score_unit": "one integrated fabric system; 4656 transactions are not 4656 benchmark tasks",
+  "negative_control": {
+    "project": "axi_fabric",
+    "mode": "negative",
+    "pass": true,
+    "exit_code": 0,
+    "wall_seconds": 51.53,
+    "artifact_directory": "E:\\GPTProject2\\EDAAgent\\artifacts\\2026-10-22T18-58-26-528Z-eda_xsim-0d0c2d06",
+    "receipt_directory": "E:\\GPTProject2\\EDAAgent\\projects\\hard-bench\\axi-fabric\\runs\\20261022T185824Z-negative",
+    "pass_marker": "expected Fatal: FABRIC_READ_DATA",
+    "other_model_api_calls": 0,
+    "raw_log": "E:\\GPTProject2\\EDAAgent\\artifacts\\2026-10-22T18-58-26-528Z-eda_xsim-0d0c2d06\\process.log"
+  },
+  "trace": {
+    "project": "axi_fabric",
+    "mode": "trace",
+    "pass": true,
+    "exit_code": 0,
+    "wall_seconds": 65.47,
+    "artifact_directory": "E:\\GPTProject2\\EDAAgent\\artifacts\\2026-10-22T18-58-26-529Z-eda_xsim-39700036",
+    "receipt_directory": "E:\\GPTProject2\\EDAAgent\\projects\\hard-bench\\axi-fabric\\runs\\20261022T185824Z-trace",
+    "pass_marker": "HARD_BENCH_TRACE_PASS project=axi_fabric",
+    "other_model_api_calls": 0,
+    "raw_log": "E:\\GPTProject2\\EDAAgent\\artifacts\\2026-10-22T18-58-26-529Z-eda_xsim-39700036\\process.log",
+    "waveform_files": [
+      "E:\\GPTProject2\\EDAAgent\\artifacts\\2026-10-22T18-58-26-529Z-eda_xsim-39700036\\eda_snapshot.wdb"
+    ]
+  },
+  "functional_pass": true,
+  "evidence_complete": true,
+  "topology": {
+    "masters": 3,
+    "targets": 3,
+    "ram_targets": 2,
+    "ram_total_bytes": 32768,
+    "data_width": 32,
+    "address_width": 16,
+    "input_id_width": 4,
+    "target_id_width": 6,
+    "configured_accept_per_master": 8,
+    "configured_threads_per_master": 4,
+    "independent_target_channel_delay_buffers": 15
+  },
+  "known_limits": [
+    "Aligned 32-bit INCR bursts, lengths 1/2/4/8/16/32/64 only; no FIXED, WRAP, narrow, exclusive, USER/QoS or AXI5 coverage.",
+    "Concurrent reads/writes use disjoint address regions; shared cross-master reads occur after a write completion barrier. Same-address data races are not covered.",
+    "Same-ID read ordering is independently checked using expected beat data and response queues. Identical BID/BRESP responses cannot individually identify two otherwise identical write responses.",
+    "Resets occur between seed batches; no reset during an outstanding fabric transaction is claimed.",
+    "The local address/write overlays are validated together with the AW/W completion guard, at the pinned commit and this configuration. They are not a general upstream fix claim.",
+    "All results are local XSim simulation or separately reported OOC implementation; no board test, formal proof or public benchmark ranking."
+  ],
+  "upstream_overlay": {
+    "patch": "E:\\GPTProject2\\EDAAgent\\projects\\hard-bench\\axi-fabric\\upstream-fix.patch",
+    "patch_sha256": "ff4759a52092cfbde949c6d2eca285f94db7fbef21e430d925188e84f500c6cc",
+    "vendor_edited": false,
+    "required_companion": "axi_write_completion_guard.sv and WVALID/WREADY gating in axi_fabric_top.sv"
+  },
+  "source_hashes_current_match": true,
+  "testbench_hash_current_match": true,
+  "attempt_history": [
+    {
+      "mode": "sim",
+      "pass": false,
+      "wall_seconds": 29.8,
+      "artifact_directory": "E:\\GPTProject2\\EDAAgent\\artifacts\\2026-10-22T18-39-45-352Z-eda_xsim-f8eff2cd",
+      "receipt_directory": "E:\\GPTProject2\\EDAAgent\\projects\\hard-bench\\axi-fabric\\runs\\20261022T183943Z-sim",
+      "classification": "RTL failure: unmodified pinned crossbar emitted a DECERR write response before the corresponding accepted AW/WLAST."
+    },
+    {
+      "mode": "sim",
+      "pass": false,
+      "wall_seconds": 27.84,
+      "artifact_directory": "E:\\GPTProject2\\EDAAgent\\artifacts\\2026-10-22T18-40-35-202Z-eda_xsim-bf721c98",
+      "receipt_directory": "E:\\GPTProject2\\EDAAgent\\projects\\hard-bench\\axi-fabric\\runs\\20261022T184033Z-sim",
+      "classification": "Diagnostic reproduction of the early DECERR B response with AW/W descriptor counters."
+    },
+    {
+      "mode": "sim",
+      "pass": false,
+      "wall_seconds": 24.72,
+      "artifact_directory": "E:\\GPTProject2\\EDAAgent\\artifacts\\2026-10-22T18-42-24-987Z-eda_xsim-115befc5",
+      "receipt_directory": "E:\\GPTProject2\\EDAAgent\\projects\\hard-bench\\axi-fabric\\runs\\20261022T184223Z-sim",
+      "classification": "RTL failure: same-ID DECERR read response overtook a prior mapped SLVERR transaction."
+    },
+    {
+      "mode": "sim",
+      "pass": false,
+      "wall_seconds": 48.74,
+      "artifact_directory": "E:\\GPTProject2\\EDAAgent\\artifacts\\2026-10-22T18-43-13-504Z-eda_xsim-792c10c4",
+      "receipt_directory": "E:\\GPTProject2\\EDAAgent\\projects\\hard-bench\\axi-fabric\\runs\\20261022T184312Z-sim",
+      "classification": "Diagnostic reproduction of same-ID read response reordering."
+    },
+    {
+      "mode": "sim",
+      "pass": false,
+      "wall_seconds": 285.04,
+      "artifact_directory": "E:\\GPTProject2\\EDAAgent\\artifacts\\2026-10-22T18-45-04-965Z-eda_xsim-06da5217",
+      "receipt_directory": "E:\\GPTProject2\\EDAAgent\\projects\\hard-bench\\axi-fabric\\runs\\20261022T184503Z-sim",
+      "classification": "Manually stopped the verified test process tree after stalled progress to add bounded phase diagnostics; not classified as an XSim crash or confirmed RTL failure."
+    },
+    {
+      "mode": "sim",
+      "pass": false,
+      "wall_seconds": 38.96,
+      "artifact_directory": "E:\\GPTProject2\\EDAAgent\\artifacts\\2026-10-22T18-49-50-451Z-eda_xsim-1234024d",
+      "receipt_directory": "E:\\GPTProject2\\EDAAgent\\projects\\hard-bench\\axi-fabric\\runs\\20261022T184948Z-sim",
+      "classification": "RTL failure: bounded phase timeout, all reads completed but writes deadlocked with only an external B guard."
+    },
+    {
+      "mode": "sim",
+      "pass": false,
+      "wall_seconds": 139.05,
+      "artifact_directory": "E:\\GPTProject2\\EDAAgent\\artifacts\\2026-10-22T18-52-36-945Z-eda_xsim-0330eec8",
+      "receipt_directory": "E:\\GPTProject2\\EDAAgent\\projects\\hard-bench\\axi-fabric\\runs\\20261022T185235Z-sim",
+      "classification": "Diagnostic reproduction: early DECERR occupied B arbitration while its WLAST depended on earlier SLVERR progress; target B/AW/W channels blocked."
+    },
+    {
+      "mode": "sim",
+      "pass": false,
+      "wall_seconds": 34.13,
+      "artifact_directory": "E:\\GPTProject2\\EDAAgent\\artifacts\\2026-10-22T18-55-44-864Z-eda_xsim-fcab51e1",
+      "receipt_directory": "E:\\GPTProject2\\EDAAgent\\projects\\hard-bench\\axi-fabric\\runs\\20261022T185543Z-sim",
+      "classification": "Coverage failure only: all 20 phases completed but same-write-ID outstanding depth was 1; strengthened write stimulus to consecutive pairs per ID."
+    },
+    {
+      "mode": "sim",
+      "pass": true,
+      "wall_seconds": 35.39,
+      "artifact_directory": "E:\\GPTProject2\\EDAAgent\\artifacts\\2026-10-22T18-57-11-301Z-eda_xsim-d1ba0de1",
+      "receipt_directory": "E:\\GPTProject2\\EDAAgent\\projects\\hard-bench\\axi-fabric\\runs\\20261022T185710Z-sim",
+      "classification": "accepted test receipt"
+    },
+    {
+      "mode": "negative",
+      "pass": true,
+      "wall_seconds": 51.53,
+      "artifact_directory": "E:\\GPTProject2\\EDAAgent\\artifacts\\2026-10-22T18-58-26-528Z-eda_xsim-0d0c2d06",
+      "receipt_directory": "E:\\GPTProject2\\EDAAgent\\projects\\hard-bench\\axi-fabric\\runs\\20261022T185824Z-negative",
+      "classification": "accepted test receipt"
+    },
+    {
+      "mode": "trace",
+      "pass": true,
+      "wall_seconds": 65.47,
+      "artifact_directory": "E:\\GPTProject2\\EDAAgent\\artifacts\\2026-10-22T18-58-26-529Z-eda_xsim-39700036",
+      "receipt_directory": "E:\\GPTProject2\\EDAAgent\\projects\\hard-bench\\axi-fabric\\runs\\20261022T185824Z-trace",
+      "classification": "accepted test receipt"
+    },
+    {
+      "mode": "impl",
+      "pass": true,
+      "wall_seconds": 239.59,
+      "artifact_directory": "E:\\GPTProject2\\EDAAgent\\artifacts\\hard-axi-fabric-impl-20261022T185742Z-60704e",
+      "receipt_directory": "E:\\GPTProject2\\EDAAgent\\artifacts\\hard-axi-fabric-impl-20261022T185742Z-60704e",
+      "classification": "parent-run frozen OOC implementation receipt; auxiliary helper drift retained separately"
+    }
+  ],
+  "usage": {
+    "other_model_api_calls": 0,
+    "recorded_runs": 12,
+    "sum_run_wall_seconds_including_queue_and_overlaps": 1020.26,
+    "functional_success_run_wall_seconds": 35.39,
+    "failed_attempts_preserved": 8,
+    "note": "Summed run durations are not end-to-end elapsed time; simultaneous runs and resource-queue waits can overlap. Current Codex token usage is not measured here.",
+    "recorded_simulation_runs": 11,
+    "recorded_implementation_runs": 1,
+    "implementation_run_wall_seconds": 239.59
+  },
+  "implementation": {
+    "status": "passed",
+    "sources": "E:\\GPTProject2\\EDAAgent\\projects\\hard-bench\\axi-fabric\\sources.json",
+    "config": "E:\\GPTProject2\\EDAAgent\\projects\\hard-bench\\axi-fabric\\impl.json",
+    "tcl": "E:\\GPTProject2\\EDAAgent\\projects\\hard-bench\\axi-fabric\\implement.tcl",
+    "clock_mhz": 100,
+    "part": "xc7a100tfgg676-2",
+    "mode": "out_of_context",
+    "project": "axi-fabric",
+    "stage": "impl",
+    "pass": true,
+    "exit_code": 0,
+    "started_at_utc": "2026-10-22T18:57:42.838800+00:00",
+    "wall_seconds": 239.59,
+    "artifact_directory": "E:\\GPTProject2\\EDAAgent\\artifacts\\hard-axi-fabric-impl-20261022T185742Z-60704e",
+    "timeout": false,
+    "source_drift": [],
+    "auxiliary_source_drift": [
+      "projects/hard-bench/axi-fabric/generate.py",
+      "projects/hard-bench/axi-fabric/run.py"
+    ],
+    "routing_verified": true,
+    "timing_verified": true,
+    "routing": {
+      "routable": 3155,
+      "fully_routed": 3155,
+      "errors": 0
+    },
+    "build": {
+      "stage": "routed",
+      "top": "axi_fabric_top",
+      "version": "2020.2",
+      "part": "xc7a100tfgg676-2",
+      "clock_period_ns": 10.0,
+      "io_delay_ns": 2.0,
+      "setup_slack_ns": 2.109,
+      "hold_slack_ns": 0.058,
+      "flip_flops": 2014,
+      "lut_cells": 2398,
+      "dsp48": 0,
+      "ramb18": 0,
+      "ramb36": 8,
+      "implementation_mode": "out_of_context",
+      "black_boxes": 0,
+      "board_io_validated": false,
+      "hardware_tested": false,
+      "model_api_calls": 0
+    },
+    "other_model_api_calls": 0,
+    "current_source_drift": [],
+    "receipt": "E:\\GPTProject2\\EDAAgent\\projects\\hard-bench\\axi-fabric\\latest-impl.json",
+    "physical_utilization": {
+      "slice_luts": 2008,
+      "slice_registers": 2014,
+      "ramb36": 8,
+      "ramb18": 0
+    },
+    "reports": {
+      "utilization.rpt": "E:\\GPTProject2\\EDAAgent\\artifacts\\hard-axi-fabric-impl-20261022T185742Z-60704e\\utilization.rpt",
+      "timing-summary.rpt": "E:\\GPTProject2\\EDAAgent\\artifacts\\hard-axi-fabric-impl-20261022T185742Z-60704e\\timing-summary.rpt",
+      "route-status.rpt": "E:\\GPTProject2\\EDAAgent\\artifacts\\hard-axi-fabric-impl-20261022T185742Z-60704e\\route-status.rpt",
+      "drc.rpt": "E:\\GPTProject2\\EDAAgent\\artifacts\\hard-axi-fabric-impl-20261022T185742Z-60704e\\drc.rpt",
+      "process.log": "E:\\GPTProject2\\EDAAgent\\artifacts\\hard-axi-fabric-impl-20261022T185742Z-60704e\\process.log",
+      "input-hashes.json": "E:\\GPTProject2\\EDAAgent\\artifacts\\hard-axi-fabric-impl-20261022T185742Z-60704e\\input-hashes.json"
+    }
+  },
+  "acceptance_pass": true,
+  "raw_log": "E:\\GPTProject2\\EDAAgent\\artifacts\\2026-10-22T18-57-11-301Z-eda_xsim-d1ba0de1\\process.log"
+}

@@ -1,0 +1,15 @@
+{
+  "top": "crypto_soc_top",
+  "sources": [
+    "vendor/picorv32/picorv32.v",
+    "vendor/aes/src/rtl/aes_core.v",
+    "vendor/aes/src/rtl/aes_encipher_block.v",
+    "vendor/aes/src/rtl/aes_decipher_block.v",
+    "vendor/aes/src/rtl/aes_key_mem.v",
+    "vendor/aes/src/rtl/aes_sbox.v",
+    "vendor/aes/src/rtl/aes_inv_sbox.v",
+    "projects/hard-bench/crypto-soc/shared_ram.sv",
+    "projects/hard-bench/crypto-soc/ctr_dma.sv",
+    "projects/hard-bench/crypto-soc/crypto_soc_top.sv"
+  ]
+}

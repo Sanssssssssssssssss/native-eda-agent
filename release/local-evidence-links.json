@@ -1,0 +1,680 @@
+{
+  "note": "Links to unbundled local evidence were rendered as labels, not public proof.",
+  "references": [
+    {
+      "document": "docs/agent-completion-2026-10-24.md",
+      "label": "验收索引",
+      "target": "../artifacts/agent-completion-20261024/verification.json"
+    },
+    {
+      "document": "docs/agent-completion-2026-10-24.md",
+      "label": "示例导出",
+      "target": "../artifacts/agent-completion-20261024/otlp-synthetic-sample.json"
+    },
+    {
+      "document": "docs/agent-completion-2026-10-24.md",
+      "label": "交付目录",
+      "target": "../artifacts/agent-completion-20261024"
+    },
+    {
+      "document": "docs/agent-foundation-validation-2026-10-23.md",
+      "label": "result.json",
+      "target": "../artifacts/agent-foundation-2026-10-23/result.json"
+    },
+    {
+      "document": "docs/agent-foundation-validation-2026-10-23.md",
+      "label": "REPORT",
+      "target": "../artifacts/benchmark-2026-10-22T18-44-46-676Z-55880096/REPORT.md"
+    },
+    {
+      "document": "docs/agent-foundation-validation-2026-10-23.md",
+      "label": "逐项审计",
+      "target": "../artifacts/benchmark-2026-10-22T18-44-46-676Z-55880096/derived-audit.json"
+    },
+    {
+      "document": "docs/agent-foundation-validation-2026-10-23.md",
+      "label": "REPORT",
+      "target": "../artifacts/benchmark-2026-10-22T19-03-56-923Z-c097dce2/REPORT.md"
+    },
+    {
+      "document": "docs/agent-foundation-validation-2026-10-23.md",
+      "label": "审计",
+      "target": "../artifacts/benchmark-2026-10-22T19-03-56-923Z-c097dce2/derived-audit.json"
+    },
+    {
+      "document": "docs/agent-foundation-validation-2026-10-23.md",
+      "label": "compare",
+      "target": "../artifacts/benchmark-2026-10-22T19-02-36-002Z-f75d2a90/compare-to-light.json"
+    },
+    {
+      "document": "docs/agent-foundation-validation-2026-10-23.md",
+      "label": "validation",
+      "target": "../artifacts/2026-10-22T19-06-44-354Z-platform_validation-8ddb2d74/validation.json"
+    },
+    {
+      "document": "docs/agent-foundation-validation-2026-10-23.md",
+      "label": "完整测试日志",
+      "target": "../artifacts/2026-10-22T19-06-44-354Z-platform_validation-8ddb2d74/process.log"
+    },
+    {
+      "document": "docs/agent-foundation-validation-2026-10-23.md",
+      "label": "REPORT",
+      "target": "../artifacts/benchmark-2026-10-22T19-06-41-837Z-e3b355f5/REPORT.md"
+    },
+    {
+      "document": "docs/agent-foundation-validation-2026-10-23.md",
+      "label": "首跑日志",
+      "target": "../artifacts/2026-10-22T18-50-13-721Z-eda_vivado-5902e55a/process.log"
+    },
+    {
+      "document": "docs/agent-foundation-validation-2026-10-23.md",
+      "label": "复跑日志",
+      "target": "../artifacts/2026-10-22T19-05-40-581Z-eda_vivado-32b082e0/process.log"
+    },
+    {
+      "document": "docs/agent-foundation-validation-2026-10-23.md",
+      "label": "最终 trace 检查",
+      "target": "../artifacts/agent-foundation-2026-10-23/final-trace-check.json"
+    },
+    {
+      "document": "docs/agent-foundation-validation-2026-10-23.md",
+      "label": "开发过程与失败修复",
+      "target": "../artifacts/agent-foundation-2026-10-23/development-history.json"
+    },
+    {
+      "document": "docs/agent-foundation-validation-2026-10-23.md",
+      "label": "精确范围与字节数",
+      "target": "../artifacts/agent-foundation-2026-10-23/footprint.json"
+    },
+    {
+      "document": "docs/agent-foundation-validation-2026-10-23.md",
+      "label": "会话计数快照",
+      "target": "../artifacts/agent-foundation-2026-10-23/codex-usage.json"
+    },
+    {
+      "document": "docs/agent-foundation-validation-2026-10-23.md",
+      "label": "汇总口径",
+      "target": "../artifacts/agent-foundation-2026-10-23/usage-summary.json"
+    },
+    {
+      "document": "docs/agent-static-audit-2026-10-24.md",
+      "label": "Python 优化器与后端日志",
+      "target": "../artifacts/optimizer-trace-python-tests-20261024-final.log"
+    },
+    {
+      "document": "docs/agent-static-audit-2026-10-24.md",
+      "label": "Node trace、兼容与 MCP 日志",
+      "target": "../artifacts/optimizer-trace-node-tests-20261024-final.log"
+    },
+    {
+      "document": "docs/agent-static-audit-2026-10-24.md",
+      "label": "最后的外层失败状态检查",
+      "target": "../artifacts/optimizer-trace-parent-status-20261024.log"
+    },
+    {
+      "document": "docs/agent-static-audit-2026-10-24.md",
+      "label": "静态文件、链接与 trace 格式盘点",
+      "target": "../artifacts/agent-static-audit-20261024/audit.json"
+    },
+    {
+      "document": "docs/agent-static-audit-2026-10-24.md",
+      "label": "Python 首轮",
+      "target": "../artifacts/optimizer-trace-python-tests-20261024.log"
+    },
+    {
+      "document": "docs/agent-static-audit-2026-10-24.md",
+      "label": "Node 首轮",
+      "target": "../artifacts/optimizer-trace-node-tests-20261024.log"
+    },
+    {
+      "document": "docs/codex-verilogeval-24-2026-10-23.md",
+      "label": "上游判分脚本",
+      "target": "../vendor/verilog-eval/scripts/sv-iv-analyze"
+    },
+    {
+      "document": "docs/codex-verilogeval-24-2026-10-23.md",
+      "label": "题面 K-map",
+      "target": "../vendor/verilog-eval/dataset_spec-to-rtl/Prob093_ece241_2014_q3_prompt.txt"
+    },
+    {
+      "document": "docs/codex-verilogeval-24-2026-10-23.md",
+      "label": "参考实现",
+      "target": "../vendor/verilog-eval/dataset_spec-to-rtl/Prob093_ece241_2014_q3_ref.sv"
+    },
+    {
+      "document": "docs/codex-verilogeval-24-2026-10-23.md",
+      "label": "穷举证据",
+      "target": "../artifacts/2026-10-22T17-01-52-519Z-xsim-89bef530/process.log"
+    },
+    {
+      "document": "docs/codex-verilogeval-24-2026-10-23.md",
+      "label": "逐题成绩",
+      "target": "../artifacts/verilogeval-codex-2026-10-22T16-56-02-984Z/report.md"
+    },
+    {
+      "document": "docs/codex-verilogeval-24-2026-10-23.md",
+      "label": "机器可读成绩",
+      "target": "../artifacts/verilogeval-codex-2026-10-22T16-56-02-984Z/score.json"
+    },
+    {
+      "document": "docs/codex-verilogeval-24-2026-10-23.md",
+      "label": "延长测试的原始记录",
+      "target": "../artifacts/verilogeval-codex-2026-10-22T17-03-30-819Z/result.json"
+    },
+    {
+      "document": "docs/codex-verilogeval-24-2026-10-23.md",
+      "label": "用量取证记录",
+      "target": "../artifacts/verilogeval-codex-2026-10-22T16-56-02-984Z/codex-usage.json"
+    },
+    {
+      "document": "docs/codex-vivado-score-2026-10-23.md",
+      "label": "XSim 波形",
+      "target": "../artifacts/codex-eda-assessment-20261023/vivado-waveform.png"
+    },
+    {
+      "document": "docs/codex-vivado-score-2026-10-23.md",
+      "label": "布局布线及时序",
+      "target": "../artifacts/codex-eda-assessment-20261023/vivado-timing.png"
+    },
+    {
+      "document": "docs/codex-vivado-score-2026-10-23.md",
+      "label": "机器可读成绩",
+      "target": "../artifacts/codex-eda-assessment-20261023/score.json"
+    },
+    {
+      "document": "docs/codex-vivado-score-2026-10-23.md",
+      "label": "小题原始成绩",
+      "target": "../artifacts/verilogeval-codex-2026-10-22T16-17-42-454Z/result.json"
+    },
+    {
+      "document": "docs/codex-vivado-score-2026-10-23.md",
+      "label": "mux 诊断复测",
+      "target": "../artifacts/verilogeval-codex-2026-10-22T16-20-53-056Z/result.json"
+    },
+    {
+      "document": "docs/codex-vivado-score-2026-10-23.md",
+      "label": "FFT 数值判定",
+      "target": "../artifacts/2026-10-22T16-19-24-402Z-vivado-ee6aadf3/oracle-result.json"
+    },
+    {
+      "document": "docs/codex-vivado-score-2026-10-23.md",
+      "label": "频谱对照图",
+      "target": "../artifacts/2026-10-22T16-19-24-402Z-vivado-ee6aadf3/spectrum-comparison.png"
+    },
+    {
+      "document": "docs/codex-vivado-score-2026-10-23.md",
+      "label": "负例结果",
+      "target": "../artifacts/2026-10-22T16-19-24-402Z-vivado-ee6aadf3/negative-controls/result.json"
+    },
+    {
+      "document": "docs/codex-vivado-score-2026-10-23.md",
+      "label": "时序报告",
+      "target": "../artifacts/2026-10-22T16-19-01-064Z-vivado-5f56d598/timing-summary.rpt"
+    },
+    {
+      "document": "docs/codex-vivado-score-2026-10-23.md",
+      "label": "资源报告",
+      "target": "../artifacts/2026-10-22T16-19-01-064Z-vivado-5f56d598/utilization.rpt"
+    },
+    {
+      "document": "docs/codex-vivado-score-2026-10-23.md",
+      "label": "约束检查",
+      "target": "../artifacts/2026-10-22T16-19-01-064Z-vivado-5f56d598/check-timing.rpt"
+    },
+    {
+      "document": "docs/codex-vivado-score-2026-10-23.md",
+      "label": "停止记录",
+      "target": "../artifacts/native-agent-2026-10-22T16-03-56-195Z-89e76f/aborted-run-receipt.json"
+    },
+    {
+      "document": "docs/fpga-knowledge-and-tools.md",
+      "label": ".pi/skills",
+      "target": "../.pi/skills"
+    },
+    {
+      "document": "docs/fpga-knowledge-and-tools.md",
+      "label": "mcp-discovery.json",
+      "target": "../artifacts/system-evidence-integration-20261022T184547Z/mcp-discovery.json"
+    },
+    {
+      "document": "docs/fpga-knowledge-and-tools.md",
+      "label": "loader-result.json",
+      "target": "../artifacts/system-evidence-integration-20261022T184547Z/loader-result.json"
+    },
+    {
+      "document": "docs/fpga-native-tools-validation-2026-10-24.md",
+      "label": "首次失败回执",
+      "target": "../artifacts/fpga-tools-validation-2026-10-24T07-28-53-197Z-5fc2f5/result.json"
+    },
+    {
+      "document": "docs/fpga-native-tools-validation-2026-10-24.md",
+      "label": "原始日志",
+      "target": "../artifacts/2026-10-24T07-37-42-311Z-eda_vivado_synthesize-ce037e00/process.log"
+    },
+    {
+      "document": "docs/fpga-native-tools-validation-2026-10-24.md",
+      "label": "完整调用参数与 12 项结果",
+      "target": "../artifacts/fpga-tools-validation-2026-10-24T07-39-55-676Z-e8a611/result.json"
+    },
+    {
+      "document": "docs/fpga-native-tools-validation-2026-10-24.md",
+      "label": "机器可读成绩",
+      "target": "../artifacts/fpga-tools-validation-2026-10-24T07-39-55-676Z-e8a611/scorecard.json"
+    },
+    {
+      "document": "docs/fpga-native-tools-validation-2026-10-24.md",
+      "label": "12 份 trace 完整性核验",
+      "target": "../artifacts/fpga-tools-validation-2026-10-24T07-39-55-676Z-e8a611/trace-audit.json"
+    },
+    {
+      "document": "docs/fpga-native-tools-validation-2026-10-24.md",
+      "label": "离线测试日志",
+      "target": "../artifacts/fpga-native-tools-tests-final-20261024.log"
+    },
+    {
+      "document": "docs/fpga-native-tools-validation-2026-10-24.md",
+      "label": "AXI 实现结果",
+      "target": "../artifacts/2026-10-24T07-42-04-300Z-eda_vivado_implement-c8f771c6/fpga-summary.json"
+    },
+    {
+      "document": "docs/fpga-native-tools-validation-2026-10-24.md",
+      "label": "Ethernet 诊断结果",
+      "target": "../artifacts/2026-10-24T07-42-50-020Z-eda_vivado_reports-c6e0029a/fpga-summary.json"
+    },
+    {
+      "document": "docs/hard-system-projects-2026-10-23.md",
+      "label": "机器结果",
+      "target": "../artifacts/hard-bench-assessment-20261023/results.json"
+    },
+    {
+      "document": "docs/hard-system-projects-2026-10-23.md",
+      "label": "Vivado 实际三时钟波形",
+      "target": "../artifacts/hard-bench-assessment-20261023/ethernet-waveform.png"
+    },
+    {
+      "document": "docs/hard-system-projects-2026-10-23.md",
+      "label": "实际布局与时序截图",
+      "target": "../artifacts/hard-bench-assessment-20261023/ethernet-timing.png"
+    },
+    {
+      "document": "docs/hard-system-projects-2026-10-23.md",
+      "label": "截图来源与哈希",
+      "target": "../artifacts/hard-bench-assessment-20261023/screenshots.json"
+    },
+    {
+      "document": "docs/hard-system-projects-2026-10-23.md",
+      "label": "Codex 计数快照",
+      "target": "../artifacts/hard-bench-assessment-20261023/codex-usage.json"
+    },
+    {
+      "document": "docs/hard-system-projects-2026-10-23.md",
+      "label": "另一子 Agent 的复核",
+      "target": "../artifacts/hard-bench-assessment-20261023/independent-review.md"
+    },
+    {
+      "document": "docs/native-fpga-open-source-2026-10-24.md",
+      "label": "元数据与提交记录",
+      "target": "../artifacts/github-native-fpga-sources-20261024.json"
+    },
+    {
+      "document": "docs/native-fpga-open-source-2026-10-24.md",
+      "label": "社区版 13 项集成结果",
+      "target": "../artifacts/community-vivado-validation-20261024T080205Z/result.json"
+    },
+    {
+      "document": "docs/native-fpga-open-source-2026-10-24.md",
+      "label": "项目配置握手",
+      "target": "../artifacts/community-vivado-validation-20261024T080205Z/config-handshake.json"
+    },
+    {
+      "document": "docs/native-fpga-open-source-2026-10-24.md",
+      "label": "上游测试日志",
+      "target": "../artifacts/vivado-community-tests-20261024.log"
+    },
+    {
+      "document": "docs/native-fpga-open-source-2026-10-24.md",
+      "label": "FPL'26 测试",
+      "target": "../artifacts/fpl26-validator-tests-20261024.log"
+    },
+    {
+      "document": "docs/native-fpga-open-source-2026-10-24.md",
+      "label": "DSE 测试及 Windows 错误",
+      "target": "../artifacts/fpga-agent-dse-tests-20261024.log"
+    },
+    {
+      "document": "docs/native-fpga-open-source-2026-10-24.md",
+      "label": "大目录项目的导入失败与缺失 handler",
+      "target": "../artifacts/fpga-mcp-source-audit-20261024.json"
+    },
+    {
+      "document": "docs/native-optimizer-2026-10-24.md",
+      "label": "optimizer-result.json",
+      "target": "../artifacts/2026-10-24T08-54-15-928Z-eda_vivado_optimize-babf5915/optimizer/optimizer-result.json"
+    },
+    {
+      "document": "docs/native-optimizer-2026-10-24.md",
+      "label": "原生 trace 回执",
+      "target": "../artifacts/2026-10-24T08-54-15-928Z-eda_vivado_optimize-babf5915/receipt.json"
+    },
+    {
+      "document": "docs/native-optimizer-2026-10-24.md",
+      "label": "16 项离线日志",
+      "target": "../artifacts/optimizer-unit-tests-20261024-final.log"
+    },
+    {
+      "document": "docs/native-optimizer-2026-10-24.md",
+      "label": "最终审阅记录",
+      "target": "../artifacts/optimizer-implementation-audit-20261024/result.json"
+    },
+    {
+      "document": "docs/parallel-validation-2026-10-23.md",
+      "label": "独立索引",
+      "target": "../artifacts/system-evidence-20261022T182619.278290Z-32714d/evidence.json"
+    },
+    {
+      "document": "docs/parallel-validation-2026-10-23.md",
+      "label": "基础回归",
+      "target": "../artifacts/parallel-baseline-2026-10-22T18-09-26-789Z-7b771cc4/REPORT.md"
+    },
+    {
+      "document": "docs/parallel-validation-2026-10-23.md",
+      "label": "Trace 真实验收",
+      "target": "../artifacts/trace-validation-2026-10-22T18-13-08-350Z-7d874449/REPORT.md"
+    },
+    {
+      "document": "docs/parallel-validation-2026-10-23.md",
+      "label": "实际复跑",
+      "target": "../artifacts/parallel-campaign-2026-10-23/replay-validation-result.json"
+    },
+    {
+      "document": "docs/parallel-validation-2026-10-23.md",
+      "label": "统一检查",
+      "target": "../artifacts/parallel-campaign-2026-10-23/npm-test-complete.log"
+    },
+    {
+      "document": "docs/parallel-validation-2026-10-23.md",
+      "label": "首次整合失败日志",
+      "target": "../artifacts/parallel-campaign-2026-10-23/npm-test.log"
+    },
+    {
+      "document": "docs/parallel-validation-2026-10-23.md",
+      "label": "Codex 计数快照",
+      "target": "../artifacts/parallel-campaign-2026-10-23/codex-usage-final.json"
+    },
+    {
+      "document": "docs/parallel-validation-2026-10-23.md",
+      "label": "已有用量收据",
+      "target": "../artifacts/system-bench-assessment-20261023/codex-usage.json"
+    },
+    {
+      "document": "docs/system-projects-2026-10-23.md",
+      "label": "仿真日志",
+      "target": "${WORKSPACE}/artifacts/2026-10-22T18-05-54-612Z-xsim-2e208788/process.log"
+    },
+    {
+      "document": "docs/system-projects-2026-10-23.md",
+      "label": "仿真波形",
+      "target": "${WORKSPACE}/artifacts/2026-10-22T18-05-54-612Z-xsim-2e208788/eda_snapshot.wdb"
+    },
+    {
+      "document": "docs/system-projects-2026-10-23.md",
+      "label": "时序",
+      "target": "${WORKSPACE}/artifacts/2026-10-22T17-59-58-182Z-vivado-477913d5/timing-summary.rpt"
+    },
+    {
+      "document": "docs/system-projects-2026-10-23.md",
+      "label": "资源",
+      "target": "${WORKSPACE}/artifacts/2026-10-22T17-59-58-182Z-vivado-477913d5/utilization.rpt"
+    },
+    {
+      "document": "docs/system-projects-2026-10-23.md",
+      "label": "仿真日志",
+      "target": "${WORKSPACE}/artifacts/2026-10-22T18-13-53-913Z-xsim-e962f1a8/process.log"
+    },
+    {
+      "document": "docs/system-projects-2026-10-23.md",
+      "label": "仿真波形",
+      "target": "${WORKSPACE}/artifacts/2026-10-22T18-13-53-913Z-xsim-e962f1a8/eda_snapshot.wdb"
+    },
+    {
+      "document": "docs/system-projects-2026-10-23.md",
+      "label": "时序",
+      "target": "${WORKSPACE}/artifacts/2026-10-22T18-08-42-733Z-vivado-9d40e947/timing-summary.rpt"
+    },
+    {
+      "document": "docs/system-projects-2026-10-23.md",
+      "label": "资源",
+      "target": "${WORKSPACE}/artifacts/2026-10-22T18-08-42-733Z-vivado-9d40e947/utilization.rpt"
+    },
+    {
+      "document": "docs/system-projects-2026-10-23.md",
+      "label": "仿真日志",
+      "target": "${WORKSPACE}/artifacts/2026-10-22T18-10-31-512Z-xsim-eb357a36/process.log"
+    },
+    {
+      "document": "docs/system-projects-2026-10-23.md",
+      "label": "仿真波形",
+      "target": "${WORKSPACE}/artifacts/2026-10-22T18-10-31-512Z-xsim-eb357a36/eda_snapshot.wdb"
+    },
+    {
+      "document": "docs/system-projects-2026-10-23.md",
+      "label": "时序",
+      "target": "${WORKSPACE}/artifacts/2026-10-22T18-12-38-012Z-vivado-dbccd136/timing-summary.rpt"
+    },
+    {
+      "document": "docs/system-projects-2026-10-23.md",
+      "label": "资源",
+      "target": "${WORKSPACE}/artifacts/2026-10-22T18-12-38-012Z-vivado-dbccd136/utilization.rpt"
+    },
+    {
+      "document": "docs/system-projects-2026-10-23.md",
+      "label": "仿真日志",
+      "target": "${WORKSPACE}/artifacts/2026-10-22T18-13-10-347Z-xsim-dd7c4d0f/process.log"
+    },
+    {
+      "document": "docs/system-projects-2026-10-23.md",
+      "label": "仿真波形",
+      "target": "${WORKSPACE}/artifacts/2026-10-22T18-13-10-347Z-xsim-dd7c4d0f/eda_snapshot.wdb"
+    },
+    {
+      "document": "docs/system-projects-2026-10-23.md",
+      "label": "时序",
+      "target": "${WORKSPACE}/artifacts/aes-direct-181959/timing-summary.rpt"
+    },
+    {
+      "document": "docs/system-projects-2026-10-23.md",
+      "label": "资源",
+      "target": "${WORKSPACE}/artifacts/aes-direct-181959/utilization.rpt"
+    },
+    {
+      "document": "docs/system-projects-2026-10-23.md",
+      "label": "结构化结果与源码哈希",
+      "target": "${WORKSPACE}/artifacts/system-bench-assessment-20261023/results.json"
+    },
+    {
+      "document": "docs/system-projects-2026-10-23.md",
+      "label": "逐 Agent 用量收据",
+      "target": "${WORKSPACE}/artifacts/system-bench-assessment-20261023/codex-usage.json"
+    },
+    {
+      "document": "docs/system-projects-2026-10-23.md",
+      "label": "Vivado 实际窗口：SoC 布线后时序。",
+      "target": "${WORKSPACE}/artifacts/system-bench-assessment-20261023/soc-timing.png"
+    },
+    {
+      "document": "docs/system-projects-2026-10-23.md",
+      "label": "Vivado 实际窗口：UDP 系统仿真波形。",
+      "target": "${WORKSPACE}/artifacts/system-bench-assessment-20261023/udp-waveform.png"
+    },
+    {
+      "document": "docs/validation.md",
+      "label": "`acceptance.json`",
+      "target": "../artifacts/2026-10-22T15-29-16-416Z-verification-bfd9c6f4/acceptance.json"
+    },
+    {
+      "document": "docs/validation.md",
+      "label": "工具调用事件",
+      "target": "../artifacts/native-agent-2026-10-22T15-28-01-411Z-845066/events.jsonl"
+    },
+    {
+      "document": "docs/validation.md",
+      "label": "Agent 回答",
+      "target": "../artifacts/native-agent-2026-10-22T15-28-01-411Z-845066/answer.md"
+    },
+    {
+      "document": "docs/validation.md",
+      "label": "版本 / 哈希与核查回执",
+      "target": "../artifacts/setup-receipt.json"
+    },
+    {
+      "document": "docs/validation.md",
+      "label": "工具层回执",
+      "target": "../artifacts/native-check-2026-10-22T15-25-11-404Z-f905a9/result.json"
+    },
+    {
+      "document": "docs/validation.md",
+      "label": "原始报告",
+      "target": "../artifacts/pi-validation-summary.md"
+    },
+    {
+      "document": "docs/validation.md",
+      "label": "用量回执",
+      "target": "../artifacts/native-agent-2026-10-22T15-28-01-411Z-845066/usage.json"
+    },
+    {
+      "document": "docs/validation.md",
+      "label": "汇总明细",
+      "target": "../artifacts/pi-usage-total.json"
+    },
+    {
+      "document": "docs/vivado-workbench-coverage-2026-10-24.md",
+      "label": "最终 33 项结果",
+      "target": "../artifacts/vivado-workbench-validation-20261024T082414Z/result.json"
+    },
+    {
+      "document": "docs/vivado-workbench-coverage-2026-10-24.md",
+      "label": "实际工具 schema",
+      "target": "../artifacts/vivado-workbench-validation-20261024T082414Z/tools.json"
+    },
+    {
+      "document": "docs/vivado-workbench-coverage-2026-10-24.md",
+      "label": "配置与重建检查",
+      "target": "../artifacts/vivado-workbench-validation-20261024T082414Z/config-audit.json"
+    },
+    {
+      "document": "docs/vivado-workbench-coverage-2026-10-24.md",
+      "label": "此前社区 13 项集成",
+      "target": "../artifacts/community-vivado-validation-20261024T080205Z/result.json"
+    },
+    {
+      "document": "docs/vivado-workbench-coverage-2026-10-24.md",
+      "label": "998 项上游测试通过日志",
+      "target": "../artifacts/vivado-community-tests-20261024.log"
+    },
+    {
+      "document": "docs/vivado-workbench-coverage-2026-10-24.md",
+      "label": "完整运行索引",
+      "target": "../artifacts/vivado-workbench-validation-20261024T082414Z/attempt-index.json"
+    },
+    {
+      "document": "projects/hard-bench/axi-fabric/README.md",
+      "label": "latest-impl.json",
+      "target": "${WORKSPACE}/projects/hard-bench/axi-fabric/latest-impl.json"
+    },
+    {
+      "document": "projects/hard-bench/axi-fabric/README.md",
+      "label": "upstream-fix.patch",
+      "target": "${WORKSPACE}/projects/hard-bench/axi-fabric/upstream-fix.patch"
+    },
+    {
+      "document": "projects/hard-bench/crypto-soc/README.md",
+      "label": "主回归",
+      "target": "../../../artifacts/2026-10-22T18-51-13-020Z-eda_xsim-276cd509/process.log"
+    },
+    {
+      "document": "projects/hard-bench/crypto-soc/README.md",
+      "label": "负控",
+      "target": "../../../artifacts/2026-10-22T18-51-39-384Z-eda_xsim-f6050952/process.log"
+    },
+    {
+      "document": "projects/hard-bench/crypto-soc/README.md",
+      "label": "暖复位",
+      "target": "../../../artifacts/2026-10-22T18-52-55-740Z-eda_xsim-640f90e0/process.log"
+    },
+    {
+      "document": "projects/hard-bench/crypto-soc/README.md",
+      "label": "时序",
+      "target": "../../../artifacts/hard-crypto-soc-impl-20261022T184615Z-2a9b4b/timing-summary.rpt"
+    },
+    {
+      "document": "projects/hard-bench/crypto-soc/README.md",
+      "label": "资源",
+      "target": "../../../artifacts/hard-crypto-soc-impl-20261022T184615Z-2a9b4b/utilization.rpt"
+    },
+    {
+      "document": "projects/hard-bench/README.md",
+      "label": "machine-readable audit",
+      "target": "../../artifacts/hard-bench-assessment-20261023/results.json"
+    },
+    {
+      "document": "projects/system-bench/dma/RESULTS.md",
+      "label": "process.log",
+      "target": "${WORKSPACE}/artifacts/2026-10-22T18-13-53-913Z-xsim-e962f1a8/process.log"
+    },
+    {
+      "document": "projects/system-bench/dma/RESULTS.md",
+      "label": "timing-summary.rpt",
+      "target": "${WORKSPACE}/artifacts/2026-10-22T18-08-42-733Z-vivado-9d40e947/timing-summary.rpt"
+    },
+    {
+      "document": "projects/system-bench/dma/RESULTS.md",
+      "label": "process.log",
+      "target": "${WORKSPACE}/artifacts/2026-10-22T18-09-28-179Z-xsim-c2911341/process.log"
+    },
+    {
+      "document": "release/README.md",
+      "label": "Tool schemas",
+      "target": "docs/reference/tools.md"
+    },
+    {
+      "document": "release/README.md",
+      "label": "Architecture and workflow",
+      "target": "docs/agent-workflow-and-trace-contract.md"
+    },
+    {
+      "document": "release/README.md",
+      "label": "Historical results",
+      "target": "docs/results.md"
+    },
+    {
+      "document": "release/README.md",
+      "label": "Trace collaboration history",
+      "target": "docs/agent-framework-and-traces.md"
+    },
+    {
+      "document": "release/README.md",
+      "label": "Release notes",
+      "target": "docs/release-2026-10-25.md"
+    },
+    {
+      "document": "release/README.md",
+      "label": "11 machine-readable scorecards",
+      "target": "results/catalog.json"
+    },
+    {
+      "document": "release/README.md",
+      "label": "trace delivery and recovery",
+      "target": "docs/agent-completion-2026-10-24.md"
+    },
+    {
+      "document": "release/README.md",
+      "label": "MIT",
+      "target": "LICENSE"
+    },
+    {
+      "document": "release/README.md",
+      "label": "third-party notices",
+      "target": "THIRD_PARTY_NOTICES.md"
+    }
+  ]
+}

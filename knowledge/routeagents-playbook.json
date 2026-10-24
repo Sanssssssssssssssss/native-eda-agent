@@ -1,0 +1,401 @@
+{
+  "source": "https://github.com/Geochatz3/routeagents-fpl26/blob/4a929b490dad048198e746d15c475a8c19dc5017/docs/PLAYBOOK.md",
+  "license": "Apache-2.0",
+  "upstream_play_count": 42,
+  "local_executable_play_count": 7,
+  "note": "Upstream catalog and native adapters are different counting units. No claim of all 42 plays being ported.",
+  "plays": [
+    {
+      "id": "D1",
+      "title": "ILS full-ruin re-place",
+      "upstream_description": "Unplace everything, re-place with a rotated directive, re-route, keep only strict wins",
+      "upstream_trigger": "LLM loop stalled ≥ 10 min, or loop exit with budget left",
+      "code_home": "`optimizer/ils_polish.py:ILS_COMBOS`",
+      "local_status": "reference_only",
+      "local_plays": []
+    },
+    {
+      "id": "D2",
+      "title": "ILS partial ruin",
+      "upstream_description": "Unplace only the worst-200-paths' fabric cells, incremental re-place",
+      "upstream_trigger": "In rotation; skipped when critical-path spread < 30 tiles",
+      "code_home": "`optimizer/ils_polish.py:partial_ruin_tcl`",
+      "local_status": "reference_only",
+      "local_plays": []
+    },
+    {
+      "id": "D3",
+      "title": "ILS last-mile cycle",
+      "upstream_description": "Netlist-level phys_opt (clock/retime/LUT) + incremental `LastMile` re-place",
+      "upstream_trigger": "In rotation; only when best WNS ≥ −1.0 ns",
+      "code_home": "`optimizer/ils_polish.py:LASTMILE_PD`",
+      "local_status": "reference_only",
+      "local_plays": []
+    },
+    {
+      "id": "D4",
+      "title": "ILS route re-roll",
+      "upstream_description": "Unroute + from-scratch `AggressiveExplore` route, nothing else",
+      "upstream_trigger": "In rotation; near-met only (\\|WNS\\| ≤ 0.7 ns)",
+      "code_home": "`optimizer/ils_polish.py:ROUTE_REROLL_PD`",
+      "local_status": "adapted_subset",
+      "local_plays": [
+        "rebuild_route"
+      ]
+    },
+    {
+      "id": "D5",
+      "title": "ILS route-only re-route",
+      "upstream_description": "Keep placement, unroute, re-route `AggressiveExplore` + phys_opt",
+      "upstream_trigger": "In rotation; cheapest cycle, any WNS",
+      "code_home": "`optimizer/ils_polish.py:ROUTE_ONLY_PD`",
+      "local_status": "reference_only",
+      "local_plays": []
+    },
+    {
+      "id": "D6",
+      "title": "ILS incremental route escalation",
+      "upstream_description": "Re-route the *incumbent* routing in place with a stronger directive (no unroute)",
+      "upstream_trigger": "Appended to rotation; needs an incumbent routed with a weaker directive",
+      "code_home": "`optimizer/ils_polish.py:INCR_ROUTE_PD`",
+      "local_status": "adapted_subset",
+      "local_plays": [
+        "route_aggressive"
+      ]
+    },
+    {
+      "id": "D7",
+      "title": "ILS place-retry ladder",
+      "upstream_description": "On a cycle-1 regression, force a ladder of untried placement families",
+      "upstream_trigger": "Cycle regresses vs incumbent; order WNS-keyed",
+      "code_home": "`optimizer/ils_polish.py:PLACE_RETRY_LADDER`",
+      "local_status": "reference_only",
+      "local_plays": []
+    },
+    {
+      "id": "R1a",
+      "title": "Crisis retiming (router R1)",
+      "upstream_description": "One full-scope `phys_opt -directive AlternateFlowWithRetiming`, then unroute + `AggressiveExplore` re-route",
+      "upstream_trigger": "≥ 100k failing endpoints, 7 ≤ \\|WNS\\| < 10 ns",
+      "code_home": "`optimizer/recipe_router.py:_rule_r1`",
+      "local_status": "reference_only",
+      "local_plays": []
+    },
+    {
+      "id": "R1b",
+      "title": "Route-first floor (router R1)",
+      "upstream_description": "Unroute + `AggressiveExplore` re-route first; retiming only as budget-gated bonus",
+      "upstream_trigger": "≥ 100k failing, \\|WNS\\| ≥ 10 ns (deep-extreme)",
+      "code_home": "`optimizer/recipe_router.py:_r1_route_first_plan`",
+      "local_status": "reference_only",
+      "local_plays": []
+    },
+    {
+      "id": "R2",
+      "title": "Placement-preserving sweep (router R2)",
+      "upstream_description": "Granular post-route phys_opt sweep, `critical_cell_opt` first, placement untouched",
+      "upstream_trigger": "\\|WNS\\| ≥ 5 ns, spread ≥ 70 tiles, < 100k failing",
+      "code_home": "`optimizer/recipe_router.py:_rule_r2`",
+      "local_status": "reference_only",
+      "local_plays": []
+    },
+    {
+      "id": "R3",
+      "title": "Class-G re-place (router R3)",
+      "upstream_description": "Unplace + full re-place (`Explore` or `Auto_1` by spread) + route + retime polish, one shot",
+      "upstream_trigger": "1 ≤ \\|WNS\\| ≤ 5 ns, fmax ratio 35–55%, wall fits",
+      "code_home": "`optimizer/recipe_router.py:_rule_r3`",
+      "local_status": "reference_only",
+      "local_plays": []
+    },
+    {
+      "id": "R4",
+      "title": "Retime sandwich (router R4)",
+      "upstream_description": "Retime → unplace + re-place (spread-gated directive) → retime again → pin polish",
+      "upstream_trigger": "0.5 ≤ \\|WNS\\| ≤ 2 ns, fmax ratio ≥ 55%",
+      "code_home": "`optimizer/recipe_router.py:_rule_r4`",
+      "local_status": "reference_only",
+      "local_plays": []
+    },
+    {
+      "id": "R7",
+      "title": "Closure ladder (router R7)",
+      "upstream_description": "Group the worst ~20 endpoints, iterate scoped granular phys_opt; never re-place",
+      "upstream_trigger": "\\|WNS\\| < 0.5 ns, fmax ratio ≥ 85% (near-met)",
+      "code_home": "`optimizer/recipe_router.py:_rule_r7`",
+      "local_status": "reference_only",
+      "local_plays": []
+    },
+    {
+      "id": "R8",
+      "title": "Out-of-band safe floor",
+      "upstream_description": "Route-first (deep) or the R2 sweep (else); full re-place blocked",
+      "upstream_trigger": "Features match no calibrated rule (hidden designs)",
+      "code_home": "`optimizer/recipe_router.py:_oob_safe_plan`",
+      "local_status": "reference_only",
+      "local_plays": []
+    },
+    {
+      "id": "F1",
+      "title": "Shallow recipe chain",
+      "upstream_description": "Unroute/unplace → place `WLDrivenBlockPlacement` → phys_opt → route `AggressiveExplore` → phys_opt",
+      "upstream_trigger": "\\|WNS\\| ≤ 1.05 ns, pre-LLM slot",
+      "code_home": "`optimizer/recipe_passes.py:RECIPE_PASS_SHALLOW_TCL`",
+      "local_status": "reference_only",
+      "local_plays": []
+    },
+    {
+      "id": "F2",
+      "title": "Deep recipe chain",
+      "upstream_description": "Pin-swap ×2 → fresh-Vivado round-trip → unplace → place `Explore` → phys_opt → route `AggressiveExplore`",
+      "upstream_trigger": "\\|WNS\\| ≥ 8 ns, pre-LLM slot",
+      "code_home": "`optimizer/recipe_passes.py:RECIPE_PASS_DEEP_TCL`",
+      "local_status": "reference_only",
+      "local_plays": []
+    },
+    {
+      "id": "F3",
+      "title": "Mid recipe chain",
+      "upstream_description": "Retime/route/re-place/re-route chain across two Vivado sessions",
+      "upstream_trigger": "1.05 < \\|WNS\\| < 8 ns; needs ~2800 s, fires only on walls well beyond 1 h",
+      "code_home": "`optimizer/recipe_passes.py:RECIPE_PASS_MID_TCL`",
+      "local_status": "reference_only",
+      "local_plays": []
+    },
+    {
+      "id": "F4",
+      "title": "Own-front retime candidate",
+      "upstream_description": "Place with the band's proven directive (`ExtraTimingOpt` or `WLDrivenBlockPlacement`) → retime → phys_opt AE → route AE",
+      "upstream_trigger": "\\|WNS\\| in [0.90, 1.05]; sub-band picks the chain",
+      "code_home": "`dcp_optimizer.py:ETO_RETIME_TCL` / `WLD_RETIME_TCL`",
+      "local_status": "reference_only",
+      "local_plays": []
+    },
+    {
+      "id": "F5",
+      "title": "Shallow determinizer",
+      "upstream_description": "Place `AltSpreadLogic_medium` → route `Explore` → *incremental* route `AggressiveExplore` → retime polish",
+      "upstream_trigger": "\\|WNS\\| in [0.60, 0.90)",
+      "code_home": "`dcp_optimizer.py:SHALLOW_DET_TCL`",
+      "local_status": "reference_only",
+      "local_plays": []
+    },
+    {
+      "id": "F6",
+      "title": "Sub-band phys_opt floor",
+      "upstream_description": "Path-group the worst 20 endpoints, then scoped phys_opt ×3, banked in-session",
+      "upstream_trigger": "\\|WNS\\| in [0.10, 0.45], ≤ 1000 failing endpoints",
+      "code_home": "`dcp_optimizer.py:_maybe_run_fir_subband_floor`",
+      "local_status": "reference_only",
+      "local_plays": []
+    },
+    {
+      "id": "B1",
+      "title": "Deep-replace from pristine",
+      "upstream_description": "Reopen the *original* input, unplace, full re-place `Explore`, route",
+      "upstream_trigger": "Deep-extreme band pre-LLM; any design at the tail if budget remains",
+      "code_home": "`optimizer/deep_replace_sibling.py`",
+      "local_status": "adapted_subset",
+      "local_plays": [
+        "replace_explore"
+      ]
+    },
+    {
+      "id": "B2",
+      "title": "Deep-replace retiming tail",
+      "upstream_description": "`phys_opt AlternateFlowWithRetiming` on the freshly re-placed design",
+      "upstream_trigger": "After B1 banks, whenever a ≥ 0.20× slice of the measured place+route cost remains",
+      "code_home": "`optimizer/deep_replace_sibling.py:DEEP_REPLACE_B2_MIN_SLICE_FRAC`",
+      "local_status": "reference_only",
+      "local_plays": []
+    },
+    {
+      "id": "B3",
+      "title": "Small-floor sibling",
+      "upstream_description": "Place `ExtraNetDelay_low` → phys_opt `AggressiveExplore` → route `AggressiveExplore` from pristine",
+      "upstream_trigger": "Mid band, first stage only; cost ≤ 550 s + physics admission",
+      "code_home": "`optimizer/deep_replace_sibling.py:DEEP_REPLACE_B3_*`",
+      "local_status": "reference_only",
+      "local_plays": []
+    },
+    {
+      "id": "T1",
+      "title": "Tail-controller portfolio",
+      "upstream_description": "Rotate 4 proven moves (re-route, phys_opt ladder, fanout opt, phys_opt AE) by measured ns/s",
+      "upstream_trigger": "Post-loop, deep-WNS states (best ≤ −1.0 ns)",
+      "code_home": "`optimizer/tail_controller.py:TAIL_MENU`",
+      "local_status": "reference_only",
+      "local_plays": []
+    },
+    {
+      "id": "T2",
+      "title": "Bare re-route compounding loop",
+      "upstream_description": "Plain `route_design` iterated while each pass still pays ≥ 0.020 ns",
+      "upstream_trigger": "Routed banked best + wall fits; deep WNS compounds",
+      "code_home": "`optimizer/polish_ladder.py:_run_bare_reroute_polish`",
+      "local_status": "reference_only",
+      "local_plays": []
+    },
+    {
+      "id": "T3",
+      "title": "Mid-band break rung",
+      "upstream_description": "From the banked best: unroute → `phys_opt -retime` → phys_opt AE → route AE",
+      "upstream_trigger": "Post-loop, mid band, ~1350 s priced wall",
+      "code_home": "`dcp_optimizer.py:MIDBAND_BREAK_RUNG_TCL`",
+      "local_status": "reference_only",
+      "local_plays": []
+    },
+    {
+      "id": "P1",
+      "title": "Fanout polish",
+      "upstream_description": "One `phys_opt -directive AggressiveFanoutOpt` pass on the final best",
+      "upstream_trigger": "Post-ILS; cheap designs only, strict hold floor +0.010 ns",
+      "code_home": "`optimizer/ils_polish.py:fanout_polish_accept`",
+      "local_status": "reference_only",
+      "local_plays": []
+    },
+    {
+      "id": "P2",
+      "title": "Last-mile final polish",
+      "upstream_description": "The D3 cycle applied once to the *final* plateaued best",
+      "upstream_trigger": "Post-ILS; best WNS ≥ −1.0 ns, budget fits",
+      "code_home": "`optimizer/ils_polish.py:lastmile_polish_accept`",
+      "local_status": "reference_only",
+      "local_plays": []
+    },
+    {
+      "id": "P3",
+      "title": "Winner polish",
+      "upstream_description": "Up to 4 `phys_opt` passes (default `AggressiveExplore`) on the shipped winner",
+      "upstream_trigger": "Wrapper wall too short for another attempt (stranded time)",
+      "code_home": "`scripts/winner_polish.tcl`",
+      "local_status": "reference_only",
+      "local_plays": []
+    },
+    {
+      "id": "L1",
+      "title": "Cell re-placement macro",
+      "upstream_description": "Find cells whose routing detours ≥ 2× Manhattan distance, move them to better sites",
+      "upstream_trigger": "LLM call; critical paths with movable, detoured cells",
+      "code_home": "`optimizer/recipe_passes.py:_recipe_cell_replacement`",
+      "local_status": "reference_only",
+      "local_plays": []
+    },
+    {
+      "id": "L2",
+      "title": "LUT-cone optimization macro",
+      "upstream_description": "Merge cascaded small LUTs on the worst paths into fewer, larger LUTs",
+      "upstream_trigger": "LLM call; LUT-bound critical path",
+      "code_home": "`optimizer/recipe_passes.py:_recipe_lut_optimization`",
+      "local_status": "reference_only",
+      "local_plays": []
+    },
+    {
+      "id": "L3",
+      "title": "Register-retiming macro",
+      "upstream_description": "`phys_opt` with a retiming directive, re-route, measure",
+      "upstream_trigger": "LLM call; plateaued designs, near-target Fmax",
+      "code_home": "`optimizer/recipe_passes.py:_recipe_register_retiming`",
+      "local_status": "reference_only",
+      "local_plays": []
+    },
+    {
+      "id": "L4",
+      "title": "Granular phys_opt sweep macro",
+      "upstream_description": "Try each phys_opt sub-optimization one at a time, keep wins, revert losses",
+      "upstream_trigger": "LLM call; budget-tight, or huge designs",
+      "code_home": "`optimizer/recipe_passes.py:_recipe_post_route_phys_opt_sweep`",
+      "local_status": "reference_only",
+      "local_plays": []
+    },
+    {
+      "id": "L5",
+      "title": "Scoped phys_opt macro",
+      "upstream_description": "Path-group the worst N paths, run one phys_opt sub-flag on just that group",
+      "upstream_trigger": "LLM call; huge designs where global phys_opt is too slow",
+      "code_home": "`optimizer/recipe_passes.py:_recipe_critical_path_focused_phys_opt`",
+      "local_status": "reference_only",
+      "local_plays": []
+    },
+    {
+      "id": "L6",
+      "title": "High-fanout replication macro",
+      "upstream_description": "Surgically replicate the drivers of named high-fanout nets on the worst paths",
+      "upstream_trigger": "LLM call; fanout-dominated critical paths",
+      "code_home": "`optimizer/recipe_passes.py:_recipe_high_fanout_timing_replication`",
+      "local_status": "reference_only",
+      "local_plays": []
+    },
+    {
+      "id": "L7",
+      "title": "Manual full re-place (Class G)",
+      "upstream_description": "Unplace + `place_design` with an escalating directive list + route + retime polish",
+      "upstream_trigger": "LLM judgment; plateaued/LOSS designs",
+      "code_home": "`prompts/system_prompt_scored.txt` (class G)",
+      "local_status": "adapted_subset",
+      "local_plays": [
+        "replace_explore",
+        "replace_timing",
+        "replace_netdelay"
+      ]
+    },
+    {
+      "id": "L8",
+      "title": "Pblock re-placement (Class C)",
+      "upstream_description": "Constrain the whole design into a computed compact region, re-place inside it",
+      "upstream_trigger": "LLM judgment; spread-out designs (avg spread > 70 tiles)",
+      "code_home": "`VivadoMCP:create_and_apply_pblock` + `RapidWrightMCP:analyze_fabric_for_pblock`",
+      "local_status": "reference_only",
+      "local_plays": []
+    },
+    {
+      "id": "L9",
+      "title": "Fanout split (Class D manual)",
+      "upstream_description": "Split one high-fanout net's driver into replicated drivers by factor",
+      "upstream_trigger": "LLM judgment; a single dominating high-fanout net",
+      "code_home": "`RapidWrightMCP:optimize_fanout`",
+      "local_status": "reference_only",
+      "local_plays": []
+    },
+    {
+      "id": "L10",
+      "title": "Surgical phys_opt flags",
+      "upstream_description": "`-critical_pin_opt` (LUT pin swap), `-clock_opt` (skew), `-force_replication_on_nets`, `-tns_cleanup`",
+      "upstream_trigger": "LLM judgment; 1–2 stubborn paths after coarser passes",
+      "code_home": "`VivadoMCP:phys_opt_design`",
+      "local_status": "reference_only",
+      "local_plays": []
+    },
+    {
+      "id": "L11",
+      "title": "Route-directive escalation (Class I)",
+      "upstream_description": "Re-route with `Explore` → `AggressiveExplore` → `NoTimingRelaxation` / congestion directives",
+      "upstream_trigger": "LLM judgment; route errors or WNS lost in routing",
+      "code_home": "`VivadoMCP:route_design`",
+      "local_status": "adapted_subset",
+      "local_plays": [
+        "route_explore",
+        "route_aggressive",
+        "route_more_global"
+      ]
+    },
+    {
+      "id": "L12",
+      "title": "BRAM/DSP relocation (Class F)",
+      "upstream_description": "Move memory/DSP macros whose path crosses the die via the cell-move play",
+      "upstream_trigger": "LLM judgment; macro-crossing critical paths",
+      "code_home": "via L1 targeting BRAM/DSP cells",
+      "local_status": "reference_only",
+      "local_plays": []
+    },
+    {
+      "id": "L13",
+      "title": "ML strategy recommender (Class H)",
+      "upstream_description": "Run Vivado's `report_qor_suggestions`, apply the suggested directives",
+      "upstream_trigger": "LLM judgment; unknown/stubborn designs",
+      "code_home": "`prompts/system_prompt_scored.txt` (class H)",
+      "local_status": "reference_only",
+      "local_plays": []
+    }
+  ]
+}

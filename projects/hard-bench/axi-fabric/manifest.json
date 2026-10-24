@@ -1,0 +1,47 @@
+{
+  "upstream_commit": "516bd5dadc3365b7f9e225d2af8fe0b8d804fe53",
+  "sources": [
+    "vendor/verilog-axi/rtl/axi_crossbar.v",
+    "projects/hard-bench/axi-fabric/axi_crossbar_wr_guarded.v",
+    "vendor/verilog-axi/rtl/axi_crossbar_rd.v",
+    "projects/hard-bench/axi-fabric/axi_crossbar_addr_guarded.v",
+    "vendor/verilog-axi/rtl/axi_register_wr.v",
+    "vendor/verilog-axi/rtl/axi_register_rd.v",
+    "vendor/verilog-axi/rtl/arbiter.v",
+    "vendor/verilog-axi/rtl/priority_encoder.v",
+    "vendor/verilog-axi/rtl/axi_ram.v",
+    "projects/hard-bench/axi-fabric/rv_delay.sv",
+    "projects/hard-bench/axi-fabric/axi_error_target.sv",
+    "projects/hard-bench/axi-fabric/axi_write_completion_guard.sv",
+    "projects/hard-bench/axi-fabric/axi_fabric_top.sv"
+  ],
+  "rtl_lines": 4365,
+  "sha256": {
+    "vendor/verilog-axi/rtl/axi_crossbar.v": "b251ddc6e47ce66cd1c5d8e09539bafae307effc6f73f176d349df9757271c89",
+    "projects/hard-bench/axi-fabric/axi_crossbar_wr_guarded.v": "695ad0578882354e644de52296a2a25589f172cc19cc892e28cc0683bedcc28c",
+    "vendor/verilog-axi/rtl/axi_crossbar_rd.v": "715be9547f9ac6b4a35be065382aa209c3c85455c412bfa4e107d7203487be41",
+    "projects/hard-bench/axi-fabric/axi_crossbar_addr_guarded.v": "6834506eed90ffbf4a44c13e68f6c7dbc6ac0fe3d061490bfb79cdd66374d94f",
+    "vendor/verilog-axi/rtl/axi_register_wr.v": "6bef07487a7d0c03eafde4a755389418a4e71e70dcdb2e60ae697370484fb5d5",
+    "vendor/verilog-axi/rtl/axi_register_rd.v": "f07a5f71a625de6b924c82214e1ff356254d542089792f67057a15deffdda32f",
+    "vendor/verilog-axi/rtl/arbiter.v": "db0ba9a08a7e8eab28b838318139abbcac2dc179032119c04006e0a2dd2a9efe",
+    "vendor/verilog-axi/rtl/priority_encoder.v": "07c610b8dda24daf67dec36c743f79fca30f9d01d5469e1e7f795a16f4c7aa97",
+    "vendor/verilog-axi/rtl/axi_ram.v": "1488318fd46a28f018817dfc61731075721581d9109efa07048a3ff5aff6eb46",
+    "projects/hard-bench/axi-fabric/rv_delay.sv": "43e5ae09a63e584f22ec0ecb40f7a0096cb18f31e5839a50c874fe624ac44661",
+    "projects/hard-bench/axi-fabric/axi_error_target.sv": "570e6f8986d91f03f53ce4fef434679c334edf4938f26b64c303b981a506badc",
+    "projects/hard-bench/axi-fabric/axi_write_completion_guard.sv": "f02ed9bec4f45fdd2fb6fffc68bc11af37d086f472df00d4e6b5e4d7573a902e",
+    "projects/hard-bench/axi-fabric/axi_fabric_top.sv": "876c4bbdbd2662756e4ce29a72e6c127bec76b788706bd16e617366a42bf3b80"
+  },
+  "seeds": [
+    "0xc001cafe",
+    "0x5eed1234",
+    "0xdeadbeef",
+    "0x13579bdf"
+  ],
+  "addresses": {
+    "RAM0": "0x0000-0x3fff",
+    "RAM1": "0x4000-0x7fff",
+    "SLVERR_target": "0x8000-0xbfff",
+    "DECERR_unmapped": "0xc000-0xffff"
+  },
+  "expected_total_bursts": 4656
+}
