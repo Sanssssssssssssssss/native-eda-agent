@@ -1,0 +1,3 @@
+# Traces, frozen test inputs and release manifests hash exact bytes.
+# Preserve LF/CRLF as committed on every platform; do not rewrite evidence.
+* -text

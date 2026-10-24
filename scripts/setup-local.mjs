@@ -3,8 +3,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 const root=path.resolve(import.meta.dirname,'..');
 const quote=s=>JSON.stringify(s.replaceAll('\\','/'));
-const native={command:'node',args:[path.join(root,'src/mcp-server.mjs')],cwd:root,timeout:4800};
-const proxy=name=>({command:'node',args:[path.join(root,'src/traced-mcp-proxy.mjs'),name],cwd:root,timeout: name==='ltspice'?1100:2200});
+const native={command:'node',args:[path.join(root,'src/mcp-server.mjs')],cwd:root,timeout:4800,exposure:'codemode'};
+const proxy=name=>({command:'node',args:[path.join(root,'src/traced-mcp-proxy.mjs'),name],cwd:root,timeout: name==='ltspice'?1100:2200,exposure:'codemode'});
 fs.mkdirSync(path.join(root,'artifacts'),{recursive:true});
 function write(file,text){
   fs.mkdirSync(path.dirname(file),{recursive:true});

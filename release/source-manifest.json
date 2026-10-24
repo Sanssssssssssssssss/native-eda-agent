@@ -40,7 +40,7 @@
     "scripts/assess-vivado.py": "b78355fc42d11757d590406b5952ff3a442f1fdffb5fbd831c24f039c3a472f2",
     "scripts/benchmark.mjs": "38c13ea867e3d8b4741a45e663e6642a74455d0dcf737273c342edd42214a98d",
     "scripts/bootstrap-python.ps1": "015c71fc2751dffded13938f12821c0b66ebb4aab9a5f019ab934b97f8894aac",
-    "scripts/build-public.mjs": "2b5dc86143774b6554cdc52346c3dd74ce73b842c590fc2720a0857169aab51a",
+    "scripts/build-public.mjs": "cd59b95ba5c6391c52f104c1c7734c0f4ca60854a5d3e0a248938ba1217ddc5e",
     "scripts/capture-codex-usage.py": "32664c322835fa1cbf4c9a31d1a69deaab2b49c857e64347546d14fe0ccf9b8e",
     "scripts/check-knowledge.mjs": "718166ddef12eb0e468ccb821bcee696376168025354c8606938537b234716e2",
     "scripts/check-ross.mjs": "5d9806b01fe3c81b6ec592c739d6b174589b92168d2612b849414a0235867f66",
@@ -55,7 +55,7 @@
     "scripts/replay-experiment.mjs": "4f9849ffbd9b6ef4d9a02de3728f5c74163d543988a25de4debd7447986b750f",
     "scripts/results.mjs": "acef48d862b80448bdfa3d0d0854b86f2bdf785d4628f41d73f0ef298a864c51",
     "scripts/ross-mcp.mjs": "98b213e2e1d4d0b7b056e68fcbc5f1439b581bce20ecd06a93f2ab895c45b42a",
-    "scripts/setup-local.mjs": "003e53b6973d7a30de8a4c264928ad65ad5990b5f167eebb3828050a137dabd9",
+    "scripts/setup-local.mjs": "061f20202b331d8f8dc8703eab3a637035ac464007ce390d399097f773d36ef5",
     "scripts/test-measurements.py": "89440c03ce0c525c704fe1ea3c788bae0ab3b4cd63077cba539d9837791bf734",
     "scripts/tool-catalog.mjs": "f47cd0ec342244e0352f758ff3b0433798d8ec19e883aad74a9edc93c29adc93",
     "scripts/trace-inspect.mjs": "739b849b7813c5a8dd89c0fcf21f939ad4e43874a9e06aa6f5d5b4af159714d3",
@@ -136,7 +136,7 @@
     "docs/parallel-validation-2026-10-23.md": "73fa41044018d9cc3d9b5c8b7b0f750c76823f18dd919bc06f8b0f9ce34949cb",
     "docs/reference/tools.json": "7e24e4b7258ce2f3950e610c7a760155fbf92067e60616cd3f7d27e86f5c4226",
     "docs/reference/tools.md": "b1241f5822309d4c058480a5096b7d87073ba544b05ae783fc52a37d0f6fef84",
-    "docs/release-2026-10-25.md": "aea7ebb80099a4832f57dd6e1c5932c771150039442a94edf974b5611bd34d69",
+    "docs/release-2026-10-25.md": "ba699c7685cba67ef950072fc6abd243684e4747c30cbe5137d3a7da7eab331d",
     "docs/research-2026-10-21.md": "e4c0a4d8961d19354705cad8cd0c0e948fa393ecf553ad0e71ea8f0915b6d25f",
     "docs/results.md": "7ee09a561e3d89f7d4bd482d85decb15065a78dc3b3ef4feb8eab5855d841c6f",
     "docs/ross-integration-2026-10-24.md": "a3e4c186a7df41372831ed1ce6ef69442d5b66ce690fc1fb20feca1cfeab6aaf",
@@ -546,6 +546,7 @@
     "vendor/routeagents-fpl26/NOTICE": "c22a7b03ebd25e5e05637a461f245942b60cc1a1b5132fbf659406928a269c4e",
     "vendor/routeagents-fpl26/optimizer/recipe_router.py": "81269651537c747d94c45982c6e62fa6b77d83a7f9e873c0a3c534a0e0486bc9",
     "vendor/routeagents-fpl26/docs/PLAYBOOK.md": "431b29ce2b2a7023e59b61694bd8c789e9083b0137539cc4d0436219e6d1d2ce",
-    "release/python-requirements.lock": "005e600d75d2b27e454712ca58766b0798490c9db85d0e0c662c7bda67e8cb9f"
+    "release/python-requirements.lock": "005e600d75d2b27e454712ca58766b0798490c9db85d0e0c662c7bda67e8cb9f",
+    ".gitattributes": "ed3315e4dba006ca34a985fe95ac43991b130a85a7698f7b9cfb55e04e8c520f"
   }
 }
