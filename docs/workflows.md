@@ -16,6 +16,8 @@ node scripts/workflow.mjs resume artifacts/FAILED_WORKFLOW_RUN
 
 完整 schema 可用 `node scripts/workflow.mjs schema` 获取。规格包含 `id`、`goal`、输入文件、`limits.max_calls` / `wall_seconds` 和有序 `steps`。每步必须给出工具参数和至少一条检查。检查采用 RFC 6901 JSON pointer，支持严格 `eq`、有限数值 `gte/lte`；字段缺失、null 或错误类型不能通过数值判断。
 
+可选 `guidance` 把知识和流程选择一起冻结，例如 `"guidance":{"rule_ids":["FPGA-TIMING-001"],"sop_ids":["fpga-rtl-verify"]}`。计划返回规则范围、来源版本、所需证据与文件哈希；修改规则、知识实现或所选 SOP 后，旧任务不能继续恢复。先用 `eda_knowledge` 检索，再用 `eda_sop` 读取流程。选择 SOP 是指导信息，步骤的 `checks` 才会执行验收；当前不会自动把 prose 转成测试。
+
 后一步可以引用已完成步骤的输出，避免手抄临时 DCP 路径：
 
 ```json
@@ -26,7 +28,7 @@ node scripts/workflow.mjs resume artifacts/FAILED_WORKFLOW_RUN
 
 样例：
 
-- [离线证据复核](../examples/workflows/offline-review.json)：前检 → 历史证据核验；可立即执行。
+- [离线证据复核](../examples/workflows/offline-review.json)：前检 → 读取复核 SOP → 历史证据核验；可立即执行。
 - [counter 仿真](../examples/workflows/counter-simulation.json)：固定 checker 的明确 PASS 判定；会启动 XSim。
 - [AXI 3×3 工程](../examples/workflows/axi-fabric-ooc.json)：仿真 → 综合 → 布局布线 → DRC 报告；会启动 EDA，公开 checkout 先获取固定 RTL 依赖。DRC 步骤只验报告生成，报告内容仍须审查；它不宣称 DRC 为零或完整签核。本轮只验证该规格的静态计划。
 

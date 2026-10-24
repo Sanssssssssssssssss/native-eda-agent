@@ -1,13 +1,19 @@
-# FPGA knowledge
+# FPGA 知识与 SOP
 
-36 条原子知识、21 个官方来源和 11 项工具/参考能力记录。JSON 可直接检索，无需向量数据库或外部服务。
+本目录保存 36 条原子规则、21 个来源、4 个 SOP 索引，以及 11 项带原始检查日期的工具/参考能力记录。当前调用与边界见 [知识与 SOP 指南](../docs/knowledge-and-sops.md)。
 
-- `rules.json`：`rule` 是限定范围内的要求；`recommendation` 是建议；`limitation` 说明结论边界。每条包含适用范围、版本、来源 URL/章节、所需证据和静态证明边界。
-- `sources.json`：来源版本、license、核验 UTC 与核验方式。可变的 latest/stable 文档记录实际观察版本；文档与代码仓库 commit 不自动视为同一构建。
-- `tools.json`：本机探测范围、可用状态及增量接入建议。未在当前 PATH/Python 检出不等于整台电脑未安装。
+| 文件 | 用途 |
+|---|---|
+| [rules.json](rules.json) | 要求、建议与限制；适用范围、版本、引用、所需证据、静态证明边界 |
+| [sources.json](sources.json) | 来源链接、观察版本、版权/许可、原核验日期与核验方式 |
+| [sops.json](sops.json) | 4 个 SOP 的触发条件、规则引用、必要证据；正文在 [.pi/skills](../.pi/skills) |
+| [retrieval-cases.json](retrieval-cases.json) | 24 条可见检索回归与 3 条无关查询；不是保留盲测题集 |
+| [tools.json](tools.json) | 2026-10-22 的工具探测记录；当前是否可运行还须 preflight 和实跑 |
+| [routeagents-playbook.json](routeagents-playbook.json) | 42 项上游策略参考及本地适配状态；执行器仅实现 7 项 |
+| [validation-receipt.json](validation-receipt.json) | 初始建设的历史回执；文件哈希对应当时版本 |
 
-调用 `eda_knowledge({query:"CDC",limit:5})` 或 `eda_knowledge({id:"FPGA-CDC-001"})`。离线检查：`node scripts/check-knowledge.mjs`；负向测试：`node --test tests/knowledge.test.mjs`。
+`npm run knowledge -- "跨时钟总线一致性"` 返回本地 BM25 排序、命中词项、来源和语料哈希；`npm run sop -- fpga-rtl-verify` 返回完整步骤。`npm run knowledge:check` 检查结构与引用；`npm run knowledge:eval` 生成新的检索回归回执。完整发布 CI 同时覆盖这些合同。
 
-校验器只检查结构、引用和文件存在，不证明来源内容正确、在线链接可达、RTL 正确或硬件运行。应用规则时仍需工具报告、仿真/形式验证及任务要求的实际硬件证据。
+本地 Ross 副本标为 optional_local_paths，公开包缺少它时明确返回 unavailable；必需文件或 SOP 缺失仍会失败。校验器不访问外网，也不把路径存在当成来源正确、EDA 安装或设计通过。
 
-来源内容均为短摘要；lowRISC 指南署名归 lowRISC contributors，原指南为 CC-BY-4.0。本项目摘要注明了工程推导项；AMD 文档仍受其原版权条款约束。完整原文保留在来源链接，不复制手册。
+来源内容为短摘要与工程推导。lowRISC 原指南为 CC-BY-4.0，署名 lowRISC contributors；AMD 文档保留其原条款。检索结果保留来源身份和适用条件；完整原文通过来源链接查阅。

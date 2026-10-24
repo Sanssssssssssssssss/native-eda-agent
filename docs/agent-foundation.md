@@ -2,7 +2,7 @@
 
 这套基座把现有 Pi Agent、真实 EDA 工具、测试目录、验收和证据放在同一条调用链中。当前模型 API 停用；Codex、CLI 或 MCP 可以直接运行本地实验。板卡实测、外部 formal 工具和盲测代码生成成绩仍须另行取得。
 
-当前交付、实跑成绩与未解决问题见 [2026-10-23 验收报告](agent-foundation-validation-2026-10-23.md)。
+早期交付与实跑记录见 [2026-10-23 验收报告](agent-foundation-validation-2026-10-23.md)。当前能力和缺口见 [机制核对](mechanisms.md)，成绩按功能见 [结果目录](results.md)。
 
 当前工具选择、优化器事件链、Pi 兼容和失败恢复以 [Agent 工作流与 trace 接入合同](agent-workflow-and-trace-contract.md)为准；历史验收数按原报告保留。
 

@@ -130,5 +130,11 @@
         }
       ]
     }
-  ]
+  ],
+  "guidance": {
+    "sop_ids": [
+      "fpga-rtl-verify",
+      "fpga-timing-triage"
+    ]
+  }
 }

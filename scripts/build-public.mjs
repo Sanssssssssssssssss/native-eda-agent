@@ -25,9 +25,9 @@ function walk(relative){
     if(e.isDirectory())walk(next);else if(permitted(e.name))copy(next);
   }
 }
-for(const name of ['src','scripts','tests','benchmarks','knowledge','examples','prompts','docs','results','.github','.pi/extensions'])walk(name);
+for(const name of ['src','scripts','tests','benchmarks','knowledge','examples','prompts','docs','results','.github','.pi/extensions','.pi/skills'])walk(name);
 for(const name of ['fft-spectrum','fpga-tool-validation','hard-bench','system-bench','verilogeval-24','verilogeval-mini','native-vivado-workbench'])walk(`projects/${name}`);
-for(const name of ['README.md','AGENTS.md','CONTRIBUTING.md','CHANGELOG.md','LICENSE','THIRD_PARTY_NOTICES.md','.gitignore','.gitattributes','package.json','package-lock.json','eda.ps1','start-pi.ps1','.eda/config.json','.eda/optimizer-upstreams.json','.pi/APPEND_SYSTEM.md','.pi/settings.json','release/upstreams.json','release/python-requirements.lock','release/README.md'])copy(name);
+for(const name of ['README.md','AGENTS.md','CONTRIBUTING.md','CHANGELOG.md','LICENSE','THIRD_PARTY_NOTICES.md','.gitignore','.gitattributes','package.json','package-lock.json','eda.ps1','start-pi.ps1','.eda/config.json','.eda/optimizer-upstreams.json','.pi/APPEND_SYSTEM.md','.pi/settings.json','projects/README.md','release/upstreams.json','release/python-requirements.lock','release/README.md'])copy(name);
 const community='vendor/vivado-mcp-community';
 const upstreamFiles=execFileSync('git',['-C',path.join(root,community),'ls-files','-z'],{encoding:'utf8'}).split('\0').filter(Boolean);
 for(const f of upstreamFiles)if(permitted(path.basename(f))&&!f.split('/').some(p=>excluded.has(p)))copy(`${community}/${f}`);

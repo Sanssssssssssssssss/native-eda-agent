@@ -15,11 +15,11 @@ export function readKnowledge(root = projectRoot) {
   const skills = fs.readdirSync(skillRoot, { withFileTypes: true })
     .filter(x => x.isDirectory() && x.name.startsWith('fpga-'))
     .map(x => ({ directory: path.join(skillRoot, x.name), content: fs.readFileSync(path.join(skillRoot, x.name, 'SKILL.md'), 'utf8') }));
-  return { sources: read('sources'), rules: read('rules'), tools: read('tools'), skills };
+  return { sources: read('sources'), rules: read('rules'), tools: read('tools'), sops: read('sops'), skills };
 }
 
 export function validateKnowledge(bundle, { root = projectRoot, checkPaths = true } = {}) {
-  const errors = [];
+  const errors = [], optional_unavailable = [];
   const check = (ok, message) => { if (!ok) errors.push(message); };
   const rows = (name, key) => {
     const doc = bundle?.[name];
@@ -27,7 +27,7 @@ export function validateKnowledge(bundle, { root = projectRoot, checkPaths = tru
     check(Array.isArray(doc?.[key]) && doc[key].length > 0, `${name}: nonempty ${key} array required`);
     return Array.isArray(doc?.[key]) ? doc[key] : [];
   };
-  const sourceRows = rows('sources', 'sources'), ruleRows = rows('rules', 'rules'), toolRows = rows('tools', 'tools');
+  const sourceRows = rows('sources', 'sources'), ruleRows = rows('rules', 'rules'), toolRows = rows('tools', 'tools'), sopRows = rows('sops', 'sops');
   const unique = (items, kind) => {
     const seen = new Set();
     for (const item of items) {
@@ -40,13 +40,18 @@ export function validateKnowledge(bundle, { root = projectRoot, checkPaths = tru
   const sourceIds = unique(sourceRows, 'sources'), ruleIds = unique(ruleRows, 'rules'); unique(toolRows, 'tools');
   const sourceMap = new Map(sourceRows.filter(x => x && typeof x === 'object').map(x => [x.id, x]));
   const localPaths = (item, label) => {
-    if (item.local_paths === undefined) return;
-    check(Array.isArray(item.local_paths), `${label}: local_paths must be an array`);
-    for (const p of Array.isArray(item.local_paths) ? item.local_paths : []) {
+    for (const field of ['local_paths','optional_local_paths']) {
+    if (item[field] === undefined) continue;
+    check(Array.isArray(item[field]), `${label}: ${field} must be an array`);
+    for (const p of Array.isArray(item[field]) ? item[field] : []) {
       if (!nonempty(p)) { check(false, `${label}: invalid local path`); continue; }
       const target = path.resolve(root, p), relative = path.relative(root, target);
       check(!!relative && !relative.startsWith('..') && !path.isAbsolute(relative), `${label}: path outside workspace ${p}`);
-      if (checkPaths) check(fs.existsSync(target), `${label}: missing local path ${p}`);
+      if (checkPaths && !fs.existsSync(target)) {
+        if (field==='optional_local_paths') optional_unavailable.push({id:label,path:p});
+        else check(false, `${label}: missing local path ${p}`);
+      }
+    }
     }
   };
   for (const s of sourceRows) {
@@ -103,14 +108,29 @@ export function validateKnowledge(bundle, { root = projectRoot, checkPaths = tru
       if (checkPaths) check(fs.existsSync(resolved), `${label}: missing skill link ${target}`);
     }
   }
-  return { valid: errors.length === 0, errors, counts: { sources: sourceRows.length, rules: ruleRows.length, tools: toolRows.length, skills: bundle?.skills?.length || 0 }, boundary: 'Offline structural and cross-reference validation only. Does not verify source truth, remote link reachability, HDL correctness, formal proof, tool installation or hardware behavior.' };
+  unique(sopRows,'sops');
+  for (const sop of sopRows) {
+    if (!sop || typeof sop!=='object') continue;
+    check(nonempty(sop.title),`${sop.id}: SOP title required`);
+    for (const field of ['triggers','rule_ids','required_evidence']) check(strings(sop[field]),`${sop.id}: SOP ${field} required`);
+    check(sop.skill_path===`.pi/skills/${sop.id}/SKILL.md`,`${sop.id}: SOP path must match its local skill`);
+    const skill=bundle.skills?.find(s=>path.basename(s.directory)===sop.id);
+    check(!!skill,`${sop.id}: SOP skill missing`);
+    const references=[...new Set([...(skill?.content||'').matchAll(/\bFPGA-[A-Z]+-\d{3}\b/g)].map(m=>m[0]))].sort();
+    if (Array.isArray(sop.rule_ids)) {
+      for (const id of sop.rule_ids) check(ruleIds.has(id),`${sop.id}: unknown SOP rule ${id}`);
+      check(JSON.stringify([...sop.rule_ids].sort())===JSON.stringify(references),`${sop.id}: SOP and skill rule references differ`);
+    }
+  }
+  for (const name of names) check(sopRows.some(s=>s?.id===name),`${name}: skill absent from SOP catalog`);
+  return { valid: errors.length === 0, errors, optional_unavailable, counts: { sources: sourceRows.length, rules: ruleRows.length, tools: toolRows.length, sops:sopRows.length, skills: bundle?.skills?.length || 0 }, boundary: 'Offline structural and cross-reference validation only. Does not verify source truth, remote link reachability, HDL correctness, formal proof, tool installation or hardware behavior.' };
 }
 
 export function main() {
   try {
     const bundle = readKnowledge();
     const result = validateKnowledge(bundle);
-    const paths = ['knowledge/sources.json', 'knowledge/rules.json', 'knowledge/tools.json', ...bundle.skills.map(s => path.relative(projectRoot, path.join(s.directory, 'SKILL.md')))];
+    const paths = ['knowledge/sources.json', 'knowledge/rules.json', 'knowledge/tools.json','knowledge/sops.json', ...bundle.skills.map(s => path.relative(projectRoot, path.join(s.directory, 'SKILL.md')))];
     result.checked_at_utc = new Date().toISOString();
     result.files = paths.map(p => ({ path: p.replaceAll('\\', '/'), sha256_at_check: createHash('sha256').update(fs.readFileSync(path.join(projectRoot, p))).digest('hex') }));
     console.log(JSON.stringify(result, null, 2));

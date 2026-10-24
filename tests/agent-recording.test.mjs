@@ -42,7 +42,8 @@ async function exercise(failAt) {
     outputDir: () => dir, save: (p, value) => fs.writeFileSync(p, JSON.stringify(value)),
     process: fakeProcess, console: { log() {}, error() {} }, setTimeout, clearTimeout,
     SettingsManager: { create() { if (failAt === 'initialize') throw new Error('fixture initialization failure'); } },
-    DefaultResourceLoader: class { async reload() {} },
+    DefaultResourceLoader: class { async reload() {} getSkills(){return {skills:[]};} },
+    edaResourceOptions:options=>options,
     edaExtension() {}, createCodemodeExtension() {}, createToolSearchExtension() {}, createMcpExtension() {},
     createAgentSession: async () => ({ session, extensionsResult: { errors: [] } }),
   };
@@ -66,10 +67,12 @@ test('records completed session, ordered timestamps and scoped usage', async () 
   assert.equal(result.run.sessionId, 'fixture-session');
   assert.equal(result.usage.scope, 'pi-sdk-agent-only');
   assert.equal(result.events.at(-1).type, 'run_end');
+  let ready=false;
   result.events.forEach((event, i) => {
+    if(event.type==='session_ready')ready=true;
     assert.equal(event.sequence, i + 1);
     assert.ok(Number.isFinite(Date.parse(event.timestamp_utc)));
-    assert.equal(event.session_id, 'fixture-session');
+    assert.equal(event.session_id, ready?'fixture-session':undefined);
   });
 });
 

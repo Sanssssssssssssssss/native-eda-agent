@@ -5,7 +5,8 @@ import { randomUUID, createHash } from 'node:crypto';
 import { createJiti } from 'jiti';
 import { spawnSync } from 'node:child_process';
 import { readConfig, listRuns, reconcileRuns } from './runtime.mjs';
-import { doctor, queryKnowledge } from './platform.mjs';
+import { doctor } from './platform.mjs';
+import { edaResourceOptions } from './agent-resources.mjs';
 import { createAgentSession, createCodemodeExtension, createMcpExtension,
   createToolSearchExtension, DefaultResourceLoader, SettingsManager,
 } from '@earendil-works/pi-coding-agent';
@@ -72,7 +73,7 @@ async function agentRun(prompt, limits) {
     return fs.existsSync(directory) ? fs.readdirSync(directory, { recursive: true })
       .filter(file => fs.statSync(path.join(directory, file)).isFile()).map(file => path.join(relative, file)) : [];
   });
-  for (const relative of ['src/agent.mjs', 'src/extension.ts', 'src/platform.mjs', 'src/runtime.mjs', 'src/tools/eda.ts', 'src/tools/fpga.mjs', 'src/tools/optimizer.mjs', 'src/optimizer-inspection.mjs', 'src/fpga_optimizer/trace.py', 'src/fpga_optimizer/runner.py', 'src/fpga_optimizer/core.py', 'src/fpga_optimizer/backend.py', 'src/tools/vivado-common.tcl', 'src/tools/xsim-options.mjs', 'src/trace.mjs', 'package.json', 'package-lock.json', '.eda/config.json', '.pi/APPEND_SYSTEM.md', '.pi/settings.json', 'knowledge/rules.json', 'knowledge/sources.json', 'benchmarks/catalog.json', ...skillInputs]) {
+  for (const relative of ['src/agent.mjs', 'src/agent-resources.mjs', 'src/knowledge.mjs', 'scripts/check-knowledge.mjs', 'knowledge/sops.json', 'knowledge/tools.json', 'src/extension.ts', 'src/platform.mjs', 'src/runtime.mjs', 'src/tools/eda.ts', 'src/tools/fpga.mjs', 'src/tools/optimizer.mjs', 'src/optimizer-inspection.mjs', 'src/fpga_optimizer/trace.py', 'src/fpga_optimizer/runner.py', 'src/fpga_optimizer/core.py', 'src/fpga_optimizer/backend.py', 'src/tools/vivado-common.tcl', 'src/tools/xsim-options.mjs', 'src/trace.mjs', 'package.json', 'package-lock.json', '.eda/config.json', '.pi/APPEND_SYSTEM.md', '.pi/settings.json', 'knowledge/rules.json', 'knowledge/sources.json', 'benchmarks/catalog.json', ...skillInputs]) {
     const source = path.join(root, relative);
     if (!fs.existsSync(source)) continue;
     const bytes = fs.readFileSync(source);
@@ -91,23 +92,15 @@ async function agentRun(prompt, limits) {
   let session;
   try {
   const settingsManager = SettingsManager.create(root, agentDir);
-  const loader = new DefaultResourceLoader({
-    cwd: root, agentDir, settingsManager,
-    // Direct in-process EDA tools. The project TUI adapter is not loaded twice.
-    noExtensions: true, noSkills: false, noContextFiles: true,
-    additionalSkillPaths: skillDirectories.map(relative => path.join(root, relative)),
-    skillsOverride: base => ({ ...base, skills: base.skills.filter(skill => {
-      return skillDirectories.some(directory => {
-        const relative = path.relative(path.join(root, directory), skill.filePath);
-        return relative && !relative.startsWith('..') && !path.isAbsolute(relative);
-      });
-    }) }),
-    appendSystemPrompt: [fs.readFileSync(path.join(root, '.pi/APPEND_SYSTEM.md'), 'utf8')],
+  const loader = new DefaultResourceLoader(edaResourceOptions({
+    root, agentDir, settingsManager,
     extensionFactories: [pi => edaExtension(pi, { traceContext: () => ({ parent_run_id: run.runId,
       session_id: run.sessionId, trace_id: run.trace_id, parent_span_id: run.span_id }) }),
       createCodemodeExtension({ mode: 'on' }), createToolSearchExtension(), createMcpExtension()],
-  });
+  }));
   await loader.reload();
+  run.resources={skills:loader.getSkills().skills.map(skill=>({name:skill.name,path:path.relative(root,skill.filePath).replaceAll('\\','/')}))};
+  recordEvent({type:'resources_loaded',...run.resources});
   const created = await createAgentSession({ cwd: root, agentDir, settingsManager, resourceLoader: loader });
   session = created.session;
   const { extensionsResult } = created;
@@ -230,7 +223,11 @@ if (command === 'doctor') {
   if (result.error) throw result.error;
   process.exitCode = result.status ?? 1;
 } else if (command === 'knowledge') {
-  console.log(JSON.stringify(queryKnowledge(root, { query: args.join(' ') }), null, 2));
+  const result=await nativeTools.get('eda_knowledge').execute(randomUUID(),args.length?{query:args.join(' ')}:{});
+  console.log(JSON.stringify(result.details,null,2));
+} else if (command === 'sop') {
+  const result=await nativeTools.get('eda_sop').execute(randomUUID(),args.length?{id:args[0]}:{});
+  console.log(JSON.stringify(result.details,null,2));
 } else if (command === 'runs') {
   console.log(JSON.stringify(args[0] === '--reconcile' ? reconcileRuns(root) : listRuns(root), null, 2));
 } else if (command === 'verify') {
@@ -253,5 +250,5 @@ if (command === 'doctor') {
   if (!prompt.trim()) throw new Error('Supply a task or --prompt-file.');
   await agentRun(prompt, limits);
 } else {
-  console.log('EDA Agent — Pi SDK + local tools + MCP\n\n  .\\eda.ps1 doctor\n  .\\eda.ps1 benchmark list|plan|run|report|compare\n  .\\eda.ps1 knowledge timing\n  .\\eda.ps1 trace RUN_DIRECTORY\n  .\\eda.ps1 recover RUN_DIRECTORY --check-only\n  .\\eda.ps1 export-trace RUN_DIRECTORY --output FILE.json\n  .\\eda.ps1 storage --plan\n  .\\eda.ps1 runs [--reconcile]\n  npm run workflow -- plan|run SPEC.json\n  npm run validate:agent\n  .\\eda.ps1 verify\n  .\\eda.ps1 chat\n  .\\eda.ps1 run "任务描述"   # requires model_api_enabled=true\n\nrun/demo: --max-turns 24 --timeout 600; run also accepts --prompt-file PATH');
+  console.log('EDA Agent — Pi SDK + local tools + MCP\n\n  .\\eda.ps1 doctor\n  .\\eda.ps1 benchmark list|plan|run|report|compare\n  .\\eda.ps1 knowledge timing\n  .\\eda.ps1 trace RUN_DIRECTORY\n  .\\eda.ps1 recover RUN_DIRECTORY --check-only\n  .\\eda.ps1 export-trace RUN_DIRECTORY --output FILE.json\n  .\\eda.ps1 storage --plan\n  .\\eda.ps1 runs [--reconcile]\n  npm run knowledge -- QUERY\n  npm run sop -- [SOP_ID]\n  npm run workflow -- plan|run SPEC.json\n  npm run validate:agent\n  .\\eda.ps1 verify\n  .\\eda.ps1 chat\n  .\\eda.ps1 run "任务描述"   # requires model_api_enabled=true\n\nrun/demo: --max-turns 24 --timeout 600; run also accepts --prompt-file PATH');
 }

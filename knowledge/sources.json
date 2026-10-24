@@ -238,7 +238,7 @@
       "verified_at_utc": "2026-10-22T18:36:38Z",
       "verification": "official content read",
       "local_status": "vendor/ross-ai-assistant documentation checkout; Ross binary/MCP not connected",
-      "local_paths": [
+      "optional_local_paths": [
         "vendor/ross-ai-assistant/manifest.yaml",
         "vendor/ross-ai-assistant/skills/vivado-timing-methodology-checks/SKILL.md"
       ]

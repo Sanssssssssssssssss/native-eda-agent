@@ -1,0 +1,32 @@
+{
+  "schema_version":1,
+  "scope":"Curated visible regression queries for this 36-rule corpus; not a held-out RAG benchmark or an answer-correctness score.",
+  "top_k":5,
+  "cases":[
+    {"query":"异步复位释放要怎样同步","relevant":["FPGA-RESET-002"]},
+    {"query":"reset release CDC metastability","relevant":["FPGA-RESET-002"]},
+    {"query":"同步复位 DSP BRAM 资源推断","relevant":["FPGA-RESET-001"]},
+    {"query":"RAM 复位为什么影响存储资源推断","relevant":["FPGA-RESET-004"]},
+    {"query":"跨时钟总线数据一致性","relevant":["FPGA-CDC-004"]},
+    {"query":"CDC 报告是结构分析还是功能证明","relevant":["FPGA-CDC-001"]},
+    {"query":"时钟没有定义可以检查 CDC 吗","relevant":["FPGA-CDC-002"]},
+    {"query":"ASYNC_REG synchronizer placement","relevant":["FPGA-CDC-003"]},
+    {"query":"主时钟周期定义应该对应真实接口","relevant":["FPGA-CLOCK-001"]},
+    {"query":"MMCM PLL 生成时钟关系","relevant":["FPGA-CLOCK-002"]},
+    {"query":"false path 异步时钟分组能替代同步器吗","relevant":["FPGA-CONSTRAINT-001"]},
+    {"query":"外部接口输入输出 IO 延迟","relevant":["FPGA-CONSTRAINT-002"]},
+    {"query":"multicycle hold 约束","relevant":["FPGA-CONSTRAINT-003"]},
+    {"query":"exceptions priority 约束覆盖","relevant":["FPGA-CONSTRAINT-004"]},
+    {"query":"setup hold 要分别验收吗","relevant":["FPGA-TIMING-001"]},
+    {"query":"unconstrained endpoints 时序优化","relevant":["FPGA-TIMING-002"]},
+    {"query":"关键路径逻辑延迟和布线延迟","relevant":["FPGA-TIMING-003"]},
+    {"query":"always_comb latch 分支赋值","relevant":["FPGA-RTL-002"]},
+    {"query":"signed arithmetic 类型转换","relevant":["FPGA-WIDTH-002"]},
+    {"query":"overflow 截断与饱和契约","relevant":["FPGA-WIDTH-003"]},
+    {"query":"AXI valid backpressure 稳定","relevant":["FPGA-HANDSHAKE-001","FPGA-HANDSHAKE-002"]},
+    {"query":"BMC bounded depth 证明范围","relevant":["FPGA-FORMAL-001"]},
+    {"query":"负控编译错误能证明 checker 有效吗","relevant":["FPGA-NEGATIVE-001"]},
+    {"query":"实验复现输入哈希 seed","relevant":["FPGA-TRACE-001"]}
+  ],
+  "unrelated_queries":["zxqv_not_in_corpus","weather forecast unicorn","意大利面番茄酱"]
+}

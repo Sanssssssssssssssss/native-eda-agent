@@ -2,10 +2,64 @@
   "schema_version": 1,
   "id": "offline-evidence-review",
   "goal": "Check local model policy and retained hard-project evidence without launching EDA",
-  "inputs": [".eda/config.json", "results/catalog.json"],
-  "limits": {"max_calls": 4, "wall_seconds": 60},
+  "inputs": [
+    ".eda/config.json",
+    "results/catalog.json"
+  ],
+  "limits": {
+    "max_calls": 4,
+    "wall_seconds": 60
+  },
   "steps": [
-    {"id": "preflight", "tool": "eda_preflight", "args": {}, "checks": [{"pointer": "/config/model_api_enabled", "op": "eq", "value": false}]},
-    {"id": "evidence", "tool": "eda_results_verify", "args": {"id": "hard-projects-3"}, "checks": [{"pointer": "/public_evidence_valid", "op": "eq", "value": true}, {"pointer": "/available_originals_valid", "op": "eq", "value": true}]}
-  ]
+    {
+      "id": "preflight",
+      "tool": "eda_preflight",
+      "args": {},
+      "checks": [
+        {
+          "pointer": "/config/model_api_enabled",
+          "op": "eq",
+          "value": false
+        }
+      ]
+    },
+    {
+      "id": "procedure",
+      "tool": "eda_sop",
+      "args": {
+        "id": "fpga-reproduce"
+      },
+      "checks": [
+        {
+          "pointer": "/sop/id",
+          "op": "eq",
+          "value": "fpga-reproduce"
+        }
+      ]
+    },
+    {
+      "id": "evidence",
+      "tool": "eda_results_verify",
+      "args": {
+        "id": "hard-projects-3"
+      },
+      "checks": [
+        {
+          "pointer": "/public_evidence_valid",
+          "op": "eq",
+          "value": true
+        },
+        {
+          "pointer": "/available_originals_valid",
+          "op": "eq",
+          "value": true
+        }
+      ]
+    }
+  ],
+  "guidance": {
+    "sop_ids": [
+      "fpga-reproduce"
+    ]
+  }
 }

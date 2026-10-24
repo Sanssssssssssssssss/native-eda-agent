@@ -1,7 +1,7 @@
 {
   "name": "native-eda-agent",
   "private": true,
-  "version": "0.4.0",
+  "version": "0.5.0",
   "type": "module",
   "description": "Local EDA agent with reproducible benchmarks, traces, resource scheduling and MCP",
   "scripts": {
@@ -16,6 +16,9 @@
     "tools": "node scripts/tool-catalog.mjs",
     "results": "node scripts/results.mjs",
     "workflow": "node scripts/workflow.mjs",
+    "knowledge": "node src/agent.mjs knowledge",
+    "sop": "node src/agent.mjs sop",
+    "knowledge:eval": "node scripts/evaluate-knowledge.mjs",
     "knowledge:check": "node scripts/check-knowledge.mjs",
     "mcp": "node src/mcp-server.mjs"
   },

@@ -228,11 +228,6 @@
     },
     {
       "document": "docs/fpga-knowledge-and-tools.md",
-      "label": ".pi/skills",
-      "target": "../.pi/skills"
-    },
-    {
-      "document": "docs/fpga-knowledge-and-tools.md",
       "label": "mcp-discovery.json",
       "target": "../artifacts/system-evidence-integration-20261022T184547Z/mcp-discovery.json"
     },

@@ -1073,10 +1073,10 @@
           "section": "skills/vivado-timing-methodology-checks/SKILL.md compatibility"
         }
       ],
-      "local_paths": [
+      "derivation": "source paraphrase",
+      "optional_local_paths": [
         "vendor/ross-ai-assistant/skills/vivado-timing-methodology-checks/SKILL.md"
-      ],
-      "derivation": "source paraphrase"
+      ]
     },
     {
       "id": "FPGA-TRACE-001",

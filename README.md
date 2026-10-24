@@ -1,16 +1,56 @@
 # Native EDA Agent
 
-A local FPGA/EDA agent built around Pi, typed tools, reproducible evidence and MCP. Codex or another MCP client can drive the same tools directly. Model-provider calls are disabled by default; local tools and offline tests need no model API key.
+面向本机 Vivado / FPGA 开发的 Agent 工程：通过 Codex、Pi 或 CLI 检索设计知识、读取 SOP、组织仿真与实现任务，并核验和恢复执行证据。模拟电路侧提供 LTspice 批处理与测量验收。
 
-**53 native interfaces**, including 28 focused contracts over shared executors, 4 historical-results tools and 5 workflow tools. The optional community Vivado backend provides **45 tools and 11 prompts**, including project, IP and Block Design operations. These counts describe interfaces, not independent engines or design achievements.
+当前重点是 **可追溯的知识指导、固定验收、可靠执行和结果复核**。模型提供商 API 默认关闭；下列本地工具和离线检查不需要模型 API key。
 
-[Tool schemas](docs/reference/tools.md) · [Architecture and workflow](docs/agent-workflow-and-trace-contract.md) · [Historical results](docs/results.md) · [Trace collaboration history](docs/agent-framework-and-traces.md) · [Release notes](docs/release-2026-10-25.md)
+[核心机制](docs/mechanisms.md) · [RAG 与 SOP](docs/knowledge-and-sops.md) · [功能成绩](docs/results.md) · [工作流](docs/workflows.md) · [全部文档](docs/README.md)
 
-The [repository comparison](docs/repository-comparison-2026-10-25.md) reviews pinned Pi, OpenHands SDK, mini-swe-agent, LangGraph and RouteAgents sources. Version 0.4 adds persistent task specifications, explicit acceptance checks, shared call/time budgets and recovery in a fresh run. [Changelog](CHANGELOG.md) · [Contributing](CONTRIBUTING.md).
+## 项目亮点
 
-## Quick start
+- **知识直接进入任务**：36 条规则带来源、版本、适用条件与所需证据；中英文检索有排名；4 个 SOP 同时支持 Pi 发现和 MCP 读取。workflow 固定所选知识与 SOP 的文件哈希。
+- **验收条件可执行**：任务声明输入、前序结果引用、逐步 checks 和预算。工具完成、功能通过、时序通过、CDC/DRC 和上板分别判断。
+- **任务可追踪和恢复**：每次调用保留输入快照、进程、失败、终态与因果 trace。恢复前核验所有者、输入、代码和产物；在新目录从已提交边界继续。
+- **EDA 执行受资源约束**：原生工具与社区 MCP 代理共享资源租约，支持队列、超时与取消。物理优化器另有候选准入、最佳结果保留、停滞停止和最终复测。
+- **成绩可以复核**：保留原测试协议、失败和公开证据哈希。不同题集、watchdog 和计分单位不合并成总分。
 
-Windows is the supported EDA execution environment, validated with Vivado/XSim 2020.2. Use Node.js 24 and Python 3.12 or newer. Vivado and LTspice must be installed separately; no commercial software or license is bundled.
+## 按功能看能力与证据
+
+| 功能 | 已有能力与证据 | 验收范围 |
+|---|---|---|
+| RTL 功能验证 | XSim 固定 checker、参数/种子/背压/复位；24 题原协议 20/24，延长 watchdog 的同一批 RTL 为 23/24 | 可见测试；两种协议分开，非盲测 pass@1 |
+| 系统工程集成 | FFT 1024 点、16 帧；SoC/DMA/UDP/AES 4/4；AXI 3×3、三时钟 Ethernet、RV32IM AES DMA 3/3 | 功能与 OOC 实现；Ethernet 保留 34 条 CDC warning |
+| 综合、实现与诊断 | 显式 RTL/XDC/DCP 输入，setup/hold、约束、routing、CDC、网表对象查询；原生集成检查 12/12 | 报告诊断；缺失字段保留 unknown；无板级签核 |
+| 工程、IP、Block Design | 社区 Workbench 13 类操作，33/33 工具检查 | 工具集成检查，非 33 个新 FPGA 项目 |
+| 物理优化 | 7 个本地策略、准入与复测；历史 AXI 运行 2 个候选，实测 WNS 收益 0 ns | 仅其中 2 类 reroute 有实跑；未复现竞赛排名 |
+| 模拟电路 | LTspice RC AC/瞬态、独立解析解校验；历史四项测量误差均低于固定 0.2% 阈值 | RC 基础案例；新代理版本未重跑商业工具 |
+| 知识与 SOP | 36 规则 / 21 来源 / 4 SOP；24 条可见检索回归 Hit@5 为 24/24 | 检索相关性；不是回答正确率或设计通过率 |
+| Agent 工程机制 | 输入/知识冻结、预算、恢复、MCP、资源并发、trace、真实 Pi 资源加载等离线检查 | 假 EDA、本机进程与协议验收；当前回执见 release/validation.json 和 CI |
+
+详细协议、失败、资源和证据索引见 [功能成绩](docs/results.md)。历史 FPGA 成绩没有在本轮重跑；新 AXI workflow 仅完成静态计划。接口数量单列在 [工具合同](docs/reference/tools.md)：54 个原生入口，其中 28 个为共享执行器的细粒度合同；可选社区后端另有 45 个工具与 11 个 prompts。
+
+## 架构
+
+```mermaid
+flowchart LR
+  A[Codex / Pi / CLI] --> K[知识检索 + SOP]
+  K --> W[任务规格 + 固定 checks]
+  A --> W
+  W --> R[共享工具注册表]
+  R --> Q[trace + 资源队列]
+  Q --> E[XSim / Vivado / LTspice]
+  Q --> M[社区 MCP 代理]
+  E --> V[功能与报告验收]
+  M --> V
+  V --> T[结果 / checkpoint / 证据]
+  T --> A
+```
+
+知识检索由工具调用触发，SOP 提供工程指导；代码强制执行的是显式参数、预算、检查与恢复条件。当前没有向量索引、自动答案引用核验、强沙箱或完整模型会话恢复。具体实现和缺口见 [机制检查](docs/mechanisms.md)。
+
+## 本地启动
+
+当前支持 Windows，EDA 实跑基线为 Vivado/XSim 2020.2。使用 Node.js 24 与 Python 3.13。Vivado、LTspice 和许可证由本机提供。
 
 ```powershell
 npm ci --ignore-scripts
@@ -19,81 +59,29 @@ npm run setup:local
 npm run validate:agent
 ```
 
-Setup creates local Codex/Pi MCP configuration with your checkout path. Existing configuration is preserved; `node scripts/setup-local.mjs --replace` backs it up before replacement. Reconnect the MCP client afterwards. Set `EDA_VIVADO_BIN` to your installed Vivado `bin` directory before EDA execution; the current fallback is `E:\Xilinx\Vivado\2020.2\bin`.
-
-The offline acceptance uses fake EDA backends, real local subprocesses, the MCP control plane and a loopback OTLP receiver. It does not launch Vivado, LTspice or model sessions. Run receipts and source hashes are written to a new `artifacts/agent-offline-*` directory.
-
-## Use the tools
+Setup 生成当前目录的 Codex/Pi MCP 配置；已有配置默认保留，`--replace` 会先备份。重连 MCP 后使用新工具。真实 EDA 执行前将 `EDA_VIVADO_BIN` 指向安装目录的 bin；当前回退路径为 `E:\Xilinx\Vivado\2020.2\bin`。
 
 ```powershell
-npm run tools
-node scripts/results.mjs list
-node scripts/results.mjs verify hard-projects-3
-node scripts/results.mjs compare verilogeval-24-original verilogeval-24-extended
-node scripts/benchmark.mjs plan --ids counter
-```
-
-The last comparison is rejected as incomparable because the watchdog changed. To execute a native tool, save its arguments to JSON and call `node scripts/eda-tool.mjs TOOL arguments.json`. For example:
-
-```json
-{"checkpoint":"artifacts/my-run/routed.dcp"}
-```
-
-Passing this file to `eda_vivado_report_cdc` starts Vivado and generates CDC evidence in a fresh run directory. Use `eda_trace_inspect` to check the receipt. `eda_vivado_optimize` also starts Vivado in **plan** mode; use its documented recovery-check interface for offline inspection.
-
-In Codex/Pi: preflight → select fixed inputs and acceptance → simulate → synthesize → implement → inspect timing/CDC/DRC → inspect trace. A completed tool call is not design signoff. Setup/hold, functionality, CDC, formal proof and board validation remain separate judgments.
-
-Declare multi-tool tasks in a [workflow specification](docs/workflows.md). Planning is offline; running executes the declared tools. Failed tasks can resume from verified completed steps after ownership, input, code, output and budget checks.
-
-```powershell
+npm run knowledge -- "跨时钟总线一致性"
+npm run sop -- fpga-timing-triage
 npm run workflow -- plan examples/workflows/offline-review.json
 npm run workflow -- run examples/workflows/offline-review.json
-npm run workflow -- resume_check artifacts/FAILED_WORKFLOW_RUN
+node scripts/results.mjs verify hard-projects-3
 ```
 
-The offline example verifies local preflight and retained evidence. The [AXI fabric workflow](examples/workflows/axi-fabric-ooc.json) declares simulation, synthesis, implementation and DRC reporting; it requires installed EDA tools and pinned example RTL. Its new orchestration has only been statically planned this release.
+上述例子只使用本地知识、前检与历史证据。`workflow run/resume` 按规格决定是否启动 EDA；`eda_vivado_optimize` 的 plan 也会启动 Vivado。真实工程可从 [counter](examples/workflows/counter-simulation.json) 或 [AXI fabric](examples/workflows/axi-fabric-ooc.json) 开始，先按 [工程索引](projects/README.md) 获取固定 RTL 依赖并核对验收范围。
 
-```mermaid
-flowchart LR
-  A[Codex MCP / Pi / CLI] --> B[Shared typed registry]
-  B --> W[Task spec + checks + checkpoints]
-  W --> B
-  B --> C[Trace + input hashes]
-  C --> D[Persistent queue + resource leases]
-  D --> E[XSim / Vivado / LTspice]
-  D --> F[Traced community MCP]
-  E --> G[Reports + independent acceptance]
-  F --> G
-  G --> H[Inspect / recover / local OTLP]
-  I[Historical scorecards] --> B
-```
+## 仓库导航
 
-## Retained results
-
-These are local historical results, imported from original receipts. They were not rerun during the framework release. No combined score is calculated across overlapping tasks, projects and software checks.
-
-| Scope | Retained result |
+| 目录 | 内容 |
 |---|---|
-| Initial VerilogEval selection | 7/8 |
-| Separate 24-task selection, original watchdog | 20/24 |
-| Same 24 RTL candidates, extended watchdog on three cases | 23/24 |
-| 1024-point FFT | 16 frames / 16,384 bins; 100 MHz OOC implementation |
-| SoC / DMA / UDP / AES | 4/4 functional and OOC implementation |
-| AXI 3×3 / Ethernet CDC / RV32IM AES DMA | 3/3 functional, negative controls and OOC implementation |
-| Frozen 61-case campaign | 51 PASS, 1 FAIL, 6 TIMEOUT, 2 expected failures, 1 expected timeout |
-| Native tool / Workbench integration | 12/12 and 33/33 checks |
-| AXI optimizer smoke | 2 candidates; measured WNS gain **0 ns**, winner rechecked |
+| [src](src) | Agent 入口、知识/SOP、工作流、执行器、验收、调度与 trace |
+| [knowledge](knowledge/README.md) / [.pi/skills](.pi/skills) | 来源、规则、SOP 索引、检索回归与操作步骤 |
+| [examples/workflows](examples/workflows) / [projects](projects/README.md) | 可执行任务规格与 FPGA 示例工程 |
+| [results](results/catalog.json) | 11 组历史成绩及公开脱敏证据；不含大型原始产物 |
+| [tests](tests) / [.github/workflows](.github/workflows) | 软件故障检查与 Windows CI |
+| [docs](docs/README.md) / [release](release/README.md) | 当前指南、历史报告、发布清单与验收回执 |
 
-The Ethernet design retains **34 CDC warnings**. All physical design results are out-of-context, with no board testing or formal CDC proof. These are visible-test integration exercises with pinned public IP, not blind pass@1 scores or official FPL leaderboard reproduction.
+安装环境、会话、凭据、波形和 DCP 保留在本机。Ross 技能、官方 Ross MCP 与 LTspice bridge 为可选依赖；公开包不保证其已安装或已连接。Synopsys 是独立项目，商业执行需要现成授权。
 
-[11 machine-readable scorecards](results/catalog.json) include original artifact hashes and hashes of sanitized public evidence. Missing local originals are reported as unavailable. Hash verification proves file integrity, not independent reproduction.
-
-## Larger examples and optional integrations
-
-`projects/fft-spectrum`, `projects/system-bench` and `projects/hard-bench` contain source examples and fixed verification materials. Fetch their pinned public RTL sources with `node scripts/fetch-example-upstreams.mjs`. Inspect historical absolute-path relocation using `node scripts/relocate-examples.mjs`, then apply with `--apply` if needed; backups are retained and new runs record changed input hashes. Each project documents its stimulus, accepted scope and limitations. Some firmware-generation steps require a separate RISC-V toolchain.
-
-The public package includes the community MCP backend and the RouteAgents pure recipe router with their licenses. AMD Ross binaries/skills, LTspice bridge, commercial tools, private model configuration, DCPs and waveforms are optional local dependencies. Synopsys tooling is a separate project and requires licensed tools for commercial execution.
-
-Trace export defaults to a local OTLP JSON file. Upload requires an explicit receiver command; no cloud collector is configured. See [trace delivery and recovery](docs/agent-completion-2026-10-24.md).
-
-Original framework code: [MIT](LICENSE). Dependencies and IP: [third-party notices](THIRD_PARTY_NOTICES.md). See [contribution guidance](CONTRIBUTING.md) for fixed acceptance, failure evidence and relevant offline checks.
+原生框架采用 [MIT](LICENSE)；依赖和 IP 见 [第三方说明](THIRD_PARTY_NOTICES.md)。维护入口：[贡献规范](CONTRIBUTING.md)、[版本记录](CHANGELOG.md)、[历史协作与 trace 文档](docs/agent-framework-and-traces.md)。

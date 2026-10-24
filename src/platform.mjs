@@ -8,6 +8,8 @@ import { exportTraces } from './trace-export.mjs';
 import { platformSurfaces } from './tools/focused.mjs';
 import { specializeSchema } from './tool-contracts.mjs';
 import { historyDefinitions, getResult, resultPath } from './results.mjs';
+import { queryKnowledge, querySop, knowledgeFiles } from './knowledge.mjs';
+export { queryKnowledge } from './knowledge.mjs';
 
 const string = { type: 'string', minLength: 1 };
 const object = properties => ({ type: 'object', properties, additionalProperties: false });
@@ -22,16 +24,6 @@ export function artifactPath(root, value) {
   if (relative.startsWith('..') || path.isAbsolute(relative)) throw new Error('Evidence path must stay inside workspace artifacts');
   return target;
 }
-export function queryKnowledge(root, { query = '', id, limit = 8 } = {}) {
-  if (!Number.isInteger(limit) || limit < 1 || limit > 40) throw new Error('limit must be 1..40');
-  const rules = JSON.parse(fs.readFileSync(path.join(root, 'knowledge/rules.json'), 'utf8')).rules;
-  const sources = JSON.parse(fs.readFileSync(path.join(root, 'knowledge/sources.json'), 'utf8')).sources;
-  const words = query.toLowerCase().split(/\s+/).filter(Boolean);
-  const matches = rules.filter(rule => id ? rule.id === id : words.every(word => JSON.stringify(rule).toLowerCase().includes(word)));
-  return { schema_version: 1, total: matches.length, rules: matches.slice(0, limit),
-    sources: sources.filter(source => matches.slice(0, limit).some(rule => rule.source_refs.some(ref => ref.source_id === source.id))),
-    boundary: 'Rules guide investigation; simulation, timing, formal proof and board measurements remain separate evidence.' };
-}
 export function doctor(root) {
   const vivado = path.join(process.env.EDA_VIVADO_BIN || 'E:\\Xilinx\\Vivado\\2020.2\\bin', 'vivado.bat');
   const ltspice = path.join(root, 'runtime/ltspice/LTspice.exe');
@@ -45,9 +37,11 @@ export function doctor(root) {
 }
 export function createPlatformTools(root) {
   const definitions = [
-    { name: 'eda_knowledge', label: 'FPGA rules and sources', description: 'Search small versioned FPGA rules, applicability boundaries and primary sources. No model or internet call.',
-      parameters: object({ query: string, id: string, limit: { type: 'integer', minimum: 1, maximum: 40 } }),
+    { name: 'eda_knowledge', label: 'FPGA rules and sources', description: 'Rank local FPGA rules using English terms and Chinese bigrams, or retrieve an exact rule ID. Returns source versions, applicability, required evidence and corpus hashes. Lexical retrieval only; no embeddings, model or internet call.',
+      parameters: object({ query: {...string,maxLength:2048}, id: string, limit: { type: 'integer', minimum: 1, maximum: 40 },classification:{type:'string',enum:['rule','recommendation','limitation']},source_id:string }),
       run: args => queryKnowledge(root, args) },
+    { name: 'eda_sop', label: 'FPGA operating procedures', description: 'List local FPGA SOPs or load one by ID with its full procedure, referenced rules, required evidence and file hashes. Guidance is advisory; declared workflow checks enforce acceptance. No EDA or model call.',
+      parameters: object({id:string}), run:args=>querySop(root,args) },
     { name: 'eda_trace', label: 'Inspect experiment evidence', description: 'Offline inspect, recovery-check or OTLP JSON export for native/proxy/optimizer traces. Checks hashes, parents, committed state and ownership. Export writes a local file only; never uploads, resumes EDA or infers functional acceptance.',
       parameters: { ...object({ directory: string, action: { type:'string',enum:['inspect','recovery-check','export'] } }), required: ['directory'] },
       run: args => {
@@ -103,12 +97,12 @@ export function createPlatformTools(root) {
       const operation=base||tool.name;
       args={...args,...fixed};
       signal?.throwIfAborted();
-      const inputs = operation === 'eda_knowledge' ? ['knowledge/rules.json', 'knowledge/sources.json']
+      const inputs = ['eda_knowledge','eda_sop'].includes(operation) ? knowledgeFiles(root)
         : operation === 'eda_preflight' ? ['.eda/config.json']
         : operation.startsWith('eda_results_') ? ['src/results.mjs','results/catalog.json']
         : operation === 'eda_benchmark' ? ['benchmarks/catalog.json', 'src/bench/index.mjs', 'src/bench/runner.mjs', 'src/bench/compare.mjs'] : ['src/runtime.mjs'];
       trace.capture(path.join(root,'src/tools/focused.mjs'),'tool_contract');
-      for (const file of inputs) trace.capture(path.join(root, file), 'query_input');
+      for (const file of inputs) trace.capture(path.resolve(root, file), 'query_input');
       if (operation.startsWith('eda_results_')) {
         for (const id of [args.id,args.baseline,args.candidate].filter(Boolean)) {
           for (const item of getResult(root,id).evidence) {

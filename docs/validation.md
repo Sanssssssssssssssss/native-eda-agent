@@ -1,5 +1,7 @@
 # 本机验证记录
 
+这是 2026-10-22 的历史记录，包含当时已授权的 Pi 模型用量。当前模型 API 已停用；版本验收见 [发布回执](../release/README.md)，历史成绩按功能见 [结果目录](results.md)。
+
 日期：2026-10-22，Asia/Singapore。原生入口 `eda.ps1` → `src/agent.mjs` → Pi SDK 1.3.0；模型 `deepseek/deepseek-flash`。最终原生 Agent 流程完成且未触发运行上限。
 
 | 项目 | 本机结果 | 范围 |

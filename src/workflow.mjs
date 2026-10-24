@@ -7,6 +7,7 @@ import {createTrace,validateTraceEvent} from './trace.mjs';
 import {createRunState, listRuns, pidAlive} from './runtime.mjs';
 import {validateArguments} from './tool-contracts.mjs';
 import {inspectTrace} from '../scripts/trace-inspect.mjs';
+import {resolveGuidance} from './knowledge.mjs';
 
 const digest=bytes=>createHash('sha256').update(bytes).digest('hex');
 const json=file=>JSON.parse(fs.readFileSync(file,'utf8'));
@@ -16,10 +17,11 @@ const object=(properties,required=[])=>({type:'object',properties,required,addit
 const checkSchema=object({pointer:str,op:{enum:['eq','gte','lte'],type:'string'},value:{}},['pointer','op','value']);
 export const workflowSchema=object({schema_version:{type:'integer',enum:[1]},id:{type:'string',pattern:'^[a-z][a-z0-9_-]{0,63}$'},goal:str,
   inputs:{type:'array',items:str,minItems:1,maxItems:256,uniqueItems:true},
+  guidance:object({rule_ids:{type:'array',items:str,uniqueItems:true,maxItems:40},sop_ids:{type:'array',items:str,uniqueItems:true,maxItems:16}}),
   limits:object({max_calls:{type:'integer',minimum:1,maximum:100},wall_seconds:{type:'integer',minimum:1,maximum:14400}},['max_calls','wall_seconds']),
   steps:{type:'array',minItems:1,maxItems:32,items:object({id:{type:'string',pattern:'^[a-z][a-z0-9_-]{0,63}$'},tool:str,args:{type:'object'},checks:{type:'array',items:checkSchema,minItems:1,maxItems:32}},['id','tool','args','checks'])}
 },['schema_version','id','goal','inputs','limits','steps']);
-export const offlineWorkflowTools=new Set(['eda_preflight','eda_knowledge','eda_results_get','eda_results_verify']);
+export const offlineWorkflowTools=new Set(['eda_preflight','eda_knowledge','eda_sop','eda_results_get','eda_results_verify']);
 const allowed=name=>offlineWorkflowTools.has(name)||['eda_xsim','eda_vivado_synthesize','eda_vivado_implement','eda_vivado_reports','eda_vivado_objects','eda_vivado_timing_paths','eda_vivado_catalog'].includes(name)||/^eda_vivado_(report_|query_|find_|setup_paths$|hold_paths$)/.test(name);
 const relative=(root,file)=>path.relative(root,file).replaceAll('\\','/');
 function inside(root,name,{artifacts=false}={}){
@@ -95,6 +97,8 @@ export function planWorkflow(root,specFile,registry){
   const seen=new Set(),inputs=new Set(),bindings={},includeDirs=new Set();
   const capture=name=>{const resolved=inside(root,name);inputs.add(resolved);bindings[relative(root,path.resolve(root,name))]=relative(root,resolved);};
   capture(specFile);spec.inputs.forEach(capture);
+  const guidance=spec.guidance?resolveGuidance(root,spec.guidance):null;
+  if(guidance)Object.keys(guidance.input_hashes).forEach(capture);
   for(const step of spec.steps){
     if(seen.has(step.id))throw new Error(`Duplicate workflow step: ${step.id}`);
     if(!allowed(step.tool)||!registry.has(step.tool))throw new Error(`Unsupported workflow tool: ${step.tool}`);
@@ -109,7 +113,7 @@ export function planWorkflow(root,specFile,registry){
   return {schema_version:1,spec_path:relative(root,file),spec,spec_sha256:hashFile(file),input_hashes:Object.fromEntries([...inputs].sort().map(f=>{
     if(!fs.statSync(f).isFile())throw new Error('Workflow inputs must be files');return [relative(root,f),hashFile(f)];
   })),input_bindings:bindings,include_directories:[...includeDirs].map(dir=>({path:dir,files:inputFiles(root,{include_dirs:[dir]}).map(f=>relative(root,f)).sort()})),
-    code_hashes:codeHashes(root),execution_requires_eda:spec.steps.some(s=>!offlineWorkflowTools.has(s.tool)),launches_eda:false,mode:'plan',model_api_calls:0};
+    code_hashes:codeHashes(root),guidance,execution_requires_eda:spec.steps.some(s=>!offlineWorkflowTools.has(s.tool)),launches_eda:false,mode:'plan',model_api_calls:0};
 }
 function durableWrite(file,bytes){const fd=fs.openSync(file,'wx');try{fs.writeFileSync(fd,bytes);fs.fsyncSync(fd);}finally{fs.closeSync(fd);}}
 function checkpoint(trace,state){

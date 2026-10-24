@@ -1,5 +1,7 @@
 # FPGA 知识与工具基座
 
+本文保留初始建设与验证记录。当前中英文检索、SOP 工具、workflow 绑定和检索回归见 [知识与 SOP](knowledge-and-sops.md)；下列环境状态及验证时间属于当时的观察。
+
 已建立 36 条可检索知识、21 个官方来源、11 项工具状态及 4 个 Pi skills。主要入口是 `eda_knowledge`；计划、执行和回看分别使用 `eda_benchmark`、原生 EDA 工具、`eda_trace` / `eda_runs`。知识检索和静态检查不能替代仿真、形式验证、器件实现或板级验证。
 
 | 内容 | 文件 |
@@ -7,7 +9,7 @@
 | 原子规则及适用边界 | [rules.json](../knowledge/rules.json) |
 | 原链接、版本、license、核验 UTC | [sources.json](../knowledge/sources.json) |
 | 本机状态和接入建议 | [tools.json](../knowledge/tools.json) |
-| 规划 / RTL 验证 / 时序排查 / 复现 | .pi/skills (local/optional evidence; see results/catalog.json) |
+| 规划 / RTL 验证 / 时序排查 / 复现 | [.pi/skills](../.pi/skills) |
 | 离线检查与负向测试 | [check-knowledge.mjs](../scripts/check-knowledge.mjs)、[knowledge.test.mjs](../tests/knowledge.test.mjs) |
 
 AMD 基线使用本机 Vivado 2020.2 对应的 [UG903](https://docs.amd.com/api/khub/documents/qfSFSG1429Fdy4AW8zDF3A/content)、[UG906](https://docs.amd.com/r/2020.2-English/ug906-vivado-design-analysis/Report-Clock-Domain-Crossings) 和 [UG949](https://docs.amd.com/r/2020.2-English/ug949-vivado-design-methodology/Synchronous-Reset-vs.-Asynchronous-Reset)。[UG901 2020.2](https://docs.amd.com/v/u/2020.2-English/ug901-vivado-synthesis) 本轮核验了官方版本页，PDF 正文端点未成功读取，因此没有从未读正文生成细节规则。

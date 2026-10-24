@@ -13,7 +13,7 @@ test('official MCP client discovers registry, calls local preflight and rejects 
   try {
     await client.connect(transport);
     const listing = await client.listTools();
-    assert.equal(listing.tools.length, 53);
+    assert.equal(listing.tools.length, 54);
     assert.ok(listing.tools.some(t => t.name === 'eda_vivado_reports'));
     assert.ok(listing.tools.some(t => t.name === 'eda_benchmark'));
     assert.ok(listing.tools.find(t=>t.name==='eda_vivado_optimize').inputSchema.properties.resume_from);
@@ -36,6 +36,12 @@ test('official MCP client discovers registry, calls local preflight and rejects 
     assert.equal(override.isError,true);
     const workflow=await client.callTool({name:'eda_workflow_plan',arguments:{spec:'examples/workflows/offline-review.json'}});
     assert.ok(!workflow.isError,JSON.stringify(workflow));assert.equal(workflow.structuredContent.launches_eda,false);
+    assert.ok(workflow.structuredContent.guidance.sop_ids.includes('fpga-reproduce'));
+    const sop=await client.callTool({name:'eda_sop',arguments:{id:'fpga-timing-triage'}});
+    assert.ok(!sop.isError,JSON.stringify(sop));assert.equal(sop.structuredContent.sop.id,'fpga-timing-triage');
+    assert.ok(sop.structuredContent.content.includes('eda_vivado_setup_paths'));
+    const naturalQuery=await client.callTool({name:'eda_knowledge',arguments:{query:'跨时钟总线一致性',limit:5}});
+    assert.ok(!naturalQuery.isError,JSON.stringify(naturalQuery));assert.ok(naturalQuery.structuredContent.rules.some(r=>r.id==='FPGA-CDC-004'));
     const fixture=fs.mkdtempSync(path.join(root,'artifacts/mcp-workflow-reject-'));
     const spec=JSON.parse(fs.readFileSync(path.join(root,'examples/workflows/offline-review.json')));
     spec.steps=[{id:'reject',tool:'eda_preflight',args:{},checks:[{pointer:'/config/model_api_enabled',op:'eq',value:true}]}];

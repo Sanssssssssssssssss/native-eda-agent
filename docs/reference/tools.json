@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "native_interfaces": 53,
+  "native_interfaces": 54,
   "focused_interfaces": 28,
   "community_interfaces": 45,
   "community_prompts": 11,
@@ -1105,13 +1105,14 @@
     },
     {
       "name": "eda_knowledge",
-      "description": "Search small versioned FPGA rules, applicability boundaries and primary sources. No model or internet call.",
+      "description": "Rank local FPGA rules using English terms and Chinese bigrams, or retrieve an exact rule ID. Returns source versions, applicability, required evidence and corpus hashes. Lexical retrieval only; no embeddings, model or internet call.",
       "inputSchema": {
         "type": "object",
         "properties": {
           "query": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "maxLength": 2048
           },
           "id": {
             "type": "string",
@@ -1121,11 +1122,43 @@
             "type": "integer",
             "minimum": 1,
             "maximum": 40
+          },
+          "classification": {
+            "type": "string",
+            "enum": [
+              "rule",
+              "recommendation",
+              "limitation"
+            ]
+          },
+          "source_id": {
+            "type": "string",
+            "minLength": 1
           }
         },
         "additionalProperties": false
       },
       "executor": "eda_knowledge",
+      "fixed_selector": null,
+      "launches_eda": false,
+      "execution_note": "Offline local inspection/control",
+      "writes_local_evidence": true,
+      "model_api_calls": 0
+    },
+    {
+      "name": "eda_sop",
+      "description": "List local FPGA SOPs or load one by ID with its full procedure, referenced rules, required evidence and file hashes. Guidance is advisory; declared workflow checks enforce acceptance. No EDA or model call.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "additionalProperties": false
+      },
+      "executor": "eda_sop",
       "fixed_selector": null,
       "launches_eda": false,
       "execution_note": "Offline local inspection/control",

@@ -2,7 +2,7 @@
 
 本项目已有两条执行路径，共用原生 EDA 工具。当前系统实验使用 Codex 直接驱动本机工具；Pi SDK 的模型会话入口保留，其他模型 API 按当前用户要求暂停。
 
-当前使用以 [Agent 工作流与 trace 接入合同](agent-workflow-and-trace-contract.md)为入口。下文保留初期协作与历史实验说明；本地注册表现为 16 接口，新增优化器内层事件链与 Pi 字段兼容检查。
+当前使用以 [Agent 工作流与 trace 接入合同](agent-workflow-and-trace-contract.md)和 [机制核对](mechanisms.md)为入口。下文保留初期协作与历史实验说明；当时的本地注册表为 16 接口，工具数量以当前自动生成的合同为准。
 
 ```mermaid
 flowchart TD

@@ -2,6 +2,8 @@
 
 项目导航：[Agent 工作流与 trace 合同](docs/agent-workflow-and-trace-contract.md)。历史成绩和本轮验证分开记录；修改框架时保留 [协作与 trace 文档](docs/agent-framework-and-traces.md)入口。
 
+机制核对见 [源码落点](docs/mechanisms.md)，知识选择见 [RAG 与 SOP](docs/knowledge-and-sops.md)。用 `eda_knowledge` 检索规则、`eda_sop` 读取完整流程；确认来源版本、适用范围与所需证据。workflow 的 `guidance` 冻结所选规则和 SOP；验收仍由明确的 step checks 执行，不能仅凭检索命中或选用 SOP 宣称通过。
+
 - 先核对任务规格、固定验收条件、输入 RTL/XDC/DCP、器件和时钟。用 `eda_preflight`、`eda_runs action=list` 查看前提和资源状态。
 - 当前用户要求停用其他模型 API；以 `.eda/config.json` 和当前指令为准。工具开发、静态分析和本地测试不需要模型调用，不启动上游模型优化器或读取凭据。
 - 用户要求静态检查时，只读证据或用假后端做软件检查。`eda_vivado_optimize mode=plan` 会启动 Vivado；`verify` 和 benchmark `run` 也会执行 EDA。

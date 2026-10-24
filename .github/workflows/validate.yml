@@ -20,6 +20,7 @@ jobs:
       - run: pwsh scripts/bootstrap-python.ps1
       - run: npm run setup:local
       - run: npm run validate:agent
+      - run: npm run knowledge:eval
       - run: node scripts/benchmark.mjs validate
       - uses: actions/upload-artifact@v4
         if: always()
@@ -30,4 +31,6 @@ jobs:
             artifacts/agent-offline-*/node.log
             artifacts/agent-offline-*/python.log
             artifacts/agent-offline-*/config.log
+            artifacts/agent-offline-*/knowledge.log
+            artifacts/knowledge-eval-*/result.json
           retention-days: 7

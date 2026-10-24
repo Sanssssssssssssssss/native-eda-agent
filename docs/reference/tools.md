@@ -1,6 +1,6 @@
 # Native tool contracts
 
-53 native interfaces. 28 are focused contracts over shared executors; 4 expose retained scores. Community MCP separately exposes 45 tools and 11 prompts.
+54 native interfaces. 28 are focused contracts over shared executors; 4 expose retained scores. Community MCP separately exposes 45 tools and 11 prompts.
 
 Schemas: [tools.json](tools.json). Real EDA calls write independent artifacts and use shared resource leases.
 
@@ -35,7 +35,8 @@ Schemas: [tools.json](tools.json). Real EDA calls write independent artifacts an
 | `eda_vivado_setup_paths` | `eda_vivado_timing_paths` | Yes / see schema | Inspect worst setup paths. This is not whole-design signoff. |
 | `eda_vivado_hold_paths` | `eda_vivado_timing_paths` | Yes / see schema | Inspect worst hold paths. This is not whole-design signoff. |
 | `eda_vivado_optimize` | `eda_vivado_optimize` | Yes / see schema | Provider-free RouteAgents routing plus bounded Vivado candidate loop and AER plateau stopping. Default plan measures a routed DCP; run tries physical recipes. resume_from continues an interrupted run from a verified committed journal in a fresh directory after baseline/winner remeasurement; run recovery-check first. Preserves constraints, logical representation, routing/hold/DRC gates; reports gain and rejections. No formal/board signoff. Shared lease and causal traces. |
-| `eda_knowledge` | `eda_knowledge` | No | Search small versioned FPGA rules, applicability boundaries and primary sources. No model or internet call. |
+| `eda_knowledge` | `eda_knowledge` | No | Rank local FPGA rules using English terms and Chinese bigrams, or retrieve an exact rule ID. Returns source versions, applicability, required evidence and corpus hashes. Lexical retrieval only; no embeddings, model or internet call. |
+| `eda_sop` | `eda_sop` | No | List local FPGA SOPs or load one by ID with its full procedure, referenced rules, required evidence and file hashes. Guidance is advisory; declared workflow checks enforce acceptance. No EDA or model call. |
 | `eda_trace` | `eda_trace` | No | Offline inspect, recovery-check or OTLP JSON export for native/proxy/optimizer traces. Checks hashes, parents, committed state and ownership. Export writes a local file only; never uploads, resumes EDA or infers functional acceptance. |
 | `eda_runs` | `eda_runs` | No | List persistent runtime jobs. Explicit reconcile archives leases only when their owner and recorded children are absent; never kills or reruns a job. |
 | `eda_preflight` | `eda_preflight` | No | Inspect local EDA capability paths, runtime configuration and model API policy. Availability is not a successful validation. |
