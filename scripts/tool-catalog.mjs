@@ -7,7 +7,7 @@ const extension=await createJiti(import.meta.url).import('../src/extension.ts',{
 const tools=[];extension({registerTool:t=>tools.push(t)});
 const records=tools.map(t=>{
   const surface=[...fpgaSurfaces,...platformSurfaces].find(s=>s.name===t.name);
-  const launches_eda=t.name.startsWith('eda_vivado')||['eda_xsim','eda_ltspice_batch','eda_benchmark_run','eda_benchmark'].includes(t.name);
+  const launches_eda=t.name.startsWith('eda_vivado')||['eda_xsim','eda_ltspice_batch','eda_benchmark_run','eda_benchmark','eda_workflow_run','eda_workflow_resume'].includes(t.name);
   return {name:t.name,description:t.description,inputSchema:t.parameters,executor:surface?.base||t.name,fixed_selector:surface?.fixed||null,
     launches_eda,execution_note:t.name==='eda_benchmark'?'Only action=run launches EDA':t.name==='eda_vivado_optimize'?'Both plan and run launch Vivado':launches_eda?'Requires installed EDA software':'Offline local inspection/control',writes_local_evidence:true,model_api_calls:0};
 });

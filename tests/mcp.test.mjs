@@ -13,7 +13,7 @@ test('official MCP client discovers registry, calls local preflight and rejects 
   try {
     await client.connect(transport);
     const listing = await client.listTools();
-    assert.equal(listing.tools.length, 48);
+    assert.equal(listing.tools.length, 53);
     assert.ok(listing.tools.some(t => t.name === 'eda_vivado_reports'));
     assert.ok(listing.tools.some(t => t.name === 'eda_benchmark'));
     assert.ok(listing.tools.find(t=>t.name==='eda_vivado_optimize').inputSchema.properties.resume_from);
@@ -34,5 +34,13 @@ test('official MCP client discovers registry, calls local preflight and rejects 
     assert.ok(!plan.isError,JSON.stringify(plan));
     const override=await client.callTool({name:'eda_benchmark_plan',arguments:{action:'run'}});
     assert.equal(override.isError,true);
+    const workflow=await client.callTool({name:'eda_workflow_plan',arguments:{spec:'examples/workflows/offline-review.json'}});
+    assert.ok(!workflow.isError,JSON.stringify(workflow));assert.equal(workflow.structuredContent.launches_eda,false);
+    const fixture=fs.mkdtempSync(path.join(root,'artifacts/mcp-workflow-reject-'));
+    const spec=JSON.parse(fs.readFileSync(path.join(root,'examples/workflows/offline-review.json')));
+    spec.steps=[{id:'reject',tool:'eda_preflight',args:{},checks:[{pointer:'/config/model_api_enabled',op:'eq',value:true}]}];
+    fs.writeFileSync(path.join(fixture,'task.json'),JSON.stringify(spec));
+    const rejected=await client.callTool({name:'eda_workflow_run',arguments:{spec:path.relative(root,path.join(fixture,'task.json'))}});
+    assert.equal(rejected.isError,true);assert.equal(rejected.structuredContent.outcome,'checks_failed');
   } finally { await client.close(); }
 });

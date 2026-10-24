@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "reviewed_on": "2026-10-25",
+  "method": "Primary source inspection; no upstream model or evaluation run.",
+  "sources": [
+    {
+      "repo": "earendil-works/pi",
+      "files": [
+        "packages/coding-agent/docs/sessions.md",
+        "packages/durable/README.md"
+      ],
+      "lesson": "Persisted sessions and commit-before-observe state; durable package is explicitly experimental.",
+      "commit": "6c2fd73b0c545a4034672cb60e34d53e035dd751",
+      "links": [
+        "https://github.com/earendil-works/pi/blob/6c2fd73b0c545a4034672cb60e34d53e035dd751/packages/coding-agent/docs/sessions.md",
+        "https://github.com/earendil-works/pi/blob/6c2fd73b0c545a4034672cb60e34d53e035dd751/packages/durable/README.md"
+      ]
+    },
+    {
+      "repo": "OpenHands/software-agent-sdk",
+      "files": [
+        "examples/01_standalone_sdk/10_persistence.py",
+        "openhands-sdk/openhands/sdk/conversation/stuck_detector.py"
+      ],
+      "lesson": "Stable conversation identity, persistence and explicit repeated-error detection.",
+      "commit": "acd96e6fa424c02432304395b9208f99be24b54d",
+      "links": [
+        "https://github.com/OpenHands/software-agent-sdk/blob/acd96e6fa424c02432304395b9208f99be24b54d/examples/01_standalone_sdk/10_persistence.py",
+        "https://github.com/OpenHands/software-agent-sdk/blob/acd96e6fa424c02432304395b9208f99be24b54d/openhands-sdk/openhands/sdk/conversation/stuck_detector.py"
+      ]
+    },
+    {
+      "repo": "SWE-agent/mini-swe-agent",
+      "files": [
+        "src/minisweagent/agents/default.py"
+      ],
+      "lesson": "Step/time/cost budgets and serialized trajectories with explicit exit reasons.",
+      "commit": "04d809ceab9df28f9adaed044884180159172930",
+      "links": [
+        "https://github.com/SWE-agent/mini-swe-agent/blob/04d809ceab9df28f9adaed044884180159172930/src/minisweagent/agents/default.py"
+      ]
+    },
+    {
+      "repo": "langchain-ai/langgraph",
+      "files": [
+        "libs/checkpoint/README.md"
+      ],
+      "lesson": "Persist successful node writes and avoid rerunning completed nodes on recovery.",
+      "commit": "4c52e129eb1ab69a3da58b799f67929f77d81149",
+      "links": [
+        "https://github.com/langchain-ai/langgraph/blob/4c52e129eb1ab69a3da58b799f67929f77d81149/libs/checkpoint/README.md"
+      ]
+    },
+    {
+      "repo": "Geochatz3/routeagents-fpl26",
+      "commit": "4a929b490dad048198e746d15c475a8c19dc5017",
+      "files": [
+        "README.md",
+        "optimizer/recipe_router.py"
+      ],
+      "links": [
+        "https://github.com/Geochatz3/routeagents-fpl26/tree/4a929b490dad048198e746d15c475a8c19dc5017"
+      ],
+      "lesson": "Measured candidate admission, bounded search and final revalidation; checked existing pinned local sources."
+    }
+  ]
+}

@@ -630,51 +630,6 @@
       "document": "projects/system-bench/dma/RESULTS.md",
       "label": "process.log",
       "target": "${WORKSPACE}/artifacts/2026-10-22T18-09-28-179Z-xsim-c2911341/process.log"
-    },
-    {
-      "document": "release/README.md",
-      "label": "Tool schemas",
-      "target": "docs/reference/tools.md"
-    },
-    {
-      "document": "release/README.md",
-      "label": "Architecture and workflow",
-      "target": "docs/agent-workflow-and-trace-contract.md"
-    },
-    {
-      "document": "release/README.md",
-      "label": "Historical results",
-      "target": "docs/results.md"
-    },
-    {
-      "document": "release/README.md",
-      "label": "Trace collaboration history",
-      "target": "docs/agent-framework-and-traces.md"
-    },
-    {
-      "document": "release/README.md",
-      "label": "Release notes",
-      "target": "docs/release-2026-10-25.md"
-    },
-    {
-      "document": "release/README.md",
-      "label": "11 machine-readable scorecards",
-      "target": "results/catalog.json"
-    },
-    {
-      "document": "release/README.md",
-      "label": "trace delivery and recovery",
-      "target": "docs/agent-completion-2026-10-24.md"
-    },
-    {
-      "document": "release/README.md",
-      "label": "MIT",
-      "target": "LICENSE"
-    },
-    {
-      "document": "release/README.md",
-      "label": "third-party notices",
-      "target": "THIRD_PARTY_NOTICES.md"
     }
   ]
 }

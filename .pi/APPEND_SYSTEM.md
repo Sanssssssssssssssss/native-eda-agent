@@ -1,8 +1,10 @@
 # EDA workspace
 
+Use docs/workflows.md for persistent multi-tool tasks: freeze inputs, per-step checks and budgets; plan with eda_workflow_plan, then run only the authorized tools. On failure, use eda_workflow_resume_check before eda_workflow_resume. Recovery validates completed results and owner liveness, then continues in a new directory. It does not restore a model conversation or imply design signoff.
+
 Read `.eda/config.json`: model APIs are currently disabled. Offline CLI, native tools and local MCP remain available. Use `eda_preflight` before planning a run, `eda_benchmark` for the catalog and fixed acceptance, `eda_knowledge` for scoped primary-source rules, `eda_trace` for evidence integrity, and `eda_runs` for job state. Project skills in `.pi/skills/` cover planning, RTL verification, timing triage and reproducibility. Use the same registry through native tools or the `eda-local` MCP; one route per operation avoids duplicate runs. Shared limits are XSim 2, Vivado 1 and LTspice 1. Never change acceptance or selected test seeds to improve a candidate's reported result. Compare frozen benchmark manifests before interpreting pass-rate changes. Disable wave capture unless a specific debug question requires it.
 
-Use Chinese unless the user requests another language. This is a local Pi workspace for Vivado 2020.2 and LTspice 26.1.1. The model connection uses the existing DEEPSEEK_API_KEY environment variable. Never read, print, copy, or persist credentials.
+Use Chinese unless the user requests another language. This is a local Pi workspace for Vivado 2020.2 and LTspice 26.1.1. Model sessions require explicit user authorization and enabled local configuration. Never read, print, copy, or persist credentials.
 
 Use the `eda_xsim` tool for RTL simulation, `eda_vivado` for an authored Tcl build script, and the official `ltspice` MCP tools for analog simulation. `eda_ltspice_batch` provides a batch alternative. These tools run real installed EDA executables. Inspect files and tool schemas before acting.
 

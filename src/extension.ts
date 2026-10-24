@@ -7,10 +7,12 @@ import { createOptimizerTools } from './tools/optimizer.mjs';
 import { createPlatformTools } from './platform.mjs';
 import { readConfig, listRuns } from './runtime.mjs';
 import { validateArguments } from './tool-contracts.mjs';
+import { createWorkflowTools } from './workflow.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 export default function extension(pi: any, options: any = {}) {
-  const registerTool = (tool: any) => pi.registerTool({ ...tool, execute: (id: any, args: any, signal: any, update: any, ctx: any) => {
+  const registry = new Map();
+  const registerTool = (tool: any) => { const wrapped = { ...tool, execute: (id: any, args: any, signal: any, update: any, ctx: any) => {
     validateArguments(args,tool.parameters);
     // Pi context contains nonenumerable tools/executeTool and guarded getters.
     const descriptors = ctx ? Object.getOwnPropertyDescriptors(ctx) : {};
@@ -21,11 +23,12 @@ export default function extension(pi: any, options: any = {}) {
       ...(options.traceContext?.() || {}), ...(ctx?.edaTraceContext || {}),
     } });
     return tool.execute(id, args, signal, update, context);
-  } });
+  } }; registry.set(tool.name, wrapped); pi.registerTool(wrapped); };
   edaTools({ registerTool } as any);
   for (const tool of createFpgaTools(root, tracedExecute)) registerTool(tool);
   for (const tool of createOptimizerTools(root, tracedExecute)) registerTool(tool);
   for (const tool of createPlatformTools(root)) registerTool(tool);
+  for (const tool of createWorkflowTools(root, registry)) registerTool(tool);
   if (!pi.on) return; // CLI registry construction has no interactive lifecycle.
   const lifecycle = (event: string, fields = {}) => {
     const dir = path.join(root, '.eda-state'); fs.mkdirSync(dir, { recursive: true });

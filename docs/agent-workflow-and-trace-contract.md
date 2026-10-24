@@ -1,8 +1,10 @@
 # Agent 工作流与 trace 接入
 
-当前入口是 Codex → 16 个原生接口 / 45 个社区 Vivado MCP 接口；Pi 会话可复用原生注册表，但模型 API 当前禁用。工具执行、设计验收和优化收益分别判断。本文是 Agent 的导航与证据合同；历史成绩仍以各次原始报告为准。
+当前入口是 Codex → 53 个原生接口 / 45 个社区 Vivado MCP 接口；Pi 会话可复用原生注册表，但模型 API 当前禁用。工具执行、设计验收和优化收益分别判断。本文是 Agent 的导航与证据合同；历史成绩仍以各次原始报告为准。
 
 统一代理、恢复和 OTLP 的操作入口见 [Agent 闭环交付](agent-completion-2026-10-24.md)。
+
+多工具任务使用 [持久化 workflow](workflows.md)：冻结规格、逐步验收、预算、子 trace 和恢复。成熟仓库对照及剩余差距见 [源码比较](repository-comparison-2026-10-25.md)。
 
 ## 按任务选择入口
 
@@ -10,6 +12,7 @@
 |---|---|---|
 | 明确任务 | 顶层、器件、频率、接口、复位/时钟域、资源目标、固定验收条件 | 项目规格、RTL/XDC、testbench；缺关键输入时再询问 |
 | 前检 | 本机路径、版本限制、活动任务、资源额度 | `eda_preflight`、`eda_runs`；路径存在不能证明许可证或板卡可用 |
+| 编排 | 固定输入、步骤依赖、验收、预算、已提交状态 | `eda_workflow_plan` 不启动 EDA；`run/resume` 按规格执行，失败即停；恢复前用 `resume_check` |
 | 理解设计 | 层次、时钟、关键路径、CDC/DRC、已有失败 | `eda_knowledge`、6 个 [FPGA 工具](fpga-native-tools-2026-10-24.md)、已有报告 |
 | 工程装配 | 工程/IP/BD 的实际配置及导出 Tcl | [Workbench](../projects/native-vivado-workbench/README.md)；查看 `ok`，失败可能留下部分修改 |
 | 功能/实现 | 固定 checker、负控、综合、布局布线和约束完整性 | `eda_xsim`、Vivado 工具、[benchmark](benchmark-catalog.md)；功能和时序独立验收 |
@@ -23,6 +26,7 @@
 | 路径 | 已有记录 | 当前连接与检查边界 |
 |---|---|---|
 | 原生 CLI / `eda-local` MCP | `run.json`、`events.jsonl`、输入快照、进程、回执 | `eda_trace` 核验；同一注册表的工具共用 trace；跨次任务关联需要显式 context/白名单环境变量 |
+| 持久化 workflow → 原生子工具 | 任务 checkpoint、子 trace/span、逐步验收、产物哈希 | `eda_workflow_inspect/resume_check` 检查完成前缀；恢复创建新运行，保留原证据；模型会话恢复另属 Pi SDK |
 | Pi SDK → 原生工具 | 会话 trace/span、工具父 span、usage | 工具继承会话 ID；检查器兼容 `runId/sequence/agent_run_id`；新会话初始化失败也落终态。Pi CLI/TUI 不等同于此 SDK 会话 trace |
 | 原生优化器 → Python → 本机 MCP | `optimizer-events.jsonl`、结果、候选、MCP 日志 | **本次接通**：继承原生工具 trace；候选/复测 span 包含客户端 MCP 调用 span。真实服务端未增加分布式传播协议 |
 | 社区全部 45 个工具 | 代理统一 `run/events/receipt`、响应哈希；13 个 `wb_*` 另保留 Tcl/回执 | Codex/Pi 已配置本地代理并共享资源锁，重连生效。检查全部工具的 MCP 边界；动态 Tcl 依赖仍不完整 |

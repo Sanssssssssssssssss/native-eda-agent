@@ -22,8 +22,12 @@ jobs:
       - run: npm run validate:agent
       - run: node scripts/benchmark.mjs validate
       - uses: actions/upload-artifact@v4
-        if: failure()
+        if: always()
         with:
-          name: offline-failure-evidence
-          path: artifacts/
+          name: offline-agent-receipts
+          path: |
+            artifacts/agent-offline-*/result.json
+            artifacts/agent-offline-*/node.log
+            artifacts/agent-offline-*/python.log
+            artifacts/agent-offline-*/config.log
           retention-days: 7

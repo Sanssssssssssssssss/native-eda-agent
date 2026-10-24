@@ -1,0 +1,22 @@
+name: Agent or workflow failure
+description: Report a reproducible tool, workflow or evidence failure
+body:
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Command and expected / actual result
+      description: Include tool arguments or a minimal workflow spec with private paths removed.
+    validations:
+      required: true
+  - type: textarea
+    id: versions
+    attributes:
+      label: Versions and execution scope
+      description: OS, Node/Python, repository commit; for real EDA include Vivado version, part and target clocks.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Compact evidence
+      description: Include outcome, failed step and inspect/resume_check issues. Do not upload credentials, full conversations or proprietary design artifacts.

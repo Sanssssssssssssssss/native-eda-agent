@@ -2,9 +2,11 @@
 
 A local FPGA/EDA agent built around Pi, typed tools, reproducible evidence and MCP. Codex or another MCP client can drive the same tools directly. Model-provider calls are disabled by default; local tools and offline tests need no model API key.
 
-**48 native interfaces**, including 28 focused contracts over shared executors and 4 historical-results tools. The optional community Vivado backend provides **45 tools and 11 prompts**, including project, IP and Block Design operations. These counts describe interfaces, not independent engines or design achievements.
+**53 native interfaces**, including 28 focused contracts over shared executors, 4 historical-results tools and 5 workflow tools. The optional community Vivado backend provides **45 tools and 11 prompts**, including project, IP and Block Design operations. These counts describe interfaces, not independent engines or design achievements.
 
 [Tool schemas](docs/reference/tools.md) · [Architecture and workflow](docs/agent-workflow-and-trace-contract.md) · [Historical results](docs/results.md) · [Trace collaboration history](docs/agent-framework-and-traces.md) · [Release notes](docs/release-2026-10-25.md)
+
+The [repository comparison](docs/repository-comparison-2026-10-25.md) reviews pinned Pi, OpenHands SDK, mini-swe-agent, LangGraph and RouteAgents sources. Version 0.4 adds persistent task specifications, explicit acceptance checks, shared call/time budgets and recovery in a fresh run. [Changelog](CHANGELOG.md) · [Contributing](CONTRIBUTING.md).
 
 ## Quick start
 
@@ -41,9 +43,21 @@ Passing this file to `eda_vivado_report_cdc` starts Vivado and generates CDC evi
 
 In Codex/Pi: preflight → select fixed inputs and acceptance → simulate → synthesize → implement → inspect timing/CDC/DRC → inspect trace. A completed tool call is not design signoff. Setup/hold, functionality, CDC, formal proof and board validation remain separate judgments.
 
+Declare multi-tool tasks in a [workflow specification](docs/workflows.md). Planning is offline; running executes the declared tools. Failed tasks can resume from verified completed steps after ownership, input, code, output and budget checks.
+
+```powershell
+npm run workflow -- plan examples/workflows/offline-review.json
+npm run workflow -- run examples/workflows/offline-review.json
+npm run workflow -- resume_check artifacts/FAILED_WORKFLOW_RUN
+```
+
+The offline example verifies local preflight and retained evidence. The [AXI fabric workflow](examples/workflows/axi-fabric-ooc.json) declares simulation, synthesis, implementation and DRC reporting; it requires installed EDA tools and pinned example RTL. Its new orchestration has only been statically planned this release.
+
 ```mermaid
 flowchart LR
   A[Codex MCP / Pi / CLI] --> B[Shared typed registry]
+  B --> W[Task spec + checks + checkpoints]
+  W --> B
   B --> C[Trace + input hashes]
   C --> D[Persistent queue + resource leases]
   D --> E[XSim / Vivado / LTspice]
@@ -82,4 +96,4 @@ The public package includes the community MCP backend and the RouteAgents pure r
 
 Trace export defaults to a local OTLP JSON file. Upload requires an explicit receiver command; no cloud collector is configured. See [trace delivery and recovery](docs/agent-completion-2026-10-24.md).
 
-Original framework code: [MIT](LICENSE). Dependencies and IP: [third-party notices](THIRD_PARTY_NOTICES.md). Contributions should include fixed acceptance, failure evidence and the relevant offline checks; preserve historical scores and never infer a passing design from a successful subprocess exit.
+Original framework code: [MIT](LICENSE). Dependencies and IP: [third-party notices](THIRD_PARTY_NOTICES.md). See [contribution guidance](CONTRIBUTING.md) for fixed acceptance, failure evidence and relevant offline checks.

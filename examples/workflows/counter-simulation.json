@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "id": "counter-fixed-simulation",
+  "goal": "Compile and simulate the fixed counter checker; require its explicit completed PASS verdict",
+  "inputs": ["examples/digital/counter.v", "examples/digital/tb_counter.sv"],
+  "limits": {"max_calls": 2, "wall_seconds": 300},
+  "steps": [
+    {"id": "simulate", "tool": "eda_xsim", "args": {"sources": ["examples/digital/counter.v", "examples/digital/tb_counter.sv"], "top": "tb_counter", "pass_marker": "COUNTER_PASS", "timeout_seconds": 120}, "checks": [{"pointer": "/simulation_acceptance/status", "op": "eq", "value": "pass"}]}
+  ]
+}

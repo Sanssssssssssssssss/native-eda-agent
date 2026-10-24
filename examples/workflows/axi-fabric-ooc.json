@@ -1,0 +1,134 @@
+{
+  "schema_version": 1,
+  "id": "axi-fabric-ooc",
+  "goal": "Fixed AXI 3x3 simulation, synthesis and OOC timing/routing acceptance; no board or CDC signoff",
+  "inputs": [
+    "projects/hard-bench/axi-fabric/manifest.json",
+    "projects/fpga-tool-validation/axi.xdc"
+  ],
+  "limits": {
+    "max_calls": 8,
+    "wall_seconds": 1800
+  },
+  "steps": [
+    {
+      "id": "simulation",
+      "tool": "eda_xsim",
+      "args": {
+        "sources": [
+          "vendor/verilog-axi/rtl/axi_crossbar.v",
+          "projects/hard-bench/axi-fabric/axi_crossbar_wr_guarded.v",
+          "vendor/verilog-axi/rtl/axi_crossbar_rd.v",
+          "projects/hard-bench/axi-fabric/axi_crossbar_addr_guarded.v",
+          "vendor/verilog-axi/rtl/axi_register_wr.v",
+          "vendor/verilog-axi/rtl/axi_register_rd.v",
+          "vendor/verilog-axi/rtl/arbiter.v",
+          "vendor/verilog-axi/rtl/priority_encoder.v",
+          "vendor/verilog-axi/rtl/axi_ram.v",
+          "projects/hard-bench/axi-fabric/rv_delay.sv",
+          "projects/hard-bench/axi-fabric/axi_error_target.sv",
+          "projects/hard-bench/axi-fabric/axi_write_completion_guard.sv",
+          "projects/hard-bench/axi-fabric/axi_fabric_top.sv",
+          "projects/hard-bench/axi-fabric/tb_axi_fabric.sv"
+        ],
+        "top": "tb_axi_fabric",
+        "capture_top_wave": false,
+        "pass_marker": "HARD_BENCH_PASS project=axi_fabric",
+        "timeout_seconds": 600
+      },
+      "checks": [
+        {
+          "pointer": "/simulation_acceptance/status",
+          "op": "eq",
+          "value": "pass"
+        }
+      ]
+    },
+    {
+      "id": "synthesis",
+      "tool": "eda_vivado_synthesize",
+      "args": {
+        "sources": [
+          "vendor/verilog-axi/rtl/axi_crossbar.v",
+          "projects/hard-bench/axi-fabric/axi_crossbar_wr_guarded.v",
+          "vendor/verilog-axi/rtl/axi_crossbar_rd.v",
+          "projects/hard-bench/axi-fabric/axi_crossbar_addr_guarded.v",
+          "vendor/verilog-axi/rtl/axi_register_wr.v",
+          "vendor/verilog-axi/rtl/axi_register_rd.v",
+          "vendor/verilog-axi/rtl/arbiter.v",
+          "vendor/verilog-axi/rtl/priority_encoder.v",
+          "vendor/verilog-axi/rtl/axi_ram.v",
+          "projects/hard-bench/axi-fabric/rv_delay.sv",
+          "projects/hard-bench/axi-fabric/axi_error_target.sv",
+          "projects/hard-bench/axi-fabric/axi_write_completion_guard.sv",
+          "projects/hard-bench/axi-fabric/axi_fabric_top.sv"
+        ],
+        "constraints": [
+          "projects/fpga-tool-validation/axi.xdc"
+        ],
+        "top": "axi_fabric_top",
+        "part": "xc7a100tfgg676-2"
+      },
+      "checks": [
+        {
+          "pointer": "/fpga/black_boxes",
+          "op": "eq",
+          "value": 0
+        }
+      ]
+    },
+    {
+      "id": "implementation",
+      "tool": "eda_vivado_implement",
+      "args": {
+        "checkpoint": {
+          "$result": {
+            "step": "synthesis",
+            "pointer": "/fpga/artifacts/synthesized.dcp"
+          }
+        }
+      },
+      "checks": [
+        {
+          "pointer": "/fpga/assessment/setup_hold",
+          "op": "eq",
+          "value": "pass"
+        },
+        {
+          "pointer": "/fpga/assessment/routing",
+          "op": "eq",
+          "value": "pass"
+        },
+        {
+          "pointer": "/fpga/assessment/clock_and_internal_constraints",
+          "op": "eq",
+          "value": "pass"
+        },
+        {
+          "pointer": "/fpga/assessment/io_constraints",
+          "op": "eq",
+          "value": "pass"
+        }
+      ]
+    },
+    {
+      "id": "drc-report",
+      "tool": "eda_vivado_report_drc",
+      "args": {
+        "checkpoint": {
+          "$result": {
+            "step": "implementation",
+            "pointer": "/fpga/artifacts/routed.dcp"
+          }
+        }
+      },
+      "checks": [
+        {
+          "pointer": "/fpga/reports/0/status",
+          "op": "eq",
+          "value": "ok"
+        }
+      ]
+    }
+  ]
+}

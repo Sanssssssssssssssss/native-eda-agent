@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "native_interfaces": 48,
+  "native_interfaces": 53,
   "focused_interfaces": 28,
   "community_interfaces": 45,
   "community_prompts": 11,
@@ -1682,6 +1682,126 @@
       "fixed_selector": null,
       "launches_eda": false,
       "execution_note": "Offline local inspection/control",
+      "writes_local_evidence": true,
+      "model_api_calls": 0
+    },
+    {
+      "name": "eda_workflow_plan",
+      "description": "Resolve a frozen sequential task, input hashes, tool dependencies and budget without starting EDA.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "spec": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2048
+          }
+        },
+        "required": [
+          "spec"
+        ],
+        "additionalProperties": false
+      },
+      "executor": "eda_workflow_plan",
+      "fixed_selector": null,
+      "launches_eda": false,
+      "execution_note": "Offline local inspection/control",
+      "writes_local_evidence": true,
+      "model_api_calls": 0
+    },
+    {
+      "name": "eda_workflow_run",
+      "description": "Execute declared steps with shared tool leases, fixed acceptance checks and a cumulative budget. May start EDA. Stops on the first failed check.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "spec": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2048
+          }
+        },
+        "required": [
+          "spec"
+        ],
+        "additionalProperties": false
+      },
+      "executor": "eda_workflow_run",
+      "fixed_selector": null,
+      "launches_eda": true,
+      "execution_note": "Requires installed EDA software",
+      "writes_local_evidence": true,
+      "model_api_calls": 0
+    },
+    {
+      "name": "eda_workflow_inspect",
+      "description": "Read task checkpoints and verify committed child traces, result files and output hashes.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "directory": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2048
+          }
+        },
+        "required": [
+          "directory"
+        ],
+        "additionalProperties": false
+      },
+      "executor": "eda_workflow_inspect",
+      "fixed_selector": null,
+      "launches_eda": false,
+      "execution_note": "Offline local inspection/control",
+      "writes_local_evidence": true,
+      "model_api_calls": 0
+    },
+    {
+      "name": "eda_workflow_resume_check",
+      "description": "Read-only check of task ownership, frozen inputs, implementation, completed results and remaining budget.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "directory": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2048
+          }
+        },
+        "required": [
+          "directory"
+        ],
+        "additionalProperties": false
+      },
+      "executor": "eda_workflow_resume_check",
+      "fixed_selector": null,
+      "launches_eda": false,
+      "execution_note": "Offline local inspection/control",
+      "writes_local_evidence": true,
+      "model_api_calls": 0
+    },
+    {
+      "name": "eda_workflow_resume",
+      "description": "Continue an eligible task in a new trace, reusing verified completed steps. An interrupted uncommitted step is rerun; no exactly-once guarantee. May start EDA.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "directory": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2048
+          }
+        },
+        "required": [
+          "directory"
+        ],
+        "additionalProperties": false
+      },
+      "executor": "eda_workflow_resume",
+      "fixed_selector": null,
+      "launches_eda": true,
+      "execution_note": "Requires installed EDA software",
       "writes_local_evidence": true,
       "model_api_calls": 0
     }

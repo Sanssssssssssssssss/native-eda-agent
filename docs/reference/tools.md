@@ -1,6 +1,6 @@
 # Native tool contracts
 
-48 native interfaces. 28 are focused contracts over shared executors; 4 expose retained scores. Community MCP separately exposes 45 tools and 11 prompts.
+53 native interfaces. 28 are focused contracts over shared executors; 4 expose retained scores. Community MCP separately exposes 45 tools and 11 prompts.
 
 Schemas: [tools.json](tools.json). Real EDA calls write independent artifacts and use shared resource leases.
 
@@ -54,3 +54,8 @@ Schemas: [tools.json](tools.json). Real EDA calls write independent artifacts an
 | `eda_results_get` | `eda_results_get` | No | Read one historical scorecard, limitations and public/original evidence hashes. |
 | `eda_results_verify` | `eda_results_verify` | No | Verify packaged evidence hashes and available local originals. Missing original artifacts are reported, never treated as reproduced. |
 | `eda_results_compare` | `eda_results_compare` | No | Compare historical scores only if task population, protocol, scope, units and evidence integrity match. |
+| `eda_workflow_plan` | `eda_workflow_plan` | No | Resolve a frozen sequential task, input hashes, tool dependencies and budget without starting EDA. |
+| `eda_workflow_run` | `eda_workflow_run` | Yes / see schema | Execute declared steps with shared tool leases, fixed acceptance checks and a cumulative budget. May start EDA. Stops on the first failed check. |
+| `eda_workflow_inspect` | `eda_workflow_inspect` | No | Read task checkpoints and verify committed child traces, result files and output hashes. |
+| `eda_workflow_resume_check` | `eda_workflow_resume_check` | No | Read-only check of task ownership, frozen inputs, implementation, completed results and remaining budget. |
+| `eda_workflow_resume` | `eda_workflow_resume` | Yes / see schema | Continue an eligible task in a new trace, reusing verified completed steps. An interrupted uncommitted step is rerun; no exactly-once guarantee. May start EDA. |

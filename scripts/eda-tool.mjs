@@ -17,6 +17,7 @@ try {
   const result = await registry.get(name).execute(`codex-local-${randomUUID()}`, parsed,
     abort.signal, update => console.log(update.content?.[0]?.text || 'Running'));
   console.log(JSON.stringify(result.details, null, 2));
+  if (result.isError) process.exitCode = 1;
 } catch (error) {
   console.error(String(error));
   let receipt = error.receipt;

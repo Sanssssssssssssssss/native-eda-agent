@@ -7,6 +7,7 @@
 - 用户要求静态检查时，只读证据或用假后端做软件检查。`eda_vivado_optimize mode=plan` 会启动 Vivado；`verify` 和 benchmark `run` 也会执行 EDA。
 - 原生入口共用 `src/extension.ts` 注册表、`src/trace.mjs` 与 `src/runtime.mjs`。社区/LTspice 使用 `src/traced-mcp-proxy.mjs` 后共用资源租约；重连后的配置才生效。任意 Tcl 启动异步工程时须等待工程结束后才归还执行额度。
 - 候选复制到新目录；固定测试、约束和输入不随优化目标放宽。功能、setup/hold、CDC、DRC、布局布线、形式证明和板卡实测分别验收。
+- 多步骤任务优先写 [workflow 规格](docs/workflows.md)，包含固定 inputs、每步 checks 与累计预算。`eda_workflow_plan` 不启动 EDA；`run/resume` 执行声明的工具。失败后先 `resume_check`，仅在输入、代码、完成步骤和所有者检查通过时恢复；续跑使用新目录。
 - 返回结果前用 `eda_trace` 检查证据，查看 `outcome`、`winner_recheck`、输入完整性与实际收益。`completed` 仅表示流程完成。trace 记录可观察的选择依据、调用和证据，不推断模型内部思维。
 - 无终态时先检查任务所有者；不根据耗时猜测死亡，不终止无关进程。优化器先用 `eda_trace action=recovery-check` 检查，再通过 `resume_from` 从已提交候选边界创建新运行，复测后继续；保留失败产物。
 - 历史 trace 不补造 span/时间戳；旧结果只说明当时已记录的证据。外部 MCP 和追踪平台的接通状态按合同中的矩阵报告。

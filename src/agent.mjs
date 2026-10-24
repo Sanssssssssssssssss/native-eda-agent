@@ -223,9 +223,9 @@ if (command === 'doctor') {
   const report = { ...doctor(root), nativeTools: [...nativeTools.keys()] };
   console.log(JSON.stringify(report, null, 2));
   if (!report.vivado.exists || !report.ltspice.exists) process.exitCode = 1;
-} else if (['benchmark', 'trace', 'storage', 'recover', 'export-trace'].includes(command)) {
+} else if (['benchmark', 'trace', 'storage', 'recover', 'export-trace', 'workflow'].includes(command)) {
   // These offline CLI modules own their argument parsers and never start a model session.
-  const script = { benchmark: 'benchmark.mjs', trace: 'trace-inspect.mjs', storage: 'artifact-inventory.mjs', recover: 'recover-optimizer.mjs', 'export-trace': 'export-traces.mjs' }[command];
+  const script = { benchmark: 'benchmark.mjs', trace: 'trace-inspect.mjs', storage: 'artifact-inventory.mjs', recover: 'recover-optimizer.mjs', 'export-trace': 'export-traces.mjs', workflow: 'workflow.mjs' }[command];
   const result = spawnSync(process.execPath, [path.join(root, 'scripts', script), ...args], { stdio: 'inherit', windowsHide: true });
   if (result.error) throw result.error;
   process.exitCode = result.status ?? 1;
@@ -253,5 +253,5 @@ if (command === 'doctor') {
   if (!prompt.trim()) throw new Error('Supply a task or --prompt-file.');
   await agentRun(prompt, limits);
 } else {
-  console.log('EDA Agent — Pi SDK + local tools + MCP\n\n  .\\eda.ps1 doctor\n  .\\eda.ps1 benchmark list|plan|run|report|compare\n  .\\eda.ps1 knowledge timing\n  .\\eda.ps1 trace RUN_DIRECTORY\n  .\\eda.ps1 recover RUN_DIRECTORY --check-only\n  .\\eda.ps1 export-trace RUN_DIRECTORY --output FILE.json\n  .\\eda.ps1 storage --plan\n  .\\eda.ps1 runs [--reconcile]\n  npm run validate:agent\n  .\\eda.ps1 verify\n  .\\eda.ps1 chat\n  .\\eda.ps1 run "任务描述"   # requires model_api_enabled=true\n\nrun/demo: --max-turns 24 --timeout 600; run also accepts --prompt-file PATH');
+  console.log('EDA Agent — Pi SDK + local tools + MCP\n\n  .\\eda.ps1 doctor\n  .\\eda.ps1 benchmark list|plan|run|report|compare\n  .\\eda.ps1 knowledge timing\n  .\\eda.ps1 trace RUN_DIRECTORY\n  .\\eda.ps1 recover RUN_DIRECTORY --check-only\n  .\\eda.ps1 export-trace RUN_DIRECTORY --output FILE.json\n  .\\eda.ps1 storage --plan\n  .\\eda.ps1 runs [--reconcile]\n  npm run workflow -- plan|run SPEC.json\n  npm run validate:agent\n  .\\eda.ps1 verify\n  .\\eda.ps1 chat\n  .\\eda.ps1 run "任务描述"   # requires model_api_enabled=true\n\nrun/demo: --max-turns 24 --timeout 600; run also accepts --prompt-file PATH');
 }
