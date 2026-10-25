@@ -6,4 +6,6 @@ Start with the [project README](../README.md), [workflow guide](../docs/workflow
 
 The published checkout adds `validation.json` and `validation-*.txt` from its own offline acceptance, with machine paths removed. `knowledge-evaluation.json` records the visible retrieval regression and exact query/corpus hashes. These checks are independent of the 11 historical FPGA/tool scorecards. GitHub Actions provides fresh logs for each commit.
 
+For v0.6, `evaluation-v06.json` indexes local software, browser and real EDA receipts. `eda-v06/` contains sanitized Counter, AXI and DRC evidence with original and public-file hashes. The AXI workflow completed but requires DRC review; its six passing domains are not a full design pass. No provider session or new Agent end-to-end score is claimed. DCPs, waveforms, full conversations and runtime installations remain local.
+
 Maintain the export allowlist in `scripts/build-public.mjs`; see [contribution guidance](../CONTRIBUTING.md). Do not copy runtime installations, credentials, conversations or large EDA artifacts into this directory.

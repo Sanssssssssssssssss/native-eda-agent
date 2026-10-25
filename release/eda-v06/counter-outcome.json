@@ -1,0 +1,64 @@
+{
+  "profile": "rtl_simulation",
+  "status": "passed",
+  "reason": null,
+  "issues": [],
+  "domains": [
+    {
+      "domain": "functional",
+      "step": "simulate",
+      "status": "passed",
+      "observed": {
+        "status": "pass",
+        "pass_marker": "COUNTER_PASS",
+        "marker_matches": 1,
+        "completion_observed": true,
+        "failure_diagnostic": false,
+        "scope": "Explicit testbench marker, completion and diagnostic checks; semantic assertions remain the testbench responsibility."
+      },
+      "pointers": [
+        "/simulation_acceptance"
+      ],
+      "evidence": {
+        "result": "artifacts/2026-10-25T11-44-38-167Z-eda_workflow_run-2c863817/simulate.result.json",
+        "sha256": "cbce8f085d90f73b8f47dd3336c406734ccfeac6bde5678e87439393609cdc4d",
+        "child_directory": "artifacts/2026-10-25T11-44-38-307Z-eda_xsim-f9a4a576"
+      }
+    },
+    {
+      "domain": "synthesis",
+      "status": "not_requested"
+    },
+    {
+      "domain": "setup",
+      "status": "not_requested"
+    },
+    {
+      "domain": "hold",
+      "status": "not_requested"
+    },
+    {
+      "domain": "constraints",
+      "status": "not_requested"
+    },
+    {
+      "domain": "routing",
+      "status": "not_requested"
+    },
+    {
+      "domain": "drc",
+      "status": "not_requested"
+    },
+    {
+      "domain": "cdc",
+      "status": "not_requested"
+    },
+    {
+      "domain": "artifact_integrity",
+      "status": "not_requested"
+    }
+  ],
+  "scope": "Explicit testbench acceptance; no physical or formal signoff.",
+  "formal": "not_evaluated",
+  "hardware": "not_evaluated"
+}

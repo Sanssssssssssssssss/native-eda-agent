@@ -1,0 +1,49 @@
+{
+  "directory": "${WORKSPACE}\\artifacts\\2026-10-25T11-44-38-307Z-eda_xsim-f9a4a576",
+  "process_log": "${WORKSPACE}\\artifacts\\2026-10-25T11-44-38-307Z-eda_xsim-f9a4a576\\process.log",
+  "files": [
+    ".Xil",
+    "eda_snapshot.wdb",
+    "events.jsonl",
+    "inputs",
+    "inputs.json",
+    "process.log",
+    "retention.json",
+    "run.json",
+    "simulation-acceptance.json",
+    "webtalk.jou",
+    "webtalk.log",
+    "webtalk_51408.backup.jou",
+    "webtalk_51408.backup.log",
+    "xelab.log",
+    "xelab.pb",
+    "xsim.dir",
+    "xsim.jou",
+    "xsim.log",
+    "xvlog.log",
+    "xvlog.pb"
+  ],
+  "transcript_tail": "\n[2026-10-25T11:44:38.334Z] [\"E:\\\\Xilinx\\\\Vivado\\\\2020.2\\\\bin\\\\xvlog.bat\",\"--sv\",\"E:\\\\GPTProject2\\\\EDAAgent\\\\examples\\\\digital\\\\counter.v\",\"E:\\\\GPTProject2\\\\EDAAgent\\\\examples\\\\digital\\\\tb_counter.sv\"]\nINFO: [VRFC 10-2263] Analyzing SystemVerilog file \"${WORKSPACE}/examples/digital/counter.v\" into library work\r\nINFO: [VRFC 10-311] analyzing module counter\r\nINFO: [VRFC 10-2263] Analyzing SystemVerilog file \"${WORKSPACE}/examples/digital/tb_counter.sv\" into library work\r\nINFO: [VRFC 10-311] analyzing module tb_counter\r\n\n[2026-10-25T11:44:39.314Z] [\"E:\\\\Xilinx\\\\Vivado\\\\2020.2\\\\bin\\\\xelab.bat\",\"tb_counter\",\"-s\",\"eda_snapshot\",\"-debug\",\"typical\",\"-mt\",\"2\"]\nVivado Simulator 2020.2\r\nCopyright 1986-1999, 2001-2020 Xilinx, Inc. All Rights Reserved.\r\nRunning: E:/Xilinx/Vivado/2020.2/bin/unwrapped/win64.o/xelab.exe tb_counter -s eda_snapshot -debug typical -mt 2 \r\nUsing 2 slave threads.\r\nStarting static elaboration\r\nPass Through NonSizing Optimizer\r\nCompleted static elaboration\r\nStarting simulation data flow analysis\r\nCompleted simulation data flow analysis\r\nTime Resolution for simulation is 1ps\r\nCompiling module work.counter\r\nCompiling module work.tb_counter\r\nBuilt simulation snapshot eda_snapshot\r\n\r\n****** Webtalk v2020.2 (64-bit)\r\n  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020\r\n  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020\r\n    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.\r\n\r\nsource ${WORKSPACE}/artifacts/2026-10-25T11-44-38-307Z-eda_xsim-f9a4a576/xsim.dir/eda_snapshot/webtalk/xsim_webtalk.tcl -notrace\r\nINFO: [Common 17-206] Exiting Webtalk at Sun Oct 25 19:44:42 2026...\r\n\n[2026-10-25T11:44:42.926Z] [\"E:\\\\Xilinx\\\\Vivado\\\\2020.2\\\\bin\\\\xsim.bat\",\"eda_snapshot\",\"-runall\"]\n\r\n****** xsim v2020.2 (64-bit)\r\n  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020\r\n  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020\r\n    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.\r\n\r\nsource xsim.dir/eda_snapshot/xsim_script.tcl\r\n# xsim {eda_snapshot} -autoloadwcfg -runall\r\nVivado Simulator 2020.2\r\nTime resolution is 1 ps\r\nrun -all\r\nCOUNTER_PASS checks=321 wraps=1 holds=7 resets=3\r\n$finish called at time : 3216 ns : File \"${WORKSPACE}/examples/digital/tb_counter.sv\" Line 42\r\nexit\r\nINFO: [Common 17-206] Exiting xsim at Sun Oct 25 19:44:49 2026...\r\n",
+  "simulation_acceptance": {
+    "status": "pass",
+    "pass_marker": "COUNTER_PASS",
+    "marker_matches": 1,
+    "completion_observed": true,
+    "failure_diagnostic": false,
+    "scope": "Explicit testbench marker, completion and diagnostic checks; semantic assertions remain the testbench responsibility."
+  },
+  "run_id": "2026-10-25T11-44-38-307Z-eda_xsim-f9a4a576",
+  "run_manifest": "${WORKSPACE}\\artifacts\\2026-10-25T11-44-38-307Z-eda_xsim-f9a4a576\\run.json",
+  "status": "completed",
+  "error": null,
+  "input_drift": false,
+  "trace_id": "c16b90b28af24a068f4ff76f0cf893c4",
+  "span_id": "401c82e88caa40da",
+  "context": {
+    "parent_run_id": "2026-10-25T11-44-38-167Z-eda_workflow_run-2c863817",
+    "trace_id": "c16b90b28af24a068f4ff76f0cf893c4",
+    "parent_span_id": "1f6387edd66e43dc"
+  },
+  "snapshot_integrity": true,
+  "unresolved_dependency_count": 0
+}

@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.6.0 — 2026-10-25
+
+- Added phase-scoped rule/SOP/tool context, CDC and IP integration procedures, and workflow observation refresh. There are now six bundled SOPs and 55 native interfaces.
+- Added host-owned engineering outcome profiles, frozen identity/clock/checkpoint lineage, independent result readback and repeated-failure recovery limits.
+- Added a loopback workbench for persistent local knowledge sessions, SOPs, execution timelines, domain outcomes and classified evaluations.
+- Separated offline contracts/retrieval/evidence, live EDA workflows and existing Pi session-task assessment; receipts retain protocol hashes and stale-source markers.
+- Validated real Counter simulation and structured DRC retrieval; preserved historical scorecards. Provider APIs remained disabled. See the release receipts for exact software and live EDA results.
+
 ## 0.5.0 — 2026-10-25
 
 - Organized the README and historical results by EDA function, with source pointers for implemented mechanisms and their remaining limits.

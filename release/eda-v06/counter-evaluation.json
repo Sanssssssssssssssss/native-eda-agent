@@ -1,0 +1,99 @@
+{
+  "schema_version": 1,
+  "suite": "online-counter",
+  "lane": "online_eda",
+  "category": "rtl",
+  "unit": "workflow_run",
+  "started_at": "2026-10-25T11:44:38.162Z",
+  "status": "passed",
+  "source_hashes": {
+    "src/evaluations.mjs": "e1c6e09e77f27160a965dbbcaeb1ffc5dc9973ff3196297baf5b0c495a591edf",
+    "src/task-outcome.mjs": "d957a04d2ae4b9e55eef2a5b8e7518fcd5d2507f87235fdcb813032866178e5f",
+    "src/task-context.mjs": "776f671692a65eccbdf42ac9cbaef530b24b28eb98de3d25aea6ae981d2f7425",
+    "src/workflow.mjs": "1f09af9ae70e99fee90f3c55b5dfd4077283f1cf212dc4bae66c6846332b10e8",
+    "scripts/evaluate-knowledge.mjs": "95c7e71ef774e98459136df460d14410636dd189957e819226d4ba3be13c4240",
+    "knowledge/retrieval-cases.json": "a0832c30ca7f28b6e22fdf65c90e561c525c39bdbd61e3cd98b241de4f74737f",
+    "src/knowledge.mjs": "5f84ab00272ba98b8297b2d19d6083bec2ec6cf0d7870dd0c7959290fd078351",
+    "scripts/check-knowledge.mjs": "65d9b5fe2acb9f49a3f7ddc06ccc276a11c35b77f294da7911848b46196d403f",
+    "knowledge/rules.json": "1e77d3eb0a63ed2323f85f4dbe8408f471eca69fc37947da41c36c5264c196fb",
+    "knowledge/sources.json": "d603e1a7159623164c79059f1c4f15944b2c2312ed6fcdfe768cb0ac23733a3d",
+    "knowledge/sops.json": "7f6cacae88edcc2ba0b095666406215733df7922af7256a771496a794e063bd4",
+    "knowledge/tools.json": "12d8ae1e0141eaef8ba79c834a30152b5c5ca3f20688e3ee12c2741db3f3f426",
+    ".pi/skills/fpga-plan/SKILL.md": "46526fc1f970b38390e8655f83138326f4bcb41b6748a253bfd38ab3a31c13bf",
+    ".pi/skills/fpga-rtl-verify/SKILL.md": "11432c15fb1fe7764ba24918668698355d2143b9dc2cff4512fe05d3add2a28a",
+    ".pi/skills/fpga-timing-triage/SKILL.md": "d45ce3ebc40241ee7604c9e8d2fd246d0551667043206423032ccd2bf89cb469",
+    ".pi/skills/fpga-reproduce/SKILL.md": "910c422cc8a9f7bbf270e4e31382dee2acf338602d3e072c6843f89f3cf526f9",
+    ".pi/skills/fpga-cdc-review/SKILL.md": "849f8725fad7f77d8a0caf6e5f15d86cc3543c8ef51afcfb61a71b62eef24259",
+    ".pi/skills/fpga-ip-integrate/SKILL.md": "ad1ece2837b3dd31fe1a4cc8e20bcefa4f9ae99f887056a6552a3b5e2757790e",
+    "examples/workflows/counter-simulation.json": "2e36a1472aae7fd458b98e99796a2e729d93d3d74c1e9ac0c9cedae311ff0f0b"
+  },
+  "provider_calls_by_evaluator": 0,
+  "outer_codex_tokens": null,
+  "workflow": "${WORKSPACE}\\artifacts\\2026-10-25T11-44-38-167Z-eda_workflow_run-2c863817",
+  "task_acceptance": {
+    "profile": "rtl_simulation",
+    "status": "passed",
+    "reason": null,
+    "issues": [],
+    "domains": [
+      {
+        "domain": "functional",
+        "step": "simulate",
+        "status": "passed",
+        "observed": {
+          "status": "pass",
+          "pass_marker": "COUNTER_PASS",
+          "marker_matches": 1,
+          "completion_observed": true,
+          "failure_diagnostic": false,
+          "scope": "Explicit testbench marker, completion and diagnostic checks; semantic assertions remain the testbench responsibility."
+        },
+        "pointers": [
+          "/simulation_acceptance"
+        ],
+        "evidence": {
+          "result": "artifacts/2026-10-25T11-44-38-167Z-eda_workflow_run-2c863817/simulate.result.json",
+          "sha256": "cbce8f085d90f73b8f47dd3336c406734ccfeac6bde5678e87439393609cdc4d",
+          "child_directory": "artifacts/2026-10-25T11-44-38-307Z-eda_xsim-f9a4a576"
+        }
+      },
+      {
+        "domain": "synthesis",
+        "status": "not_requested"
+      },
+      {
+        "domain": "setup",
+        "status": "not_requested"
+      },
+      {
+        "domain": "hold",
+        "status": "not_requested"
+      },
+      {
+        "domain": "constraints",
+        "status": "not_requested"
+      },
+      {
+        "domain": "routing",
+        "status": "not_requested"
+      },
+      {
+        "domain": "drc",
+        "status": "not_requested"
+      },
+      {
+        "domain": "cdc",
+        "status": "not_requested"
+      },
+      {
+        "domain": "artifact_integrity",
+        "status": "not_requested"
+      }
+    ],
+    "scope": "Explicit testbench acceptance; no physical or formal signoff.",
+    "formal": "not_evaluated",
+    "hardware": "not_evaluated"
+  },
+  "workflow_outcome": "passed",
+  "finished_at": "2026-10-25T11:44:50.037Z"
+}

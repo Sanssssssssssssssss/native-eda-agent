@@ -61,5 +61,11 @@
     "sop_ids": [
       "fpga-reproduce"
     ]
+  },
+  "acceptance": {
+    "profile": "evidence_review",
+    "bindings": {
+      "artifact_integrity": "evidence"
+    }
   }
 }

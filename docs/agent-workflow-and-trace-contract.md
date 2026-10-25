@@ -1,6 +1,6 @@
 # Agent 工作流与 trace 接入
 
-当前入口是 Codex → 54 个原生接口 / 45 个社区 Vivado MCP 接口；Pi 会话可复用原生注册表，但模型 API 当前禁用。工具执行、设计验收和优化收益分别判断。本文是 Agent 的导航与证据合同；历史成绩仍以各次原始报告为准。
+当前入口是 Codex → 55 个原生接口 / 45 个社区 Vivado MCP 接口；Pi 会话可复用原生注册表，但模型 API 当前禁用。工具执行、设计验收和优化收益分别判断。本文是 Agent 的导航与证据合同；历史成绩仍以各次原始报告为准。
 
 统一代理、恢复和 OTLP 的操作入口见 [Agent 闭环交付](agent-completion-2026-10-24.md)。
 
@@ -13,7 +13,7 @@
 | 明确任务 | 顶层、器件、频率、接口、复位/时钟域、资源目标、固定验收条件 | 项目规格、RTL/XDC、testbench；缺关键输入时再询问 |
 | 前检 | 本机路径、版本限制、活动任务、资源额度 | `eda_preflight`、`eda_runs`；路径存在不能证明许可证或板卡可用 |
 | 编排 | 固定输入、步骤依赖、验收、预算、已提交状态 | `eda_workflow_plan` 不启动 EDA；`run/resume` 按规格执行，失败即停；恢复前用 `resume_check` |
-| 理解设计 | 层次、时钟、关键路径、CDC/DRC、已有失败 | `eda_knowledge`、`eda_sop`、6 个 [FPGA 工具](fpga-native-tools-2026-10-24.md)、已有报告 |
+| 理解设计 | 层次、时钟、关键路径、CDC/DRC、已有失败 | `eda_task_context`、`eda_knowledge`、`eda_sop`、6 个 [FPGA 工具](fpga-native-tools-2026-10-24.md)、已有报告 |
 | 工程装配 | 工程/IP/BD 的实际配置及导出 Tcl | [Workbench](../projects/native-vivado-workbench/README.md)；查看 `ok`，失败可能留下部分修改 |
 | 功能/实现 | 固定 checker、负控、综合、布局布线和约束完整性 | `eda_xsim`、Vivado 工具、[benchmark](benchmark-catalog.md)；功能和时序独立验收 |
 | 优化 | 基线、候选依据、预算、拒绝理由、收益、独立复测 | `eda_vivado_optimize`；`plan` **也会启动 Vivado 测基线**，纯静态任务不要调用它 |

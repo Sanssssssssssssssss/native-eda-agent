@@ -9,7 +9,7 @@ if(destination===root||root.startsWith(destination+path.sep))throw new Error('Ex
 if(fs.existsSync(destination)&&fs.readdirSync(destination).length)throw new Error('Destination must be empty; existing files preserved');
 fs.mkdirSync(destination,{recursive:true});
 const excluded=new Set(['.git','node_modules','runtime','downloads','artifacts','Gameboy','.pi-state','.eda-state','__pycache__','.Xil','runs']);
-const extensions=new Set(['.mjs','.js','.ts','.py','.tcl','.json','.toml','.yaml','.yml','.md','.ps1','.v','.sv','.vh','.svh','.vhd','.vhdl','.xdc','.c','.h','.S','.ld','.hex','.mem','.txt','.cir','.net','.rpt','.csv','.coe']);
+const extensions=new Set(['.mjs','.js','.ts','.py','.tcl','.json','.toml','.yaml','.yml','.md','.html','.css','.ps1','.v','.sv','.vh','.svh','.vhd','.vhdl','.xdc','.c','.h','.S','.ld','.hex','.mem','.txt','.cir','.net','.rpt','.csv','.coe']);
 const files=[];
 function permitted(name){return name!=='write_report.py'&&!/^(latest[-.]|codex-usage|collect_usage|collect-usage)/.test(name)&&!/(\.egg-info|\.cache)$/.test(name)&&(extensions.has(path.extname(name))||/^(LICENSE|NOTICE|Makefile|\.gitignore)$/.test(name));}
 function copy(relative){
@@ -25,7 +25,8 @@ function walk(relative){
     if(e.isDirectory())walk(next);else if(permitted(e.name))copy(next);
   }
 }
-for(const name of ['src','scripts','tests','benchmarks','knowledge','examples','prompts','docs','results','.github','.pi/extensions','.pi/skills'])walk(name);
+for(const name of ['src','scripts','tests','benchmarks','knowledge','examples','prompts','docs','results','web','.github','.pi/extensions','.pi/skills'])walk(name);
+if(fs.existsSync(path.join(root,'docs/media/workbench.png')))copy('docs/media/workbench.png');
 for(const name of ['fft-spectrum','fpga-tool-validation','hard-bench','system-bench','verilogeval-24','verilogeval-mini','native-vivado-workbench'])walk(`projects/${name}`);
 for(const name of ['README.md','AGENTS.md','CONTRIBUTING.md','CHANGELOG.md','LICENSE','THIRD_PARTY_NOTICES.md','.gitignore','.gitattributes','package.json','package-lock.json','eda.ps1','start-pi.ps1','.eda/config.json','.eda/optimizer-upstreams.json','.pi/APPEND_SYSTEM.md','.pi/settings.json','projects/README.md','release/upstreams.json','release/python-requirements.lock','release/README.md'])copy(name);
 const community='vendor/vivado-mcp-community';

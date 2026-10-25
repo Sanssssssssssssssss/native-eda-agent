@@ -4,9 +4,11 @@ Use Chinese unless requested otherwise. Read `.eda/config.json`: model provider 
 
 ## Choose guidance and freeze the task
 
-Start with `eda_preflight` and `eda_runs action=list`. Establish the top, part, clocks/resets, interfaces, RTL/XDC/DCP inputs and fixed acceptance. Use `eda_knowledge` for ranked Chinese/English rules; inspect source versions, scope and required evidence. Use `eda_sop` for the full planning, RTL verification, timing triage or reproduction procedure. These four bundled skills also load through Pi's resource loader. Optional Ross skills appear only when installed; session `resources_loaded` records what was actually discovered. See `docs/knowledge-and-sops.md`.
+Start with `eda_preflight` and `eda_runs action=list`. Establish the top, part, clocks/resets, interfaces, RTL/XDC/DCP inputs and fixed acceptance. Use `eda_knowledge` for ranked Chinese/English rules; inspect source versions, scope and required evidence. Use `eda_sop` for the full planning, RTL verification, timing triage or reproduction procedure. Planning, verification, timing, reproduction, CDC and IP integration make six bundled skills. These skills also load through Pi's resource loader. Optional Ross skills appear only when installed; session `resources_loaded` records what was actually discovered. See `docs/knowledge-and-sops.md`.
 
-For multi-tool tasks use `docs/workflows.md`: declare inputs, selected `guidance.rule_ids/sop_ids`, per-step checks and cumulative budgets. `eda_workflow_plan` is static. `run/resume` executes the declared tools; selecting guidance freezes its content but only explicit checks enforce acceptance. Freeze testbenches, seeds, constraints and inputs before optimization. Never weaken them to improve a score. Use one native/MCP route per operation to avoid duplicate runs.
+Use `eda_task_context` to select phase-relevant rules/SOPs and actual tool contracts. With a workflow directory it revalidates observations; unknown or stale observations must not become successful design conclusions.
+
+For multi-tool tasks use `docs/workflows.md`: declare inputs, selected `guidance.rule_ids/sop_ids`, per-step checks, a typed `acceptance` profile with domain bindings, and cumulative budgets. `eda_workflow_plan` is static. `run/resume` executes the declared tools; selecting guidance freezes its content but step checks and bound domain evaluators enforce acceptance. Freeze testbenches, seeds, constraints and inputs before optimization. Never weaken them to improve a score. Use one native/MCP route per operation to avoid duplicate runs.
 
 ## Execute and verify EDA
 
@@ -24,7 +26,7 @@ The community proxy exposes persistent sessions and project/IP/BD operations. Se
 
 Use `eda_trace` before delivery. Inspect terminal outcome, snapshots, failures, acceptance and remaining work; `completed` describes execution only. Trace records observable decisions and evidence, never inferred model thoughts. Historical events must not be backfilled.
 
-Workflow recovery uses `eda_workflow_resume_check` before `resume`; it verifies owners, frozen inputs/code, completed results and artifacts, then continues in a new directory. Optimizer recovery uses `eda_trace action=recovery-check` and `resume_from`, remeasuring baseline and committed best. Legacy four-tool replay is a separate path. Do not infer process death from elapsed time or terminate unrelated jobs. Preserve failed runs. See `docs/agent-workflow-and-trace-contract.md` and `docs/agent-framework-and-traces.md`.
+Workflow recovery uses `eda_workflow_resume_check` before `resume`; it verifies owners, frozen inputs/code, completed results and artifacts, then continues in a new directory. Optimizer recovery uses `eda_trace action=recovery-check` and `resume_from`, remeasuring baseline and committed best. Legacy four-tool replay is a separate path. Do not infer process death from elapsed time or terminate unrelated jobs. Preserve failed runs. Three unchanged failures in a recovery chain stop further resume; diagnose before a new task. Separate task_acceptance from execution status. See `docs/agent-workflow-and-trace-contract.md` and `docs/agent-framework-and-traces.md`.
 
 OTLP export writes local files by default. Upload only when the user explicitly requests transmission to a specified receiver. Historical score comparisons require the same task set, protocol, scope and unit. Keep historical achievements, current software verification, model/API cost and unaccepted items distinct.
 

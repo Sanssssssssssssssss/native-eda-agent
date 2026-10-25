@@ -8,12 +8,14 @@
     "scripts/check-knowledge.mjs": "65d9b5fe2acb9f49a3f7ddc06ccc276a11c35b77f294da7911848b46196d403f",
     "knowledge/rules.json": "1e77d3eb0a63ed2323f85f4dbe8408f471eca69fc37947da41c36c5264c196fb",
     "knowledge/sources.json": "d603e1a7159623164c79059f1c4f15944b2c2312ed6fcdfe768cb0ac23733a3d",
-    "knowledge/sops.json": "23ff47a9ae713216df2bd0b2c4df570ca067892133dc2784a48f6b9cb03af5bb",
+    "knowledge/sops.json": "7f6cacae88edcc2ba0b095666406215733df7922af7256a771496a794e063bd4",
     "knowledge/tools.json": "12d8ae1e0141eaef8ba79c834a30152b5c5ca3f20688e3ee12c2741db3f3f426",
     ".pi/skills/fpga-plan/SKILL.md": "46526fc1f970b38390e8655f83138326f4bcb41b6748a253bfd38ab3a31c13bf",
     ".pi/skills/fpga-rtl-verify/SKILL.md": "11432c15fb1fe7764ba24918668698355d2143b9dc2cff4512fe05d3add2a28a",
     ".pi/skills/fpga-timing-triage/SKILL.md": "d45ce3ebc40241ee7604c9e8d2fd246d0551667043206423032ccd2bf89cb469",
-    ".pi/skills/fpga-reproduce/SKILL.md": "910c422cc8a9f7bbf270e4e31382dee2acf338602d3e072c6843f89f3cf526f9"
+    ".pi/skills/fpga-reproduce/SKILL.md": "910c422cc8a9f7bbf270e4e31382dee2acf338602d3e072c6843f89f3cf526f9",
+    ".pi/skills/fpga-cdc-review/SKILL.md": "849f8725fad7f77d8a0caf6e5f15d86cc3543c8ef51afcfb61a71b62eef24259",
+    ".pi/skills/fpga-ip-integrate/SKILL.md": "ad1ece2837b3dd31fe1a4cc8e20bcefa4f9ae99f887056a6552a3b5e2757790e"
   },
   "baseline_method": "Previous whitespace-AND substring search over serialized rules",
   "current_method": "local-bm25-en-han-bigram-v1",

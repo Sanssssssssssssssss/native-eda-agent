@@ -8,6 +8,7 @@ import {createRunState, listRuns, pidAlive} from './runtime.mjs';
 import {validateArguments} from './tool-contracts.mjs';
 import {inspectTrace} from '../scripts/trace-inspect.mjs';
 import {resolveGuidance} from './knowledge.mjs';
+import {acceptanceSchema,compileAcceptance,evaluateTask,recoveryAdvice} from './task-outcome.mjs';
 
 const digest=bytes=>createHash('sha256').update(bytes).digest('hex');
 const json=file=>JSON.parse(fs.readFileSync(file,'utf8'));
@@ -18,6 +19,7 @@ const checkSchema=object({pointer:str,op:{enum:['eq','gte','lte'],type:'string'}
 export const workflowSchema=object({schema_version:{type:'integer',enum:[1]},id:{type:'string',pattern:'^[a-z][a-z0-9_-]{0,63}$'},goal:str,
   inputs:{type:'array',items:str,minItems:1,maxItems:256,uniqueItems:true},
   guidance:object({rule_ids:{type:'array',items:str,uniqueItems:true,maxItems:40},sop_ids:{type:'array',items:str,uniqueItems:true,maxItems:16}}),
+  acceptance:acceptanceSchema,
   limits:object({max_calls:{type:'integer',minimum:1,maximum:100},wall_seconds:{type:'integer',minimum:1,maximum:14400}},['max_calls','wall_seconds']),
   steps:{type:'array',minItems:1,maxItems:32,items:object({id:{type:'string',pattern:'^[a-z][a-z0-9_-]{0,63}$'},tool:str,args:{type:'object'},checks:{type:'array',items:checkSchema,minItems:1,maxItems:32}},['id','tool','args','checks'])}
 },['schema_version','id','goal','inputs','limits','steps']);
@@ -97,7 +99,8 @@ export function planWorkflow(root,specFile,registry){
   const seen=new Set(),inputs=new Set(),bindings={},includeDirs=new Set();
   const capture=name=>{const resolved=inside(root,name);inputs.add(resolved);bindings[relative(root,path.resolve(root,name))]=relative(root,resolved);};
   capture(specFile);spec.inputs.forEach(capture);
-  const guidance=spec.guidance?resolveGuidance(root,spec.guidance):null;
+  const acceptance=compileAcceptance(spec);
+  const guidance=spec.guidance||acceptance?resolveGuidance(root,{rule_ids:spec.guidance?.rule_ids||[],sop_ids:[...new Set([...(spec.guidance?.sop_ids||[]),...(acceptance?.sop_ids||[])])]}):null;
   if(guidance)Object.keys(guidance.input_hashes).forEach(capture);
   for(const step of spec.steps){
     if(seen.has(step.id))throw new Error(`Duplicate workflow step: ${step.id}`);
@@ -113,7 +116,7 @@ export function planWorkflow(root,specFile,registry){
   return {schema_version:1,spec_path:relative(root,file),spec,spec_sha256:hashFile(file),input_hashes:Object.fromEntries([...inputs].sort().map(f=>{
     if(!fs.statSync(f).isFile())throw new Error('Workflow inputs must be files');return [relative(root,f),hashFile(f)];
   })),input_bindings:bindings,include_directories:[...includeDirs].map(dir=>({path:dir,files:inputFiles(root,{include_dirs:[dir]}).map(f=>relative(root,f)).sort()})),
-    code_hashes:codeHashes(root),guidance,execution_requires_eda:spec.steps.some(s=>!offlineWorkflowTools.has(s.tool)),launches_eda:false,mode:'plan',model_api_calls:0};
+    code_hashes:codeHashes(root),guidance,acceptance,execution_requires_eda:spec.steps.some(s=>!offlineWorkflowTools.has(s.tool)),launches_eda:false,mode:'plan',model_api_calls:0};
 }
 function durableWrite(file,bytes){const fd=fs.openSync(file,'wx');try{fs.writeFileSync(fd,bytes);fs.fsyncSync(fd);}finally{fs.closeSync(fd);}}
 function checkpoint(trace,state){
@@ -157,11 +160,11 @@ function frozenIssues(root,plan){
   if(!isDeepStrictEqual(codeHashes(root),plan.code_hashes))issues.push('implementation_changed');
   return issues;
 }
-function verifyStep(root,record,spec){
+function verifyStep(root,record,spec,{requireChecks=true}={}){
   const file=inside(root,record.result_path,{artifacts:true});
   if(hashFile(file)!==record.result_sha256)throw new Error('Committed step result changed');
   const result=json(file),checks=evaluateChecks(result,spec.checks);
-  if(result.status!=='completed'||checks.some(c=>!c.passed))throw new Error('Committed step no longer satisfies its checks');
+  if(result.status!=='completed'||requireChecks&&checks.some(c=>!c.passed))throw new Error('Committed step no longer satisfies its checks');
   const inspected=inspectTrace(inside(root,record.child_directory,{artifacts:true}));
   if(!inspected.valid||inspected.input_drift||inspected.status!=='completed')throw new Error('Committed child trace is incomplete or drifted');
   for(const [file,sha]of Object.entries(record.artifact_hashes))if(hashFile(inside(root,file,{artifacts:true}))!==sha)throw new Error('Committed child artifact changed');
@@ -182,6 +185,12 @@ export function inspectWorkflow(root,directory,{resume=false}={}){
     const record=state.passed[i],step=state.plan.spec.steps[i];
     try{if(record.id!==step.id)throw new Error('Steps are not a committed prefix');results[step.id]=verifyStep(root,record,step);}catch(e){issues.push(`${record.id}:${e.message}`);}
   }
+  if(state.failed_step){
+    try{results[state.failed_step.id]=verifyStep(root,state.failed_step,state.plan.spec.steps.find(s=>s.id===state.failed_step.id),{requireChecks:false});}catch(e){issues.push(`failed_evidence:${e.message}`);}
+  }
+  if(state.task_acceptance_hash){try{if(hashFile(inside(dir,'task-outcome.json'))!==state.task_acceptance_hash)issues.push('task_outcome_changed');}catch{issues.push('task_outcome_missing');}}
+  const taskAcceptance=evaluateTask(state.plan.acceptance,results,[...state.passed,...(state.failed_step?[state.failed_step]:[])],issues);
+  const recovery=recoveryAdvice({...state,task_acceptance:taskAcceptance},issues);
   if(resume){
     if(state.outcome==='passed')issues.push('already_completed');
     if(state.status==='running'&&pidAlive(state.owner_pid)!==false)issues.push('owner_may_be_alive');
@@ -191,10 +200,12 @@ export function inspectWorkflow(root,directory,{resume=false}={}){
       else if((m.status==='running'&&pidAlive(run.pid)!==false)||(m.processes||[]).some(p=>!p.ended_at&&pidAlive(p.pid)!==false))issues.push('child_may_be_alive');
     }
     if(state.calls>=state.plan.spec.limits.max_calls||spent>=state.plan.spec.limits.wall_seconds*1000)issues.push('budget_exhausted');
+    if(recovery.stalled)issues.push('repeated_failure_requires_diagnosis');
+    if(state.passed.length===state.plan.spec.steps.length&&state.outcome!=='passed')issues.push('all_steps_done_review_goal_before_new_task');
   }
   return {schema_version:1,directory:dir,run_id:state.run_id,status:state.status,outcome:state.outcome,valid:issues.length===0,ready:resume?issues.length===0:undefined,
     issues,completed_steps:state.passed.map(s=>s.id),child_evidence:state.passed.map(s=>({step:s.id,directory:s.child_directory,result:s.result_path})),next_step:state.plan.spec.steps[state.passed.length]?.id||null,calls:state.calls,spent_ms:spent,uncheckpointed_wall_ms:uncheckpointed,
-    boundary:'Checks cover the declared workflow only. No formal proof, CDC waiver or board signoff is inferred.',state,results};
+    task_acceptance:taskAcceptance,recovery,boundary:'Checks cover the declared workflow only. No formal proof, CDC waiver or board signoff is inferred.',state,results};
 }
 async function executeWorkflow(root,registry,trace,args,signal,update,resuming){
   const prior=resuming?inspectWorkflow(root,args.directory,{resume:true}):null;
@@ -202,7 +213,7 @@ async function executeWorkflow(root,registry,trace,args,signal,update,resuming){
   if(prior&&!isDeepStrictEqual(planWorkflow(root,prior.state.plan.spec_path,registry),prior.state.plan))throw new Error('Recovery plan differs from the current frozen spec');
   const plan=prior?.state.plan||planWorkflow(root,args.spec,registry),results=prior?.results||{};
   const state={schema_version:1,run_id:trace.manifest.run_id,owner_pid:process.pid,status:'running',outcome:null,sequence:0,plan,
-    calls:prior?.state.calls||0,spent_ms:prior?.spent_ms||0,passed:[...(prior?.state.passed||[])],resume_from:prior?.directory||null};
+    calls:prior?.state.calls||0,spent_ms:prior?.spent_ms||0,passed:[...(prior?.state.passed||[])],failure_history:[...(prior?.state.failure_history||[])],resume_from:prior?.directory||null};
   const runtime=createRunState(root,trace);runtime.transition('preflight');runtime.transition('snapshotting');
   for(const file of [...Object.keys(plan.input_hashes),...Object.keys(plan.code_hashes)])trace.capture(path.join(root,file),'workflow_input');
   trace.finalizeDependencies();runtime.transition('waiting');runtime.transition('running');
@@ -238,13 +249,28 @@ async function executeWorkflow(root,registry,trace,args,signal,update,resuming){
       if(checks.some(c=>!c.passed)){state.failed_step=record;state.outcome='checks_failed';throw new Error(`Acceptance failed: ${step.id}`);}
       state.passed.push(record);results[step.id]=normalized;delete state.current_step;persist();trace.event('workflow_step_end',{step_id:step.id,status:'passed'});
     }
-    state.status='completed';state.outcome='passed';persist();runtime.transition('finalizing');runtime.transition('completed');
+    // Read the persisted evidence back before declaring the engineering goal met.
+    const checked={};for(const record of state.passed)checked[record.id]=verifyStep(root,record,plan.spec.steps.find(s=>s.id===record.id));
+    state.task_acceptance=evaluateTask(plan.acceptance,checked,state.passed,frozenIssues(root,plan));
+    state.status='completed';state.outcome=plan.acceptance&&state.task_acceptance.status!=='passed'?`acceptance_${state.task_acceptance.status}`:'passed';
+    runtime.transition('finalizing');runtime.transition('completed');
   }catch(error){
-    state.status=deadline?'timed_out':signal?.aborted?'cancelled':'failed';state.outcome||=deadline?'budget_exhausted':signal?.aborted?'cancelled':'tool_error';state.error=String(error);persist();runtime.transition(state.status);
+    state.status=deadline?'timed_out':signal?.aborted?'cancelled':'failed';state.outcome||=deadline?'budget_exhausted':signal?.aborted?'cancelled':'tool_error';state.error=String(error);
+    if(['tool_error','checks_failed'].includes(state.outcome)&&state.current_step){
+      const step=plan.spec.steps.find(s=>s.id===state.current_step);
+      const fingerprint=digest(JSON.stringify({step:step.id,tool:step.tool,args:step.args,inputs:plan.input_hashes,outcome:state.outcome}));
+      state.failure_history.push({fingerprint,step:step.id,outcome:state.outcome,run_id:state.run_id});
+    }
+    runtime.transition(state.status);
   }finally{clearTimeout(timer);signal?.removeEventListener('abort',abort);}
+  if(!state.task_acceptance){
+    const observed={};for(const r of [...state.passed,...(state.failed_step?[state.failed_step]:[])]){try{observed[r.id]=verifyStep(root,r,plan.spec.steps.find(s=>s.id===r.id),{requireChecks:false});}catch{}}
+    state.task_acceptance=evaluateTask(plan.acceptance,observed,[...state.passed,...(state.failed_step?[state.failed_step]:[])],frozenIssues(root,plan));
+  }
+  const outcomeBytes=JSON.stringify(state.task_acceptance,null,2)+'\n';durableWrite(path.join(trace.directory,'task-outcome.json'),outcomeBytes);state.task_acceptance_hash=digest(outcomeBytes);persist();
   const receipt=trace.finish(state.status,state.error?new Error(state.error):null);
   return {directory:trace.directory,run_id:state.run_id,status:state.status,outcome:state.outcome,completed_steps:state.passed.map(s=>s.id),
-    next_step:plan.spec.steps[state.passed.length]?.id||null,error:state.error||null,model_api_calls:0,receipt,
+    next_step:plan.spec.steps[state.passed.length]?.id||null,error:state.error||null,model_api_calls:0,receipt,task_acceptance:state.task_acceptance,recovery:recoveryAdvice(state),
     acceptance_scope:'Only the frozen declared checks; no implicit functional, formal, CDC or board signoff.'};
 }
 export function createWorkflowTools(root,registry){

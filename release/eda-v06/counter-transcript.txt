@@ -1,0 +1,46 @@
+
+[2026-10-25T11:44:38.334Z] ["E:\\Xilinx\\Vivado\\2020.2\\bin\\xvlog.bat","--sv","E:\\GPTProject2\\EDAAgent\\examples\\digital\\counter.v","E:\\GPTProject2\\EDAAgent\\examples\\digital\\tb_counter.sv"]
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "${WORKSPACE}/examples/digital/counter.v" into library work
+INFO: [VRFC 10-311] analyzing module counter
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "${WORKSPACE}/examples/digital/tb_counter.sv" into library work
+INFO: [VRFC 10-311] analyzing module tb_counter
+
+[2026-10-25T11:44:39.314Z] ["E:\\Xilinx\\Vivado\\2020.2\\bin\\xelab.bat","tb_counter","-s","eda_snapshot","-debug","typical","-mt","2"]
+Vivado Simulator 2020.2
+Copyright 1986-1999, 2001-2020 Xilinx, Inc. All Rights Reserved.
+Running: E:/Xilinx/Vivado/2020.2/bin/unwrapped/win64.o/xelab.exe tb_counter -s eda_snapshot -debug typical -mt 2 
+Using 2 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module work.counter
+Compiling module work.tb_counter
+Built simulation snapshot eda_snapshot
+
+****** Webtalk v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source ${WORKSPACE}/artifacts/2026-10-25T11-44-38-307Z-eda_xsim-f9a4a576/xsim.dir/eda_snapshot/webtalk/xsim_webtalk.tcl -notrace
+INFO: [Common 17-206] Exiting Webtalk at Sun Oct 25 19:44:42 2026...
+
+[2026-10-25T11:44:42.926Z] ["E:\\Xilinx\\Vivado\\2020.2\\bin\\xsim.bat","eda_snapshot","-runall"]
+
+****** xsim v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/eda_snapshot/xsim_script.tcl
+# xsim {eda_snapshot} -autoloadwcfg -runall
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+COUNTER_PASS checks=321 wraps=1 holds=7 resets=3
+$finish called at time : 3216 ns : File "${WORKSPACE}/examples/digital/tb_counter.sv" Line 42
+exit
+INFO: [Common 17-206] Exiting xsim at Sun Oct 25 19:44:49 2026...

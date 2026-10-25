@@ -1,0 +1,180 @@
+{
+  "schema_version": 1,
+  "version": "0.6.0",
+  "date": "2026-10-25",
+  "other_model_api_calls": 0,
+  "outer_codex_tokens": null,
+  "software": {
+    "node": 111,
+    "python": 21,
+    "passed": true,
+    "root_receipt": "artifacts/agent-offline-2026-10-25T11-42-49-954Z-8e6c26/result.json",
+    "publication_receipt": "release/validation.json"
+  },
+  "retrieval": {
+    "hit_at_5": "24/24",
+    "mrr_at_5": 0.9583333333333334,
+    "unrelated_empty": "3/3",
+    "scope": "Visible regression, no held-out answer or SOP-compliance score"
+  },
+  "browser": {
+    "viewports": [
+      [
+        1440,
+        1050
+      ],
+      [
+        390,
+        844
+      ]
+    ],
+    "horizontal_overflow": false,
+    "console_errors": 0,
+    "console_warnings": 0,
+    "checks": [
+      "persisted local context session",
+      "source links and SOP pane",
+      "workflow plan and offline execution",
+      "domain verdict and timeline",
+      "classified evaluations and existing-session inputs"
+    ],
+    "scope": "Manual Playwright interaction; not a full automated UI suite"
+  },
+  "counter": {
+    "status": "passed",
+    "scope": "Functional profile only",
+    "checks": 321
+  },
+  "axi": {
+    "status": "review_required",
+    "passing_domains": 6,
+    "setup_slack_ns": 2.393,
+    "hold_slack_ns": 0.058,
+    "drc": {
+      "errors": 0,
+      "critical_warnings": 0,
+      "warnings": 2
+    },
+    "protocol_checks": 658158,
+    "scope": "Existing AXI checker/OOC design; no new blind design or hardware signoff"
+  },
+  "online_agent": {
+    "status": "not_run",
+    "reason": "Provider APIs disabled; evaluator supports existing causal Pi sessions only"
+  },
+  "retained_failures": [
+    "Offline proxy checks overlapped live Vivado and exceeded their unchanged timeout; same suite passed after live EDA completed.",
+    "First DCP identity probe used a non-applicable property target and failed; corrected current_design TOP query succeeded."
+  ],
+  "evidence": [
+    {
+      "source": "artifacts/evaluation-2026-10-25T11-38-24-457Z-52c3ff/result.json",
+      "original_sha256": "9d857989f283b8e182f66fc880aa4de76df9dd3fa066327e5f5ed21b510632d5",
+      "public_file": "release/eda-v06/axi-evaluation.json",
+      "public_sha256": "cb7b74724ccb4fbc8bd44ad73a3467f00aad184c6bfaa4a8c4e558a83465cd23"
+    },
+    {
+      "source": "artifacts/evaluation-2026-10-25T11-44-38-159Z-807913/result.json",
+      "original_sha256": "832217e02e511f32fc52e45a48226879d57ec0acf3d37e2d3b40671b83a047e8",
+      "public_file": "release/eda-v06/counter-evaluation.json",
+      "public_sha256": "0eea43bbf923dba00e5b9532180bfbb6602fec174b5b6b8a88b2692cbe4539b3"
+    },
+    {
+      "source": "artifacts/evaluation-2026-10-25T11-38-51-258Z-cf7d0a/result.json",
+      "original_sha256": "c677ed19036971a57602662108d24c62ad18f023768eaa0faf5b8d9e70f9b34c",
+      "public_file": "release/eda-v06/offline-overlap-timeout.json",
+      "public_sha256": "c677ed19036971a57602662108d24c62ad18f023768eaa0faf5b8d9e70f9b34c"
+    },
+    {
+      "source": "artifacts/agent-offline-2026-10-25T11-38-51-323Z-16db73/node.log",
+      "original_sha256": "fdb4454e68623fdce3d2c1b643c043a0580da75437d6e3b7bb5ca88a5e90b999",
+      "public_file": "release/eda-v06/offline-overlap-timeout.txt",
+      "public_sha256": "456309489fc15f0b7ba8d0ca9058b007a985c8a7f0fafbeada362ee4f4a106fc"
+    },
+    {
+      "source": "artifacts/2026-10-25T11-33-54-991Z-eda_vivado-f0ec9553/process.log",
+      "original_sha256": "723d3563e1eafa918f38471c006e94279ae7f918f8e256ad3eaa10a37e2156a4",
+      "public_file": "release/eda-v06/identity-probe-failed.txt",
+      "public_sha256": "eec8a0b7fe36041ef89328697267182cae030d36bf19f02431ad13b10cc492ff"
+    },
+    {
+      "source": "artifacts/2026-10-25T11-35-49-337Z-eda_vivado-a223bd63/process.log",
+      "original_sha256": "acf184da97457be0b0ce16ff608e4837163e5accaa2233ac994c495987b847fb",
+      "public_file": "release/eda-v06/identity-probe-corrected.txt",
+      "public_sha256": "34bc7d0a0acfe3abe9e527fa709490c7677dd0fa33d9bfbdf24f4bc2efcb790e"
+    },
+    {
+      "source": "artifacts/2026-10-25T11-44-38-167Z-eda_workflow_run-2c863817/task-outcome.json",
+      "original_sha256": "d0e569bc0a8c77785ebd21f7351ef9826fc72273b622caf3c0f819a98a3726dd",
+      "public_file": "release/eda-v06/counter-outcome.json",
+      "public_sha256": "d0e569bc0a8c77785ebd21f7351ef9826fc72273b622caf3c0f819a98a3726dd"
+    },
+    {
+      "source": "artifacts/2026-10-25T11-44-38-167Z-eda_workflow_run-2c863817/simulate.result.json",
+      "original_sha256": "cbce8f085d90f73b8f47dd3336c406734ccfeac6bde5678e87439393609cdc4d",
+      "public_file": "release/eda-v06/counter-simulation.json",
+      "public_sha256": "b6763f8abce323c1cbf8c1afd3afbf9a81dc7eaaef5f1c7db25cda4cf7c18eeb"
+    },
+    {
+      "source": "artifacts/2026-10-25T11-44-38-307Z-eda_xsim-f9a4a576/process.log",
+      "original_sha256": "6f0c618766587dd171a6a894e9280aa296a5c1c82e39cfb6ffaba7f1648ff358",
+      "public_file": "release/eda-v06/counter-transcript.txt",
+      "public_sha256": "1045c0f5622ae0cb78f857e945a1a0b73a300e725025835e51d0603a40e8e331"
+    },
+    {
+      "source": "artifacts/2026-10-25T11-38-24-464Z-eda_workflow_run-9a7a5467/task-outcome.json",
+      "original_sha256": "c514796ca751ca3c24f7d198308c17d18b50da0e295044d3e2960125e977eb46",
+      "public_file": "release/eda-v06/axi-outcome.json",
+      "public_sha256": "c514796ca751ca3c24f7d198308c17d18b50da0e295044d3e2960125e977eb46"
+    },
+    {
+      "source": "artifacts/2026-10-25T11-38-24-464Z-eda_workflow_run-9a7a5467/simulation.result.json",
+      "original_sha256": "3b74b51e88b5ff9f41686dc1f8ba9039986bcc0681dba4698a62183797776f8d",
+      "public_file": "release/eda-v06/axi-simulation.json",
+      "public_sha256": "431d24b32a108f6e41387afee69d8911bad7a847cba0e02657b5b994bef0ba97"
+    },
+    {
+      "source": "artifacts/2026-10-25T11-38-24-464Z-eda_workflow_run-9a7a5467/synthesis.result.json",
+      "original_sha256": "33aaaf4cf098d05fe5f529f4c4d5056bc4cf327ac0d092848d309c25d3e2b70a",
+      "public_file": "release/eda-v06/axi-synthesis.json",
+      "public_sha256": "47c597124b3fc5a5cb3e13aa07cbf91f5f845a8f7c4ac01a4ac2e4b9d2c8e65f"
+    },
+    {
+      "source": "artifacts/2026-10-25T11-38-24-464Z-eda_workflow_run-9a7a5467/implementation.result.json",
+      "original_sha256": "0b6b47694275115366f75a82f8ba930e49b34cabcef07e7d90128a7fd4fc46bc",
+      "public_file": "release/eda-v06/axi-implementation.json",
+      "public_sha256": "7ecd71becf44510b68ae3878bc64f72efeb673c28530b0cbd4defecd053391d0"
+    },
+    {
+      "source": "artifacts/2026-10-25T11-38-24-464Z-eda_workflow_run-9a7a5467/drc-report.result.json",
+      "original_sha256": "442a73fb814d321ebc4003153746cd8e38448d8a207c828293312dd2ebb9e980",
+      "public_file": "release/eda-v06/axi-drc-report.json",
+      "public_sha256": "79ad081ad376100ae1677260b813b5862ea887719fc39cfe668c0b6ca1cddc80"
+    },
+    {
+      "source": "artifacts/2026-10-25T11-38-24-650Z-eda_xsim-4970f8ef/process.log",
+      "original_sha256": "3beb15dd99bea3637d52ea977398e65acfe26f498dc8086f67be9ca85c770529",
+      "public_file": "release/eda-v06/axi-transcript.txt",
+      "public_sha256": "dcf09a5a9c1aad6125dadbcb784270fc77477e4c521aede76297a18ecb535840"
+    },
+    {
+      "source": "artifacts/2026-10-25T11-40-40-172Z-eda_vivado_report_drc-624ec488/drc.rpt",
+      "original_sha256": "a8b0272c943c91c12d273ff5e48507899707951d000b208d818e64d71b0302ef",
+      "public_file": "release/eda-v06/axi-drc.rpt",
+      "public_sha256": "a8b0272c943c91c12d273ff5e48507899707951d000b208d818e64d71b0302ef"
+    },
+    {
+      "source": "artifacts/2026-10-25T11-32-32-276Z-eda_vivado_report_drc-2d987a9a/fpga-result.json",
+      "original_sha256": "c889862013d495479b9d08932647731fbf7d10eedd6d866cfc59b06a8b1070f6",
+      "public_file": "release/eda-v06/ethernet-drc.json",
+      "public_sha256": "e3e4bde4d1027807155985cbbfe2c4029653e397d63192f6b797ea2eef391bf8"
+    },
+    {
+      "source": "artifacts/2026-10-25T11-32-32-276Z-eda_vivado_report_drc-2d987a9a/drc.rpt",
+      "original_sha256": "f9d695a4510251e5e62e1758d40d4dfbf871b10f017aa14039933d835685390c",
+      "public_file": "release/eda-v06/ethernet-drc.rpt",
+      "public_sha256": "f9d695a4510251e5e62e1758d40d4dfbf871b10f017aa14039933d835685390c"
+    }
+  ],
+  "boundary": "Sanitized copies, not a full replay bundle or independent reproduction. Original workflows, snapshots, DCP and waveforms remain local. Existing 11 scorecards are unchanged."
+}

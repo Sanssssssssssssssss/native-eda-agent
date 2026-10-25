@@ -136,5 +136,23 @@
       "fpga-rtl-verify",
       "fpga-timing-triage"
     ]
+  },
+  "acceptance": {
+    "profile": "fpga_ooc",
+    "bindings": {
+      "functional": "simulation",
+      "synthesis": "synthesis",
+      "setup": "implementation",
+      "hold": "implementation",
+      "constraints": "implementation",
+      "routing": "implementation",
+      "drc": "drc-report"
+    },
+    "design": {
+      "top": "axi_fabric_top",
+      "part": "xc7a100tfgg676-2",
+      "clock": "clk",
+      "period_ns": 10
+    }
   }
 }

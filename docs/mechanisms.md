@@ -6,12 +6,15 @@
 |---|---|---|
 | 单一工具合同 | [extension.ts](../src/extension.ts) → [tool-contracts](../src/tool-contracts.mjs)；Pi、CLI、MCP 共用注册表，固定选择器不能被隐藏参数覆盖 | 接口别名共用执行器；不会增加设计能力数量 |
 | 知识检索与 SOP | [knowledge](../src/knowledge.mjs) → [platform](../src/platform.mjs)；有排名、来源、适用条件、文件哈希和统一 SOP 入口 | 检索指导与设计证明分别判断；详见 [知识与 SOP](knowledge-and-sops.md) |
+| 阶段与工具选择 | [task-context](../src/task-context.mjs)；阶段、规则关联选择最多两个 SOP，返回对应实际 schema 与重新核验的任务状态 | 不自动替换模型当前工具集合；无 blind SOP 选择分数 |
+| 宿主工程目标 | [task-outcome](../src/task-outcome.mjs)；三类 profile，固定身份/时钟/DCP 来源，回读已提交结果，分领域判定 | 参考模型独立性、formal 与硬件另行验收 |
 | Agent 上下文 | [agent-resources](../src/agent-resources.mjs) → [agent](../src/agent.mjs)；加载项目技能、APPEND_SYSTEM，记录 resources_loaded 与实际技能名 | Pi SDK 会话启用需用户授权；本轮使用真实 loader 和假会话检查，没有真实 provider 评估 |
 | 多工具任务合同 | [workflow](../src/workflow.mjs)；固定规格/输入/知识/代码，解析前序结果引用，每步显式 checks；失败即停 | 串行流程；不自动补充未声明的设计验收项 |
+| 本地会话与评测 | [workbench](../src/workbench.mjs)、[evaluations](../src/evaluations.mjs)；持久化知识会话、任务证据与六类评测套件；源码变更显式标记 | 本机单用户；非完整模型聊天；线上会话成绩尚未实测 |
 | 资源与进程管理 | [runtime](../src/runtime.mjs)；FIFO 资源租约，跨进程调度、超时、取消与所有者检查 | 默认 XSim 2 / Vivado 1 / LTspice 1；主机执行，不是容器或 VM 沙箱 |
 | 输入与 trace | [trace](../src/trace.mjs)；依赖捕获、字节快照、哈希、进程状态、因果 span；保留失败 | 动态 Tcl/文件依赖可能无法解析；前后哈希不能检测修改后又恢复的瞬时变化 |
 | 功能验收 | [bench/acceptance](../src/bench/acceptance.mjs)；检查 PASS、计数、错误、超时、负控原因及数值 oracle | 特定 harness 的覆盖；仿真通过不代表无界证明 |
-| 物理报告诊断 | [fpga](../src/tools/fpga.mjs) + [Tcl](../src/tools/vivado-common.tcl)；setup/hold、内部/IO 约束、routing 与 CDC 分别报告 | CDC 未识别为 unknown；DRC 报告生成成功不等于 DRC 为零；整体设计验收默认 not_evaluated |
+| 物理报告诊断 | [fpga](../src/tools/fpga.mjs) + [Tcl](../src/tools/vivado-common.tcl)；setup/hold、内部/IO 约束、routing、CDC 与 DRC 严重级别计数分别报告 | CDC 未识别为 unknown；DRC warning 需审查；单工具的整体验收仍为 not_evaluated，绑定 workflow profile 才做任务核验 |
 | 工程/IP/BD 操作 | [vivado_workbench](../src/vivado_workbench.py)；13 个 wb_* 操作、持久会话与工程导出 | 修改失败可留下部分工程状态；导出的工程仍可能引用原文件 |
 | 跨 MCP 证据 | [traced-mcp-proxy](../src/traced-mcp-proxy.mjs)；社区/LTspice 调用共用资源额度与 trace | 代理边界已验；原始工具内部不会自动具有完整分布式 span |
 | 成绩的可比性 | [results](../src/results.mjs)、[bench/compare](../src/bench/compare.mjs)；固定 task set、协议、scope、单位与输入 | 哈希证明文件一致性，不是第三方复现；缺失原件标 unavailable |
@@ -32,7 +35,7 @@
 
 | 路径 | 可以恢复什么 | 边界 |
 |---|---|---|
-| workflow `resume_check/resume` | 提交完成的步骤前缀；验证原规格、知识/代码/输入、子 trace 和输出哈希 | 新目录继续，累计预算；未提交步骤可能重做；无全局请求去重或 exactly-once |
+| workflow `resume_check/resume` | 提交完成的步骤前缀；验证原规格、知识/代码/输入、子 trace 和输出哈希 | 新目录继续，累计预算；同失败三次后要求诊断；未提交步骤可能重做；无全局请求去重或 exactly-once |
 | 优化器 `recovery-check` / `resume_from` | 已提交候选边界和最佳候选 | 新运行重新测基线与最佳候选；检查原所有者与子进程 |
 | [replay-experiment](../scripts/replay-experiment.mjs) | 最初四类原生调用的参数与匹配输入 | 不自动支持全部新工具，不自动恢复历史源文件或许可证环境 |
 
@@ -44,6 +47,9 @@
 - SOP 的逐项遵循评估、自动检索触发和答案引用核验。
 - 真实板卡、仪器、形式证明和完整 CDC 签核；当前是板外/OOC 证据。
 - IP 仿真模型与库的自动依赖编排、板级约束与 bitstream 交付流程。
-- 完整 DRC 结构化验收入口、一般模型停滞治理、远端 Linux 执行及强隔离。
+- DRC waiver 审查、一般模型停滞治理、远端 Linux 执行及强隔离。
+- 完整 Pi 会话聊天/续接 UI、动态模型工具发布、多用户权限与独立线上评测。
+
+本轮与 ERP 的具体源码对照、工作台用法见 [ERP 对照](erp-parity-and-workbench.md)，分类测评见 [评测协议](evaluation.md)。
 
 验证记录按 [功能成绩](results.md) 查询。历史协作与 trace 设计保留在 [原文入口](agent-framework-and-traces.md)；当前详细 trace 合同见 [操作合同](agent-workflow-and-trace-contract.md)。

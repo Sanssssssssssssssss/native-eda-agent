@@ -1,0 +1,11 @@
+import path from 'node:path';
+import {createJiti} from 'jiti';
+import {createWorkbench} from '../src/workbench.mjs';
+const root=path.resolve(import.meta.dirname,'..'),registry=new Map();
+(await createJiti(import.meta.url).import('../src/extension.ts',{default:true}))({registerTool:t=>registry.set(t.name,t)});
+const i=process.argv.indexOf('--port'),port=i<0?4317:Number(process.argv[i+1]);
+if(!Number.isInteger(port)||port<0||port>65535)throw new Error('Invalid port');
+const app=createWorkbench(root,registry);
+app.server.listen(port,'127.0.0.1',()=>console.log(`EDA workbench: http://127.0.0.1:${app.server.address().port}`));
+app.server.on('error',error=>{console.error(error.message);process.exitCode=1;});
+process.on('SIGINT',()=>app.close());process.on('SIGTERM',()=>app.close());

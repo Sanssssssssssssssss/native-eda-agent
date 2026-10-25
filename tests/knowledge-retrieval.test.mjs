@@ -65,7 +65,7 @@ test('selected knowledge and SOP bytes are frozen in workflow plans and recovery
   fs.appendFileSync(path.join(tmp,'.pi/skills/fpga-plan/SKILL.md'),'\nchanged instruction');
   assert.ok(inspectWorkflow(tmp,run.details.directory,{resume:true}).issues.some(i=>i.includes('input_changed:.pi/skills/fpga-plan')));
 });
-test('real Pi resource loader discovers all four bundled SOPs without a model session',async t=>{
+test('real Pi resource loader discovers all bundled SOPs without a model session',async t=>{
   const agentDir=fs.mkdtempSync(path.join(os.tmpdir(),'eda-loader-'));
   t.after(()=>{assert.ok(agentDir.startsWith(path.join(os.tmpdir(),'eda-loader-')));fs.rmSync(agentDir,{recursive:true,force:true});});
   const loader=new DefaultResourceLoader(edaResourceOptions({root,agentDir,settingsManager:SettingsManager.inMemory({})}));

@@ -6,6 +6,7 @@ import { randomUUID } from 'node:crypto';
 import { spawn, spawnSync } from 'node:child_process';
 import { pathToFileURL } from 'node:url';
 import { createTrace, runProcess, storeSnapshot, verifyInputEvidence, traceContext, validateTraceEvent, mcpTraceContext } from '../src/trace.mjs';
+import {inspectTrace} from '../scripts/trace-inspect.mjs';
 
 const workspace = path.resolve(import.meta.dirname, '..');
 const evidence = path.join(workspace, 'artifacts', `trace-tests-${new Date().toISOString().replace(/[:.]/g, '-')}-${randomUUID().slice(0, 6)}`);
@@ -17,6 +18,12 @@ function setup(name) {
   return { root, trace: createTrace({ root, tool: 'test_process', args: { name }, toolCallId: name }) };
 }
 function readRun(trace) { return JSON.parse(fs.readFileSync(path.join(trace.directory, 'run.json'), 'utf8')); }
+
+test('Pi drift history remains visible even if the original file is restored later',()=>{
+  const {root,trace}=setup('pi-drift-history');fs.writeFileSync(path.join(root,'input.txt'),'original');trace.capture(path.join(root,'input.txt'),'input');trace.finalizeDependencies();trace.finish('completed');
+  const m=readRun(trace);m.mode='pi-sdk-agent';m.inputDrift=['input.txt'];fs.writeFileSync(path.join(trace.directory,'run.json'),JSON.stringify(m));
+  const r=inspectTrace(trace.directory,{checkCurrent:true});assert.equal(r.valid,true);assert.equal(r.input_drift,true);
+});
 
 test('success preserves ordered events, actual process metadata, stdout/stderr and a distinct tool status', async () => {
   const { trace } = setup('success');

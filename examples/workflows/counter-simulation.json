@@ -36,5 +36,11 @@
     "sop_ids": [
       "fpga-rtl-verify"
     ]
+  },
+  "acceptance": {
+    "profile": "rtl_simulation",
+    "bindings": {
+      "functional": "simulate"
+    }
   }
 }

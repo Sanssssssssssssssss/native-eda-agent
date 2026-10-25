@@ -73,7 +73,8 @@ proc eda::paths {delay maximum from to} {
     eda::write [dict create delay_type [eda::str $delay] returned [llength $all] limit $maximum paths [eda::arr $entries] whole_design_tns null]
 }
 proc eda::reports {names stage} {
-    set fields [dict create stage [eda::str $stage] design [eda::str [current_design]] part [eda::str [eda::prop [current_design] PART]]]
+    # The design object is renamed when a DCP is opened; TOP retains the RTL identity.
+    set fields [dict create stage [eda::str $stage] design [eda::str [eda::prop [current_design] TOP]] design_object [eda::str [current_design]] part [eda::str [eda::prop [current_design] PART]]]
     set clocks {}; foreach c [get_clocks -quiet] {lappend clocks [eda::obj [dict create name [eda::str $c] period_ns [eda::num [eda::prop $c PERIOD]]]]}
     dict set fields clocks [eda::arr $clocks]
     dict set fields black_boxes [llength [get_cells -hier -quiet -filter {IS_BLACKBOX == 1}]]
@@ -92,6 +93,9 @@ proc eda::reports {names stage} {
         }
         set status ok; set message ""
         if {[catch {{*}$command} message]} {set status failed; incr failures}
+        if {$name eq "drc" && $status eq "ok"} {
+            dict set fields drc [eda::obj [dict create errors [llength [get_drc_violations -quiet -filter {SEVERITY == Error}]] critical_warnings [llength [get_drc_violations -quiet -filter {SEVERITY == "Critical Warning"}]] warnings [llength [get_drc_violations -quiet -filter {SEVERITY == Warning}]]]]
+        }
         # Command return text may be large; raw reports and process.log retain it.
         lappend report_entries [eda::obj [dict create name [eda::str $name] status [eda::str $status] error [eda::str [expr {$status eq "failed" ? $message : ""}]]]]
     }

@@ -1,0 +1,133 @@
+{
+  "directory": "${WORKSPACE}\\artifacts\\2026-10-25T11-39-54-474Z-eda_vivado_implement-54d64f5f",
+  "process_log": "${WORKSPACE}\\artifacts\\2026-10-25T11-39-54-474Z-eda_vivado_implement-54d64f5f\\process.log",
+  "files": [
+    ".Xil",
+    "applied-constraints.xdc",
+    "check-timing.rpt",
+    "drc.rpt",
+    "events.jsonl",
+    "fpga-result.json",
+    "fpga-summary.json",
+    "inputs",
+    "operation.tcl",
+    "process.log",
+    "retention.json",
+    "route.rpt",
+    "routed.dcp",
+    "run.json",
+    "timing.rpt",
+    "utilization.rpt",
+    "vivado.jou",
+    "vivado.log"
+  ],
+  "fpga": {
+    "stage": "routed",
+    "design": "axi_fabric_top",
+    "design_object": "checkpoint_synthesized",
+    "part": "xc7a100tfgg676-2",
+    "clocks": [
+      {
+        "name": "clk",
+        "period_ns": 10
+      }
+    ],
+    "black_boxes": 0,
+    "drc": {
+      "errors": 0,
+      "critical_warnings": 0,
+      "warnings": 2
+    },
+    "setup_slack_ns": 2.393,
+    "hold_slack_ns": 0.058,
+    "reports": [
+      {
+        "name": "timing",
+        "status": "ok",
+        "error": ""
+      },
+      {
+        "name": "utilization",
+        "status": "ok",
+        "error": ""
+      },
+      {
+        "name": "route",
+        "status": "ok",
+        "error": ""
+      },
+      {
+        "name": "drc",
+        "status": "ok",
+        "error": ""
+      }
+    ],
+    "version": "2020.2",
+    "parsed_reports": {
+      "timing_checks": {
+        "no_clock": 0,
+        "constant_clock": 0,
+        "pulse_width_clock": 0,
+        "unconstrained_internal_endpoints": 0,
+        "no_input_delay": 0,
+        "no_output_delay": 0,
+        "multiple_clock": 0,
+        "generated_clocks": 0,
+        "loops": 0,
+        "partial_input_delay": 0,
+        "partial_output_delay": 0,
+        "latch_loops": 0
+      },
+      "route": {
+        "routable": 3159,
+        "fully_routed": 3159,
+        "errors": 0,
+        "status": "pass"
+      },
+      "utilization": {
+        "Slice LUTs": 2018,
+        "Slice Registers": 2014,
+        "Block RAM Tile": 8,
+        "RAMB36/FIFO*": 8,
+        "RAMB18": 0,
+        "DSPs": 0
+      },
+      "cdc_rules": [],
+      "cdc_format_recognized": false
+    },
+    "assessment": {
+      "setup_hold": "pass",
+      "clock_and_internal_constraints": "pass",
+      "io_constraints": "pass",
+      "routing": "pass",
+      "cdc": "unknown",
+      "overall_design_acceptance": "not_evaluated",
+      "board_signoff": false,
+      "scope": "Per-report diagnostics only. Positive setup/hold slack does not validate CDC, IO timing, functional correctness or hardware."
+    },
+    "artifacts": {
+      "applied-constraints.xdc": "${WORKSPACE}\\artifacts\\2026-10-25T11-39-54-474Z-eda_vivado_implement-54d64f5f\\applied-constraints.xdc",
+      "check-timing.rpt": "${WORKSPACE}\\artifacts\\2026-10-25T11-39-54-474Z-eda_vivado_implement-54d64f5f\\check-timing.rpt",
+      "drc.rpt": "${WORKSPACE}\\artifacts\\2026-10-25T11-39-54-474Z-eda_vivado_implement-54d64f5f\\drc.rpt",
+      "route.rpt": "${WORKSPACE}\\artifacts\\2026-10-25T11-39-54-474Z-eda_vivado_implement-54d64f5f\\route.rpt",
+      "routed.dcp": "${WORKSPACE}\\artifacts\\2026-10-25T11-39-54-474Z-eda_vivado_implement-54d64f5f\\routed.dcp",
+      "timing.rpt": "${WORKSPACE}\\artifacts\\2026-10-25T11-39-54-474Z-eda_vivado_implement-54d64f5f\\timing.rpt",
+      "utilization.rpt": "${WORKSPACE}\\artifacts\\2026-10-25T11-39-54-474Z-eda_vivado_implement-54d64f5f\\utilization.rpt"
+    },
+    "model_api_calls": 0
+  },
+  "run_id": "2026-10-25T11-39-54-474Z-eda_vivado_implement-54d64f5f",
+  "run_manifest": "${WORKSPACE}\\artifacts\\2026-10-25T11-39-54-474Z-eda_vivado_implement-54d64f5f\\run.json",
+  "status": "completed",
+  "error": null,
+  "input_drift": false,
+  "trace_id": "0ceabaa9964b478dac995a64d8697263",
+  "span_id": "812644903d5c4a45",
+  "context": {
+    "parent_run_id": "2026-10-25T11-38-24-464Z-eda_workflow_run-9a7a5467",
+    "trace_id": "0ceabaa9964b478dac995a64d8697263",
+    "parent_span_id": "f760762bf15e4f8c"
+  },
+  "snapshot_integrity": true,
+  "unresolved_dependency_count": 0
+}

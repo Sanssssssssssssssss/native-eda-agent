@@ -110,3 +110,27 @@ test('a live unfinished child blocks recovery after its parent has failed',async
   manifest.processes[0].ended_at=new Date().toISOString();fs.writeFileSync(manifestFile,JSON.stringify(manifest));
   assert.equal(inspectWorkflow(f.root,r.details.directory,{resume:true}).ready,true);
 });
+
+test('three unchanged failures across new recovery directories stop further replay',async t=>{
+  const f=fixture(t,async()=>{throw new Error('unchanged EDA failure');});f.spec.limits.max_calls=8;f.save();
+  let result=await f.run('run');
+  for(let i=0;i<2;i++)result=await f.run('resume',{directory:result.details.directory});
+  assert.equal(f.calls.length,3);assert.equal(result.details.recovery.stalled,true);
+  const check=await f.run('resume_check',{directory:result.details.directory});assert.equal(check.details.ready,false);assert.ok(check.details.issues.includes('repeated_failure_requires_diagnosis'));
+  await assert.rejects(f.run('resume',{directory:result.details.directory}),/cannot resume/);
+});
+
+test('final acceptance is independently read back and outcome tampering is visible',async t=>{
+  const f=fixture(t);const r=await f.run('run');assert.equal(r.details.task_acceptance.reason,'goal_scope_unbound');
+  fs.appendFileSync(path.join(r.details.directory,'task-outcome.json'),' ');
+  assert.ok(inspectWorkflow(f.root,r.details.directory).issues.includes('task_outcome_changed'));
+});
+
+test('completed step checks cannot upgrade an unobserved bound engineering goal to passed',async t=>{
+  const f=fixture(t),project=path.resolve(import.meta.dirname,'..');
+  for(const name of ['knowledge','.pi/skills'])fs.cpSync(path.join(project,name),path.join(f.root,name),{recursive:true});
+  for(const name of ['src/knowledge.mjs','src/trace.mjs','scripts/check-knowledge.mjs','scripts/eda-tool.mjs','scripts/replay-experiment.mjs','scripts/collect-system-evidence.py','projects/system-bench/run.py','projects/system-bench/implement-common.tcl','docs/workflows.md','docs/reference/tools.md','docs/results.md']){fs.mkdirSync(path.dirname(path.join(f.root,name)),{recursive:true});fs.copyFileSync(path.join(project,name),path.join(f.root,name));}
+  f.spec.acceptance={profile:'evidence_review',bindings:{artifact_integrity:'second'}};f.save();
+  const r=await f.run('run');assert.equal(r.details.status,'completed');assert.equal(r.isError,true);assert.equal(r.details.outcome,'acceptance_unknown');assert.equal(r.details.task_acceptance.status,'unknown');
+  const inspected=inspectWorkflow(f.root,r.details.directory,{resume:true});assert.equal(inspected.completed_steps.length,2);assert.equal(inspected.ready,false);
+});

@@ -1,0 +1,114 @@
+{
+  "directory": "${WORKSPACE}\\artifacts\\2026-10-25T11-38-46-975Z-eda_vivado_synthesize-39ae64c2",
+  "process_log": "${WORKSPACE}\\artifacts\\2026-10-25T11-38-46-975Z-eda_vivado_synthesize-39ae64c2\\process.log",
+  "files": [
+    ".Xil",
+    "applied-constraints.xdc",
+    "check-timing.rpt",
+    "events.jsonl",
+    "fpga-result.json",
+    "fpga-summary.json",
+    "inputs",
+    "operation.tcl",
+    "process.log",
+    "retention.json",
+    "run.json",
+    "synthesized.dcp",
+    "timing.rpt",
+    "utilization.rpt",
+    "vivado.jou",
+    "vivado.log"
+  ],
+  "fpga": {
+    "stage": "synthesized",
+    "design": "axi_fabric_top",
+    "design_object": "design_1",
+    "part": "xc7a100tfgg676-2",
+    "clocks": [
+      {
+        "name": "clk",
+        "period_ns": 10
+      }
+    ],
+    "black_boxes": 0,
+    "setup_slack_ns": 2.901,
+    "hold_slack_ns": 0.201,
+    "reports": [
+      {
+        "name": "utilization",
+        "status": "ok",
+        "error": ""
+      },
+      {
+        "name": "timing",
+        "status": "ok",
+        "error": ""
+      }
+    ],
+    "version": "2020.2",
+    "parsed_reports": {
+      "timing_checks": {
+        "no_clock": 0,
+        "constant_clock": 0,
+        "pulse_width_clock": 0,
+        "unconstrained_internal_endpoints": 0,
+        "no_input_delay": 0,
+        "no_output_delay": 0,
+        "multiple_clock": 0,
+        "generated_clocks": 0,
+        "loops": 0,
+        "partial_input_delay": 0,
+        "partial_output_delay": 0,
+        "latch_loops": 0
+      },
+      "route": {
+        "routable": null,
+        "fully_routed": null,
+        "errors": null,
+        "status": "unknown"
+      },
+      "utilization": {
+        "Slice LUTs": 2059,
+        "Slice Registers": 2014,
+        "Block RAM Tile": 8,
+        "RAMB36/FIFO*": 8,
+        "RAMB18": 0,
+        "DSPs": 0
+      },
+      "cdc_rules": [],
+      "cdc_format_recognized": false
+    },
+    "assessment": {
+      "setup_hold": "pass",
+      "clock_and_internal_constraints": "pass",
+      "io_constraints": "pass",
+      "routing": "unknown",
+      "cdc": "unknown",
+      "overall_design_acceptance": "not_evaluated",
+      "board_signoff": false,
+      "scope": "Per-report diagnostics only. Positive setup/hold slack does not validate CDC, IO timing, functional correctness or hardware."
+    },
+    "artifacts": {
+      "applied-constraints.xdc": "${WORKSPACE}\\artifacts\\2026-10-25T11-38-46-975Z-eda_vivado_synthesize-39ae64c2\\applied-constraints.xdc",
+      "check-timing.rpt": "${WORKSPACE}\\artifacts\\2026-10-25T11-38-46-975Z-eda_vivado_synthesize-39ae64c2\\check-timing.rpt",
+      "synthesized.dcp": "${WORKSPACE}\\artifacts\\2026-10-25T11-38-46-975Z-eda_vivado_synthesize-39ae64c2\\synthesized.dcp",
+      "timing.rpt": "${WORKSPACE}\\artifacts\\2026-10-25T11-38-46-975Z-eda_vivado_synthesize-39ae64c2\\timing.rpt",
+      "utilization.rpt": "${WORKSPACE}\\artifacts\\2026-10-25T11-38-46-975Z-eda_vivado_synthesize-39ae64c2\\utilization.rpt"
+    },
+    "model_api_calls": 0
+  },
+  "run_id": "2026-10-25T11-38-46-975Z-eda_vivado_synthesize-39ae64c2",
+  "run_manifest": "${WORKSPACE}\\artifacts\\2026-10-25T11-38-46-975Z-eda_vivado_synthesize-39ae64c2\\run.json",
+  "status": "completed",
+  "error": null,
+  "input_drift": false,
+  "trace_id": "0ceabaa9964b478dac995a64d8697263",
+  "span_id": "43720926624e4482",
+  "context": {
+    "parent_run_id": "2026-10-25T11-38-24-464Z-eda_workflow_run-9a7a5467",
+    "trace_id": "0ceabaa9964b478dac995a64d8697263",
+    "parent_span_id": "f760762bf15e4f8c"
+  },
+  "snapshot_integrity": true,
+  "unresolved_dependency_count": 0
+}

@@ -8,6 +8,7 @@ import { createPlatformTools } from './platform.mjs';
 import { readConfig, listRuns } from './runtime.mjs';
 import { validateArguments } from './tool-contracts.mjs';
 import { createWorkflowTools } from './workflow.mjs';
+import { createContextTools } from './task-context.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 export default function extension(pi: any, options: any = {}) {
@@ -29,6 +30,7 @@ export default function extension(pi: any, options: any = {}) {
   for (const tool of createOptimizerTools(root, tracedExecute)) registerTool(tool);
   for (const tool of createPlatformTools(root)) registerTool(tool);
   for (const tool of createWorkflowTools(root, registry)) registerTool(tool);
+  for (const tool of createContextTools(root, registry)) registerTool(tool);
   if (!pi.on) return; // CLI registry construction has no interactive lifecycle.
   const lifecycle = (event: string, fields = {}) => {
     const dir = path.join(root, '.eda-state'); fs.mkdirSync(dir, { recursive: true });

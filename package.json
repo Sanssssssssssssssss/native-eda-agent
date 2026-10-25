@@ -1,7 +1,7 @@
 {
   "name": "native-eda-agent",
   "private": true,
-  "version": "0.5.0",
+  "version": "0.6.0",
   "type": "module",
   "description": "Local EDA agent with reproducible benchmarks, traces, resource scheduling and MCP",
   "scripts": {
@@ -20,7 +20,9 @@
     "sop": "node src/agent.mjs sop",
     "knowledge:eval": "node scripts/evaluate-knowledge.mjs",
     "knowledge:check": "node scripts/check-knowledge.mjs",
-    "mcp": "node src/mcp-server.mjs"
+    "mcp": "node src/mcp-server.mjs",
+    "workbench": "node scripts/workbench.mjs",
+    "evaluate": "node scripts/evaluate.mjs"
   },
   "dependencies": {
     "@earendil-works/pi-ai": "1.3.0",

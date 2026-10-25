@@ -1,0 +1,86 @@
+{
+  "directory": "${WORKSPACE}\\artifacts\\2026-10-25T11-40-40-172Z-eda_vivado_report_drc-624ec488",
+  "process_log": "${WORKSPACE}\\artifacts\\2026-10-25T11-40-40-172Z-eda_vivado_report_drc-624ec488\\process.log",
+  "files": [
+    ".Xil",
+    "applied-constraints.xdc",
+    "drc.rpt",
+    "events.jsonl",
+    "fpga-result.json",
+    "fpga-summary.json",
+    "inputs",
+    "operation.tcl",
+    "process.log",
+    "retention.json",
+    "run.json",
+    "vivado.jou",
+    "vivado.log"
+  ],
+  "fpga": {
+    "stage": "checkpoint_analysis",
+    "design": "axi_fabric_top",
+    "design_object": "checkpoint_routed",
+    "part": "xc7a100tfgg676-2",
+    "clocks": [
+      {
+        "name": "clk",
+        "period_ns": 10
+      }
+    ],
+    "black_boxes": 0,
+    "drc": {
+      "errors": 0,
+      "critical_warnings": 0,
+      "warnings": 2
+    },
+    "reports": [
+      {
+        "name": "drc",
+        "status": "ok",
+        "error": ""
+      }
+    ],
+    "version": "2020.2",
+    "parsed_reports": {
+      "timing_checks": {},
+      "route": {
+        "routable": null,
+        "fully_routed": null,
+        "errors": null,
+        "status": "unknown"
+      },
+      "utilization": {},
+      "cdc_rules": [],
+      "cdc_format_recognized": false
+    },
+    "assessment": {
+      "setup_hold": "unknown",
+      "clock_and_internal_constraints": "unknown",
+      "io_constraints": "unknown",
+      "routing": "unknown",
+      "cdc": "unknown",
+      "overall_design_acceptance": "not_evaluated",
+      "board_signoff": false,
+      "scope": "Per-report diagnostics only. Positive setup/hold slack does not validate CDC, IO timing, functional correctness or hardware."
+    },
+    "artifacts": {
+      "applied-constraints.xdc": "${WORKSPACE}\\artifacts\\2026-10-25T11-40-40-172Z-eda_vivado_report_drc-624ec488\\applied-constraints.xdc",
+      "drc.rpt": "${WORKSPACE}\\artifacts\\2026-10-25T11-40-40-172Z-eda_vivado_report_drc-624ec488\\drc.rpt"
+    },
+    "model_api_calls": 0
+  },
+  "run_id": "2026-10-25T11-40-40-172Z-eda_vivado_report_drc-624ec488",
+  "run_manifest": "${WORKSPACE}\\artifacts\\2026-10-25T11-40-40-172Z-eda_vivado_report_drc-624ec488\\run.json",
+  "status": "completed",
+  "error": null,
+  "input_drift": false,
+  "trace_id": "0ceabaa9964b478dac995a64d8697263",
+  "span_id": "fab8dca02a10420b",
+  "context": {
+    "parent_run_id": "2026-10-25T11-38-24-464Z-eda_workflow_run-9a7a5467",
+    "trace_id": "0ceabaa9964b478dac995a64d8697263",
+    "parent_span_id": "f760762bf15e4f8c"
+  },
+  "snapshot_integrity": true,
+  "unresolved_dependency_count": 0
+}

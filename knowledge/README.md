@@ -1,12 +1,12 @@
 # FPGA 知识与 SOP
 
-本目录保存 36 条原子规则、21 个来源、4 个 SOP 索引，以及 11 项带原始检查日期的工具/参考能力记录。当前调用与边界见 [知识与 SOP 指南](../docs/knowledge-and-sops.md)。
+本目录保存 36 条原子规则、21 个来源、6 个 SOP 索引，以及 11 项带原始检查日期的工具/参考能力记录。当前调用与边界见 [知识与 SOP 指南](../docs/knowledge-and-sops.md)。
 
 | 文件 | 用途 |
 |---|---|
 | [rules.json](rules.json) | 要求、建议与限制；适用范围、版本、引用、所需证据、静态证明边界 |
 | [sources.json](sources.json) | 来源链接、观察版本、版权/许可、原核验日期与核验方式 |
-| [sops.json](sops.json) | 4 个 SOP 的触发条件、规则引用、必要证据；正文在 [.pi/skills](../.pi/skills) |
+| [sops.json](sops.json) | 6 个 SOP 的阶段、所需工具、触发条件、规则引用、必要证据；正文在 [.pi/skills](../.pi/skills) |
 | [retrieval-cases.json](retrieval-cases.json) | 24 条可见检索回归与 3 条无关查询；不是保留盲测题集 |
 | [tools.json](tools.json) | 2026-10-22 的工具探测记录；当前是否可运行还须 preflight 和实跑 |
 | [routeagents-playbook.json](routeagents-playbook.json) | 42 项上游策略参考及本地适配状态；执行器仅实现 7 项 |

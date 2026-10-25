@@ -1,0 +1,33 @@
+{
+  "stage": "checkpoint_analysis",
+  "design": "checkpoint_ethernet_cdc_top-routed",
+  "part": "xc7a100tfgg676-2",
+  "clocks": [
+    {
+      "name": "logic_clk",
+      "period_ns": 10
+    },
+    {
+      "name": "rx_clk",
+      "period_ns": 8
+    },
+    {
+      "name": "tx_clk",
+      "period_ns": 8
+    }
+  ],
+  "black_boxes": 0,
+  "drc": {
+    "errors": 0,
+    "critical_warnings": 0,
+    "warnings": 2
+  },
+  "reports": [
+    {
+      "name": "drc",
+      "status": "ok",
+      "error": ""
+    }
+  ],
+  "version": "2020.2"
+}

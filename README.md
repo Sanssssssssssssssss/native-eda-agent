@@ -4,14 +4,15 @@
 
 当前重点是 **可追溯的知识指导、固定验收、可靠执行和结果复核**。模型提供商 API 默认关闭；下列本地工具和离线检查不需要模型 API key。
 
-[核心机制](docs/mechanisms.md) · [RAG 与 SOP](docs/knowledge-and-sops.md) · [功能成绩](docs/results.md) · [工作流](docs/workflows.md) · [全部文档](docs/README.md)
+[本地工作台与 ERP 对照](docs/erp-parity-and-workbench.md) · [分类评测](docs/evaluation.md) · [核心机制](docs/mechanisms.md) · [RAG 与 SOP](docs/knowledge-and-sops.md) · [功能成绩](docs/results.md) · [工作流](docs/workflows.md) · [全部文档](docs/README.md)
 
 ## 项目亮点
 
-- **知识直接进入任务**：36 条规则带来源、版本、适用条件与所需证据；中英文检索有排名；4 个 SOP 同时支持 Pi 发现和 MCP 读取。workflow 固定所选知识与 SOP 的文件哈希。
-- **验收条件可执行**：任务声明输入、前序结果引用、逐步 checks 和预算。工具完成、功能通过、时序通过、CDC/DRC 和上板分别判断。
-- **任务可追踪和恢复**：每次调用保留输入快照、进程、失败、终态与因果 trace。恢复前核验所有者、输入、代码和产物；在新目录从已提交边界继续。
+- **知识直接进入任务**：36 条规则带来源、版本、适用条件与所需证据；中英文检索有排名；6 个 SOP 同时支持 Pi 发现和 MCP 读取。workflow 固定所选知识与 SOP 的文件哈希。
+- **验收条件可执行**：任务声明输入、前序结果引用、逐步 checks、工程目标 profile 和累计预算；宿主重新读取证据，核验顶层、器件、时钟与 DCP 来源。工具完成、功能通过、时序通过、CDC/DRC 和上板分别判断。
+- **任务可追踪和恢复**：每次调用保留输入快照、进程、失败、终态与因果 trace。恢复前核验所有者、输入、代码和产物；在新目录从已提交边界继续；同一恢复链重复三次失败后停止重放并要求诊断。
 - **EDA 执行受资源约束**：原生工具与社区 MCP 代理共享资源租约，支持队列、超时与取消。物理优化器另有候选准入、最佳结果保留、停滞停止和最终复测。
+- **本地会话与分层评测**：浏览器保存工程问题与检索上下文，查看 SOP、任务步骤、领域验收和时间线；离线、真实 EDA、Agent 会话评测分别记录。
 - **成绩可以复核**：保留原测试协议、失败和公开证据哈希。不同题集、watchdog 和计分单位不合并成总分。
 
 ## 按功能看能力与证据
@@ -24,26 +25,27 @@
 | 工程、IP、Block Design | 社区 Workbench 13 类操作，33/33 工具检查 | 工具集成检查，非 33 个新 FPGA 项目 |
 | 物理优化 | 7 个本地策略、准入与复测；历史 AXI 运行 2 个候选，实测 WNS 收益 0 ns | 仅其中 2 类 reroute 有实跑；未复现竞赛排名 |
 | 模拟电路 | LTspice RC AC/瞬态、独立解析解校验；历史四项测量误差均低于固定 0.2% 阈值 | RC 基础案例；新代理版本未重跑商业工具 |
-| 知识与 SOP | 36 规则 / 21 来源 / 4 SOP；24 条可见检索回归 Hit@5 为 24/24 | 检索相关性；不是回答正确率或设计通过率 |
+| 知识与 SOP | 36 规则 / 21 来源 / 6 SOP；24 条可见检索回归 Hit@5 为 24/24 | 检索相关性；不是回答正确率或设计通过率 |
 | Agent 工程机制 | 输入/知识冻结、预算、恢复、MCP、资源并发、trace、真实 Pi 资源加载等离线检查 | 假 EDA、本机进程与协议验收；当前回执见 release/validation.json 和 CI |
 
-详细协议、失败、资源和证据索引见 [功能成绩](docs/results.md)。历史 FPGA 成绩没有在本轮重跑；新 AXI workflow 仅完成静态计划。接口数量单列在 [工具合同](docs/reference/tools.md)：54 个原生入口，其中 28 个为共享执行器的细粒度合同；可选社区后端另有 45 个工具与 11 个 prompts。
+详细协议、失败、资源和证据索引见 [功能成绩](docs/results.md)。历史 11 组成绩保持原协议；本轮新增 Counter 功能与真实 DRC 查询验证，完整 AXI 结果单列于功能成绩。接口数量单列在 [工具合同](docs/reference/tools.md)：55 个原生入口，其中 28 个为共享执行器的细粒度合同；可选社区后端另有 45 个工具与 11 个 prompts。
 
 ## 架构
 
 ```mermaid
 flowchart LR
-  A[Codex / Pi / CLI] --> K[知识检索 + SOP]
-  K --> W[任务规格 + 固定 checks]
+  A[Codex / Pi / CLI / 本地工作台] --> K[任务上下文 + 知识 + SOP]
+  K --> W[任务规格 + 固定 checks + 工程目标]
   A --> W
   W --> R[共享工具注册表]
   R --> Q[trace + 资源队列]
   Q --> E[XSim / Vivado / LTspice]
   Q --> M[社区 MCP 代理]
-  E --> V[功能与报告验收]
+  E --> V[宿主回读证据 + 分领域验收]
   M --> V
   V --> T[结果 / checkpoint / 证据]
   T --> A
+  T --> B[离线 / 真实 EDA / Agent 会话评测]
 ```
 
 知识检索由工具调用触发，SOP 提供工程指导；代码强制执行的是显式参数、预算、检查与恢复条件。当前没有向量索引、自动答案引用核验、强沙箱或完整模型会话恢复。具体实现和缺口见 [机制检查](docs/mechanisms.md)。
@@ -71,6 +73,19 @@ node scripts/results.mjs verify hard-projects-3
 
 上述例子只使用本地知识、前检与历史证据。`workflow run/resume` 按规格决定是否启动 EDA；`eda_vivado_optimize` 的 plan 也会启动 Vivado。真实工程可从 [counter](examples/workflows/counter-simulation.json) 或 [AXI fabric](examples/workflows/axi-fabric-ooc.json) 开始，先按 [工程索引](projects/README.md) 获取固定 RTL 依赖并核对验收范围。
 
+## 会话与评测界面
+
+```powershell
+npm run workbench
+# http://127.0.0.1:4317
+npm run evaluate -- list
+npm run evaluate -- run offline-retrieval
+```
+
+![本地工程会话、相关规则与 SOP](docs/media/workbench.png)
+
+当前会话是本地知识模式：保存问题、检索规则、读取 SOP 和准备工具合同；不启动模型。执行页可运行固定规格任务，评测页区分当前结果、历史记录和源码变化。已有 Pi 会话支持执行时间线查看及因果关联核验。完整模型聊天、会话续接与多用户访问尚未提供。
+
 ## 仓库导航
 
 | 目录 | 内容 |
@@ -79,6 +94,7 @@ node scripts/results.mjs verify hard-projects-3
 | [knowledge](knowledge/README.md) / [.pi/skills](.pi/skills) | 来源、规则、SOP 索引、检索回归与操作步骤 |
 | [examples/workflows](examples/workflows) / [projects](projects/README.md) | 可执行任务规格与 FPGA 示例工程 |
 | [results](results/catalog.json) | 11 组历史成绩及公开脱敏证据；不含大型原始产物 |
+| [web/workbench](web/workbench) | 本地会话、知识、任务证据与分类评测界面 |
 | [tests](tests) / [.github/workflows](.github/workflows) | 软件故障检查与 Windows CI |
 | [docs](docs/README.md) / [release](release/README.md) | 当前指南、历史报告、发布清单与验收回执 |
 

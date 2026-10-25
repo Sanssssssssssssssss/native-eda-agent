@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "native_interfaces": 54,
+  "native_interfaces": 55,
   "focused_interfaces": 28,
   "community_interfaces": 45,
   "community_prompts": 11,
@@ -1835,6 +1835,45 @@
       "fixed_selector": null,
       "launches_eda": true,
       "execution_note": "Requires installed EDA software",
+      "writes_local_evidence": true,
+      "model_api_calls": 0
+    },
+    {
+      "name": "eda_task_context",
+      "description": "Prepare ranked rules, phase-selected SOPs and their actual tool contracts. Optionally revalidate a workflow and attach domain outcomes, evidence citations and recovery advice. No model or EDA execution.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2048
+          },
+          "phase": {
+            "type": "string",
+            "enum": [
+              "planning",
+              "simulation",
+              "timing",
+              "recovery",
+              "cdc",
+              "ip"
+            ]
+          },
+          "directory": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "query"
+        ],
+        "additionalProperties": false
+      },
+      "executor": "eda_task_context",
+      "fixed_selector": null,
+      "launches_eda": false,
+      "execution_note": "Offline local inspection/control",
       "writes_local_evidence": true,
       "model_api_calls": 0
     }

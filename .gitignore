@@ -3,6 +3,8 @@ runtime/
 downloads/
 .pi-state/
 artifacts/
+output/
+.playwright-cli/
 .eda-state/
 __pycache__/
 Gameboy/

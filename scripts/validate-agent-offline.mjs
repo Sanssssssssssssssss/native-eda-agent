@@ -18,7 +18,7 @@ function run(name,command,args){
   const count=name==='python'?Number(output.match(/Ran (\d+) tests/)?.[1]):name==='node'?Number(output.match(/\btests (\d+)/)?.[1]):null;
   report.checks.push({name,passed:result.status===0&&!result.error,exit_code:result.status,test_count:count,duration_ms:Date.now()-start,log,error:result.error?.message});save();
 }
-const nodeTests=['proxy-export','otlp-upload','optimizer-recovery','optimizer-trace','artifact-storage','replay-experiment','runtime','runtime-concurrency','mcp','trace','results-contracts','fpga-tools','benchmark','workflow','knowledge','knowledge-retrieval','agent-recording'].map(name=>`tests/${name}.test.mjs`);
+const nodeTests=['proxy-export','otlp-upload','optimizer-recovery','optimizer-trace','artifact-storage','replay-experiment','runtime','runtime-concurrency','mcp','trace','results-contracts','fpga-tools','benchmark','workflow','knowledge','knowledge-retrieval','agent-recording','task-outcome','workbench'].map(name=>`tests/${name}.test.mjs`);
 try {
   const config=JSON.parse(fs.readFileSync(path.join(root,'.eda/config.json')));
   if(config.model_api_enabled!==false) throw new Error('Offline acceptance requires model_api_enabled=false');
@@ -33,7 +33,7 @@ try {
     'src/otlp-upload.mjs','scripts/upload-traces.mjs','scripts/validate-agent-offline.mjs','tests/fixtures/proxy-backend.mjs','tests/test_fpga_optimizer.py',...nodeTests,
     'src/tool-contracts.mjs','src/tools/focused.mjs','src/results.mjs','src/tools/fpga.mjs','src/extension.ts','src/workflow.mjs','scripts/workflow.mjs','scripts/eda-tool.mjs','results/catalog.json',
     'package.json','.codex/config.toml','.pi/mcp.json','.pi/APPEND_SYSTEM.md','.eda/config.json','AGENTS.md','docs/agent-workflow-and-trace-contract.md','docs/agent-completion-2026-10-24.md'];
-  files.push('src/agent-resources.mjs','scripts/evaluate-knowledge.mjs','knowledge/retrieval-cases.json',...knowledgeFiles(root).map(file=>path.relative(root,file).replaceAll('\\','/')));
+  files.push('web/workbench/index.html','web/workbench/style.css','web/workbench/app.js','src/task-outcome.mjs','src/task-context.mjs','src/evaluations.mjs','src/workbench.mjs','scripts/evaluate.mjs','scripts/workbench.mjs','src/agent-resources.mjs','scripts/evaluate-knowledge.mjs','knowledge/retrieval-cases.json',...knowledgeFiles(root).map(file=>path.relative(root,file).replaceAll('\\','/')));
   report.source_hashes=Object.fromEntries([...new Set(files)].map(file=>[file,createHash('sha256').update(fs.readFileSync(path.join(root,file))).digest('hex')]));
   report.passed=report.checks.every(c=>c.passed);
 } catch(error){report.passed=false;report.error=error.message;}

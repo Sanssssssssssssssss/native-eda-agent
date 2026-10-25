@@ -1,6 +1,6 @@
 # Native tool contracts
 
-54 native interfaces. 28 are focused contracts over shared executors; 4 expose retained scores. Community MCP separately exposes 45 tools and 11 prompts.
+55 native interfaces. 28 are focused contracts over shared executors; 4 expose retained scores. Community MCP separately exposes 45 tools and 11 prompts.
 
 Schemas: [tools.json](tools.json). Real EDA calls write independent artifacts and use shared resource leases.
 
@@ -60,3 +60,4 @@ Schemas: [tools.json](tools.json). Real EDA calls write independent artifacts an
 | `eda_workflow_inspect` | `eda_workflow_inspect` | No | Read task checkpoints and verify committed child traces, result files and output hashes. |
 | `eda_workflow_resume_check` | `eda_workflow_resume_check` | No | Read-only check of task ownership, frozen inputs, implementation, completed results and remaining budget. |
 | `eda_workflow_resume` | `eda_workflow_resume` | Yes / see schema | Continue an eligible task in a new trace, reusing verified completed steps. An interrupted uncommitted step is rerun; no exactly-once guarantee. May start EDA. |
+| `eda_task_context` | `eda_task_context` | No | Prepare ranked rules, phase-selected SOPs and their actual tool contracts. Optionally revalidate a workflow and attach domain outcomes, evidence citations and recovery advice. No model or EDA execution. |

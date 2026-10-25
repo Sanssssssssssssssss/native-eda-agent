@@ -30,6 +30,7 @@ export function inspectTrace(input, { timelineLimit = 20, checkCurrent = false }
       schema_version: manifest.schema_version ?? manifest.schemaVersion,
       started_at: manifest.started_at ?? manifest.startedAt, finished_at: manifest.finished_at ?? manifest.endedAt,
       duration_ms: manifest.duration_ms ?? (typeof manifest.wallSeconds === 'number' ? manifest.wallSeconds * 1000 : null),
+      input_drift: Boolean(manifest.input_drift || manifest.inputDrift?.length),
       inputs: Array.isArray(manifest.inputs) ? manifest.inputs.map(item => ({ ...item, relative_path: item.relative_path ?? item.path })) : manifest.inputs };
     warnings.push('Pi SDK field aliases normalized for inspection; snapshots cover listed orchestration files only.');
     if (checkCurrent && !manifest.workspace) problems.push('Legacy Pi manifest has no workspace for current-file verification.');

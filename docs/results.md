@@ -40,7 +40,7 @@
 
 原生集成中的 AXI 运行：4 个种子，读写各 2,328 个 burst、37,824 个 beat，658,158 次协议检查；setup +2.393 ns、hold +0.058 ns，3,159/3,159 可布线网络完成，routing errors=0。它与上表的原始 hard-bench 运行有独立记录，不能覆盖原值。诊断结果仍为 `overall_design_acceptance=not_evaluated`、CDC unknown、board_signoff=false。
 
-详见 [原生工具验收](fpga-native-tools-validation-2026-10-24.md) 与 [Workbench 覆盖](vivado-workbench-coverage-2026-10-24.md)。生成 DRC 报告只证明报告生成；现有 AXI workflow 没有把它升级为“DRC 为零”的检查。
+详见 [原生工具验收](fpga-native-tools-validation-2026-10-24.md) 与 [Workbench 覆盖](vivado-workbench-coverage-2026-10-24.md)。生成 DRC 报告只证明报告生成；历史记录没有把它升级为“DRC 为零”。v0.6 workflow 另行核验严重级别计数；旧记录不补造该字段。
 
 ## 物理优化
 
@@ -57,6 +57,16 @@
 当前检索回归为 24 条人工可见问题，Hit@5 从旧查询的 **3/24** 提升到 **24/24**，MRR@5 为 0.9583；3 条无关问题均返回空。软件检查覆盖中英文问题、来源过滤、SOP 读取、缺失文件、知识变更阻止续跑和真实 Pi 资源发现。检索成绩不衡量模型回答或设计正确率。[方法与边界](knowledge-and-sops.md)，可运行 `npm run knowledge:eval` 重现。
 
 `npm run validate:agent` 检查本机资源调度、MCP、trace、恢复、固定验收与知识合同。当前发布回执见 [release](../release/README.md) 和 GitHub Actions，使用假 EDA、本机子进程和资源加载，不启动模型会话。历史索引 `agent-offline-20261024` 的 64/64 保留原版本；不可累计为当前软件测试总量或 FPGA 新成绩。
+
+## v0.6 本机验证
+
+新增真实 Counter workflow：321 次检查、1 次回绕、7 次保持、3 次复位；功能目标通过。真实 Ethernet DCP 报告查询：DRC errors=0、critical_warnings=0、warnings=2，属于需要审查的物理证据。工具调用成功与 DRC 完全通过分别报告。
+
+AXI 3×3 完整 workflow 在 Vivado/XSim 2020.2、`xc7a100tfgg676-2`、100 MHz 下运行约 155 秒：4 个种子，读写各 2,328 burst、37,824 beat，658,158 次协议检查；setup **+2.393 ns**、hold **+0.058 ns**，3,159/3,159 可布线网络完成，零黑盒。功能、综合、setup、hold、约束、routing 六项通过；DRC 为 0 error / 0 critical / **2 warning**（CFGBVS-1、RTSTAT-10），整体 `acceptance_review_required`，严格评测不计通过。CDC 未要求，formal/板卡未评估；不填写或猜测板卡配置电压来消除警告。
+
+该运行复用了已公开的 AXI 工程和 checker，证明新增 workflow/目标核验实际接通；不是新盲测设计，也不是新的性能提升。原始目录为 `artifacts/2026-10-25T11-38-24-464Z-eda_workflow_run-9a7a5467`，评测回执为 `artifacts/evaluation-2026-10-25T11-38-24-457Z-52c3ff/result.json`。公开包保留脱敏结果及原件哈希，DCP/波形留在本机。
+
+分类评测、当前软件/检索回执与用量见 [评测协议](evaluation.md) 和 [发布回执](../release/README.md)。没有新模型 Agent 端到端分数；历史 11 组结果保持原样。
 
 ## 查询与复核
 

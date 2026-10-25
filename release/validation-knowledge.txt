@@ -19,11 +19,11 @@
     "sources": 21,
     "rules": 36,
     "tools": 11,
-    "sops": 4,
-    "skills": 4
+    "sops": 6,
+    "skills": 6
   },
   "boundary": "Offline structural and cross-reference validation only. Does not verify source truth, remote link reachability, HDL correctness, formal proof, tool installation or hardware behavior.",
-  "checked_at_utc": "2026-10-24T19:14:53.420Z",
+  "checked_at_utc": "2026-10-25T11:47:06.844Z",
   "files": [
     {
       "path": "knowledge/sources.json",
@@ -39,7 +39,15 @@
     },
     {
       "path": "knowledge/sops.json",
-      "sha256_at_check": "23ff47a9ae713216df2bd0b2c4df570ca067892133dc2784a48f6b9cb03af5bb"
+      "sha256_at_check": "7f6cacae88edcc2ba0b095666406215733df7922af7256a771496a794e063bd4"
+    },
+    {
+      "path": ".pi/skills/fpga-cdc-review/SKILL.md",
+      "sha256_at_check": "849f8725fad7f77d8a0caf6e5f15d86cc3543c8ef51afcfb61a71b62eef24259"
+    },
+    {
+      "path": ".pi/skills/fpga-ip-integrate/SKILL.md",
+      "sha256_at_check": "ad1ece2837b3dd31fe1a4cc8e20bcefa4f9ae99f887056a6552a3b5e2757790e"
     },
     {
       "path": ".pi/skills/fpga-plan/SKILL.md",

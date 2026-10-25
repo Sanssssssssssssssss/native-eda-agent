@@ -2,9 +2,196 @@
   "schema_version": 1,
   "boundary": "Reviewed operating guidance. Skills guide decisions; only explicitly declared tool/workflow checks enforce acceptance. User scope and authorization take precedence.",
   "sops": [
-    {"id":"fpga-plan","title":"任务规划与验收矩阵","skill_path":".pi/skills/fpga-plan/SKILL.md","triggers":["新 RTL 模块","新 FPGA 项目","固定接口与验收"],"rule_ids":["FPGA-RESET-001","FPGA-CDC-001","FPGA-WIDTH-003","FPGA-TIMING-001","FPGA-TOOL-002"],"required_evidence":["器件/工具/接口/时钟与复位规格","固定输入及验收矩阵","明确未执行的验收项"]},
-    {"id":"fpga-rtl-verify","title":"功能仿真与负控","skill_path":".pi/skills/fpga-rtl-verify/SKILL.md","triggers":["RTL 功能验证","复位/背压/位宽问题","检查 scoreboard 是否有效"],"rule_ids":["FPGA-HANDSHAKE-001","FPGA-HANDSHAKE-002","FPGA-XPROP-001","FPGA-XPROP-002","FPGA-FORMAL-001","FPGA-NEGATIVE-001"],"required_evidence":["独立参考结果与固定刺激","PASS 标记、实际计数和超时状态","负控命中特定 checker 的证据"]},
-    {"id":"fpga-timing-triage","title":"时序与约束诊断","skill_path":".pi/skills/fpga-timing-triage/SKILL.md","triggers":["setup/hold 违例","时钟或 IO 约束不完整","比较时序修改收益"],"rule_ids":["FPGA-CLOCK-001","FPGA-CLOCK-002","FPGA-CONSTRAINT-001","FPGA-CONSTRAINT-002","FPGA-CONSTRAINT-003","FPGA-CONSTRAINT-004","FPGA-TIMING-001","FPGA-TIMING-002","FPGA-TIMING-003","FPGA-TOOL-002"],"required_evidence":["器件/阶段/XDC/时钟一致性","setup/hold、约束完整性、布局布线报告","CDC/DRC 的单独审查及缺失字段"]},
-    {"id":"fpga-reproduce","title":"证据复核与恢复","skill_path":".pi/skills/fpga-reproduce/SKILL.md","triggers":["历史成绩复核","任务中断续跑","相同条件回归比较"],"rule_ids":["FPGA-TRACE-001","FPGA-FORMAL-001","FPGA-NEGATIVE-001","FPGA-TIMING-001"],"required_evidence":["原始输入/参数/种子与哈希","运行终态、所有者及失败记录","相同测试协议下的比较或不可比原因"]}
+    {
+      "id": "fpga-plan",
+      "title": "任务规划与验收矩阵",
+      "skill_path": ".pi/skills/fpga-plan/SKILL.md",
+      "triggers": [
+        "新 RTL 模块",
+        "新 FPGA 项目",
+        "固定接口与验收"
+      ],
+      "rule_ids": [
+        "FPGA-RESET-001",
+        "FPGA-CDC-001",
+        "FPGA-WIDTH-003",
+        "FPGA-TIMING-001",
+        "FPGA-TOOL-002"
+      ],
+      "required_evidence": [
+        "器件/工具/接口/时钟与复位规格",
+        "固定输入及验收矩阵",
+        "明确未执行的验收项"
+      ],
+      "required_tools": [
+        "eda_preflight",
+        "eda_runs_list",
+        "eda_benchmark_plan",
+        "eda_workflow_plan"
+      ],
+      "phases": [
+        "planning"
+      ]
+    },
+    {
+      "id": "fpga-rtl-verify",
+      "title": "功能仿真与负控",
+      "skill_path": ".pi/skills/fpga-rtl-verify/SKILL.md",
+      "triggers": [
+        "RTL 功能验证",
+        "复位/背压/位宽问题",
+        "检查 scoreboard 是否有效"
+      ],
+      "rule_ids": [
+        "FPGA-HANDSHAKE-001",
+        "FPGA-HANDSHAKE-002",
+        "FPGA-XPROP-001",
+        "FPGA-XPROP-002",
+        "FPGA-FORMAL-001",
+        "FPGA-NEGATIVE-001"
+      ],
+      "required_evidence": [
+        "独立参考结果与固定刺激",
+        "PASS 标记、实际计数和超时状态",
+        "负控命中特定 checker 的证据"
+      ],
+      "required_tools": [
+        "eda_xsim",
+        "eda_trace_inspect",
+        "eda_workflow_run"
+      ],
+      "phases": [
+        "simulation"
+      ]
+    },
+    {
+      "id": "fpga-timing-triage",
+      "title": "时序与约束诊断",
+      "skill_path": ".pi/skills/fpga-timing-triage/SKILL.md",
+      "triggers": [
+        "setup/hold 违例",
+        "时钟或 IO 约束不完整",
+        "比较时序修改收益"
+      ],
+      "rule_ids": [
+        "FPGA-CLOCK-001",
+        "FPGA-CLOCK-002",
+        "FPGA-CONSTRAINT-001",
+        "FPGA-CONSTRAINT-002",
+        "FPGA-CONSTRAINT-003",
+        "FPGA-CONSTRAINT-004",
+        "FPGA-TIMING-001",
+        "FPGA-TIMING-002",
+        "FPGA-TIMING-003",
+        "FPGA-TOOL-002"
+      ],
+      "required_evidence": [
+        "器件/阶段/XDC/时钟一致性",
+        "setup/hold、约束完整性、布局布线报告",
+        "CDC/DRC 的单独审查及缺失字段"
+      ],
+      "required_tools": [
+        "eda_vivado_report_timing",
+        "eda_vivado_report_cdc",
+        "eda_vivado_report_drc",
+        "eda_vivado_setup_paths",
+        "eda_vivado_hold_paths"
+      ],
+      "phases": [
+        "timing"
+      ]
+    },
+    {
+      "id": "fpga-reproduce",
+      "title": "证据复核与恢复",
+      "skill_path": ".pi/skills/fpga-reproduce/SKILL.md",
+      "triggers": [
+        "历史成绩复核",
+        "任务中断续跑",
+        "相同条件回归比较"
+      ],
+      "rule_ids": [
+        "FPGA-TRACE-001",
+        "FPGA-FORMAL-001",
+        "FPGA-NEGATIVE-001",
+        "FPGA-TIMING-001"
+      ],
+      "required_evidence": [
+        "原始输入/参数/种子与哈希",
+        "运行终态、所有者及失败记录",
+        "相同测试协议下的比较或不可比原因"
+      ],
+      "required_tools": [
+        "eda_trace_inspect",
+        "eda_workflow_inspect",
+        "eda_workflow_resume_check",
+        "eda_results_verify"
+      ],
+      "phases": [
+        "recovery"
+      ]
+    },
+    {
+      "id": "fpga-cdc-review",
+      "title": "多时钟与 CDC 审查",
+      "skill_path": ".pi/skills/fpga-cdc-review/SKILL.md",
+      "triggers": [
+        "跨时钟总线",
+        "CDC warning",
+        "异步复位释放",
+        "异步 FIFO"
+      ],
+      "rule_ids": [
+        "FPGA-CDC-001",
+        "FPGA-CDC-004",
+        "FPGA-RESET-001",
+        "FPGA-TRACE-001"
+      ],
+      "required_evidence": [
+        "时钟域与 crossing 清单",
+        "真实 routed DCP 的 CDC 报告",
+        "每条 warning 的证据与未验收项"
+      ],
+      "required_tools": [
+        "eda_vivado_report_cdc",
+        "eda_vivado_query_cells",
+        "eda_vivado_query_clocks",
+        "eda_xsim"
+      ],
+      "phases": [
+        "cdc"
+      ]
+    },
+    {
+      "id": "fpga-ip-integrate",
+      "title": "IP 与仿真依赖集成",
+      "skill_path": ".pi/skills/fpga-ip-integrate/SKILL.md",
+      "triggers": [
+        "Vivado IP 配置",
+        "仿真库缺失",
+        "black box",
+        "Block Design"
+      ],
+      "rule_ids": [
+        "FPGA-TOOL-002",
+        "FPGA-TIMING-001",
+        "FPGA-TRACE-001",
+        "FPGA-XPROP-001"
+      ],
+      "required_evidence": [
+        "器件/IP 版本与配置",
+        "生成模型和仿真库依赖",
+        "wrapper 功能及无 black box 的综合证据"
+      ],
+      "required_tools": [
+        "eda_vivado_find_ips",
+        "eda_vivado",
+        "eda_xsim",
+        "eda_vivado_synthesize"
+      ],
+      "phases": [
+        "ip"
+      ]
+    }
   ]
 }
