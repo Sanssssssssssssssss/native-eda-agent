@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "version": "0.7.0",
+  "date": "2026-10-25",
+  "provider_calls": 0,
+  "outer_codex_tokens": null,
+  "scope": "Workbench product, orchestration and UI contract checks; no new FPGA or live provider score",
+  "root_software": {
+    "node": 136,
+    "python": 21,
+    "passed": true,
+    "receipt": "artifacts/agent-offline-2026-10-25T14-18-58-466Z-11b9e0/result.json"
+  },
+  "publication_software": {
+    "node": 136,
+    "python": 21,
+    "passed": true,
+    "receipt": "release/validation.json",
+    "status": "passed"
+  },
+  "retrieval": {
+    "hit_at_5": "24/24",
+    "unrelated_empty": "3/3",
+    "scope": "Visible regression"
+  },
+  "browser": {
+    "viewports": [
+      [
+        1440,
+        1050
+      ],
+      [
+        390,
+        844
+      ]
+    ],
+    "console_errors_final": 0,
+    "console_warnings_final": 0,
+    "horizontal_overflow": false,
+    "checks": [
+      "persistent question and retrieval context",
+      "rename and keyboard archive/restore",
+      "fixed plan preview and explicit workflow execution",
+      "historical domain acceptance separate from current freshness",
+      "recovery blocked on changed source",
+      "real retained DRC receipt preview and original hash",
+      "classified evaluation and software-source freshness",
+      "network disconnect and reconnect"
+    ],
+    "synthetic_agent_checks": [
+      "isolated fake adapter public text/tool stream",
+      "persisted complete reply",
+      "cancel request followed by stopped reply"
+    ],
+    "boundary": "Manual Playwright interaction plus API contract tests, not live model quality"
+  },
+  "local_workflow": {
+    "run_id": "2026-10-25T14-02-10-913Z-eda_workflow_run-f31c8b1d",
+    "status": "passed",
+    "scope": "Three-step local evidence review, no EDA execution"
+  },
+  "preserved_engineering_results": "release/evaluation-v06.json",
+  "remaining": [
+    "Provider APIs disabled; true Pi continuation and multi-turn quality not evaluated",
+    "Cooperative SDK cancellation; initialization waits for backend return",
+    "Single-user loopback app; no desktop installer or remote access control",
+    "No steer/compaction controls or new board/formal signoff"
+  ],
+  "screenshots": [
+    {
+      "file": "docs/media/workbench.png",
+      "sha256": "bfb0d73774016dcca31efbb8fa1e7d6a30a0f18a36fa2399486a23d9951897f9"
+    },
+    {
+      "file": "docs/media/workbench-axi.png",
+      "sha256": "24b4c72ca463d12323e847984fd87795ca2d6d5d588bbf15cc3313266fe94e6a"
+    },
+    {
+      "file": "docs/media/workbench-evaluations.png",
+      "sha256": "833d253a106e6ac0ad3ca22223f3791302e18a73c414bd006c5e0a4fbf5d89df"
+    }
+  ]
+}

@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "scope": "synthetic_agent_and_local_mcp_control_plane",
-  "started_at": "2026-10-25T11:46:52.148Z",
-  "directory": "${WORKSPACE}\\artifacts\\agent-offline-2026-10-25T11-46-52-147Z-e783f7",
+  "started_at": "2026-10-25T14:19:07.968Z",
+  "directory": "${WORKSPACE}\\artifacts\\agent-offline-2026-10-25T14-19-07-967Z-d62ad9",
   "other_model_api_calls": 0,
   "vivado_runs": 0,
   "ltspice_runs": 0,
@@ -12,25 +12,25 @@
       "name": "node",
       "passed": true,
       "exit_code": 0,
-      "test_count": 111,
-      "duration_ms": 12337,
-      "log": "${WORKSPACE}\\artifacts\\agent-offline-2026-10-25T11-46-52-147Z-e783f7\\node.log"
+      "test_count": 136,
+      "duration_ms": 6450,
+      "log": "${WORKSPACE}\\artifacts\\agent-offline-2026-10-25T14-19-07-967Z-d62ad9\\node.log"
     },
     {
       "name": "python",
       "passed": true,
       "exit_code": 0,
       "test_count": 21,
-      "duration_ms": 2187,
-      "log": "${WORKSPACE}\\artifacts\\agent-offline-2026-10-25T11-46-52-147Z-e783f7\\python.log"
+      "duration_ms": 2226,
+      "log": "${WORKSPACE}\\artifacts\\agent-offline-2026-10-25T14-19-07-967Z-d62ad9\\python.log"
     },
     {
       "name": "config",
       "passed": true,
       "exit_code": 0,
       "test_count": null,
-      "duration_ms": 107,
-      "log": "${WORKSPACE}\\artifacts\\agent-offline-2026-10-25T11-46-52-147Z-e783f7\\config.log"
+      "duration_ms": 94,
+      "log": "${WORKSPACE}\\artifacts\\agent-offline-2026-10-25T14-19-07-967Z-d62ad9\\config.log"
     },
     {
       "name": "knowledge",
@@ -38,7 +38,7 @@
       "exit_code": 0,
       "test_count": null,
       "duration_ms": 72,
-      "log": "${WORKSPACE}\\artifacts\\agent-offline-2026-10-25T11-46-52-147Z-e783f7\\knowledge.log"
+      "log": "${WORKSPACE}\\artifacts\\agent-offline-2026-10-25T14-19-07-967Z-d62ad9\\knowledge.log"
     }
   ],
   "source_hashes": {
@@ -50,7 +50,7 @@
     "src/trace.mjs": "196fd77d341886c090b5a32eb53a089c680fd752d982a20d31ff1ca97b8fc38b",
     "src/runtime.mjs": "b506190fd0e09a119261efe4673554af24e4e4dc95d893b00d53855c6b8e0854",
     "src/tools/optimizer.mjs": "d03b62b10329486696fda3124647c964efffe5b8a6af01a1731308637f6c65ee",
-    "src/agent.mjs": "0dd1ca066c1ea10a16ffcf62afc3ca561d83866fcfb4dbad67b2ecdfde74df55",
+    "src/agent.mjs": "07cd4ced3b833afdcc61f2f2d528d2ef98fa8ca12aa5bf4a5bbf841d956c127f",
     "src/fpga_optimizer/recovery.py": "0c8080d1934ab38c63ff0c9c93be985fc05b958163ec0c185989ff6dc8e584f7",
     "src/fpga_optimizer/runner.py": "c4be5e1e151f8eaa09c8e795c25145335def1718b7e4fe03fa1a42f90f5d65e5",
     "src/fpga_optimizer/trace.py": "92b691d99ec71749b494d80142385d2e5d292e7b0cfd0ddb3a481bc3a95a7a24",
@@ -59,7 +59,7 @@
     "scripts/recover-optimizer.mjs": "ae9e4e7aa6127f478b6f341fdedaff045f81bc788a52240c5c47029bd69cf9df",
     "src/otlp-upload.mjs": "6cc581585d7086e2a629fd8b756abbb6d6364f3d475cd4e8375e0f6354de706b",
     "scripts/upload-traces.mjs": "7ac2673c791de7fe1565184f840e1f77169ad32733546d033558abe8e7bbda5d",
-    "scripts/validate-agent-offline.mjs": "bf25276743601a42b24e086da78fd884665f5031c9ef82a6b9733a4391ffb6e0",
+    "scripts/validate-agent-offline.mjs": "05710d4c418c336e85af11e9c50eb00f2c4701b77021589d9eeef5ce590b209b",
     "tests/fixtures/proxy-backend.mjs": "ab0504b1bacaa751ea66e606aa5ede17ef4eeb5844448e559610d64f982816e7",
     "tests/test_fpga_optimizer.py": "19a7b036c88468c058150adacba0ae3dc632aa7a02e51a6a9524b5c45afff9df",
     "tests/proxy-export.test.mjs": "a84bd07b5ba5e7a87bae55911f69758ec3c1c5d67bb54597823fcbe625dc5923",
@@ -78,9 +78,12 @@
     "tests/workflow.test.mjs": "4fb0605849c7a3000fe8cff9454ff949961bb8bf073671ca65958f33f4921636",
     "tests/knowledge.test.mjs": "86e1177c2127b4046857aa42bc7706787f523b0d79b3e10a2316b4be271b55ca",
     "tests/knowledge-retrieval.test.mjs": "542444fe64c281ffe232efaabecaf4f41c6d5c81c9dc91fc15d5b992817c30a7",
-    "tests/agent-recording.test.mjs": "7ed19998b118b44da000560ea529c6c7870bdd2f714fee82fbbffb7c6e0aedcd",
+    "tests/agent-recording.test.mjs": "33231abbed814473c373426b37410daf04669647a81e39d0d1afe5db84528433",
     "tests/task-outcome.test.mjs": "b8212cdfe6e7e5b8fddac2d9423da0bbc9a2908ef7af11cb4b6c4e5af4457ea0",
-    "tests/workbench.test.mjs": "f0cb5d366cc8b7b1f9433a2834eed3323445a73072f833eaef684011ffccdbd5",
+    "tests/workbench-acceptance.test.mjs": "edb69c2620d51da67d2eb9020c9e4a58e1408a15795f220ef7c7f5a78b870110",
+    "tests/workbench-artifacts.test.mjs": "a11f83b12d765ee3941e31757d3d0567ecfac319ca800e939cad13f953f6c83a",
+    "tests/workbench-runtime.test.mjs": "41fa604c0c0e1842f0060e10709fbc044a74722ea6393c6f169b31f27bb50e6a",
+    "tests/workbench.test.mjs": "0cccd25ee2561fdff98b3bacc8e219eac1f64c9feaabe082a3e6dbf1b881fe93",
     "src/tool-contracts.mjs": "293725e9a65d12c4698b68b7b2e6fa4eb763f212a5e48f5e755613458c732608",
     "src/tools/focused.mjs": "7b720ef6e13ba6abcbcb586d810206e576a0bd9a5e01213c17537674c8b63a95",
     "src/results.mjs": "ae909044f5ef3fb96ac317f78fea96d65b114bb5ff969b43d038cc98128c7925",
@@ -90,7 +93,7 @@
     "scripts/workflow.mjs": "1ac569632b8686943abc4e926f22f1e23402a6727048410e658dddd2c046bdc6",
     "scripts/eda-tool.mjs": "94f6ff9b821e45d9efc9bcc5c7caddd49cc2173537bb4dab90d258fe4014e1f3",
     "results/catalog.json": "03f7f41e9e8a15b9f4ec37869f7728857aec3a1a2da5a842659a22c7d22eab04",
-    "package.json": "dc865012674a39b7e44ff5678e0066c9435658bc333de41d18c7cd42ea15b1ff",
+    "package.json": "d0d2a98e71d2f87100c17122b434b74fed36d0abcde886739e4ec0966fc6a66d",
     ".codex/config.toml": "635bea447a9def48f374178f9e957ec1ef6e811555abf328c1b7336eb304af77",
     ".pi/mcp.json": "07e9dfaff84cf686967819798b60dc73220c36dee8cbf196898bb01d86e36387",
     ".pi/APPEND_SYSTEM.md": "f79b802f54236653bd24aab5004495eb71fc3a74d7702a8d5917cf4bf29db879",
@@ -98,13 +101,13 @@
     "AGENTS.md": "098409ec4709ba6a6167f21ef1bfca906d1a084385fe321aa82b5b38cda0f0ab",
     "docs/agent-workflow-and-trace-contract.md": "c8dba9a79eb8460b9ec8c6c55229f0ab02caa567c1230e025ce4273a2a7be1f3",
     "docs/agent-completion-2026-10-24.md": "35a427fb928bd03e48c07ba05ee182d5579c78df3976b06fb79dbcde487d5db0",
-    "web/workbench/index.html": "7931a870573663627192b11f7cb0a3923cd6e77c69200f9d786499910615131b",
-    "web/workbench/style.css": "5e34cfe2cf6fe5fc7819758f101d9978b6114c0c6c377b3d839e9c887cf7fe05",
-    "web/workbench/app.js": "859a77e9bd31c65bdd94984a6e49426a053c6e4d37e57c65b2924463e2679b63",
+    "web/workbench/index.html": "ab3852d427c5603ff0910a955ad113ff359187b75ec7b791f04abd1643960c29",
+    "web/workbench/style.css": "7fbfefe2b99e50f5f5bd4dcdd2afc62e1c715c6c7b3ca20483a6d3fc9b936812",
+    "web/workbench/app.js": "86ddcda859f91f246b0313edba75e6c7b15e82a0aa382bce00608487e6a8fe52",
     "src/task-outcome.mjs": "d957a04d2ae4b9e55eef2a5b8e7518fcd5d2507f87235fdcb813032866178e5f",
     "src/task-context.mjs": "776f671692a65eccbdf42ac9cbaef530b24b28eb98de3d25aea6ae981d2f7425",
-    "src/evaluations.mjs": "e1c6e09e77f27160a965dbbcaeb1ffc5dc9973ff3196297baf5b0c495a591edf",
-    "src/workbench.mjs": "6707187b80714674c7bc9483ffce8bc1f6cff366b96f54ceeab20c3d413a4873",
+    "src/evaluations.mjs": "ccffc723a9d7bb346f4ec599b73c5c487384d4a6da5fdca454d3a769dd47e776",
+    "src/workbench.mjs": "05693427e1ca61302a25f6c9c3b7a89be6031c51e2810b19bddadd065cdbb512",
     "scripts/evaluate.mjs": "b33dd917eafc6ef20d670a58645157c270a40b0e79f8fd4845cdefa5a9632e45",
     "scripts/workbench.mjs": "8b6098d303852fb02834a9552a5c0fd1696db27b66a3ad0e6667ca7a053e4281",
     "src/agent-resources.mjs": "910ecf5ffbf6881f0c4f7d2123bebaa149d229ad4bd7abb8fa98ab0a9791dba9",
@@ -121,8 +124,11 @@
     ".pi/skills/fpga-timing-triage/SKILL.md": "d45ce3ebc40241ee7604c9e8d2fd246d0551667043206423032ccd2bf89cb469",
     ".pi/skills/fpga-reproduce/SKILL.md": "910c422cc8a9f7bbf270e4e31382dee2acf338602d3e072c6843f89f3cf526f9",
     ".pi/skills/fpga-cdc-review/SKILL.md": "849f8725fad7f77d8a0caf6e5f15d86cc3543c8ef51afcfb61a71b62eef24259",
-    ".pi/skills/fpga-ip-integrate/SKILL.md": "ad1ece2837b3dd31fe1a4cc8e20bcefa4f9ae99f887056a6552a3b5e2757790e"
+    ".pi/skills/fpga-ip-integrate/SKILL.md": "ad1ece2837b3dd31fe1a4cc8e20bcefa4f9ae99f887056a6552a3b5e2757790e",
+    "src/agent-session.mjs": "cb20fe9a2117afd7689ae673c12335402f2f24cbe6df514600f7030a74b845d2",
+    "src/workbench-artifacts.mjs": "b009790b14d99427a8c991264a558a7d45f8e92f14c9ea8e364c73198e67f967",
+    "src/workbench-state.mjs": "82425676546711c7d99345efaa3569a65b1745909413491ca228582893508dfd"
   },
   "passed": true,
-  "finished_at": "2026-10-25T11:47:06.890Z"
+  "finished_at": "2026-10-25T14:19:16.846Z"
 }

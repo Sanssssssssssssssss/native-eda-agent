@@ -6,7 +6,7 @@
 |---|---|
 | 项目能做什么、怎样启动 | [项目 README](../README.md) |
 | EDA Agent 的关键机制是否实际接入 | [机制与源码落点](mechanisms.md) |
-| 本地会话界面、任务可视化和 ERP 对照 | [工作台与机制比较](erp-parity-and-workbench.md) |
+| 本地会话界面、任务可视化和 ERP 对照 | [v0.7 工作台验收](workbench-v07-acceptance.md) · [机制比较](erp-parity-and-workbench.md) |
 | 离线、真实 EDA 与 Agent 会话如何分类评测 | [评测协议](evaluation.md) |
 | RAG 检索、来源、SOP 与执行之间的关系 | [知识与 SOP](knowledge-and-sops.md) |
 | 各功能有哪些历史成绩、如何计分 | [按功能查看成绩](results.md) |

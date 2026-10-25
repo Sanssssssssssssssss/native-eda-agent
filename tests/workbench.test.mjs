@@ -57,4 +57,7 @@ test('evaluation freshness distinguishes matching, changed, missing and unbound 
   fs.writeFileSync(path.join(dir,'source.txt'),'changed');assert.equal(evaluationFreshness(dir,receipt).current_sources_match,false);
   assert.equal(evaluationFreshness(dir,{source_hashes:{'missing.txt':'hash'}}).current_sources_match,false);
   assert.equal(evaluationFreshness(dir,{}).current_sources_match,null);
+  const unbound=evaluationFreshness(dir,{...receipt,suite:'offline-contracts'});
+  assert.equal(unbound.current_sources_match,null);
+  assert.equal(unbound.reason,'software_validation_sources_unbound');
 });

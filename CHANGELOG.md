@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.7.0 — 2026-10-25
+
+- Rebuilt the workbench around persistent conversations, task proposals, execution state and evidence inspection, following the local ERP workbench's session/workspace separation.
+- Added session rename/archive/restore, scoped event cursors, durable jobs, owner-aware interruption handling, explicit cancellation and frozen plan checks before execution. Existing project workflow files can be planned from a conversation.
+- Shared the native Pi session driver between CLI and workbench, with owned session continuation, public text streaming and cancellation. The disabled-model gate runs before SDK configuration or credential loading.
+- Added offline counterexamples for crash recovery, cross-session task scope, model gating and stale-answer prevention. Model APIs remain disabled; fake SDK checks do not establish live model quality. See the workbench acceptance document and release receipts.
+
 ## 0.6.0 — 2026-10-25
 
 - Added phase-scoped rule/SOP/tool context, CDC and IP integration procedures, and workflow observation refresh. There are now six bundled SOPs and 55 native interfaces.

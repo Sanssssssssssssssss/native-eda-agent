@@ -17,7 +17,9 @@ export function evaluationFreshness(root,receipt){
       if(!rel||rel.startsWith('..')||path.isAbsolute(rel)||hash(file)!==expected)changed.push(name);
     }catch{changed.push(name);}
   }
-  return {current_sources_match:entries.length?changed.length===0:null,changed_sources:changed,scope:'Recorded protocol/source hashes only; referenced workflow evidence requires separate inspection.'};
+  const softwareUnbound=receipt.suite==='offline-contracts'&&!receipt.source_hashes?.['scripts/validate-agent-offline.mjs'];
+  return {current_sources_match:softwareUnbound?null:entries.length?changed.length===0:null,changed_sources:changed,
+    ...(softwareUnbound?{reason:'software_validation_sources_unbound'}:{}),scope:'Recorded protocol/source hashes only; referenced workflow evidence requires separate inspection.'};
 }
 export const evaluationSuites=[
   {id:'offline-contracts',lane:'offline',category:'agent_mechanism',unit:'software_test',description:'Fake EDA, native MCP, task outcomes, recovery and resource contracts',launches_eda:false},
@@ -55,6 +57,13 @@ export async function runEvaluation(root,id,registry,{signal,session_directory,w
     if(id==='offline-contracts'){
       result.exit_code=await command(root,['scripts/validate-agent-offline.mjs'],signal,path.join(dir,'validation.log'));
       result.status=result.exit_code===0?'passed':'failed';result.detail_log='validation.log';
+      // Bind the actual software validation receipt, rather than only this evaluator's source.
+      const child=JSON.parse(fs.readFileSync(path.join(dir,'validation.log'),'utf8'));
+      const validationDirectory=artifact(root,child.evidence),validation=JSON.parse(fs.readFileSync(path.join(validationDirectory,'result.json'),'utf8'));
+      result.validation_directory=path.relative(root,validationDirectory).replaceAll('\\','/');
+      result.source_hashes={...result.source_hashes,...validation.source_hashes};
+      result.metrics={checks:validation.checks.map(({name,passed,test_count})=>({name,passed,test_count}))};
+      if(!validation.passed||!validation.source_hashes?.['scripts/validate-agent-offline.mjs'])result.status='failed';
     }else if(id==='offline-retrieval'){
       result.metrics=evaluateRetrieval(root);result.status=result.metrics.after.hits>=result.metrics.before.hits&&result.metrics.unrelated.every(q=>q.returned===0)?'passed':'failed';
     }else if(id==='offline-evidence'){

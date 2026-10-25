@@ -26,7 +26,9 @@ function walk(relative){
   }
 }
 for(const name of ['src','scripts','tests','benchmarks','knowledge','examples','prompts','docs','results','web','.github','.pi/extensions','.pi/skills'])walk(name);
-if(fs.existsSync(path.join(root,'docs/media/workbench.png')))copy('docs/media/workbench.png');
+for(const image of ['workbench.png','workbench-axi.png','workbench-evaluations.png']){
+  if(fs.existsSync(path.join(root,'docs/media',image)))copy(`docs/media/${image}`);
+}
 for(const name of ['fft-spectrum','fpga-tool-validation','hard-bench','system-bench','verilogeval-24','verilogeval-mini','native-vivado-workbench'])walk(`projects/${name}`);
 for(const name of ['README.md','AGENTS.md','CONTRIBUTING.md','CHANGELOG.md','LICENSE','THIRD_PARTY_NOTICES.md','.gitignore','.gitattributes','package.json','package-lock.json','eda.ps1','start-pi.ps1','.eda/config.json','.eda/optimizer-upstreams.json','.pi/APPEND_SYSTEM.md','.pi/settings.json','projects/README.md','release/upstreams.json','release/python-requirements.lock','release/README.md'])copy(name);
 const community='vendor/vivado-mcp-community';

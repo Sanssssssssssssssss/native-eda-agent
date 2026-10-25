@@ -8,9 +8,9 @@
 | 知识检索与 SOP | [knowledge](../src/knowledge.mjs) → [platform](../src/platform.mjs)；有排名、来源、适用条件、文件哈希和统一 SOP 入口 | 检索指导与设计证明分别判断；详见 [知识与 SOP](knowledge-and-sops.md) |
 | 阶段与工具选择 | [task-context](../src/task-context.mjs)；阶段、规则关联选择最多两个 SOP，返回对应实际 schema 与重新核验的任务状态 | 不自动替换模型当前工具集合；无 blind SOP 选择分数 |
 | 宿主工程目标 | [task-outcome](../src/task-outcome.mjs)；三类 profile，固定身份/时钟/DCP 来源，回读已提交结果，分领域判定 | 参考模型独立性、formal 与硬件另行验收 |
-| Agent 上下文 | [agent-resources](../src/agent-resources.mjs) → [agent](../src/agent.mjs)；加载项目技能、APPEND_SYSTEM，记录 resources_loaded 与实际技能名 | Pi SDK 会话启用需用户授权；本轮使用真实 loader 和假会话检查，没有真实 provider 评估 |
+| Agent 上下文与会话 | [agent-resources](../src/agent-resources.mjs) → [agent-session](../src/agent-session.mjs)；CLI/工作台共用 Pi 驱动，加载项目技能、记录 resources_loaded、续接本项目会话文件并冻结续接前记录 | API 当前停用；真实 loader 与假 SDK 验证不等于真实 provider 评估；无 steer/compaction 操作界面 |
 | 多工具任务合同 | [workflow](../src/workflow.mjs)；固定规格/输入/知识/代码，解析前序结果引用，每步显式 checks；失败即停 | 串行流程；不自动补充未声明的设计验收项 |
-| 本地会话与评测 | [workbench](../src/workbench.mjs)、[evaluations](../src/evaluations.mjs)；持久化知识会话、任务证据与六类评测套件；源码变更显式标记 | 本机单用户；非完整模型聊天；线上会话成绩尚未实测 |
+| 本地会话与评测 | [workbench](../src/workbench.mjs)、[workbench-state](../src/workbench-state.mjs)、[evaluations](../src/evaluations.mjs)；持久会话/任务/job/事件，计划哈希复核、取消和所有者检查；六类评测独立计分 | 本机单用户；重启不自动重放；真实线上会话成绩尚未实测 |
 | 资源与进程管理 | [runtime](../src/runtime.mjs)；FIFO 资源租约，跨进程调度、超时、取消与所有者检查 | 默认 XSim 2 / Vivado 1 / LTspice 1；主机执行，不是容器或 VM 沙箱 |
 | 输入与 trace | [trace](../src/trace.mjs)；依赖捕获、字节快照、哈希、进程状态、因果 span；保留失败 | 动态 Tcl/文件依赖可能无法解析；前后哈希不能检测修改后又恢复的瞬时变化 |
 | 功能验收 | [bench/acceptance](../src/bench/acceptance.mjs)；检查 PASS、计数、错误、超时、负控原因及数值 oracle | 特定 harness 的覆盖；仿真通过不代表无界证明 |
@@ -39,7 +39,7 @@
 | 优化器 `recovery-check` / `resume_from` | 已提交候选边界和最佳候选 | 新运行重新测基线与最佳候选；检查原所有者与子进程 |
 | [replay-experiment](../scripts/replay-experiment.mjs) | 最初四类原生调用的参数与匹配输入 | 不自动支持全部新工具，不自动恢复历史源文件或许可证环境 |
 
-硬崩溃后不能确定停止时刻时，workflow 保守计入最后 checkpoint 到恢复的整个间隔。原进程仍可能存活时拒绝恢复。Pi 模型会话的 resume/steer/compaction 属于另一层，目前没有完整合同验收。
+硬崩溃后不能确定停止时刻时，workflow 保守计入最后 checkpoint 到恢复的整个间隔。原进程仍可能存活时拒绝恢复。Pi 模型会话属于另一层：驱动可用 SessionManager.open 续接本项目的会话文件，保留续接前快照；目前仅有假 SDK 生命周期验收。SDK 初始化和取消为合作式退出，超时请求不能证明后端已停止。
 
 ## 仍需工程补全的部分
 
@@ -48,7 +48,7 @@
 - 真实板卡、仪器、形式证明和完整 CDC 签核；当前是板外/OOC 证据。
 - IP 仿真模型与库的自动依赖编排、板级约束与 bitstream 交付流程。
 - DRC waiver 审查、一般模型停滞治理、远端 Linux 执行及强隔离。
-- 完整 Pi 会话聊天/续接 UI、动态模型工具发布、多用户权限与独立线上评测。
+- 真实 Pi 多轮/压缩/steer 验收、动态模型工具发布、多用户权限与独立线上评测。
 
 本轮与 ERP 的具体源码对照、工作台用法见 [ERP 对照](erp-parity-and-workbench.md)，分类测评见 [评测协议](evaluation.md)。
 

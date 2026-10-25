@@ -1,37 +1,1613 @@
-const $=s=>document.querySelector(s),esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-let overview,tab='sessions',selectedRun=null,session=null,currentJob=null;
-const dateText=value=>value?new Intl.DateTimeFormat('zh-CN',{timeZone:'Asia/Singapore',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hour12:false}).format(new Date(value))+' UTC+8':'';
-const timeText=value=>value?new Intl.DateTimeFormat('zh-CN',{timeZone:'Asia/Singapore',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false}).format(new Date(value)):'';
-const nextActions={repair_evidence_or_start_new_task:'先处理证据或源码变化，再创建新任务',diagnose_before_new_task:'先定位重复失败，再创建新任务',deliver_evidence:'验收已通过，可交付对应证据',review_unmet_goal:'核对未满足的工程验收项',inspect_failed_step_then_resume_check:'查看失败步骤，再检查是否允许恢复'};
-const evalLabels={offline:'离线回归',online_eda:'真实 EDA',online_agent:'Agent 端到端',agent_mechanism:'执行与恢复机制',rag:'知识检索',evidence:'证据完整性',rtl:'RTL 仿真',system_implementation:'系统实现',agent_end_to_end:'会话任务验收',software_test:'软件检查',visible_query:'可见问题',scorecard_integrity:'成绩记录',workflow_run:'工作流',session_task:'会话任务'};
-const evalDescriptions={'offline-contracts':'用假 EDA、本机进程和 MCP 验证工具合同、目标验收、恢复和资源约束。','offline-retrieval':'24 条可见中英文检索问题；衡量规则命中，不衡量模型答案质量。','offline-evidence':'核验 11 组历史记录及可用原件的哈希；不重跑原 FPGA 工程。','online-counter':'运行真实 XSim，使用固定 Counter checker，并由执行框架核验功能结果。','online-axi':'运行 AXI 仿真、综合、布线和严格 DRC 检查；需要固定版本的 RTL 依赖。','online-agent':'核验已有 Pi 会话及其直接关联的工作流；评测器不启动模型。'};
-const labels={functional:'功能仿真',synthesis:'综合',setup:'Setup',hold:'Hold',constraints:'约束完整性',routing:'布局布线',drc:'DRC',cdc:'CDC',artifact_integrity:'证据完整性'};
-const badge=s=>`<span class="badge ${esc(s)}">${esc(({passed:'通过',completed:'已完成',failed:'失败',unknown:'待核验',review_required:'需审查',not_requested:'本次未要求',running:'运行中',blocked:'缺少前提',cancelled:'已取消',timed_out:'超时',pass:'通过'})[s]||s)}</span>`;
-async function api(route,data){const r=await fetch('/api/'+route,data?{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)}:{});const value=await r.json();if(!r.ok)throw new Error(value.error||r.statusText);return value;}
-function toast(text){$('#toast').textContent=text;$('#toast').style.display='block';setTimeout(()=>$('#toast').style.display='none',5000);}
-function guard(fn){return async e=>{try{await fn(e);}catch(error){toast(error.message);}};}
-function detail(html){$('#detail').innerHTML=html;}
-function sourceLink(source){try{if(new URL(source.url).protocol!=='https:')return esc(source.title);}catch{return esc(source.title);}return `<a href="${esc(source.url)}" target="_blank" rel="noreferrer">${esc(source.title)}</a>`;}
-function rulesHtml(rules,sources){return rules.map(r=>`<article class="rule"><div class="meta"><code>${esc(r.id)}</code> · ${esc(r.classification)}</div><h3>${esc(r.title)}</h3><p>${esc(r.statement)}</p><div class="meta">适用范围：${esc(r.scope)}</div>${r.source_refs.map(ref=>`<span class="source">${sourceLink(sources.find(s=>s.id===ref.source_id)||{title:ref.source_id,url:ref.url})} · ${esc(ref.section)}</span>`).join('')}<details><summary>需要什么证据</summary><p>${esc(r.evidence_required.join('；'))}</p><p>${esc(r.static_proof_boundary)}</p></details></article>`).join('')||'<p class="muted">未找到相关规则。请补充时钟、接口或错误类型。</p>';}
-function contextDetail(c){detail(`<h2>任务上下文</h2><p class="muted">${c.rules.length} 条规则 · ${c.sops.length} 个相关 SOP · ${c.tools.length} 个工具合同</p>${c.sops.map(s=>`<button class="sop-button" data-sop="${esc(s.sop.id)}">${esc(s.sop.title)}<br><small class="meta">${esc(s.selection.method==='explicit_phase'?'按任务阶段选择':'按规则与问题关联选择')}</small></button>`).join('')}<h3>可用操作</h3>${c.tools.map(t=>`<details><summary>${esc(t.name)}</summary><p>${esc(t.description)}</p></details>`).join('')}<div class="notice">所选 SOP 提供指导；任务的验收合同决定完成条件。</div>`);bindSops();}
-function bindSops(){document.querySelectorAll('[data-sop]').forEach(b=>b.onclick=guard(async()=>{const s=await api('sop',{id:b.dataset.sop});detail(`<h2>${esc(s.sop.title)}</h2><pre class="evidence">${esc(s.content)}</pre><p class="muted">规则：${s.sop.rule_ids.map(esc).join('、')}</p>`);}));}
-function side(){const titles={sessions:'本地会话',runs:'执行记录',knowledge:'操作流程',evaluations:'评测分类'};$('#side-title').textContent=titles[tab];$('#new-session').hidden=tab!=='sessions';
-  if(tab==='sessions'){$('#side-list').innerHTML=overview.sessions.map(s=>`<button class="item ${session?.id===s.id?'selected':''}" data-session="${esc(s.id)}"><strong>${esc(s.title)}</strong><small>本地知识模式 · ${esc(dateText(s.updated_at))}</small></button>`).join('')||'<p class="muted">新建会话，输入当前工程问题。</p>';document.querySelectorAll('[data-session]').forEach(b=>b.onclick=guard(async()=>{session=await api('session?id='+encodeURIComponent(b.dataset.session));render();}));}
-  else if(tab==='runs'){$('#side-list').innerHTML=overview.runs.filter(r=>r.workflow||r.pi_session).slice(0,45).map(r=>`<button class="item ${selectedRun===r.id?'selected':''}" data-run="${esc(r.id)}"><strong>${r.workflow?'任务流程':'Pi 会话'}</strong><small>${esc(r.id.slice(0,24))} ${badge(r.status)}</small></button>`).join('')||'<p class="muted">运行任务后会在这里保留记录。</p>';document.querySelectorAll('[data-run]').forEach(b=>b.onclick=guard(()=>showRun(b.dataset.run)));}
-  else if(tab==='knowledge'){$('#side-list').innerHTML=overview.sops.map(s=>`<button class="item" data-sop="${esc(s.id)}"><strong>${esc(s.title)}</strong><small>${esc(s.id)}</small></button>`).join('');bindSops();}
-  else{$('#side-list').innerHTML=`<div class="item"><strong>离线回归</strong><small>机制 · RAG · 证据完整性</small></div><div class="item"><strong>现场 EDA</strong><small>真实仿真、综合、布局布线</small></div><div class="item"><strong>Agent 端到端</strong><small>会话与任务因果关联、目标验收</small></div><div class="notice">分类与计分单位独立。缺少前提不会记作通过。</div>`;}}
-function sessionView(){const msgs=session?.messages||[];$('#content').innerHTML=`<div class="intro"><h1>${session?'工程会话':'从一个工程问题开始'}</h1><p>描述接口、时钟、约束或失败现象，查看相关规则、流程和工具。</p></div><div class="notice">当前为本地知识模式。消息触发检索与证据整理，不生成模型回答，不调用模型 API。</div><div class="chat">${msgs.map(m=>m.role==='user'?`<article class="message user"><div class="byline">你</div><pre>${esc(m.text)}</pre></article>`:m.role==='error'?`<article class="message error">${esc(m.text)}</article>`:`<article class="message"><div class="byline">本地检索 · ${m.context.rules.length} 条规则</div>${rulesHtml(m.context.rules.slice(0,3),m.context.sources)}<div class="meta">${esc(m.context.evidence?.split(/[\\/]/).at(-1)||'')}</div></article>`).join('')||'<div class="panel"><h3>把目标写具体</h3><p class="muted">例如：AXI 工程已经能仿真，100 MHz 布线后 hold 失败，应怎样定位并固定验收？</p><p class="muted">系统会给出适用规则、SOP 和工具合同。执行仍需明确任务规格。</p></div>'}</div><form id="composer" class="composer"><textarea id="message" aria-label="工程问题" placeholder="描述工程目标或当前失败…" maxlength="2048" required></textarea><div class="toolbar"><select id="phase" aria-label="任务阶段"><option value="">自动选择相关流程</option value="planning">任务规划</option><option value="simulation">功能验证</option><option value="timing">时序诊断</option><option value="recovery">证据与恢复</option><option value="cdc">多时钟 CDC</option><option value="ip">IP 集成</option></select><button class="primary" type="submit">检索并整理上下文</button></div></form>`;
-  $('#composer').onsubmit=guard(async e=>{e.preventDefault();const b=e.submitter;b.disabled=true;try{session=await api('session',{id:session?.id,message:$('#message').value,phase:$('#phase').value});overview=await api('overview');render();}finally{b.disabled=false;}});
-  const last=msgs.filter(m=>m.context).at(-1);if(last)contextDetail(last.context);else detail('<h2>可选择的流程</h2><p class="muted">任务规划、RTL 功能验证、时序诊断、CDC 审查、IP 集成、证据复核与恢复。</p><h3>执行边界</h3><p class="muted">知识命中不会启动 EDA。运行前固定来源、器件、时钟、checker 和验收范围。</p>');}
-function taskLauncher(){return `<div class="panel"><h3>固定规格任务</h3><select id="spec" aria-label="任务规格">${overview.specimens.map(s=>`<option value="${s}">${({ 'offline-review':'离线证据复核','counter-simulation':'Counter 功能仿真','axi-fabric-ooc':'AXI 3×3 系统实现'})[s]}</option>`).join('')}</select><div class="toolbar"><button id="plan">查看计划与验收</button><button id="execute" class="primary">运行离线复核</button></div><p class="muted" id="execution-note">离线复核只读取本机状态与历史证据。</p><div id="job"></div></div>`;}
-function bindLauncher(){const s=$('#spec');s.onchange=()=>{$('#execute').textContent=s.value==='offline-review'?'运行离线复核':'执行真实 EDA';$('#execution-note').textContent=s.value==='offline-review'?'离线复核只读取本机状态与历史证据。':'将启动本机 EDA；需要工具、许可证及固定 RTL 依赖，结果写入新目录。';};$('#plan').onclick=guard(async()=>{const p=await api('workflow',{action:'plan',spec:s.value});detail(`<h2>任务计划</h2><p>${esc(p.spec.goal)}</p><p class="muted">${Object.keys(p.input_hashes).length} 个固定输入 · ${p.spec.limits.max_calls} 次调用 · ${p.spec.limits.wall_seconds} 秒预算</p><h3>验收领域</h3><p>${esc(p.acceptance?.required.map(d=>labels[d]).join('、')||'未绑定工程目标')}</p><h3>选定 SOP</h3><p class="muted">${esc(p.guidance?.sop_ids.join('、'))}</p>`);});$('#execute').onclick=guard(async()=>{const j=await api('workflow',{action:'run',spec:s.value});watchJob(j);});}
-async function watchJob(j){currentJob=j.id;const container=$('#job')||$('#eval-job');if(container)container.innerHTML=`${badge('running')} <span class="meta">${esc(j.kind)}</span> <button id="cancel-job">取消本任务</button>`;if($('#cancel-job'))$('#cancel-job').onclick=guard(()=>api('cancel',{id:j.id}));
-  const poll=async()=>{try{const state=await api('job?id='+j.id);if(state.status==='running')return setTimeout(poll,1500);currentJob=null;toast(state.error||('任务状态：'+state.status));overview=await api('overview');if(state.result?.directory&&j.kind.startsWith('workflow'))await showRun(state.result.directory.split(/[\\/]/).at(-1));else if(tab==='evaluations')await evaluationsView();}catch(e){toast(e.message);}};setTimeout(poll,800);}
-async function showRun(id){selectedRun=id;tab='runs';document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));side();const r=await api('run?id='+encodeURIComponent(id)),w=r.workflow;
-  $('#content').innerHTML=`<div class="intro"><h1>${w?'工程任务':'Agent 会话'}</h1><p>${esc(w?.goal||r.prompt||r.manifest.tool)}</p><div class="meta">${esc(id)}</div></div><div class="toolbar">${badge(r.manifest.status)}<span class="meta">证据完整性：${r.inspection.valid?'已核对':'存在缺失或运行未结束'}</span><button id="refresh-run">刷新记录</button></div>${w?.steps?`<div class="steps">${w.steps.map(s=>`<div class="step ${w.completed_steps.includes(s.id)?'done':''}"><strong>${esc(s.id)}</strong><small>${esc(s.tool)}</small></div>`).join('')}</div>`:''}${w?.task_acceptance?`<h2>工程目标验收 ${badge(w.task_acceptance.status)}</h2><div class="table-wrap"><table><thead><tr><th>领域</th><th>状态</th><th>依据</th></tr></thead><tbody>${w.task_acceptance.domains.map(d=>`<tr><td>${labels[d.domain]||esc(d.domain)}</td><td>${badge(d.status)}</td><td>${esc(d.reason||d.step||'本次未要求')}<br><small class="meta">${esc(d.evidence?.sha256?.slice(0,16)||'')}</small></td></tr>`).join('')}</tbody></table></div>`:''}<h2>执行时间线 <small class="meta">UTC+8</small></h2><ol class="timeline">${r.events.filter(e=>!['input_captured','workflow_checkpoint','dependency_unresolved'].includes(e.type)).slice(-35).map(e=>`<li><time>${esc(timeText(e.time))}</time>${esc(e.type)} ${e.step?'<strong>'+esc(e.step)+'</strong>':''} ${e.status?badge(e.status):''}</li>`).join('')}</ol>${taskLauncher()}`;
-  $('#refresh-run').onclick=guard(()=>showRun(id));bindLauncher();detail(`<h2>证据与下一步</h2><p>${esc(nextActions[w?.recovery?.next_action]||'查看运行日志和输入快照')}</p><p class="muted">${esc(w?.task_acceptance?.scope||r.inspection.scope||'执行结果不代表设计签核')}</p>${w?.recovery?.stalled?'<div class="notice">同一失败已出现三次，继续恢复前需要诊断。</div>':''}<h3>尚待处理</h3><p class="muted">${esc([...(w?.issues||[]),...(r.inspection.validation_issues||[])].join('\n')||'没有发现文件完整性问题')}</p><h3>用量边界</h3><p class="muted">本地检查不调用模型 API。外层 Codex token 未计量。</p>`);}
-function knowledgeView(){$('#content').innerHTML='<div class="intro"><h1>知识与操作流程</h1><p>按工程问题检索，核对版本、适用条件与需要取得的证据。</p></div><form id="search" class="toolbar"><input id="query" aria-label="检索知识" placeholder="例如：跨时钟总线一致性" required><button class="primary">检索</button></form><div id="search-results" class="panel"><p class="muted">36 条规则、21 个来源、6 个 SOP。检索分数表示相关性。</p></div>';$('#search').onsubmit=guard(async e=>{e.preventDefault();const c=await api('context',{query:$('#query').value});$('#search-results').innerHTML=rulesHtml(c.rules,c.sources);contextDetail(c);});detail('<h2>如何使用结果</h2><p class="muted">先核对适用范围，再读取 SOP；把器件、时钟、输入和验收领域写入任务规格。</p><p class="muted">当前为本地词项检索，未评估模型答案的引用忠实度。</p>');}
-async function evaluationsView(){const data=await api('evaluations');$('#content').innerHTML=`<div class="intro"><h1>分层评测</h1><p>每项保留协议、计分单位、输入和证据。历史成绩与当前评测分别查看。</p></div><div class="eval-list">${data.suites.map(s=>{const latest=data.receipts.find(r=>r.suite===s.id);return `<article class="eval-row"><div class="meta">${esc(evalLabels[s.lane])} · ${esc(evalLabels[s.category])} · ${esc(evalLabels[s.unit])}</div><h3>${esc(s.id)}</h3><p class="muted">${esc(evalDescriptions[s.id])}</p>${s.id==='online-agent'?'<div class="agent-evidence"><label>Pi 会话目录<input id="agent-session" placeholder="artifacts/native-agent-…"></label><label>关联工作流目录<input id="agent-workflow" placeholder="artifacts/…-eda_workflow_run-…"></label></div>':''}<div class="toolbar">${latest?badge(latest.status):'<span class="badge">当前无评测回执</span>'}<button data-eval="${s.id}" >${s.launches_eda?'启动真实 EDA 评测':s.id==='online-agent'?'核验已有会话':'运行离线评测'}</button></div>${latest?'<p class="meta">'+esc(dateText(latest.finished_at||latest.started_at))+' · '+(latest.freshness.current_sources_match===true?'记录的协议源码与当前一致':latest.freshness.current_sources_match===false?'源码已变更，按历史记录查看':'没有源码指纹')+'</p>':''}${latest?.task_acceptance?`<p class="meta">工程结论：${badge(latest.task_acceptance.status)} · ${latest.task_acceptance.domains.filter(d=>d.status==='passed').length} 个领域通过</p><button data-eval-run="${esc(latest.workflow?.split(/[\\/]/).at(-1))}">查看领域验收与证据</button>`:''}${latest?.metrics?`<p class="meta">Hit@5：${latest.metrics.before.hits}/${latest.metrics.before.total} → ${latest.metrics.after.hits}/${latest.metrics.after.total}；可见回归集</p>`:''}</article>`;}).join('')}</div><div id="eval-job"></div><h2 class="section-title">历史功能成绩</h2><div class="table-wrap"><table><thead><tr><th>功能记录</th><th>结果</th><th>计分单位</th></tr></thead><tbody>${overview.history.map(r=>`<tr><td>${esc(r.title)}<details><summary>验收边界</summary><p>${esc(r.limitations)}</p></details></td><td>${r.passed!==undefined?r.passed+'/'+r.total:r.wns_gain_ns!==undefined?r.wns_gain_ns+' ns':'见原始分类'}</td><td>${esc(r.unit)}</td></tr>`).join('')}</tbody></table></div>`;document.querySelectorAll('[data-eval]').forEach(b=>b.onclick=guard(async()=>{const j=await api('evaluate',{suite:b.dataset.eval,...(b.dataset.eval==='online-agent'?{session_directory:$('#agent-session').value.trim(),workflow_directory:$('#agent-workflow').value.trim()}:{})});watchJob(j);}));document.querySelectorAll('[data-eval-run]').forEach(b=>b.onclick=guard(()=>showRun(b.dataset.evalRun)));detail('<h2>计分原则</h2><p class="muted">软件检查、检索问题、FPGA 工程与会话任务使用不同分母，不合并成总分。</p><div class="notice">Agent 端到端评测需要真实会话与因果关联的子任务。当前模型 API 已停用，评测器不会代为启动模型。</div><h3>命令行入口</h3><pre class="evidence">npm run evaluate -- list\nnpm run evaluate -- plan online-agent</pre>');}
-async function render(){document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));side();if(tab==='sessions')sessionView();else if(tab==='knowledge')knowledgeView();else if(tab==='evaluations')await evaluationsView();else if(selectedRun)await showRun(selectedRun);else{$('#content').innerHTML='<div class="intro"><h1>执行记录</h1><p>选择左侧任务，核对阶段进展、目标验收和证据。</p></div>'+taskLauncher();bindLauncher();detail('<h2>运行与验收</h2><p class="muted">流程完成只说明执行结束。工程结论由独立领域检查给出。</p>');}}
-document.querySelectorAll('nav button').forEach(b=>b.onclick=guard(async()=>{tab=b.dataset.tab;overview=await api('overview');await render();}));$('#new-session').onclick=guard(async()=>{session=null;await render();});
-guard(async()=>{overview=await api('overview');$('.policy').textContent=overview.config.model_api_enabled?'本地运行 · 模型会话需单独启动':'本地运行 · 模型 API 停用';await render();})();
+const $ = (selector) => document.querySelector(selector);
+const esc = (value) =>
+  String(value ?? "").replace(
+    /[&<>"']/g,
+    (c) =>
+      ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[
+        c
+      ],
+  );
+const paths = {
+  chip: '<rect x="6" y="6" width="12" height="12" rx="2"/><path d="M9 1v5m6-5v5M9 18v5m6-5v5M1 9h5m-5 6h5m12-6h5m-5 6h5"/><path d="M10 10h4v4h-4z"/>',
+  plus: '<path d="M12 5v14M5 12h14"/>',
+  chat: '<path d="M21 11.5a8.5 8.5 0 0 1-8.5 8.5H4l-3 2v-10A8.5 8.5 0 0 1 9.5 3h3a8.5 8.5 0 0 1 8.5 8.5Z"/><path d="M7 9h9M7 13h6"/>',
+  runs: '<rect x="4" y="3" width="16" height="18" rx="2"/><path d="m8 8 1 1 2-2m-3 7 1 1 2-2m3-5h3m-3 6h3"/>',
+  book: '<path d="M12 5c-3-2-6-2-10-1v15c4-1 7-1 10 1m0-15c3-2 6-2 10-1v15c-4-1-7-1-10 1V5Z"/>',
+  chart: '<path d="M4 3v18h17M8 16v-5m5 5V7m5 9V4"/>',
+  search: '<circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/>',
+  more: '<circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/>',
+  settings: '<path d="M4 6h16M4 18h16M9 3v6m6 6v6"/>',
+  arrow: '<path d="m5 12 7-7 7 7M12 5v14"/>',
+  right: '<path d="m9 5 7 7-7 7"/>',
+  back: '<path d="m14 5-7 7 7 7"/>',
+  close: '<path d="m6 6 12 12M6 18 18 6"/>',
+  shield:
+    '<path d="m12 3 8 3v5c0 5-4 8-8 10-4-2-8-5-8-10V6l8-3Z"/><path d="m8 12 3 3 5-6"/>',
+  flow: '<rect x="3" y="3" width="6" height="5" rx="1"/><rect x="15" y="16" width="6" height="5" rx="1"/><path d="M6 8v9h9m-9-5h12V8"/><rect x="15" y="3" width="6" height="5" rx="1"/>',
+  clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+  wave: '<path d="M2 12h4l2-7 4 14 3-10 2 3h5"/>',
+  check: '<path d="m5 12 4 4L19 6"/>',
+  play: '<path d="m8 5 11 7-11 7V5Z"/>',
+  stop: '<rect x="5" y="5" width="14" height="14" rx="2"/>',
+  refresh:
+    '<path d="M20 7v5h-5M4 17v-5h5"/><path d="M5 8a8 8 0 0 1 13-4l2 3M4 17l2 3a8 8 0 0 0 13-4"/>',
+  file: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6Z"/><path d="M14 2v6h6M8 13h8m-8 4h5"/>',
+  folder:
+    '<path d="M3 7V5a2 2 0 0 1 2-2h5l2 3h7a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7Z"/>',
+  warning: '<path d="m12 3 10 18H2L12 3Z"/><path d="M12 9v5m0 3h.01"/>',
+  menu: '<path d="M4 6h16M4 12h16M4 18h16"/>',
+  link: '<path d="m10 13 4-4m-6 7-1 1a4 4 0 0 1-6-6l4-4a4 4 0 0 1 6 0m2-1 1-1a4 4 0 0 1 6 6l-4 4a4 4 0 0 1-6 0"/>',
+  archive:
+    '<rect x="3" y="3" width="18" height="5" rx="1"/><path d="M5 8v13h14V8M9 12h6"/>',
+  tool: '<path d="M14 6a5 5 0 0 0-6 6l-6 6 4 4 6-6a5 5 0 0 0 6-6l-3 3-4-4 3-3Z"/>',
+};
+const icon = (name) =>
+  `<svg viewBox="0 0 24 24" aria-hidden="true">${paths[name] || paths.file}</svg>`;
+const statusNames = {
+  passed: "通过",
+  pass: "通过",
+  completed: "执行完成",
+  failed: "失败",
+  error: "失败",
+  unknown: "待核验",
+  review_required: "需审查",
+  not_requested: "未要求",
+  not_evaluated: "未评估",
+  running: "运行中",
+  planned: "待执行",
+  awaiting_confirmation: "待执行",
+  cancel_requested: "正在停止",
+  cancelled: "已停止",
+  timed_out: "超时",
+  blocked: "缺少前提",
+  interrupted: "已中断",
+  queued: "排队中",
+};
+const badge = (status) =>
+  `<span class="badge ${esc(status)}"><span class="dot"></span>${esc(statusNames[status] || status || "待核验")}</span>`;
+const domainNames = {
+  functional: "功能仿真",
+  synthesis: "综合",
+  setup: "建立时间",
+  hold: "保持时间",
+  constraints: "时钟与约束",
+  routing: "布局布线",
+  drc: "设计规则检查",
+  cdc: "跨时钟域",
+  artifact_integrity: "证据完整性",
+};
+const profileNames = {
+  evidence_review: "证据复核",
+  rtl_simulation: "RTL 功能验收",
+  fpga_ooc: "FPGA 实现验收",
+};
+const phaseNames = {
+  planning: "任务规划",
+  simulation: "功能仿真",
+  timing: "时序诊断",
+  cdc: "跨时钟审查",
+  ip: "IP 集成",
+  recovery: "复核与恢复",
+};
+const toolNames = {
+  eda_preflight: "检查本地环境",
+  eda_sop: "读取操作流程",
+  eda_results_verify: "核验历史证据",
+  eda_xsim: "RTL 功能仿真",
+  eda_vivado_synthesize: "设计综合",
+  eda_vivado_implement: "布局与布线",
+  eda_vivado_report_drc: "设计规则检查",
+  eda_task_context: "检索任务上下文",
+  eda_workflow_run: "工程任务",
+  eda_workflow_plan: "工程计划",
+  "pi-sdk-agent": "Pi Agent 会话",
+};
+const specs = {
+  "offline-review": {
+    title: "历史工程证据复核",
+    description:
+      "核对本地配置、操作流程和保留的复杂项目证据。适合先跑通任务闭环。",
+    scope: "只读本地证据",
+    icon: "shield",
+  },
+  "counter-simulation": {
+    title: "Counter 功能仿真",
+    description: "固定 RTL 与 checker，执行 XSim，检查计数、复位、保持和回绕。",
+    scope: "真实 XSim 仿真",
+    icon: "wave",
+  },
+  "axi-fabric-ooc": {
+    title: "AXI 3×3 系统实现",
+    description: "从系统级仿真到综合、布局布线与 DRC，分别核验功能和实现质量。",
+    scope: "真实 Vivado 工程",
+    icon: "chip",
+  },
+};
+const suiteNames = {
+  "offline-contracts": "Agent 机制回归",
+  "offline-retrieval": "RAG 检索质量",
+  "offline-evidence": "历史证据完整性",
+  "online-counter": "RTL 功能验证",
+  "online-axi": "AXI 系统实现",
+  "online-agent": "Agent 端到端验收",
+};
+const suiteDescriptions = {
+  "offline-contracts":
+    "检查工具契约、任务验收、失败恢复和资源租约。使用假 EDA 后端与本机进程。",
+  "offline-retrieval":
+    "使用 24 条可见中英文问题，检查相关规则命中及无关问题拒绝。",
+  "offline-evidence": "核验历史功能记录、公开证据及本机可用原件的哈希。",
+  "online-counter":
+    "运行固定 Counter checker，由执行框架回读结果，核验功能是否满足规格。",
+  "online-axi":
+    "运行 AXI 仿真、综合、布线与严格 DRC 审查，保留每个领域的独立结论。",
+  "online-agent":
+    "核验真实 Pi 会话及其直接关联的工程任务。需要已有会话和工作流证据。",
+};
+const unitNames = {
+  software_test: "软件检查",
+  visible_query: "可见检索问题",
+  scorecard_integrity: "成绩记录",
+  workflow_run: "工程任务",
+  session_task: "会话任务",
+};
+const eventNames = {
+  run_started: "开始执行",
+  run_finished: "执行结束",
+  workflow_started: "工程任务开始",
+  workflow_step_started: "开始步骤",
+  workflow_step_finished: "步骤结束",
+  workflow_step_completed: "步骤完成",
+  workflow_completed: "工程任务完成",
+  tool_execution_start: "开始调用工具",
+  tool_execution_end: "工具返回",
+  task_acceptance: "核验工程目标",
+  task_outcome: "核验工程目标",
+  terminal: "执行结束",
+  session_created: "创建会话",
+  task_planned: "任务计划已保存",
+  job_started: "开始执行任务",
+  job_finished: "任务执行结束",
+  message_saved: "保存会话消息",
+  cancel_requested: "请求停止任务",
+};
+const state = {
+  overview: null,
+  view: "sessions",
+  id: "",
+  session: null,
+  run: null,
+  routeVersion: 0,
+  archive: false,
+  sessionQuery: "",
+  drafts: {},
+  phase: "planning",
+  sending: false,
+  interaction: "local",
+  live: new Map(),
+  stream: null,
+  evalLane: "offline",
+  evaluations: null,
+  runTab: "acceptance",
+  runFilter: "workflow",
+  runQuery: "",
+  contexts: new Map(),
+  tasks: new Map(),
+  eventsAfter: new Map(),
+  pollBusy: false,
+  drawerReturn: null,
+};
+try {
+  state.drafts = JSON.parse(
+    localStorage.getItem("eda.workbench.drafts") || "{}",
+  );
+} catch {}
+function saveDraft() {
+  try {
+    localStorage.setItem("eda.workbench.drafts", JSON.stringify(state.drafts));
+  } catch {}
+}
+function date(value, timeOnly = false) {
+  if (!value || !Number.isFinite(Date.parse(value))) return "时间未记录";
+  return new Intl.DateTimeFormat("zh-CN", {
+    timeZone: "Asia/Singapore",
+    ...(timeOnly ? {} : { month: "2-digit", day: "2-digit" }),
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  }).format(new Date(value));
+}
+function basename(value) {
+  return (
+    String(value || "")
+      .split(/[\\/]/)
+      .filter(Boolean)
+      .at(-1) || ""
+  );
+}
+function duration(start, end) {
+  if (!start || !end) return "";
+  const n = Math.max(
+    0,
+    Math.round((Date.parse(end) - Date.parse(start)) / 1000),
+  );
+  return Number.isFinite(n)
+    ? n < 60
+      ? `${n} 秒`
+      : `${Math.floor(n / 60)} 分 ${n % 60} 秒`
+    : "";
+}
+async function api(route, data) {
+  const response = await fetch(
+    "/api/" + route,
+    data === undefined
+      ? {}
+      : {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        },
+  ).catch((error) => {
+    setConnection(false);
+    throw error;
+  });
+  setConnection(true);
+  let result;
+  try {
+    result = await response.json();
+  } catch {
+    throw new Error("本地服务未返回有效响应，请刷新重试。");
+  }
+  if (!response.ok)
+    throw new Error(result.error || `请求失败 (${response.status})`);
+  return result;
+}
+function setConnection(connected) {
+  state.connected = connected;
+  const row = document.querySelector(".connection-row");
+  if (!row) return;
+  row.classList.toggle(
+    "disconnected",
+    !connected || Boolean(state.streamReconnecting),
+  );
+  row.querySelector("span:last-child").textContent = !connected
+    ? "连接断开，正在重连…"
+    : state.streamReconnecting
+      ? "实时更新正在重连…"
+      : "本地工作区已连接";
+}
+function toast(text, error = false) {
+  const el = $("#toast");
+  el.textContent = text;
+  el.classList.toggle("error", error);
+  el.hidden = false;
+  clearTimeout(toast.timer);
+  toast.timer = setTimeout(() => {
+    el.hidden = true;
+  }, 5500);
+}
+const guard = (fn) => async (event) => {
+  try {
+    await fn(event);
+  } catch (error) {
+    toast(error.message, true);
+  }
+};
+function go(view, id = "") {
+  const hash = "#/" + view + (id ? "/" + encodeURIComponent(id) : "");
+  if (location.hash === hash) void renderRoute();
+  else location.hash = hash;
+  $("#app").classList.remove("rail-open");
+}
+function parseRoute() {
+  const [view = "sessions", id = ""] = location.hash
+    .replace(/^#\/?/, "")
+    .split("/");
+  return {
+    view: ["sessions", "runs", "knowledge", "evaluations"].includes(view)
+      ? view
+      : "sessions",
+    id: decodeURIComponent(id),
+  };
+}
+async function refreshOverview() {
+  state.overview = await api("overview");
+  return state.overview;
+}
+function button(action, label, name, extra = "", kind = "") {
+  return `<button class="button ${kind}" data-action="${action}" ${extra}>${name ? icon(name) : ""}${esc(label)}</button>`;
+}
+function iconButton(action, label, name, extra = "") {
+  return `<button class="icon-button" data-action="${action}" aria-label="${esc(label)}" title="${esc(label)}" ${extra}>${icon(name)}</button>`;
+}
+function empty(title, detail, name = "folder", action = "") {
+  return `<div class="empty-state">${icon(name)}<h2>${esc(title)}</h2><p>${esc(detail)}</p>${action}</div>`;
+}
+function sourceLink(source) {
+  try {
+    const url = new URL(source.url);
+    if (url.protocol === "https:")
+      return `<a href="${esc(url.href)}" target="_blank" rel="noreferrer">${esc(source.title || source.section || source.source_id || url.hostname)}</a>`;
+  } catch {}
+  return `<span>${esc(source.title || source.source_id || "本地来源")}</span>`;
+}
+function renderSidebar() {
+  const o = state.overview;
+  if (!o) return;
+  const nav = [
+    ["sessions", "工作会话", "chat"],
+    ["runs", "执行记录", "runs"],
+    ["knowledge", "知识与流程", "book"],
+    ["evaluations", "评测中心", "chart"],
+  ];
+  $("#sidebar").innerHTML =
+    `<div class="brand"><span class="brand-mark">${icon("chip")}</span><div>EDA Agent<span class="brand-sub">FPGA 工作台</span></div></div>${button("new-session", "新建会话", "plus", "", "new-session")}<nav class="main-nav" aria-label="主要页面">${nav.map(([id, label, i]) => `<button class="nav-item ${state.view === id ? "active" : ""}" data-action="navigate" data-view="${id}" ${state.view === id ? 'aria-current="page"' : ""}>${icon(i)}<span>${label}</span>${id === "runs" ? `<span class="count">${o.runs.filter((r) => r.workflow).length}</span>` : ""}</button>`).join("")}</nav><div class="session-section-heading"><span>${state.archive ? "已归档会话" : "最近会话"}</span><button data-action="toggle-archive">${state.archive ? "返回活跃" : "查看归档"}</button></div><label class="session-search">${icon("search")}<input id="session-search" aria-label="搜索会话" placeholder="搜索会话" value="${esc(state.sessionQuery)}"></label><div id="session-list" class="session-list"></div><div class="rail-footer"><div class="connection-row"><span class="dot"></span><span>本地工作区已连接</span></div>${button("settings", "运行模式与连接", "settings", "", "subtle")}</div>`;
+  renderSessionList();
+  setConnection(state.connected !== false);
+}
+function renderSessionList() {
+  if (!$("#session-list")) return;
+  const sessions = state.overview.sessions.filter(
+    (s) =>
+      Boolean(s.archived || s.archived_at) === state.archive &&
+      String(s.title || "")
+        .toLowerCase()
+        .includes(state.sessionQuery.toLowerCase()),
+  );
+  $("#session-list").innerHTML = sessions.length
+    ? sessions
+        .map(
+          (s) =>
+            `<div class="session-row ${state.view === "sessions" && state.id === s.id ? "active" : ""}"><button class="session-select" data-action="select-session" data-id="${esc(s.id)}" ${state.id === s.id ? 'aria-current="true"' : ""}><span class="truncate">${esc(s.title || "新会话")}</span><small>${date(s.updated_at)}</small></button><span class="session-actions">${iconButton("session-menu", "会话操作", "more", `data-id="${esc(s.id)}"`)}</span></div>`,
+        )
+        .join("")
+    : `<p class="sidebar-empty">${state.sessionQuery ? "没有匹配的会话。" : state.archive ? "归档会话会保留在这里。" : "任务、消息和执行证据<br>会保存在每个会话中。"}</p>`;
+}
+function renderHeader(title, subtitle = "", actions = "") {
+  $("#page-header").innerHTML =
+    `${iconButton("toggle-rail", "打开导航", "menu").replace('class="icon-button"', 'class="icon-button mobile-menu"')}<div class="header-title"><h1 class="truncate">${esc(title)}</h1>${subtitle ? `<p>${esc(subtitle)}</p>` : ""}</div><div class="header-actions"><span class="mode-label">${icon("shield")}<span>${state.overview?.config.model_api_enabled ? "本地工具流程" : "本地流程模式"}</span></span>${actions ? '<span class="header-divider"></span>' + actions : ""}</div>`;
+}
+function welcome() {
+  const starters = [
+    [
+      "wave",
+      "准备 RTL 功能验证",
+      "固定接口、激励与验收条件",
+      "请帮我规划 RTL 功能仿真，检查复位、背压和 scoreboard 的验收条件。",
+      "simulation",
+    ],
+    [
+      "clock",
+      "分析时序收敛路径",
+      "从时钟约束到关键路径",
+      "时序收敛应该先检查哪些时钟约束、关键路径和 setup hold 证据？",
+      "timing",
+    ],
+    [
+      "flow",
+      "审查跨时钟设计",
+      "检查同步器与总线一致性",
+      "跨时钟总线一致性与异步 FIFO 需要哪些 CDC 审查证据？",
+      "cdc",
+    ],
+    [
+      "shield",
+      "复核已有工程结果",
+      "核验记录、来源和恢复条件",
+      "请复核已有 FPGA 工程的输入、证据和恢复条件。",
+      "recovery",
+    ],
+  ];
+  return `<section class="welcome"><div class="welcome-symbol">${icon("chip")}</div><h2>从一个 FPGA 任务开始</h2><p>整理设计目标，选择工程流程，让每一步执行都有依据。<br>在同一个会话中连接知识、工具和验收结果。</p><div class="pipeline"><span>${icon("chat")}任务规格</span><span class="pipe-line"></span><span>${icon("book")}知识与 SOP</span><span class="pipe-line"></span><span>${icon("flow")}工具执行</span><span class="pipe-line"></span><span>${icon("shield")}证据验收</span></div><div class="starter-grid">${starters.map(([i, t, d, q, p]) => `<button class="starter" aria-label="${esc(t)}" data-action="starter" data-query="${esc(q)}" data-phase="${p}">${icon(i)}<span><strong>${t}</strong><small>${d}</small></span></button>`).join("")}</div><div class="welcome-foot">${icon("shield")}${state.overview.config.model_api_enabled ? "可使用本地工程流程，也可切换至 Pi Agent 会话。" : "当前使用本地检索与工程工具；模型 API 已停用。"}</div></section>`;
+}
+function contextHtml(context, key) {
+  state.contexts.set(key, context);
+  const rules = context.rules || [],
+    sops = context.sops || [];
+  return `<p class="message-intro">${rules.length ? `已整理与任务相关的 ${rules.length} 条规则${sops.length ? `，并选出 ${sops.length} 个操作流程` : ""}。执行前请确认适用范围与验收证据。` : "知识库中没有匹配的规则。可以补充器件、接口、时钟或具体错误，再次检索。"}</p><ul class="context-rules">${rules
+    .slice(0, 3)
+    .map(
+      (r) =>
+        `<li><strong>${esc(r.title)}</strong><p>${esc(r.statement)}</p></li>`,
+    )
+    .join(
+      "",
+    )}</ul>${sops.length ? `<div class="context-callout"><p>建议流程：${sops.map((s) => esc(s.sop.title)).join("、")}</p></div>` : ""}<div class="context-actions">${button("context-detail", "查看规则与来源", "book", `data-key="${esc(key)}"`)}${sops.map((s) => button("sop", s.sop.title, "file", `data-id="${esc(s.sop.id)}"`)).join("")}${button("templates", "准备工程任务", "flow")}</div><p class="context-footer">本地检索结果 · 尚未执行工程工具${context.context_budget ? ` · 选取 ${context.context_budget.selected_tools} 个相关工具` : ""}</p>`;
+}
+function taskHtml(task) {
+  state.tasks.set(task.id, task);
+  const plan = task.plan || {},
+    spec = plan.spec || {},
+    meta = specs[task.spec] || {
+      title: task.title || "自定义工程任务",
+      scope: "工程规格",
+    },
+    running = ["running", "queued", "cancel_requested"].includes(task.status),
+    planned = ["planned", "awaiting_confirmation"].includes(task.status),
+    result = task.result || {},
+    dir = result.directory || task.directory;
+  return `<article class="task-card" data-task-card="${esc(task.id)}"><div class="task-head"><span class="task-symbol">${icon(meta.icon || "flow")}</span><div><h3>${esc(meta.title)}</h3><p>${esc(meta.scope)}${spec.acceptance?.profile ? " · " + esc(profileNames[spec.acceptance.profile] || spec.acceptance.profile) : ""}</p></div>${badge(task.status)}</div><div class="task-content"><ol class="task-steps">${(spec.steps || []).map((step, i) => `<li><span class="step-marker">${i + 1}</span>${esc(toolNames[step.tool] || step.id)}</li>`).join("")}</ol><div class="task-facts"><span>${Object.keys(plan.input_hashes || {}).length} 个固定输入</span><span>最多 ${spec.limits?.max_calls ?? "—"} 次调用</span><span>${spec.limits?.wall_seconds ?? "—"} 秒预算</span></div>${result.task_acceptance ? `<div class="job-summary">工程验收 ${badge(result.task_acceptance.status)}</div>` : ""}${task.error ? `<p class="job-summary">${esc(task.error)}</p>` : ""}</div><div class="task-actions">${planned ? button("run-task", "确认并执行", "play", `data-id="${esc(task.id)}"`, "primary") : running ? button("cancel-job", task.status === "cancel_requested" ? "正在停止" : "停止任务", "stop", `data-id="${esc(task.job_id)}" ${task.status === "cancel_requested" ? "disabled" : ""}`) : dir ? button("open-run", "查看验收结果", "runs", `data-id="${esc(basename(dir))}"`) : ""}${button("task-detail", "计划详情", null, `data-id="${esc(task.id)}"`, "subtle")}<small>${planned ? "已保存输入指纹；执行前再次核验。" : running ? "工具在本机运行，状态持续保存。" : task.status === "completed" ? "执行结束；工程目标单独验收。" : "记录与失败证据已保留。"}</small></div></article>`;
+}
+function messagesHtml() {
+  const s = state.session,
+    messages = s?.messages || [],
+    tasks = new Map((s?.tasks || []).map((t) => [t.id, t]));
+  const included = new Set();
+  const output = messages
+    .map((m, index) => {
+      let body,
+        label,
+        avatar,
+        kind = m.role;
+      if (m.role === "task") {
+        const t = tasks.get(m.task_id);
+        if (!t) return "";
+        included.add(t.id);
+        body = taskHtml(t);
+        label = "工程任务";
+        avatar = icon("flow");
+      } else if (m.context) {
+        body = contextHtml(m.context, `${s.id}:${index}`);
+        label = "本地上下文";
+        avatar = icon("chip");
+        kind = "context";
+      } else {
+        body = `<div class="message-text">${esc(m.text || m.content || "")}</div>`;
+        label =
+          m.role === "user"
+            ? "你"
+            : m.role === "error"
+              ? "执行提示"
+              : m.role === "assistant"
+                ? "Agent"
+                : "工作区";
+        avatar = m.role === "user" ? "你" : icon("chip");
+      }
+      return `<article class="message ${esc(kind)}"><span class="avatar ${m.role === "user" ? "user" : ""}">${avatar}</span><div><div class="message-meta"><strong>${label}</strong><time>${date(m.at || m.created_at, true)}</time></div><div class="message-body">${body}</div></div></article>`;
+    })
+    .join("");
+  return (
+    output +
+    [...tasks.values()]
+      .filter((t) => !included.has(t.id))
+      .map(
+        (t) =>
+          `<article class="message task"><span class="avatar">${icon("flow")}</span><div><div class="message-meta"><strong>工程任务</strong></div>${taskHtml(t)}</div></article>`,
+      )
+      .join("") +
+    liveMessagesHtml() +
+    (state.sending
+      ? '<div class="inline-loading"><span class="spinner"></span>正在检索规则并整理任务上下文…</div>'
+      : "")
+  );
+}
+function liveMessagesHtml() {
+  const live = state.live.get(state.id);
+  if (!live) return "";
+  const saved = (state.session?.messages || []).some(
+    (m) => m.role === "assistant" && m.text === live.text,
+  );
+  const active = (state.overview.jobs || []).find(
+    (j) =>
+      j.session_id === state.id &&
+      j.kind === "agent" &&
+      ["running", "cancel_requested"].includes(j.status),
+  );
+  if (saved && !active) return "";
+  if (!live.text && !active) return "";
+  return `<article class="message assistant live-agent" data-live-run="${esc(live.run_id)}"><span class="avatar">${icon("chip")}</span><div><div class="message-meta"><strong>Pi Agent</strong><span class="meta live-status">${active ? "实时输出" : live.status === "completed" ? "回复完成" : "回复已停止"}</span>${active && active.controllable !== false ? button("cancel-job", "停止", "stop", `data-id="${esc(active.id)}"`, "subtle") : ""}</div><div class="message-body message-text live-text">${saved ? "" : esc(live.text)}</div><div class="live-tools" ${live.tools?.length ? "" : "hidden"}>${liveToolsHtml(live)}</div></div></article>`;
+}
+function liveToolsHtml(live) {
+  return (live.tools || [])
+    .slice(-4)
+    .map(
+      (t) =>
+        `<p>${icon(t.done ? "check" : "tool")}${esc(toolNames[t.name] || t.name)}${t.failed ? " · 失败" : t.done ? " · 已返回" : " · 执行中"}</p>`,
+    )
+    .join("");
+}
+function updateLiveDisplay(live) {
+  const row = document.querySelector(".live-agent");
+  if (!row || row.dataset.liveRun !== live.run_id) return renderMessages();
+  const scroller = $("#conversation-scroll");
+  const atLatest =
+    scroller.scrollHeight - scroller.scrollTop - scroller.clientHeight < 75;
+  row.querySelector(".live-text").textContent = live.text;
+  const tools = row.querySelector(".live-tools");
+  const toolHtml = liveToolsHtml(live);
+  if (tools.innerHTML !== toolHtml) tools.innerHTML = toolHtml;
+  tools.hidden = !live.tools.length;
+  if (!["running", "queued"].includes(live.status)) {
+    row.querySelector(".live-status").textContent =
+      live.status === "completed" ? "回复完成" : "回复已停止";
+    row.querySelector('[data-action="cancel-job"]')?.remove();
+  }
+  if (atLatest) scroller.scrollTop = scroller.scrollHeight;
+}
+function openSessionStream(id, version) {
+  state.stream?.close();
+  state.stream = null;
+  if (!id) return;
+  const after = state.eventsAfter.get(id) || 0;
+  const stream = new EventSource(
+    "/api/events?session_id=" +
+      encodeURIComponent(id) +
+      "&format=sse&after=" +
+      after,
+  );
+  state.stream = stream;
+  stream.onopen = () => {
+    if (state.stream === stream) {
+      state.streamReconnecting = false;
+      setConnection(true);
+    }
+  };
+  stream.onerror = () => {
+    if (state.stream === stream) {
+      state.streamReconnecting = true;
+      setConnection(state.connected !== false);
+    }
+  };
+  stream.addEventListener("update", (event) => {
+    if (version !== state.routeVersion || id !== state.id) return;
+    let row;
+    try {
+      row = JSON.parse(event.data);
+    } catch {
+      return;
+    }
+    if (
+      row.session_id !== id ||
+      row.sequence <= (state.eventsAfter.get(id) || 0)
+    )
+      return;
+    state.eventsAfter.set(id, row.sequence);
+    if (row.type === "job_finished" && state.live.has(id)) {
+      const live = state.live.get(id);
+      live.status = row.status;
+      updateLiveDisplay(live);
+    }
+    if (row.type !== "agent_event") return;
+    const e = row.event;
+    if (!e?.run_id) return;
+    let live = state.live.get(id);
+    if (!live || live.run_id !== e.run_id)
+      live = { run_id: e.run_id, text: "", tools: [], status: "running" };
+    if (e.type === "text_delta") {
+      if (live.messageEnded) {
+        live.text = "";
+        live.messageEnded = false;
+      }
+      live.text += e.text || "";
+    } else if (e.type === "assistant_message") {
+      live.text = e.text || "";
+      live.messageEnded = true;
+    } else if (e.type === "tool_execution_start")
+      live.tools.push({ id: e.toolCallId, name: e.toolName, done: false });
+    else if (e.type === "tool_execution_end") {
+      const tool = live.tools.find((t) => t.id === e.toolCallId);
+      if (tool) {
+        tool.done = true;
+        tool.failed = e.isError;
+      }
+    } else if (e.type === "run_end") live.status = e.status;
+    state.live.set(id, live);
+    updateLiveDisplay(live);
+  });
+}
+async function sendAgentMessage() {
+  if (!state.overview.config.model_api_enabled)
+    throw new Error("模型 API 已停用，请使用本地上下文模式。");
+  const input = $("#message-input"),
+    message = input?.value.trim();
+  if (!message) return;
+  const version = state.routeVersion,
+    target = state.id;
+  state.sending = true;
+  $('#composer button[type="submit"]').disabled = true;
+  try {
+    const session = target
+      ? state.session
+      : await api("session", { action: "create", title: message.slice(0, 60) });
+    await api("agent", { session_id: session.id, message });
+    state.drafts[target || "new"] = "";
+    saveDraft();
+    await refreshOverview();
+    if (version !== state.routeVersion) return;
+    if (!target) go("sessions", session.id);
+    else {
+      state.session = await api("session?id=" + encodeURIComponent(target));
+      input.value = "";
+      renderMessages({ scroll: true });
+    }
+  } finally {
+    state.sending = false;
+    if (version === state.routeVersion) {
+      const button = $('#composer button[type="submit"]');
+      if (button) button.disabled = false;
+    }
+  }
+}
+function renderMessages({ scroll = false } = {}) {
+  const list = $("#conversation-scroll");
+  if (!list) return;
+  const oldTop = list.scrollTop,
+    atBottom = list.scrollHeight - list.scrollTop - list.clientHeight < 75;
+  list.innerHTML =
+    state.session?.messages?.length ||
+    state.session?.tasks?.length ||
+    state.live.has(state.id)
+      ? `<div class="conversation-inner">${messagesHtml()}</div>`
+      : welcome();
+  if (scroll || atBottom) list.scrollTop = list.scrollHeight;
+  else list.scrollTop = oldTop;
+}
+function renderConversation() {
+  const s = state.session,
+    archived = Boolean(s?.archived || s?.archived_at);
+  renderHeader(
+    s?.title || "新会话",
+    s ? "会话内容与工程证据保存在本机" : "从任务讨论到工程验收",
+    button("templates", "工程任务", "plus") +
+      (s
+        ? iconButton(
+            "session-menu",
+            "会话操作",
+            "more",
+            `data-id="${esc(s.id)}"`,
+          )
+        : ""),
+  );
+  $("#content").className = "content conversation-content";
+  $("#content").innerHTML =
+    `<div id="conversation-scroll" class="conversation-scroll"></div><div class="composer-wrap">${
+      archived
+        ? `<div class="composer"><div class="row"><span class="meta">该会话已归档。恢复后可以继续任务。</span><span class="spacer"></span>${button("restore-session", "恢复会话", "archive", `data-id="${esc(s.id)}"`)}</div></div>`
+        : `<form id="composer" class="composer"><label class="sr-only" for="message-input">会话消息</label><textarea id="message-input" rows="2" maxlength="2048" placeholder="描述设计目标，或粘贴需要排查的工程问题…">${esc(state.drafts[state.id || "new"] || "")}</textarea><div class="composer-footer"><label class="composer-select">${icon("flow")}<select id="phase-select" aria-label="任务阶段">${Object.entries(
+            phaseNames,
+          )
+            .map(
+              ([id, label]) =>
+                `<option value="${id}" ${state.phase === id ? "selected" : ""}>${label}</option>`,
+            )
+            .join(
+              "",
+            )}</select></label><label class="composer-select">${icon("shield")}<select id="interaction-mode" aria-label="对话模式"><option value="local" ${state.interaction === "local" ? "selected" : ""}>本地上下文</option><option value="agent" ${state.interaction === "agent" ? "selected" : ""} ${state.overview.config.model_api_enabled ? "" : "disabled"}>${state.overview.config.model_api_enabled ? "Pi Agent" : "Pi Agent（模型已停用）"}</option></select></label><button class="send-button" type="submit" aria-label="发送消息" title="发送消息" ${state.sending ? "disabled" : ""}>${icon("arrow")}</button></div></form>`
+    }<p class="composer-hint">Enter 发送，Shift + Enter 换行 · 本地模式不生成模型回复 · 工程执行需先确认计划</p></div>`;
+  renderMessages({ scroll: true });
+  syncComposerMode();
+}
+function syncComposerMode() {
+  const agent = state.interaction === "agent";
+  const hint = document.querySelector(".composer-hint");
+  if (hint)
+    hint.textContent = agent
+      ? "Enter 发送，Shift + Enter 换行 · Pi Agent 使用已配置模型 · 公开回复与工具进度实时保存"
+      : "Enter 发送，Shift + Enter 换行 · 本地模式不生成模型回复 · 工程执行需先确认计划";
+  const input = document.querySelector("#message-input");
+  if (input)
+    input.placeholder = agent
+      ? "向 Pi Agent 描述工程目标、输入与验收条件…"
+      : "描述设计目标，或粘贴需要排查的工程问题…";
+  const label = document.querySelector(".mode-label span");
+  if (label) label.textContent = agent ? "Pi Agent 会话" : "本地流程模式";
+}
+async function newSession() {
+  const session = await api("session", { action: "create", title: "新会话" });
+  state.session = session;
+  await refreshOverview();
+  go("sessions", session.id);
+}
+async function ensureSession() {
+  if (
+    state.view === "sessions" &&
+    state.session &&
+    !state.session.archived &&
+    !state.session.archived_at
+  )
+    return state.session;
+  const s = await api("session", { action: "create", title: "工程任务" });
+  state.session = s;
+  await refreshOverview();
+  go("sessions", s.id);
+  return s;
+}
+async function sendMessage(event) {
+  event.preventDefault();
+  if (state.sending) return;
+  if (state.interaction === "agent") return sendAgentMessage();
+  const message = $("#message-input")?.value.trim();
+  if (!message) return;
+  const target = state.id,
+    version = state.routeVersion,
+    phase = $("#phase-select").value;
+  state.sending = true;
+  $('#composer button[type="submit"]').disabled = true;
+  try {
+    const s = await api("session", {
+      ...(target ? { id: target } : {}),
+      message,
+      phase,
+    });
+    state.drafts[target || "new"] = "";
+    saveDraft();
+    await refreshOverview();
+    if (state.routeVersion !== version) return;
+    if (!target) {
+      state.session = s;
+      go("sessions", s.id);
+    } else {
+      state.session = s;
+      $("#message-input").value = "";
+      renderMessages({ scroll: true });
+      renderSidebar();
+      renderHeader(
+        s.title,
+        "会话内容与工程证据保存在本机",
+        button("templates", "工程任务", "plus") +
+          iconButton(
+            "session-menu",
+            "会话操作",
+            "more",
+            `data-id="${esc(s.id)}"`,
+          ),
+      );
+    }
+  } finally {
+    state.sending = false;
+    if (state.routeVersion === version) {
+      const b = $('#composer button[type="submit"]');
+      if (b) b.disabled = false;
+      renderMessages({ scroll: true });
+    }
+  }
+}
+function openDrawer(title, body, { wide = false } = {}) {
+  state.drawerReturn = document.activeElement;
+  $("#drawer-host").innerHTML =
+    `<div class="drawer-backdrop" data-action="close-drawer"></div><section class="drawer ${wide ? "wide" : ""}" role="dialog" aria-modal="true" aria-labelledby="drawer-title"><header class="drawer-header"><h2 id="drawer-title">${esc(title)}</h2>${iconButton("close-drawer", "关闭详情", "close")}</header><div class="drawer-body">${body}</div></section>`;
+  $(".drawer .icon-button").focus();
+  $("#workspace").inert = true;
+  $("#sidebar").inert = true;
+}
+function closeDrawer() {
+  $("#drawer-host").innerHTML = "";
+  $("#workspace").inert = false;
+  $("#sidebar").inert = false;
+  if (state.drawerReturn?.isConnected) state.drawerReturn.focus();
+}
+function templatesDrawer() {
+  openDrawer(
+    "准备工程任务",
+    `<p>选择一项已固定输入和验收条件的任务。先查看计划，再确认执行；每次运行保存独立证据。</p>${Object.entries(
+      specs,
+    )
+      .map(
+        ([id, s]) =>
+          `<article class="template-card"><h3>${s.title}</h3><p>${s.description}</p><div class="row"><span class="meta">${s.scope}</span>${button("plan-template", "准备计划", "plus", `data-spec="${id}"`)}</div></article>`,
+      )
+      .join(
+        "",
+      )}<h3>使用自己的工程规格</h3><p class="meta">填写工作区 examples/workflows 或 projects 中的工作流 JSON 路径，复用已声明的 RTL、XDC、器件、检查和预算。</p><form id="custom-plan" class="form-grid"><label>工程规格路径<input id="custom-spec" placeholder="projects/my-fpga/workflow.json" required></label>${button("submit-custom-plan", "读取规格并准备计划", "file", 'type="submit"')}</form>`,
+  );
+}
+async function planTask(spec) {
+  const session = await ensureSession();
+  const result = await api("workflow", {
+    action: "plan",
+    spec,
+    session_id: session.id,
+  });
+  if (result.task) state.tasks.set(result.task.id, result.task);
+  closeDrawer();
+  state.session = await api("session?id=" + encodeURIComponent(session.id));
+  await refreshOverview();
+  if (state.view === "sessions" && state.id === session.id) {
+    renderSidebar();
+    renderMessages({ scroll: true });
+  } else go("sessions", session.id);
+  toast("计划已保存。核对输入与验收条件后即可执行。");
+}
+function planDetails(task) {
+  const p = task.plan || {},
+    s = p.spec || {};
+  openDrawer(
+    "工程计划与验收",
+    `<h3>${esc(specs[task.spec]?.title || task.title || "工程任务")}</h3><p>${esc(s.goal)}</p><dl class="definition-list"><dt>执行状态</dt><dd>${badge(task.status)}</dd><dt>调用上限</dt><dd>${esc(s.limits?.max_calls ?? "—")} 次</dd><dt>时间预算</dt><dd>${esc(s.limits?.wall_seconds ?? "—")} 秒</dd><dt>验收领域</dt><dd>${esc((p.acceptance?.required || Object.keys(s.acceptance?.bindings || {})).map((d) => domainNames[d] || d).join("、") || "未绑定")}</dd>${s.acceptance?.design ? `<dt>顶层模块</dt><dd>${esc(s.acceptance.design.top)}</dd><dt>目标器件</dt><dd>${esc(s.acceptance.design.part)}</dd><dt>时钟约束</dt><dd>${esc(s.acceptance.design.clock)} / ${esc(s.acceptance.design.period_ns)} ns</dd>` : ""}<dt>选定流程</dt><dd>${esc((p.guidance?.sop_ids || s.guidance?.sop_ids || []).join("、"))}</dd></dl><h3>固定输入</h3>${
+      Object.entries(p.input_hashes || {})
+        .map(
+          ([file, hash]) =>
+            `<div class="evidence-link">${icon("file")}<div>${esc(file)}<code>${esc(typeof hash === "string" ? hash : JSON.stringify(hash))}</code></div>`,
+        )
+        .join("") || '<p class="meta">没有记录固定输入。</p>'
+    }<h3>每一步的验收条件</h3>${(s.steps || []).map((step, i) => `<details class="tool-contract"><summary>${i + 1}. ${esc(toolNames[step.tool] || step.id)}</summary><p>${esc(step.tool)}</p><pre>${esc(JSON.stringify({ args: step.args, checks: step.checks }, null, 2))}</pre></details>`).join("")}<p class="technical-note">输入、代码或验收条件变化后，需准备新计划。完成一次执行不等于全部工程目标通过。</p>`,
+    { wide: true },
+  );
+}
+async function runTask(id) {
+  const t =
+    state.tasks.get(id) || (await api("task?id=" + encodeURIComponent(id)));
+  const job = await api("workflow", {
+    action: "run",
+    spec: t.spec,
+    session_id: t.session_id,
+    plan_id: t.plan_id || t.id,
+  });
+  await refreshOverview();
+  if (state.view === "sessions" && state.id === t.session_id) {
+    state.session = await api("session?id=" + encodeURIComponent(state.id));
+    renderMessages();
+  }
+  toast("任务已启动，执行记录将持续保存。");
+  return job;
+}
+function renderContextDetail(key) {
+  const c = state.contexts.get(key);
+  if (!c) return;
+  openDrawer(
+    "任务上下文与来源",
+    `<p>${esc(c.query)}</p><div class="row wrap">${c.phase ? `<span class="phase-pill">${esc(phaseNames[c.phase] || c.phase)}</span>` : ""}<span class="meta">${c.rules?.length || 0} 条规则 / ${c.sops?.length || 0} 个流程</span></div>${rulesHtml(c.rules, c.sources)}<h3>本任务相关工具</h3><p class="meta">${c.context_budget?.selected_tools || 0} / ${c.context_budget?.available_tools || 0} 个工具。选取上下文后，执行仍使用明确的步骤检查。</p>${(c.tools || []).map((t) => `<details class="tool-contract"><summary>${esc(toolNames[t.name] || t.name)}</summary><p>${esc(t.description)}</p><pre>${esc(JSON.stringify(t.inputSchema, null, 2))}</pre></details>`).join("")}`,
+    { wide: true },
+  );
+}
+function rulesHtml(rules = [], sources = []) {
+  return rules
+    .map(
+      (r) =>
+        `<article class="rule-card"><h3>${esc(r.title)}</h3><p>${esc(r.statement)}</p><div class="source-list">${(r.source_refs || []).map((ref) => sourceLink({ ...sources.find((s) => s.id === ref.source_id), ...ref })).join("")}</div><details><summary>适用范围与证据要求</summary><p>${esc(r.scope)}${r.versions?.length ? "<br>版本：" + esc(r.versions.join("、")) : ""}</p><p>需要证据：${esc((r.evidence_required || []).join("、"))}</p><p>${esc(r.static_proof_boundary)}</p></details></article>`,
+    )
+    .join("");
+}
+function markdown(text) {
+  const lines = String(text || "").split(/\r?\n/);
+  let code = false;
+  return (
+    lines
+      .map((line) => {
+        if (line.startsWith("```")) {
+          code = !code;
+          return code ? "<pre><code>" : "</code></pre>";
+        }
+        if (code) return esc(line) + "\n";
+        const safe = esc(line)
+          .replace(/`([^`]+)`/g, "<code>$1</code>")
+          .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
+        const h = /^(#{1,3}) (.*)/.exec(safe);
+        if (h) return `<h${h[1].length}>${h[2]}</h${h[1].length}>`;
+        if (/^\s*[-*] /.test(safe))
+          return `<p>• ${safe.replace(/^\s*[-*] /, "")}</p>`;
+        return safe ? `<p>${safe}</p>` : "";
+      })
+      .join("") + (code ? "</code></pre>" : "")
+  );
+}
+async function showSop(id) {
+  const result = await api("sop", { id });
+  const readable = String(result.content || "")
+    .replace(/^---\r?\n[\s\S]*?\r?\n---\r?\n/, "")
+    .replace(/^\s*# [^\r\n]+[\r\n]+/, "");
+  openDrawer(
+    result.sop?.title || "操作流程",
+    `<div class="row wrap"><span class="phase-pill">${(result.sop?.required_tools || []).length} 个工具</span><span class="phase-pill">${(result.sop?.required_evidence || []).length} 类验收证据</span></div><div class="markdown-content">${markdown(readable)}</div><details class="tool-contract"><summary>完整来源与元数据</summary><pre>${esc(result.content)}</pre></details>`,
+    { wide: true },
+  );
+}
+function renderKnowledge() {
+  renderHeader("知识与流程", "按任务阶段检索规则、完整 SOP 和工具契约");
+  $("#content").className = "content";
+  $("#content").innerHTML =
+    `<div class="page"><div class="page-intro"><div><h1>让工程决策有据可查</h1><p>检索相关规则，核对适用版本，再将操作流程带入工程任务。</p></div></div><form id="knowledge-search" class="knowledge-search"><label class="search-box">${icon("search")}<input id="knowledge-query" aria-label="检索知识" placeholder="输入工程问题，例如：异步 FIFO 的跨时钟总线一致性" required maxlength="2048"></label><button class="button primary" type="submit">检索规则</button></form><div class="knowledge-layout"><div id="knowledge-results"><div class="empty-result">${icon("book")}<p>输入具体的设计问题，查看匹配规则及来源。</p><p class="technical-note">检索命中表示相关性；工程结论由实际检查给出。</p></div></div><aside class="knowledge-aside"><h3>完整操作流程</h3>${(state.overview.sops || []).map((s) => `<button class="sop-item" aria-label="${esc(s.title)}" data-action="sop" data-id="${esc(s.id)}"><strong>${esc(s.title)}</strong><small>${(s.required_tools || []).length} 个工具 · ${(s.required_evidence || []).length} 类证据</small></button>`).join("")}<p class="technical-note">每个流程保留所需证据、工具范围和来源版本。</p></aside></div></div>`;
+}
+function runTitle(r) {
+  if (r.workflow) {
+    if (r.id?.includes("workflow")) return r.title || "工程工作流";
+    return r.title || "工程任务";
+  }
+  return toolNames[r.tool] || r.tool || "执行记录";
+}
+function activeJobs() {
+  return (state.overview.jobs || []).filter((j) =>
+    ["running", "queued", "cancel_requested"].includes(j.status),
+  );
+}
+function busyJobsHtml() {
+  return activeJobs()
+    .map(
+      (j) =>
+        `<div class="busy-row"><span class="spinner"></span><div><strong>${esc(suiteNames[j.kind?.split(":")[1]] || specs[j.kind?.split(":")[1]]?.title || j.kind || "正在执行")}</strong><p class="meta">${date(j.started_at)}${j.session_id ? " · 已关联会话" : ""}</p></div>${badge(j.status)}${j.controllable !== false ? button("cancel-job", j.status === "cancel_requested" ? "正在停止" : "停止", "stop", `data-id="${esc(j.id)}" ${j.status === "cancel_requested" ? "disabled" : ""}`) : ""}</div>`,
+    )
+    .join("");
+}
+function renderRuns() {
+  renderHeader(
+    "执行记录",
+    "查看每次执行、工程验收与原始证据",
+    button("refresh", "刷新", "refresh"),
+  );
+  $("#content").className = "content";
+  $("#content").innerHTML =
+    `<div class="page"><div class="page-intro"><div><h1>工程执行记录</h1><p>执行状态、工程目标和证据完整性分别核验。失败与待审查结果会一并保留。</p></div><span class="spacer"></span>${button("templates", "新建工程任务", "plus")}</div><div id="active-jobs">${busyJobsHtml()}</div><div class="toolbar"><label class="search-box">${icon("search")}<input id="run-search" aria-label="搜索执行记录" value="${esc(state.runQuery)}" placeholder="搜索工具或运行编号"></label><select id="run-filter" aria-label="记录类型"><option value="workflow" ${state.runFilter === "workflow" ? "selected" : ""}>工程任务</option><option value="agent" ${state.runFilter === "agent" ? "selected" : ""}>Pi Agent 会话</option><option value="all" ${state.runFilter === "all" ? "selected" : ""}>全部工具记录</option></select></div><div id="run-list"></div></div>`;
+  renderRunList();
+}
+function renderRunList() {
+  const runs = state.overview.runs.filter(
+    (r) =>
+      (state.runFilter === "all" ||
+        (state.runFilter === "workflow" && r.workflow) ||
+        (state.runFilter === "agent" && r.pi_session)) &&
+      `${r.id} ${r.tool} ${r.title || ""}`
+        .toLowerCase()
+        .includes(state.runQuery.toLowerCase()),
+  );
+  $("#run-list").innerHTML = runs.length
+    ? `<div class="record-list">${runs.map((r) => `<button class="record-row" data-action="open-run" data-id="${esc(r.id)}"><span class="record-icon">${icon(r.workflow ? "flow" : r.pi_session ? "chat" : "tool")}</span><span><strong>${esc(runTitle(r))}</strong><small>${date(r.started_at)} · ${esc(r.workflow ? "独立工程验收" : r.pi_session ? "原生 Pi 运行" : "工具调用")}</small></span>${badge(r.status)}${icon("right")}</button>`).join("")}</div><p class="pagination-note">显示 ${runs.length} 条记录 · 时间为 UTC+8 · 运行编号可在详情中查看</p>`
+    : empty(
+        "暂无匹配记录",
+        "调整筛选条件，或创建一项工程任务。",
+        "runs",
+        button("templates", "准备工程任务", "plus"),
+      );
+}
+function runDescription(r) {
+  const goal = runPurpose(r);
+  if (/retained|historical|evidence.*review/i.test(goal))
+    return "核对本地模型策略、操作流程与历史工程证据，回读原件和公开文件的哈希。";
+  if (/AXI/i.test(goal))
+    return "核验 AXI 互连的功能仿真、综合、布局布线和设计规则。每个领域独立给出工程结论。";
+  if (/counter/i.test(goal))
+    return "执行固定 Counter checker，验证计数、保持、复位与回绕行为。";
+  return goal;
+}
+function runPurpose(r) {
+  return (
+    r.workflow?.goal ||
+    r.prompt ||
+    toolNames[r.manifest.tool] ||
+    r.manifest.tool ||
+    "工程执行"
+  );
+}
+function runName(r) {
+  if (r.title) return r.title;
+  const text = runPurpose(r);
+  if (/AXI/i.test(text)) return "AXI 3×3 系统实现";
+  if (/counter/i.test(text)) return "Counter 功能仿真";
+  if (/retained|historical|evidence.*review/i.test(text))
+    return "历史工程证据复核";
+  return r.workflow
+    ? "工程工作流"
+    : toolNames[r.manifest.tool] || r.manifest.tool;
+}
+function acceptanceFor(workflow) {
+  return workflow?.recorded_acceptance_integrity && workflow.recorded_acceptance
+    ? workflow.recorded_acceptance
+    : workflow?.task_acceptance;
+}
+function domainDetail(d) {
+  if (["setup", "hold"].includes(d.domain) && typeof d.observed === "number")
+    return `时序裕量 ${d.observed >= 0 ? "+" : ""}${d.observed.toFixed(3)} ns`;
+  if (d.domain === "drc" && d.observed)
+    return `${d.observed.errors ?? "—"} 个错误，${d.observed.critical_warnings ?? "—"} 个严重警告，${d.observed.warnings ?? "—"} 个警告`;
+  if (d.domain === "synthesis" && typeof d.observed === "number")
+    return `${d.observed} 个未解析黑盒`;
+  if (d.domain === "functional" && d.observed?.completion_observed)
+    return "固定 checker 标记通过，仿真完整结束。";
+  if (d.domain === "constraints" && d.observed?.internal === "pass")
+    return "内部时钟与 IO 约束检查通过。";
+  if (d.domain === "routing" && d.observed === "pass")
+    return "布线报告核验通过。";
+  return (
+    d.reason ||
+    (d.status === "not_requested"
+      ? "此任务未要求该领域验收。"
+      : "见独立工具报告。")
+  );
+}
+function renderRun() {
+  const r = state.run,
+    w = r.workflow,
+    a = acceptanceFor(w);
+  renderHeader(
+    runName(r),
+    "运行与验收",
+    button("run-list", "返回记录", "back") +
+      button("run-evidence", "证据详情", "file") +
+      iconButton("refresh", "刷新运行", "refresh"),
+  );
+  $("#content").className = "content";
+  $("#content").innerHTML =
+    `<div class="page"><div class="run-summary"><span class="summary-symbol">${icon(w ? "flow" : "tool")}</span><div><h2>${esc(runName(r))}</h2><p>${esc(runDescription(r))}</p><div class="run-meta"><span>${date(r.manifest.started_at)}</span><span>${duration(r.manifest.started_at, r.manifest.finished_at)}</span><span>执行：${esc(statusNames[r.manifest.status] || r.manifest.status)}</span></div></div>${badge(a?.status || r.manifest.status)}</div>${w?.valid === false ? '<div class="notice neutral">' + icon("clock") + "<span>当前源码或输入与此运行记录有差异。下方保留当时的验收结果；复用或恢复前需重新核验。</span></div>" : ""}${w?.steps?.length ? `<div class="run-steps">${w.steps.map((s, i) => `<div class="run-step ${(w.completed_steps || []).includes(s.id) ? "done" : ""}"><span class="step-marker">${(w.completed_steps || []).includes(s.id) ? icon("check") : i + 1}</span><strong>${esc(toolNames[s.tool] || s.id)}</strong></div>`).join("")}</div>` : ""}<div class="tabs" role="tablist" aria-label="运行详情">${[
+      ["acceptance", "验收结果"],
+      ["timeline", "执行时间线"],
+      ["info", "运行信息"],
+    ]
+      .map(
+        ([id, label]) =>
+          `<button role="tab" aria-selected="${state.runTab === id}" data-action="run-tab" data-tab="${id}" class="${state.runTab === id ? "active" : ""}">${label}</button>`,
+      )
+      .join("")}</div><div id="run-panel">${runPanel()}</div></div>`;
+}
+function runPanel() {
+  const r = state.run,
+    w = r.workflow,
+    a = acceptanceFor(w);
+  if (state.runTab === "timeline") {
+    const events = (r.events || []).filter(
+      (e) =>
+        ![
+          "input_captured",
+          "workflow_checkpoint",
+          "dependency_unresolved",
+        ].includes(e.type),
+    );
+    return events.length
+      ? `<ol class="timeline">${events.map((e) => `<li><time>${date(e.time || e.timestamp_utc, true)}</time><span class="timeline-mark"></span><div><strong>${esc(eventNames[e.type] || e.type)}</strong>${e.status ? badge(e.status) : ""}<p>${esc(toolNames[e.tool] || e.tool || e.step || "")}</p></div></li>`).join("")}</ol>`
+      : empty(
+          "没有可展示的事件",
+          "此历史记录未保存逐步事件。完整性检查仍保留原始结果。",
+          "clock",
+        );
+  }
+  if (state.runTab === "info")
+    return `<dl class="definition-list"><dt>原始任务目标</dt><dd>${esc(runPurpose(r))}</dd><dt>运行编号</dt><dd><code>${esc(r.id)}</code></dd><dt>执行工具</dt><dd>${esc(r.manifest.tool)}</dd><dt>开始时间</dt><dd>${date(r.manifest.started_at)}</dd><dt>结束时间</dt><dd>${date(r.manifest.finished_at)}</dd><dt>执行状态</dt><dd>${badge(r.manifest.status)}</dd><dt>证据检查</dt><dd>${r.inspection?.valid ? "文件与记录检查通过" : "存在缺失、变化或运行尚未结束"}</dd></dl><div class="notice neutral">${icon("shield")}<span>本地工具流程不调用模型 API。外层 Codex token 未在工作台中计量。</span></div>`;
+  if (!a)
+    return `<div class="notice neutral">${icon("file")}<span>本记录没有结构化工程验收结论。可以查看工具执行时间线与证据详情。</span></div>${r.messages?.length ? `<div class="section-heading"><h2>Agent 会话记录</h2></div>${r.messages.map((m) => `<article class="message"><span class="avatar">${icon("chat")}</span><div><div class="message-meta"><strong>${esc(m.role)}</strong></div><p class="message-text">${esc(m.text)}</p></div></article>`).join("")}` : ""}`;
+  return `${a.status === "review_required" ? `<div class="notice">${icon("warning")}<span>有验收领域需要人工审查。请检查警告及其适用条件，再决定是否接受工程结果。</span></div>` : ""}<div class="section-heading"><h2>${w.recorded_acceptance_integrity ? "当时记录的验收结论" : "工程目标验收"}</h2>${w.recorded_acceptance_integrity ? "<small>原始结果已通过保存指纹核对</small>" : ""}</div><div class="domain-grid">${(
+    a.domains || []
+  )
+    .filter((d) => !["not_requested", "not_evaluated"].includes(d.status))
+    .map(
+      (d) =>
+        `<article class="domain ${esc(d.status)}"><div class="row"><h3>${esc(domainNames[d.domain] || d.domain)}</h3>${badge(d.status)}</div><p>${esc(domainDetail(d))}</p></article>`,
+    )
+    .join("")}</div>${
+    (a.domains || []).some((d) =>
+      ["not_requested", "not_evaluated"].includes(d.status),
+    )
+      ? `<details class="omitted-domains"><summary>本次未要求 ${(a.domains || []).filter((d) => ["not_requested", "not_evaluated"].includes(d.status)).length} 个领域</summary><p>${esc(
+          (a.domains || [])
+            .filter((d) =>
+              ["not_requested", "not_evaluated"].includes(d.status),
+            )
+            .map((d) => domainNames[d.domain] || d.domain)
+            .join("、"),
+        )}</p></details>`
+      : ""
+  }<p class="meta">${a.profile === "fpga_ooc" ? "固定器件的 OOC 实现验收；CDC 仅在任务要求时检查。形式证明与板卡实测尚未评估。" : esc(a.scope || "功能、实现、CDC 与证据分别验收。形式证明和板卡实测需独立证据。")}</p>${w.recovery?.stalled ? `<div class="notice">${icon("warning")}同一失败已重复三次，请先诊断再创建新任务。</div>` : ""}`;
+}
+function runEvidence() {
+  const r = state.run,
+    w = r.workflow;
+  openDrawer(
+    "运行证据与恢复",
+    `<h3>运行身份</h3><p><code>${esc(r.id)}</code></p><dl class="definition-list"><dt>证据完整性</dt><dd>${r.inspection?.valid ? "检查通过" : "需复核"}</dd><dt>当前可复用</dt><dd>${w?.valid === true ? "来源核验通过" : w?.valid === false ? "来源已变化或有缺失" : "未评估"}</dd><dt>工程目标</dt><dd>${badge(acceptanceFor(w)?.status || "unknown")}</dd></dl>${w ? `<h3>任务恢复</h3><div id="recovery-result">${button("recovery-check", "检查恢复条件", "refresh", `data-id="${esc(r.id)}"`)}</div>` : ""}<h3>待处理事项</h3><p>${esc([...(w?.issues || []), ...(r.inspection?.validation_issues || [])].join("\n") || "没有发现额外的文件完整性问题。")}</p><h3>报告与文件</h3><div id="artifact-list">${(r.artifacts || []).length ? (r.artifacts || []).map((f) => `<button class="evidence-link artifact-button" ${f.previewable === false ? 'disabled title="文件超过预览限制，请在本机查看"' : ""} data-action="artifact-preview" data-run="${esc(r.id)}" data-file="${esc(f.file)}">${icon("file")}<span>${esc(f.file)}<small class="meta">${(f.size_bytes / 1024).toFixed(1)} KB${f.previewable === false ? " · 超出预览范围，请在本机查看" : ""}</small></span>${icon("right")}</button>`).join("") : '<p class="meta">此运行暂无可预览文件。</p>'}</div><h3>领域证据</h3>${
+      (acceptanceFor(w)?.domains || [])
+        .filter((d) => d.evidence)
+        .map(
+          (d) =>
+            `<button class="evidence-link artifact-button" data-action="artifact-preview" data-run="${esc(r.id)}" data-file="${esc(basename(d.evidence.result || d.evidence.file))}" ${d.evidence.result || d.evidence.file ? "" : "disabled"}>${icon("file")}<span>${esc(domainNames[d.domain] || d.domain)}<small class="meta">${esc(basename(d.evidence.result || d.evidence.file) || "证据文件未记录")}${d.evidence.sha256 ? " · " + esc(d.evidence.sha256.slice(0, 12)) : ""}</small></span>${icon("right")}</button>`,
+        )
+        .join("") || '<p class="meta">该记录未提供领域级证据链接。</p>'
+    }<details class="tool-contract"><summary>查看完整检查结果</summary><pre>${esc(JSON.stringify({ inspection: r.inspection, recovery: w?.recovery }, null, 2))}</pre></details><p class="technical-note">历史结果只说明当时保存的证据；恢复操作必须重新检查输入、代码与任务所有者。</p>`,
+    { wide: true },
+  );
+}
+async function loadEvaluations() {
+  const version = state.routeVersion;
+  const data = await api("evaluations");
+  if (version !== state.routeVersion) return;
+  state.evaluations = data;
+  renderEvaluations();
+}
+function renderEvaluations() {
+  renderHeader(
+    "评测中心",
+    "各类评测保留自己的计分单位和证据",
+    button("refresh", "刷新", "refresh"),
+  );
+  $("#content").className = "content";
+  const lanes = [
+    ["offline", "离线回归"],
+    ["online_eda", "真实 EDA"],
+    ["online_agent", "Agent 端到端"],
+    ["history", "历史成绩"],
+  ];
+  $("#content").innerHTML =
+    `<div class="page"><div class="page-intro"><div><h1>用证据衡量每一层能力</h1><p>软件机制、知识检索与 FPGA 工程分别计分。每次评测生成独立回执，可追溯输入与源码版本。</p></div></div><div class="tabs" role="tablist" aria-label="评测分类">${lanes.map(([id, label]) => `<button role="tab" aria-selected="${state.evalLane === id}" data-action="eval-tab" data-tab="${id}" class="${state.evalLane === id ? "active" : ""}">${label}</button>`).join("")}</div><div id="active-jobs">${busyJobsHtml()}</div>${state.evalLane === "history" ? historyHtml() : suitesHtml()}</div>`;
+}
+function freshnessText(receipt) {
+  if (receipt?.freshness?.reason === "software_validation_sources_unbound")
+    return "历史软件回执，未完整绑定本版本源码";
+  const current = receipt?.freshness?.current_sources_match;
+  return current === true
+    ? "记录的协议源码一致"
+    : current === false
+      ? "源码已更新，作为历史记录查看"
+      : "未记录完整源码指纹";
+}
+function softwareMetrics(receipt) {
+  return (receipt.metrics?.checks || [])
+    .map(
+      (c) =>
+        `<span>${esc(c.name)} ${Number.isFinite(c.test_count) ? c.test_count : "—"} 项 ${c.passed ? "通过" : "未通过"}</span>`,
+    )
+    .join(" ");
+}
+function suitesHtml() {
+  const data = state.evaluations;
+  if (!data) return '<div class="loading-state">正在读取评测记录…</div>';
+  const suites = data.suites.filter((s) => s.lane === state.evalLane);
+  return `<div class="suite-list">${suites
+    .map((s) => {
+      const receipt = data.receipts.find((r) => r.suite === s.id);
+      const freshness = receipt?.freshness?.current_sources_match;
+      return `<article class="suite-card"><div><div class="suite-title"><h3>${esc(suiteNames[s.id] || s.id)}</h3></div><p>${esc(suiteDescriptions[s.id] || s.description)}</p><div class="suite-meta"><span>计分单位：${esc(unitNames[s.unit] || s.unit)}</span><span>${s.launches_eda ? "使用本机 EDA 工具" : "模型调用为 0"}</span></div></div><div class="suite-actions">${receipt ? badge(receipt.status) : '<span class="badge">尚无回执</span>'}${button("evaluate", s.id === "online-agent" ? "核验已有会话" : s.launches_eda ? "准备 EDA 评测" : "运行离线评测", s.launches_eda ? "play" : "chart", `data-suite="${esc(s.id)}"`)}</div>${receipt ? `<div class="receipt-note"><span>最近一次 ${date(receipt.finished_at || receipt.started_at)}</span><span>${freshnessText(receipt)}</span>${receipt.metrics?.after ? `<span>Hit@5 ${receipt.metrics.after.hits}/${receipt.metrics.after.total}</span>` : ""}${softwareMetrics(receipt)}${receipt.workflow ? `<button class="text-button" data-action="open-run" data-id="${esc(basename(receipt.workflow))}">查看工程验收</button>` : `<button class="text-button" data-action="evaluation-detail" data-id="${esc(receipt.id)}">查看评测回执</button>`}</div>` : ""}</article>`;
+    })
+    .join(
+      "",
+    )}</div>${state.evalLane === "online_agent" ? `<div class="notice neutral">${icon("shield")}<span>当前模型 API 停用。这里核验已有真实会话及其工程子任务，评测器不会启动模型。</span></div>` : ""}`;
+}
+function historyHtml() {
+  return `<div class="notice neutral">${icon("clock")}<span>以下是保留的历史功能记录。结果按原计分单位展示；历史成绩不代表当前代码已复测。</span></div><div class="section-heading"><h2>已归档功能成绩</h2><small>${state.overview.history.length} 组记录</small></div><div class="table-wrap"><table><thead><tr><th>功能与工程</th><th>记录结果</th><th>计分单位</th><th>证据</th></tr></thead><tbody>${state.overview.history.map((r) => `<tr><td>${esc(r.title)}<details><summary>验收范围</summary><p>${esc(Array.isArray(r.limitations) ? r.limitations.join("；") : r.limitations)}</p></details></td><td class="numeric">${r.passed !== undefined ? `${r.passed} / ${r.total}` : r.wns_gain_ns !== undefined ? `+${r.wns_gain_ns} ns` : "按原分类"}</td><td>${esc(r.unit)}</td><td>${r.evidence_count} 份</td></tr>`).join("")}</tbody></table></div>`;
+}
+async function previewArtifact(id, file, offset = 0) {
+  const value = await api(
+    "artifact?run_id=" +
+      encodeURIComponent(id) +
+      "&file=" +
+      encodeURIComponent(file) +
+      "&offset=" +
+      offset,
+  );
+  openDrawer(
+    basename(value.file) || "文件预览",
+    `<div class="row wrap">${button("run-evidence", "返回证据", "back")}<span class="meta">${(value.total_bytes / 1024).toFixed(1)} KB${value.redacted ? " · 敏感内容已隐藏" : ""}</span></div><pre>${esc(value.text || "文件没有可显示文本。")}</pre>${value.next_offset != null && value.truncated ? button("artifact-next", "继续读取", "right", `data-run="${esc(id)}" data-file="${esc(file)}" data-offset="${value.next_offset}"`) : ""}<p class="technical-note">${esc(value.file)}<br>SHA-256 ${esc(value.sha256)}</p>`,
+    { wide: true },
+  );
+}
+async function checkRecovery(id) {
+  const r = await api("recovery", { run_id: id, action: "check" });
+  const holder = $("#recovery-result");
+  if (!holder || state.run?.id !== id) return;
+  holder.innerHTML = `<div class="notice ${r.ready ? "neutral" : ""}">${icon(r.ready ? "check" : "warning")}<span>${r.ready ? "恢复前提已核验。续跑会保存到新的运行目录。" : "当前不满足恢复条件。请处理下方问题后重新检查。"}</span></div><p class="technical-note">${esc((r.issues || []).join("；"))}</p>${r.ready ? button("recovery-resume", "从检查点继续", "play", `data-id="${esc(id)}"`, "primary") : ""}`;
+}
+async function resumeRecovery(id) {
+  const owner = state.run?.id === id ? state.run.owner_session_id : null;
+  const s = owner
+    ? await api("session?id=" + encodeURIComponent(owner))
+    : await ensureSession();
+  if (s.archived || s.archived_at)
+    throw new Error("请先从会话栏恢复该任务所属的归档会话。");
+  const j = await api("recovery", {
+    run_id: id,
+    action: "resume",
+    session_id: s.id,
+  });
+  closeDrawer();
+  await refreshOverview();
+  go("sessions", s.id);
+  toast("已在新运行目录继续任务。");
+  return j;
+}
+function evaluationDetail(id) {
+  const r = state.evaluations.receipts.find((v) => v.id === id);
+  if (!r) return;
+  openDrawer(
+    "评测回执",
+    `<h3>${esc(suiteNames[r.suite] || r.suite)}</h3><dl class="definition-list"><dt>执行结果</dt><dd>${badge(r.status)}</dd><dt>计分单位</dt><dd>${esc(unitNames[r.unit] || r.unit)}</dd><dt>开始时间</dt><dd>${date(r.started_at)}</dd><dt>结束时间</dt><dd>${date(r.finished_at)}</dd><dt>来源状态</dt><dd>${freshnessText(r)}</dd><dt>模型调用</dt><dd>${r.provider_calls_by_evaluator ?? "未记录"}</dd></dl>${r.metrics?.after ? `<h3>检索结果</h3><p>Hit@5：${r.metrics.after.hits}/${r.metrics.after.total}<br>MRR：${Number(r.metrics.after.mrr).toFixed(3)}</p>` : ""}${softwareMetrics(r)}${r.reason ? `<div class="notice">${esc(r.reason)}</div>` : ""}<details class="tool-contract"><summary>完整回执与来源指纹</summary><pre>${esc(JSON.stringify(r, null, 2))}</pre></details>`,
+  );
+}
+async function evaluate(suite) {
+  if (suite === "online-agent") {
+    openDrawer(
+      "核验已有 Agent 会话",
+      `<p>提供 artifacts 中已有的 Pi 会话与直接关联的工程工作流。会话输入、终态、因果关联和工程目标都会核验。</p><form id="agent-evaluation" class="form-grid"><label>Pi 会话目录<input id="agent-session" placeholder="artifacts/native-agent-…" required></label><label>工程工作流目录<input id="agent-workflow" placeholder="artifacts/…-eda_workflow_run-…" required></label><button class="button primary" type="submit">核验已有会话</button></form>`,
+    );
+    return;
+  }
+  if (suite.startsWith("online-")) {
+    showDialog(
+      "启动真实 EDA 评测",
+      `<p>${esc(suiteDescriptions[suite])}。这会使用本机 EDA 工具并生成新运行目录。</p>`,
+      [
+        { label: "取消", action: () => {} },
+        {
+          label: "开始评测",
+          primary: true,
+          action: () => launchEvaluation(suite),
+        },
+      ],
+    );
+    return;
+  }
+  await launchEvaluation(suite);
+}
+async function launchEvaluation(suite, args = {}) {
+  await api("evaluate", { suite, ...args });
+  closeDrawer();
+  await refreshOverview();
+  if (state.view === "evaluations") renderEvaluations();
+  toast("评测已启动，可在当前页面查看执行状态。");
+}
+function showDialog(title, body, actions) {
+  const dialog = $("#dialog");
+  dialog.innerHTML = `<h2>${esc(title)}</h2>${body}<div class="dialog-actions">${actions.map((a, i) => `<button class="button ${a.primary ? "primary" : ""} ${a.danger ? "danger" : ""}" data-dialog-index="${i}">${esc(a.label)}</button>`).join("")}</div>`;
+  dialog.showModal();
+  dialog.onclick = async (e) => {
+    const button = e.target.closest("[data-dialog-index]");
+    if (!button) return;
+    const action = actions[Number(button.dataset.dialogIndex)];
+    const value = $("#dialog input")?.value;
+    const controls = [...dialog.querySelectorAll("button")];
+    controls.forEach((control) => {
+      control.disabled = true;
+    });
+    dialog.querySelector(".dialog-error")?.remove();
+    try {
+      await action.action(value);
+      dialog.close();
+    } catch (error) {
+      const message = document.createElement("p");
+      message.className = "dialog-error";
+      message.setAttribute("role", "alert");
+      message.textContent = error.message;
+      dialog.querySelector(".dialog-actions").before(message);
+      dialog.querySelector("input")?.focus();
+    } finally {
+      controls.forEach((control) => {
+        control.disabled = false;
+      });
+    }
+  };
+}
+function sessionMenu(id) {
+  const s = state.overview.sessions.find((x) => x.id === id) || state.session;
+  if (!s) return;
+  showDialog(
+    "会话设置",
+    `<label for="session-title">会话名称</label><input id="session-title" value="${esc(s.title || "新会话")}" maxlength="120"><p>消息、任务和运行证据都保留在本地。归档后可从会话栏恢复。</p>`,
+    [
+      {
+        label: s.archived || s.archived_at ? "恢复会话" : "归档会话",
+        action: () =>
+          updateSession(
+            s.id,
+            s.archived || s.archived_at ? "restore" : "archive",
+          ),
+      },
+      { label: "取消", action: () => {} },
+      {
+        label: "保存名称",
+        primary: true,
+        action: (title) => {
+          if (!title?.trim() || title.trim().length > 120) {
+            throw new Error("请输入 1 至 120 个字符的会话名称。");
+          }
+          return updateSession(s.id, "rename", title.trim());
+        },
+      },
+    ],
+  );
+}
+async function updateSession(id, action, title) {
+  await api("session", { action, id, ...(title ? { title } : {}) });
+  await refreshOverview();
+  renderSidebar();
+  if (state.view === "sessions" && state.id === id) {
+    state.session = await api("session?id=" + encodeURIComponent(id));
+    renderConversation();
+  }
+  toast(
+    action === "rename"
+      ? "会话名称已保存。"
+      : action === "archive"
+        ? "会话已归档，可随时恢复。"
+        : "会话已恢复。",
+  );
+}
+function settings() {
+  showDialog(
+    "运行模式与连接",
+    `<dl class="definition-list"><dt>当前模式</dt><dd>本地上下文与工程工具</dd><dt>模型 API</dt><dd>${state.overview.config.model_api_enabled ? "配置允许，需明确启动会话" : "已停用"}</dd><dt>工作区连接</dt><dd>${esc(location.origin)}</dd><dt>数据保存</dt><dd>本机会话、任务与 artifacts 证据目录</dd></dl><p>本地模式可以检索知识、准备计划、运行工程工具和核验结果。自由对话由原生 Pi Agent 承载，需要单独启用模型配置。</p><p class="technical-note">本轮本地工具流程的其他模型 API 调用为 0；外层 Codex token 未计量。</p>`,
+    [{ label: "知道了", primary: true, action: () => {} }],
+  );
+}
+async function renderRoute() {
+  state.stream?.close();
+  state.stream = null;
+  state.streamReconnecting = false;
+  const version = ++state.routeVersion;
+  closeDrawer();
+  const route = parseRoute();
+  state.view = route.view;
+  state.id = route.id;
+  state.session = null;
+  state.run = null;
+  $("#content").className = "content";
+  renderSidebar();
+  renderHeader(
+    {
+      sessions: "工作会话",
+      runs: "执行记录",
+      knowledge: "知识与流程",
+      evaluations: "评测中心",
+    }[state.view],
+  );
+  $("#content").innerHTML =
+    '<div class="loading-state" role="status">正在读取工作区…</div>';
+  try {
+    if (state.view === "sessions") {
+      if (state.id) {
+        const session = await api("session?id=" + encodeURIComponent(state.id));
+        if (version !== state.routeVersion) return;
+        state.session = session;
+      }
+      renderConversation();
+      openSessionStream(state.id, version);
+    } else if (state.view === "runs") {
+      if (state.id) {
+        const run = await api("run?id=" + encodeURIComponent(state.id));
+        if (version !== state.routeVersion) return;
+        state.run = run;
+        renderRun();
+      } else renderRuns();
+    } else if (state.view === "knowledge") renderKnowledge();
+    else {
+      renderEvaluations();
+      await loadEvaluations();
+    }
+  } catch (error) {
+    if (version !== state.routeVersion) return;
+    $("#content").innerHTML =
+      `<div class="screen-error"><h2>暂时无法打开这项内容</h2><p>${esc(error.message)}</p>${button("refresh", "重新加载", "refresh")}${button("navigate", "回到工作会话", "chat", 'data-view="sessions"', "subtle")}</div>`;
+  }
+}
+async function poll() {
+  if (state.pollBusy || !state.overview || document.hidden) return;
+  state.pollBusy = true;
+  try {
+    const version = state.routeVersion,
+      id = state.id,
+      previous = state.overview.jobs || [];
+    const overview = await api("overview");
+    state.overview = overview;
+    const changed =
+      JSON.stringify(previous.map((j) => [j.id, j.status])) !==
+      JSON.stringify((overview.jobs || []).map((j) => [j.id, j.status]));
+    if (version !== state.routeVersion) return;
+    if (state.view === "sessions" && id) {
+      const fresh = await api("session?id=" + encodeURIComponent(id));
+      if (version !== state.routeVersion || id !== state.id) return;
+      if (
+        JSON.stringify(fresh.messages) !==
+          JSON.stringify(state.session?.messages) ||
+        JSON.stringify(fresh.tasks) !== JSON.stringify(state.session?.tasks)
+      ) {
+        state.session = fresh;
+        renderMessages();
+        renderSessionList();
+      }
+    }
+    if ($("#active-jobs")) $("#active-jobs").innerHTML = busyJobsHtml();
+    if (changed) {
+      const ended = (overview.jobs || []).filter(
+        (j) =>
+          !["running", "queued", "cancel_requested"].includes(j.status) &&
+          previous.some(
+            (p) =>
+              p.id === j.id &&
+              ["running", "queued", "cancel_requested"].includes(p.status),
+          ),
+      );
+      if (ended.length) {
+        const agent = ended.find(
+          (job) => job.kind === "agent" && job.session_id === state.id,
+        );
+        if (agent && state.live.has(state.id)) {
+          const live = state.live.get(state.id);
+          live.status = agent.status;
+          updateLiveDisplay(live);
+        }
+        toast(
+          `任务${statusNames[ended[0].status] || "已结束"}，结果与证据已保存。`,
+        );
+        if (state.view === "evaluations") await loadEvaluations();
+        else if (state.view === "runs" && !state.id) renderRunList();
+      }
+    }
+  } catch {
+  } finally {
+    state.pollBusy = false;
+  }
+}
+document.addEventListener(
+  "click",
+  guard(async (event) => {
+    if (event.target.closest(".skip-link")) {
+      event.preventDefault();
+      $("#content").focus();
+      return;
+    }
+    const b = event.target.closest("[data-action]");
+    if (!b || b.disabled) return;
+    const action = b.dataset.action;
+    if (action === "submit-custom-plan") return;
+    const actions = {
+      navigate: () => go(b.dataset.view),
+      "new-session": newSession,
+      "select-session": () => go("sessions", b.dataset.id),
+      "toggle-archive": () => {
+        state.archive = !state.archive;
+        renderSidebar();
+      },
+      "toggle-rail": () => $("#app").classList.toggle("rail-open"),
+      "session-menu": () => sessionMenu(b.dataset.id),
+      "restore-session": () => updateSession(b.dataset.id, "restore"),
+      settings,
+      starter: () => {
+        state.phase = b.dataset.phase;
+        state.drafts[state.id || "new"] = b.dataset.query;
+        saveDraft();
+        $("#message-input").value = b.dataset.query;
+        $("#phase-select").value = state.phase;
+        $("#message-input").focus();
+      },
+      templates: templatesDrawer,
+      "close-drawer": closeDrawer,
+      sop: () => showSop(b.dataset.id),
+      "context-detail": () => renderContextDetail(b.dataset.key),
+      "plan-template": async () => {
+        b.disabled = true;
+        try {
+          await planTask(b.dataset.spec);
+        } finally {
+          if (b.isConnected) b.disabled = false;
+        }
+      },
+      "task-detail": () => planDetails(state.tasks.get(b.dataset.id)),
+      "run-task": async () => {
+        b.disabled = true;
+        try {
+          await runTask(b.dataset.id);
+        } finally {
+          if (b.isConnected) b.disabled = false;
+        }
+      },
+      "cancel-job": async () => {
+        await api("cancel", { id: b.dataset.id });
+        await refreshOverview();
+        await poll();
+        toast("已请求停止，等待工具返回终态。");
+      },
+      "open-run": () => {
+        state.runTab = "acceptance";
+        go("runs", b.dataset.id);
+      },
+      "run-list": () => go("runs"),
+      "run-tab": () => {
+        state.runTab = b.dataset.tab;
+        renderRun();
+      },
+      "run-evidence": runEvidence,
+      "artifact-preview": () => previewArtifact(b.dataset.run, b.dataset.file),
+      "artifact-next": () =>
+        previewArtifact(
+          b.dataset.run,
+          b.dataset.file,
+          Number(b.dataset.offset),
+        ),
+      "recovery-check": () => checkRecovery(b.dataset.id),
+      "recovery-resume": () => resumeRecovery(b.dataset.id),
+      "eval-tab": () => {
+        state.evalLane = b.dataset.tab;
+        renderEvaluations();
+      },
+      evaluate: () => evaluate(b.dataset.suite),
+      "evaluation-detail": () => evaluationDetail(b.dataset.id),
+      refresh: async () => {
+        await refreshOverview();
+        await renderRoute();
+      },
+    };
+    if (actions[action]) await actions[action]();
+  }),
+);
+document.addEventListener(
+  "submit",
+  guard(async (event) => {
+    if (event.target.id === "composer") return sendMessage(event);
+    event.preventDefault();
+    if (event.target.id === "knowledge-search") {
+      const version = state.routeVersion,
+        b = event.target.querySelector("button");
+      b.disabled = true;
+      $("#knowledge-results").innerHTML =
+        '<div class="inline-loading"><span class="spinner"></span>正在检索规则与操作流程…</div>';
+      try {
+        const c = await api("context", { query: $("#knowledge-query").value });
+        if (version !== state.routeVersion) return;
+        state.contexts.set("knowledge", c);
+        $("#knowledge-results").innerHTML =
+          `<div class="row"><span class="meta">${c.rules.length} 条相关规则</span><span class="spacer"></span>${button("context-detail", "工具与上下文", "tool", 'data-key="knowledge"', "subtle")}</div>${c.rules.length ? rulesHtml(c.rules, c.sources) : '<div class="empty-result">没有匹配规则。请补充接口、时钟或具体错误关键词。</div>'}`;
+      } finally {
+        if (b.isConnected) b.disabled = false;
+      }
+    } else if (event.target.id === "custom-plan") {
+      const b = event.target.querySelector("button");
+      b.disabled = true;
+      try {
+        await planTask($("#custom-spec").value.trim());
+      } finally {
+        if (b.isConnected) b.disabled = false;
+      }
+    } else if (event.target.id === "agent-evaluation") {
+      await launchEvaluation("online-agent", {
+        session_directory: $("#agent-session").value.trim(),
+        workflow_directory: $("#agent-workflow").value.trim(),
+      });
+    }
+  }),
+);
+document.addEventListener("input", (event) => {
+  if (event.target.id === "message-input") {
+    state.drafts[state.id || "new"] = event.target.value;
+    saveDraft();
+  } else if (event.target.id === "session-search") {
+    state.sessionQuery = event.target.value;
+    renderSessionList();
+  } else if (event.target.id === "run-search") {
+    state.runQuery = event.target.value;
+    renderRunList();
+  }
+});
+document.addEventListener("change", (event) => {
+  if (event.target.id === "interaction-mode") {
+    state.interaction = event.target.value;
+    syncComposerMode();
+  }
+  if (event.target.id === "phase-select") state.phase = event.target.value;
+  if (event.target.id === "run-filter") {
+    state.runFilter = event.target.value;
+    renderRunList();
+  }
+});
+document.addEventListener("keydown", (event) => {
+  if (
+    event.key === "Enter" &&
+    event.target.id === "message-input" &&
+    !event.shiftKey &&
+    !event.isComposing
+  ) {
+    event.preventDefault();
+    $("#composer").requestSubmit();
+  }
+  if (event.key === "Escape") {
+    if ($(".drawer")) closeDrawer();
+    $("#app").classList.remove("rail-open");
+  }
+  if (event.key === "Tab" && $(".drawer")) {
+    const focusables = [
+        ...$(".drawer").querySelectorAll(
+          "button,input,select,textarea,a,summary",
+        ),
+      ].filter((x) => !x.disabled),
+      first = focusables[0],
+      last = focusables.at(-1);
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last?.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first?.focus();
+    }
+  }
+});
+window.addEventListener("hashchange", () => void renderRoute());
+try {
+  await refreshOverview();
+  await renderRoute();
+} catch (error) {
+  $("#content").innerHTML =
+    `<div class="screen-error"><h2>本地工作区连接失败</h2><p>${esc(error.message)}</p>${button("refresh", "重新连接", "refresh")}</div>`;
+}
+setInterval(() => void poll(), 2200);

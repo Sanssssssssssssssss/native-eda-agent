@@ -8,4 +8,6 @@ The published checkout adds `validation.json` and `validation-*.txt` from its ow
 
 For v0.6, `evaluation-v06.json` indexes local software, browser and real EDA receipts. `eda-v06/` contains sanitized Counter, AXI and DRC evidence with original and public-file hashes. The AXI workflow completed but requires DRC review; its six passing domains are not a full design pass. No provider session or new Agent end-to-end score is claimed. DCPs, waveforms, full conversations and runtime installations remain local.
 
+For v0.7, see [workbench acceptance](../docs/workbench-v07-acceptance.md) for conversation/task interactions, browser screenshots and offline lifecycle checks. The new UI does not change the retained v0.6 engineering scores. Pi session continuation and streaming were tested with a fake SDK while provider calls remained disabled.
+
 Maintain the export allowlist in `scripts/build-public.mjs`; see [contribution guidance](../CONTRIBUTING.md). Do not copy runtime installations, credentials, conversations or large EDA artifacts into this directory.
