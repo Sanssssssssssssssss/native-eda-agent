@@ -7,6 +7,7 @@
 | 套件 | 分类与单位 | 检查内容 |
 |---|---|---|
 | `offline-contracts` | 离线 / 软件检查 | 假 EDA、本机进程、MCP、目标验收、预算、恢复与会话保存；调用完整 `validate:agent` |
+| `offline-agent-loop` | 离线 / 模拟任务场景 | 候选隔离、按证据选 SOP、压缩上下文、调用边界、完整性、并发占用、恢复、预算和交付；按类别保存逐场景结果 |
 | `offline-retrieval` | 离线 / 可见问题 | 24 条中英文回归、Hit@5、MRR@5、3 条无关查询；保留旧 AND 检索对照 |
 | `offline-evidence` | 离线 / 历史成绩记录 | 11 组公开副本与可取得原件的哈希；原件缺失单独报告 |
 | `online-counter` | 真实 EDA / 工作流 | XSim、固定 checker、精确标记及独立功能验收 |
@@ -20,6 +21,7 @@ npm run evaluate -- list
 npm run evaluate -- plan online-axi
 npm run evaluate -- run offline-retrieval
 npm run evaluate -- run offline-contracts
+npm run evaluate -- run offline-agent-loop
 # 下面会启动真实 XSim / Vivado，需要安装、许可证和固定依赖
 npm run evaluate -- run online-counter
 npm run evaluate -- run online-axi
@@ -32,6 +34,8 @@ npm run evaluate -- run online-agent --session artifacts/NATIVE_AGENT --workflow
 界面同时展示记录时的结果和当前源码是否匹配。该标记只覆盖回执记录的文件；要判断 workflow 证据与输入是否仍可用，执行 `workflow inspect`。未运行、前提缺失、失败和待审查不会自动变为 passed。
 
 ## 当前验证边界
+
+绑定新任务的 `online-agent` 还要求当前 delivery 接受所给 workflow，记录验证轮次、验证调用、首次/修复后通过和原始输入保留状态。无法使用较早的 passing 子运行覆盖当前失败或陈旧候选。新离线场景只衡量宿主机制，不计为真实 Agent 成绩。
 
 本轮真实 Counter 验证固定 `COUNTER_PASS`，321 次检查、1 次回绕、7 次保持、3 次复位；只覆盖功能 profile。真实 Ethernet DCP 的 DRC 查询得到 0 error、0 critical warning、2 warning，按严格策略需要审查。这两项与历史 11 组成绩分别记录。完整发布回执见 [release](../release/README.md)，AXI 本轮结果见 [功能成绩](results.md)。
 

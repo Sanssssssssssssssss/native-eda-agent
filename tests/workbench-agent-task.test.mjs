@@ -1,0 +1,32 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import path from 'node:path';
+import {createWorkbench} from '../src/workbench.mjs';
+import {taskFixture} from './fixtures/agent-task.mjs';
+
+test('workbench task preparation remains available with APIs off and persists a fresh inspectable scope',async t=>{
+  const f=taskFixture(t);
+  fs.mkdirSync(path.join(f.root,'projects/task'),{recursive:true});
+  fs.copyFileSync(path.join(f.root,'spec.json'),path.join(f.root,'projects/task/workflow.json'));
+  let providerCalls=0;
+  const app=createWorkbench(f.root,f.registry,{agentAdapter:async()=>{providerCalls++;throw new Error('unexpected provider');}});
+  await new Promise(resolve=>app.server.listen(0,'127.0.0.1',resolve));
+  t.after(()=>app.close());
+  const base=`http://127.0.0.1:${app.server.address().port}`;
+  const post=(route,data)=>fetch(base+'/api/'+route,{method:'POST',headers:{Origin:base,'Content-Type':'application/json'},body:JSON.stringify(data)});
+  const session=await (await post('session',{action:'create',title:'Verified RTL task'})).json();
+  const prepared=await post('agent-task',{action:'prepare',session_id:session.id,configuration:{...f.configuration,spec:'projects/task/workflow.json'}});
+  assert.equal(prepared.status,200);
+  const task=await prepared.json();assert.ok(task.candidate);assert.equal(task.launches_eda,false);
+  const state=await (await fetch(base+'/api/session?id='+session.id)).json();
+  assert.equal(state.agent_task,task.directory);assert.equal(state.agent_task_summary.status,'prepared');
+  assert.equal((await post('agent',{session_id:session.id,message:'repair now'})).status,403);
+  assert.equal(providerCalls,0);assert.equal(f.calls.length,0);
+  fs.appendFileSync(path.join(f.root,'design/checker.sv'),'// input drift');
+  const changed=await (await fetch(base+'/api/session?id='+session.id)).json();
+  assert.equal(changed.agent_task_summary.status,'invalid');assert.equal(changed.agent_task_summary.recovery.ready,false);
+  await post('agent-task',{action:'detach',session_id:session.id});
+  const detached=await (await fetch(base+'/api/session?id='+session.id)).json();
+  assert.equal(detached.agent_task,null);assert.equal(fs.existsSync(path.join(f.root,task.directory,'task-contract.json')),true);
+});

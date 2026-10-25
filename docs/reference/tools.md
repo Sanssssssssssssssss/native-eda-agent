@@ -1,6 +1,8 @@
 # Native tool contracts
 
-55 native interfaces. 28 are focused contracts over shared executors; 4 expose retained scores. Community MCP separately exposes 45 tools and 11 prompts.
+57 native interfaces. 28 are focused contracts over shared executors; 4 expose retained scores. Community MCP separately exposes 45 tools and 11 prompts.
+
+`eda_task_prepare(configuration)` freezes an existing verifier and copies its declared dependencies into an isolated RTL candidate. `eda_task_inspect(directory)` rechecks its original/candidate inputs, current independent verdict, ownership and cumulative recovery budget. Both are static and record native traces; use the returned task directory with the [host session](../agent-lifecycle.md) for generation and verification.
 
 Schemas: [tools.json](tools.json). Real EDA calls write independent artifacts and use shared resource leases.
 

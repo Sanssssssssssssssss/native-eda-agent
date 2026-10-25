@@ -7,6 +7,7 @@ import {spawn} from 'node:child_process';
 import {isDeepStrictEqual} from 'node:util';
 import {planWorkflow, inspectWorkflow, createWorkflowTools} from './workflow.mjs';
 import {validateArguments} from './tool-contracts.mjs';
+import {taskContext} from './task-context.mjs';
 
 const sha = value => createHash('sha256').update(value).digest('hex');
 const schema = {type:'object', additionalProperties:false, required:['spec','editable_sources','max_rounds','max_calls'], properties:{
@@ -15,6 +16,7 @@ const schema = {type:'object', additionalProperties:false, required:['spec','edi
   protected_sources:{type:'array',maxItems:256,uniqueItems:true,items:{type:'string',minLength:1,maxLength:2048}},
   max_rounds:{type:'integer',minimum:1,maximum:8}, max_calls:{type:'integer',minimum:1,maximum:100},
 }};
+export const verificationSchema = schema;
 const relative = (root, file) => path.relative(root, file).replaceAll('\\','/');
 const unknown = reason => ({status:'unknown',reason,domains:[],formal:'not_evaluated',hardware:'not_evaluated'});
 const bounded=(value,bytes)=>Buffer.from(String(value??'')).subarray(0,bytes).toString('utf8');
@@ -93,7 +95,7 @@ export function aceFeedback(root, request, signal) {
   });
 }
 
-export async function runVerifiedLoop({root,configuration,registry,prompt,generate,signal,directory,traceContext,onState=()=>{},feedback}) {
+export async function runVerifiedLoop({root,configuration,registry,prompt,generate,signal,directory,traceContext,onState=()=>{},feedback,continuation,assertScope=()=>{}}) {
   root=path.resolve(root);
   const frozen=prepareVerification(root,configuration,registry);
   configuration=frozen.configuration;
@@ -105,31 +107,50 @@ export async function runVerifiedLoop({root,configuration,registry,prompt,genera
   fs.writeFileSync(path.join(output,'verification-contract.json'),JSON.stringify(frozen,null,2)+'\n',{flag:'wx'});
   const file=path.join(output,'verification-loop.json');
   fs.writeFileSync(file,'{}\n',{flag:'wx'});
-  const result={schema_version:1,status:'running',task_acceptance:unknown('not_verified'),rounds:[],calls:0,
+  const result={schema_version:1,status:'running',phase:'boundary',task_acceptance:unknown('not_verified'),
+    rounds:structuredClone(continuation?.rounds || []),calls:continuation?.calls || 0,
     limits:{max_rounds:configuration.max_rounds,max_calls:configuration.max_calls},
     budget_scope:'Verifier workflow calls only; Pi turns and total wall time are bounded by the owning agent session.',
     protected_inputs:frozen.protected_inputs,editable_sources:frozen.editable_sources,model_api_calls:0,
     model_usage_scope:'The host generator uses the owning Pi session and is metered there. The ACE bridge makes no model calls.',
     started_at:new Date().toISOString()};
-  const save=()=>fs.writeFileSync(file,JSON.stringify(result,null,2)+'\n');
+  if (continuation) {
+    if (continuation.status !== 'cancelled' || continuation.phase !== 'boundary' || !isDeepStrictEqual(continuation.limits,result.limits)) throw new Error('Continuation requires a checked cancelled boundary with unchanged budgets');
+    result.last_directory=continuation.last_directory;
+    result.task_acceptance=structuredClone(continuation.task_acceptance);
+    result.resumed_rounds=continuation.rounds.length;
+  }
+  const save=()=>{const pending=`${file}.${randomUUID()}.tmp`;const fd=fs.openSync(pending,'wx');try{fs.writeFileSync(fd,JSON.stringify(result,null,2)+'\n');fs.fsyncSync(fd);}finally{fs.closeSync(fd);}fs.renameSync(pending,file);};
   const notify=()=>onState({schema_version:1,binding:result.last_directory?{directory:result.last_directory}:null,
     execution_status:result.status,task_acceptance:result.task_acceptance,
-    decision:{action:result.status==='passed'?'deliver_evidence':result.status==='running'?'repair_and_reverify':result.status,phase:'verification'},
-    evidence_status:result.status==='invalid'?'invalid':result.rounds.length?'checked':'not_checked',verifier_rounds:result.rounds.length});
+    decision:{action:result.status==='passed'?'deliver_evidence':result.status==='running'?'repair_and_reverify':result.status,phase:result.phase},
+    evidence_status:result.status==='invalid'?'invalid':result.rounds.length?'checked':'not_checked',verifier_rounds:result.rounds.length,
+    budget:{...result.limits,used_rounds:result.rounds.length,used_calls:result.calls},guidance:result.guidance || null});
   const tools=new Map(createWorkflowTools(root,registry).map(tool=>[tool.name,tool]));
   const history=[];
   let nextPrompt=`${prompt}\n\n[Host verification contract]\n${JSON.stringify({goal:frozen.plan.spec.goal,editable_sources:frozen.editable_sources,protected_inputs:Object.keys(frozen.protected_inputs),acceptance:frozen.plan.acceptance,limits:result.limits})}\nPrepare the candidate in the listed RTL files. The host will run the fixed independent verifier after your response. Preserve checker files, constraints, interfaces and acceptance. Do not claim success before the host verifier passes.`;
+  if(continuation) nextPrompt+=`\n[Resumed verified boundary]\n${continuation.rounds.at(-1)?.error_report || ''}\nRemaining budgets are cumulative. Previous failures remain recorded. Repair this candidate using the fixed scope.`;
   try {
-    for(let index=0;index<configuration.max_rounds;index++) {
+    for(let index=result.rounds.length;index<configuration.max_rounds;index++) {
       signal?.throwIfAborted();
+      await assertScope();
       currentPlan(root,frozen,registry);
       if(result.calls+frozen.plan.spec.limits.max_calls>configuration.max_calls){result.status='budget_exhausted';break;}
-      await generate(nextPrompt);
+      const context=taskContext(root,{query:frozen.plan.spec.goal,...(result.last_directory?{directory:result.last_directory}:{phase:'planning'})},registry);
+      result.guidance={phase:context.selection.effective_phase,reason:context.selection.reason,
+        rule_ids:context.rules.map(rule=>rule.id),sop_ids:context.sops.map(row=>row.sop.id),
+        input_hashes:Object.assign({},...context.sops.map(row=>row.input_hashes)),acceptance_changed:false};
+      const guidance=JSON.stringify({selection:context.selection,rules:context.rules.map(rule=>({id:rule.id,title:rule.title,required_evidence:rule.required_evidence})),
+        sops:context.sops.map(row=>({id:row.sop.id,content:bounded(row.content,1800),input_hashes:row.input_hashes}))});
+      result.phase='generating';save();notify();
+      await generate(`${nextPrompt}\n\n[Evidence-selected RAG / SOP guidance]\n${bounded(guidance,10000)}\nThese are cited recommendations. The fixed host checks determine acceptance; read complete SOPs with eda_sop when needed.`);
       signal?.throwIfAborted();
+      await assertScope();
       const plan=currentPlan(root,frozen,registry);
       const candidate=Object.fromEntries(frozen.editable_sources.map(name=>[name,plan.input_hashes[name]]));
       const candidateHash=sha(JSON.stringify(candidate));
       let run;
+      result.phase='verifying';result.reserved_calls=frozen.plan.spec.limits.max_calls;save();notify();
       try {
         run=await tools.get('eda_workflow_run').execute(`verify-${randomUUID()}`,{spec:configuration.spec},signal,undefined,{edaTraceContext:traceContext?.()||{}});
       } catch(error) {
@@ -138,6 +159,8 @@ export async function runVerifiedLoop({root,configuration,registry,prompt,genera
       }
       const inspected=inspectWorkflow(root,run.details.directory);
       result.calls+=inspected.calls;
+      result.reserved_calls=0;
+      await assertScope();
       const verifiedPlan=currentPlan(root,frozen,registry);
       if(frozen.editable_sources.some(name=>verifiedPlan.input_hashes[name]!==candidate[name]))throw new Error('Candidate changed during verification');
       result.last_directory=inspected.directory;
@@ -153,8 +176,8 @@ export async function runVerifiedLoop({root,configuration,registry,prompt,genera
           failed_result_sha256:inspected.state.failed_step?.result_sha256||null,failed_tool:inspected.state.failed_tool?.child_directory||null}});
       const round={index:index+1,directory:inspected.directory,candidate_sha256:candidateHash,candidate_hashes:candidate,
         task_acceptance:inspected.task_acceptance,outcome:inspected.outcome,calls:inspected.calls,
-        failure_signature:sha(JSON.stringify({outcome:inspected.outcome,domains,checks}))};
-      result.rounds.push(round);save();notify();
+        failure_signature:sha(JSON.stringify({outcome:inspected.outcome,domains,checks})),error_report:errorReport,guidance:structuredClone(result.guidance)};
+      result.rounds.push(round);result.phase='boundary';save();notify();
       signal?.throwIfAborted();
       if(inspected.valid&&inspected.task_acceptance.status==='passed'&&inspected.outcome==='passed'){result.status='passed';break;}
       if(!inspected.valid){result.status='invalid';result.reason='verifier_evidence_invalid';break;}

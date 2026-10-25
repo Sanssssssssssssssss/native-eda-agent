@@ -4,6 +4,8 @@
 
 ## RAG 到底接到了哪里
 
+宿主 [验证任务](agent-lifecycle.md)在每轮生成前调用 `taskContext`：第一轮使用 planning，失败后根据当前 workflow 的验收域选择 simulation、timing 或 recovery 等阶段。选择记录及 SOP 哈希写入 `verification-loop.json`；Pi context hook 在压缩后保留当前任务范围、预算与选择。普通探索会话仍通过工具按需检索。自动选择没有替代固定 checks，也不表示模型遵循了 SOP 的全部自然语言条目。
+
 ```mermaid
 flowchart LR
   Q[设计问题] --> K[eda_knowledge: 词项检索与排序]

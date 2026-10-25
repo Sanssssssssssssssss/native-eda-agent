@@ -23,7 +23,7 @@
     "skills": 6
   },
   "boundary": "Offline structural and cross-reference validation only. Does not verify source truth, remote link reachability, HDL correctness, formal proof, tool installation or hardware behavior.",
-  "checked_at_utc": "2026-10-25T17:51:18.875Z",
+  "checked_at_utc": "2026-10-25T18:24:26.023Z",
   "files": [
     {
       "path": "knowledge/sources.json",

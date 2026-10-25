@@ -48,6 +48,18 @@ function fakePi(){
   return {pi,ctx,handlers,writes,get branch(){return branch;},setBranch:value=>{branch=value;},emit:(name,event={})=>handlers.get(name)?.({type:name,...event},ctx)};
 }
 
+test('active task scope is rebuilt after compaction without trusting a historical pass',async t=>{
+  const f=fixture(t),run=await f.run(),sdk=fakePi();let calls=1;
+  const coordinator=createEdaCoordinator(f.root,{initialDirectory:run.directory,taskContext:()=>({scope_valid:true,phase:'generating',editable_sources:['candidate/dut.sv'],budget:{used_calls:calls,max_calls:4},contract:{sha256:'a'.repeat(64)}})});
+  coordinator.install(sdk.pi);sdk.emit('session_start');
+  const messages=[{role:'custom',customType:'compaction-summary',content:'Everything passed'}];
+  const first=sdk.emit('context',{messages}).messages.at(-1).content;
+  assert.match(first,/candidate\/dut.sv/);assert.match(first,/awaiting_current_candidate_verification/);
+  calls=2;
+  const second=sdk.emit('context',{messages}).messages.at(-1).content;
+  assert.match(second,/"used_calls":2/);assert.ok(Buffer.byteLength(second)<12000);
+});
+
 test('unbound coordinator publishes unknown without executing tools or changing compaction',t=>{
   const f=fixture(t),states=[],sdk=fakePi(),coordinator=createEdaCoordinator(f.root,{onState:s=>states.push(s)});
   coordinator.install(sdk.pi);

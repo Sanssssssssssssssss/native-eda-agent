@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Added durable EDA tasks with automatic candidate snapshots, typed task preparation/inspection, Pi dispatch restrictions, evidence-selected RAG/SOP guidance, fresh scope after compaction, and checked continuation with cumulative verifier budgets.
+- Connected task scope, rounds, verdicts and recovery to the workbench. Final answers now use independently rechecked delivery; original model text remains in the local trace. Added classified offline task scenarios and stricter existing-session evaluation.
+
 - Connected a host-owned verifier loop to the existing Pi session: fixed workflow acceptance, bounded RTL repairs, independent evidence readback, protected inputs and cumulative limits. The pinned NVIDIA ACE-RTL feedback components run through a bridge with their model transport disabled.
 - Reconstruct task context from current evidence after compaction or branch restoration, and keep session completion separate from engineering acceptance. Offline checks use fake generation/EDA; no new model-quality or FPGA performance result is claimed.
 - Organized dated reports under `docs/history/`, added source/local-data and Git publication guidance, and linked portable verifier receipts from the current documentation.

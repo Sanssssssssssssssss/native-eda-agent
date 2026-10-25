@@ -1,6 +1,8 @@
 # Agent 工作流与 trace 接入
 
-当前入口是 Codex → 55 个原生接口 / 45 个社区 Vivado MCP 接口；Pi 会话可复用原生注册表，但模型 API 当前禁用。工具执行、设计验收和优化收益分别判断。本文是 Agent 的导航与证据合同；历史成绩仍以各次原始报告为准。
+当前入口是 Codex → 57 个原生接口 / 45 个社区 Vivado MCP 接口；Pi 会话可复用原生注册表，但模型 API 当前禁用。工具执行、设计验收和优化收益分别判断。本文是 Agent 的导航与证据合同；历史成绩仍以各次原始报告为准。
+
+自动候选、逐轮知识选择、可恢复验证回合和最终交付合同见 [任务闭环](agent-lifecycle.md)。`task.json` 绑定已提交 attempt 的 verifier 回执哈希；最终 `delivery.json` 重新检查当前输入与证据，原模型文字单独保留。
 
 统一代理、恢复和 OTLP 的操作入口见 [Agent 闭环交付](agent-completion-2026-10-24.md)。
 

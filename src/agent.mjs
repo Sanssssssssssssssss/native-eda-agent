@@ -69,7 +69,7 @@ async function agentRun(prompt, limits, options = {}) {
       console.error(result.run.error || result.run.stoppedReason || result.status);
       process.exitCode = 1;
     }
-    if (options.verification) {
+    if (options.verification || options.task) {
       console.log(`Engineering acceptance: ${result.run.task_acceptance?.status || 'unknown'}`);
       if (result.run.task_acceptance?.status !== 'passed') process.exitCode = 1;
     }
@@ -92,6 +92,11 @@ if (command === 'doctor') {
 } else if (command === 'knowledge') {
   const result=await nativeTools.get('eda_knowledge').execute(randomUUID(),args.length?{query:args.join(' ')}:{});
   console.log(JSON.stringify(result.details,null,2));
+} else if (command === 'task') {
+  const {prepareAgentTask,taskDelivery} = await import('./agent-task.mjs');
+  if (args[0] === 'prepare' && args[1]) console.log(JSON.stringify(prepareAgentTask(root,JSON.parse(fs.readFileSync(path.resolve(root,args[1]),'utf8')),nativeTools),null,2));
+  else if (args[0] === 'inspect' && args[1]) console.log(JSON.stringify(taskDelivery(root,args[1],nativeTools),null,2));
+  else throw new Error('Usage: task prepare VERIFICATION.json | task inspect TASK_DIRECTORY');
 } else if (command === 'verification') {
   if(args[0] !== 'plan' || !args[1]) throw new Error('Usage: verification plan FILE.json');
   const {prepareVerification} = await import('./verifier-loop.mjs');
@@ -112,15 +117,17 @@ if (command === 'doctor') {
 } else if (command === 'run' || command === 'demo') {
   if (!readConfig(root).model_api_enabled) throw new Error('Model API is disabled in .eda/config.json; offline benchmark, verify and MCP remain available.');
   const limits = { maxTurns: 24, timeoutSeconds: 600 };
-  let file, verificationFile, taskDirectory;
+  let file, verificationFile, taskDirectory, task, resumeTask=false;
   while (args[0]?.startsWith('--')) {
     const option = args.shift();
+    if (option === '--resume-task') {resumeTask=true;continue;}
     const value = args.shift();
     if (option === '--max-turns') limits.maxTurns = Number(value);
     else if (option === '--timeout') limits.timeoutSeconds = Number(value);
     else if (option === '--prompt-file') file = value;
     else if (option === '--verification') verificationFile = value;
     else if (option === '--task-directory') taskDirectory = value;
+    else if (option === '--task') task = value;
     else throw new Error(`Unknown option ${option}`);
   }
   if (!Number.isSafeInteger(limits.maxTurns) || limits.maxTurns < 1 || !Number.isSafeInteger(limits.timeoutSeconds) || limits.timeoutSeconds < 1) throw new Error('Limits must be positive integers');
@@ -130,6 +137,7 @@ if (command === 'doctor') {
   await agentRun(prompt, limits, {
     ...(verificationFile ? {verification:JSON.parse(fs.readFileSync(path.resolve(root,verificationFile),'utf8'))} : {}),
     ...(taskDirectory ? {taskDirectory} : {}),
+    ...(task ? {task,resumeTask} : {}),
   });
 } else {
   console.log('EDA Agent — Pi SDK + local tools + MCP\n\n  .\\eda.ps1 doctor\n  .\\eda.ps1 benchmark list|plan|run|report|compare\n  .\\eda.ps1 knowledge timing\n  .\\eda.ps1 trace RUN_DIRECTORY\n  .\\eda.ps1 recover RUN_DIRECTORY --check-only\n  .\\eda.ps1 export-trace RUN_DIRECTORY --output FILE.json\n  .\\eda.ps1 storage --plan\n  .\\eda.ps1 runs [--reconcile]\n  npm run knowledge -- QUERY\n  npm run sop -- [SOP_ID]\n  npm run workflow -- plan|run SPEC.json\n  npm run validate:agent\n  .\\eda.ps1 verify\n  .\\eda.ps1 chat\n  .\\eda.ps1 run "任务描述"   # requires model_api_enabled=true\n\nrun/demo: --max-turns 24 --timeout 600 --verification FILE.json --task-directory WORKFLOW_DIR; run also accepts --prompt-file PATH');

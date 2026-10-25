@@ -37,6 +37,7 @@ jobs:
             artifacts/agent-offline-*/knowledge.log
             artifacts/agent-offline-*/repository.log
             artifacts/ace-loop-demo-*/result.json
-            artifacts/ace-loop-demo-*/artifacts/owned-loop/verification-loop.json
+            artifacts/ace-loop-demo-*/artifacts/native-agent-*/verification-loop.json
+            artifacts/ace-loop-demo-*/artifacts/native-agent-*/delivery.json
             artifacts/knowledge-eval-*/result.json
           retention-days: 7

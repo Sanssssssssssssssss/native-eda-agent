@@ -13,6 +13,7 @@ const states = ['passed', 'failed', 'unknown', 'not_run', 'blocked', 'review_req
 const domainTitles = { functional: '功能仿真', synthesis: '综合', setup: 'Setup 时序', hold: 'Hold 时序', constraints: '约束完整性', routing: '布局布线', drc: 'DRC', cdc: 'CDC', formal: '形式验证', hardware: '板卡实测' };
 const softwareGroups = [
   ['workbench', '工作台与修改边界', /workbench/],
+  ['agent_loop', 'Agent 候选、验证与交付', /agent-task|verifier-loop|eda-coordinator/],
   ['agent_runtime', 'Agent 会话与资源', /agent-recording|agent-lifecycle|runtime|platform|mcp/],
   ['workflow', '任务、验收与恢复', /workflow|task-context|task-outcome/],
   ['retrieval_contract', 'RAG 与 SOP 契约', /knowledge/],

@@ -20,7 +20,7 @@ function contextFor(state){
       domains:(acceptance.domains||[]).slice(0,16).map(d=>({domain:brief(d.domain,48),status:d.status,reason:brief(d.reason,128),step:brief(d.step,80),
         ...(Number.isFinite(d.observed)?{observed:d.observed}:{}),...(Number.isFinite(d.expected_min)?{expected_min:d.expected_min}:{}),
         ...(d.evidence?{evidence:{result:brief(d.evidence.result,256),sha256:brief(d.evidence.sha256,64)}}:{})}))},
-    decision:state.decision,reflection:state.reflection};
+    decision:state.decision,reflection:state.reflection,active_task:state.active_task||null};
   const prefix='Fresh host-verified EDA state. Use this state instead of historical success claims or compaction summaries. Unknown, invalid, failed and review_required are not acceptance. Guidance does not authorize execution or change fixed checks.\n';
   let text=prefix+JSON.stringify(view);
   if(Buffer.byteLength(text)>12000){
@@ -31,11 +31,12 @@ function contextFor(state){
   // All remaining strings and arrays are bounded above. This is a final guard
   // for unusual Unicode paths or future additions, without cutting JSON bytes.
   if(Buffer.byteLength(text)>12000)text=prefix+JSON.stringify({schema_version:1,binding:view.binding,evidence_status:view.evidence_status,
-    execution_status:view.execution_status,task:state.task,task_acceptance:{status:acceptance.status,reason:brief(acceptance.reason,128)},decision:state.decision,truncated:true});
+    execution_status:view.execution_status,task:state.task,task_acceptance:{status:acceptance.status,reason:brief(acceptance.reason,128)},decision:state.decision,
+    active_task:state.active_task?{...state.active_task,editable_sources:null,editable_sources_omitted:true}:null,truncated:true});
   return text;
 }
 
-export function createEdaCoordinator(root,{initialDirectory,onState=()=>{}}={}){
+export function createEdaCoordinator(root,{initialDirectory,onState=()=>{},taskContext}={}){
   root=fs.realpathSync(root);
   let pointer=null,pi=null,initialPending=Boolean(initialDirectory),bindingProblem=null,lastFingerprint=null;
   const resolveDirectory=directory=>{
@@ -81,6 +82,12 @@ export function createEdaCoordinator(root,{initialDirectory,onState=()=>{}}={}){
           reflection:{issues:[brief(error.message,320)],unmet_domains:[],recent_failures:[],stalled:false},evidence_status:'invalid'};
       }
     }
+    if(taskContext)try{
+      const active=taskContext();
+      if(active){state.active_task=active;state.task_acceptance=unknown(active.scope_valid?'awaiting_current_candidate_verification':'active_task_integrity_failed');
+        state.decision={action:active.scope_valid?'repair_within_frozen_scope':'inspect_evidence',phase:active.scope_valid?active.phase:'recovery'};
+        if(!active.scope_valid)state.evidence_status='invalid';}
+    }catch(error){state.active_task={scope_valid:false,issue:brief(error.message,256)};state.task_acceptance=unknown('active_task_inspection_failed');}
     state.context=contextFor(state);
     const fingerprint=JSON.stringify(state);
     if(fingerprint!==lastFingerprint){

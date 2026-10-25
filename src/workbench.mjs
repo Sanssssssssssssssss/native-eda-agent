@@ -13,6 +13,7 @@ import {listRunArtifacts, readRunArtifact} from './workbench-artifacts.mjs';
 import {listProjects, getProject, readProjectSource} from './workbench-projects.mjs';
 import {getTestingOverview} from './workbench-testing.mjs';
 import {listChanges, getChange, planChange, previewChange, applyChange, checkChange} from './workbench-changes.mjs';
+import {prepareAgentTask,taskDelivery} from './agent-task.mjs';
 
 const digest = value => createHash('sha256').update(JSON.stringify(value)).digest('hex');
 // Each preview has its own trace directory; the executable contract excludes only that receipt location.
@@ -207,6 +208,7 @@ export function createWorkbench(root, registry, options = {}) {
         let result;
         try {
           result = await adapter({root, prompt, limits: {maxTurns: 24, timeoutSeconds: 600}, signal,
+            ...(s.agent_task ? {task:s.agent_task,resumeTask:data.resumeTask===true} : {}),
             ...(data.taskDirectory ? {taskDirectory:data.taskDirectory} : {}),
             ...(data.verification ? {verification:data.verification} : {}),
             resumeSessionFile: state.get('sessions', s.id).native_session_file, onEvent});
@@ -218,6 +220,23 @@ export function createWorkbench(root, registry, options = {}) {
         const {sessionFile, ...publicResult} = result; return publicResult;
       }, {sessionId: s.id, release});
     } catch (error) { release(); throw error; }
+  }
+  function agentTask(data) {
+    const session=availableSession(data.session_id),release=state.acquire(session.id);
+    try {
+      if(data.action==='prepare') {
+        if(!data.configuration) throw new Error('Supply a fixed verifier configuration');
+        // Restrict web-authored specs to the same reviewed project roots as workflow planning.
+        const configuration={...data.configuration,spec:specPath(root,data.configuration.spec)};
+        const prepared=prepareAgentTask(root,configuration,registry);
+        session.agent_task=prepared.directory;state.save('sessions',session);
+        publish(session.id,'agent_task_prepared',{directory:prepared.directory});
+        return prepared;
+      }
+      if(data.action==='detach') {session.agent_task=null;state.save('sessions',session);return {detached:true};}
+      if(data.action==='inspect'&&session.agent_task) return taskDelivery(root,session.agent_task,registry);
+      throw new Error('Choose prepare, inspect or detach for an agent task');
+    } finally {release();}
   }
   async function recover(data) {
     if (!['check', 'resume'].includes(data.action)) throw new Error('Choose recovery check or resume');
@@ -292,15 +311,21 @@ export function createWorkbench(root, registry, options = {}) {
         const prompt = m.mode === 'pi-sdk-agent' && fs.existsSync(path.join(dir, 'prompt.txt')) ? fs.readFileSync(path.join(dir, 'prompt.txt'), 'utf8').slice(0, 8000) : null;
         const ownerSession = state.list('tasks').find(task => task.run_id === path.basename(dir))?.session_id || null;
         const preview = listRunArtifacts(root, path.basename(dir));
+        let agent_task=null;
+        if(m.task)try{agent_task={recorded:m.delivery||null,current:taskDelivery(root,m.task,registry)};}catch(error){agent_task={recorded:m.delivery||null,current:{status:'invalid',task_acceptance:{status:'unknown'},issues:[error.message]}};}
         return send(200, {id: path.basename(dir), owner_session_id: ownerSession, ...runLabel(dir, m), artifacts: preview.files, artifact_preview: preview,
-          manifest: {tool: m.tool || m.mode, status: m.status, started_at: m.started_at || m.startedAt, finished_at: m.finished_at || m.endedAt}, inspection: inspectTrace(dir), workflow, events, prompt});
+          manifest: {tool: m.tool || m.mode, status: m.status, started_at: m.started_at || m.startedAt, finished_at: m.finished_at || m.endedAt}, inspection: inspectTrace(dir), workflow, agent_task, events, prompt});
       }
       if (req.method === 'GET' && route === '/api/artifacts') return send(200, listRunArtifacts(root, url.searchParams.get('run_id')));
       if (req.method === 'GET' && route === '/api/artifact') return send(200, readRunArtifact(root, url.searchParams.get('run_id'), url.searchParams.get('file'), {
         ...(url.searchParams.has('offset') ? {offset: Number(url.searchParams.get('offset'))} : {}),
         ...(url.searchParams.has('limit') ? {limit: Number(url.searchParams.get('limit'))} : {}),
       }));
-      if (req.method === 'GET' && route === '/api/session') { const id = url.searchParams.get('id'); reconcileSession(id); return send(200, state.session(id)); }
+      if (req.method === 'GET' && route === '/api/session') {
+        const id = url.searchParams.get('id'); reconcileSession(id);const session=state.session(id);
+        if(session.agent_task)try{session.agent_task_summary=taskDelivery(root,session.agent_task,registry);}catch(error){session.agent_task_summary={task:session.agent_task,status:'invalid',issues:[error.message],task_acceptance:{status:'unknown'},recovery:{ready:false,reason:'inspection_failed'}};}
+        return send(200, session);
+      }
       if (req.method === 'GET' && route === '/api/task') {
         const task = state.get('tasks', url.searchParams.get('id'));
         if (url.searchParams.has('session_id') && task.session_id !== url.searchParams.get('session_id')) throw conflict('Task belongs to a different session');
@@ -328,6 +353,7 @@ export function createWorkbench(root, registry, options = {}) {
       }
       if (req.method !== 'POST') return send(404, {error: 'Unknown route'});
       if (req.headers.origin !== origin) return send(403, {error: 'POST requires same-origin browser request'}); const data = await body(req);
+      if(route==='/api/agent-task')return send(200,agentTask(data));
       if (route === '/api/context') return send(200, (await registry.get('eda_task_context').execute(`ui-${randomUUID()}`, data)).details);
       if (route === '/api/sop') return send(200, querySop(root, {id: data.id}));
       if (route === '/api/session') return send(200, data.action ? editSession(data) : await sendMessage(data));

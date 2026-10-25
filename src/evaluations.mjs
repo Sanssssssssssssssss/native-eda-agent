@@ -8,6 +8,7 @@ import {readConfig} from './runtime.mjs';
 import {inspectTrace} from '../scripts/trace-inspect.mjs';
 import {inspectWorkflow} from './workflow.mjs';
 import {knowledgeFiles} from './knowledge.mjs';
+import {taskDelivery} from './agent-task.mjs';
 const hash=file=>createHash('sha256').update(fs.readFileSync(file)).digest('hex');
 export function evaluationFreshness(root,receipt){
   const entries=Object.entries(receipt.source_hashes||{}),changed=[];
@@ -23,6 +24,7 @@ export function evaluationFreshness(root,receipt){
 }
 export const evaluationSuites=[
   {id:'offline-contracts',lane:'offline',category:'agent_mechanism',unit:'software_test',description:'Fake EDA, native MCP, task outcomes, recovery and resource contracts',launches_eda:false},
+  {id:'offline-agent-loop',lane:'offline',category:'agent_lifecycle',unit:'synthetic_scenario',description:'Candidate isolation, adaptive guidance, dispatch boundaries, cumulative recovery and evidence delivery using fake EDA; not an RTL or model capability score',launches_eda:false},
   {id:'offline-retrieval',lane:'offline',category:'rag',unit:'visible_query',description:'24 visible bilingual rule-retrieval queries; not a blind answer score',launches_eda:false},
   {id:'offline-evidence',lane:'offline',category:'evidence',unit:'scorecard_integrity',description:'Verify retained public and available original evidence hashes; does not rerun designs',launches_eda:false},
   {id:'online-counter',lane:'online_eda',category:'rtl',unit:'workflow_run',description:'Live XSim with the fixed counter checker and host goal verification',spec:'examples/workflows/counter-simulation.json',launches_eda:true},
@@ -51,6 +53,7 @@ export async function runEvaluation(root,id,registry,{signal,session_directory,w
   const files=[...new Set(['src/evaluations.mjs','src/task-outcome.mjs','src/task-context.mjs','src/workflow.mjs','scripts/evaluate-knowledge.mjs','knowledge/retrieval-cases.json',...knowledgeFiles(root).map(f=>path.relative(root,f).replaceAll('\\','/')),...(plan.spec?[plan.spec]:[])])];
   const result={schema_version:1,suite:id,lane:plan.lane,category:plan.category,unit:plan.unit,started_at:new Date().toISOString(),status:'running',
     source_hashes:Object.fromEntries(files.map(f=>[f,createHash('sha256').update(fs.readFileSync(path.join(root,f))).digest('hex')])),provider_calls_by_evaluator:0,outer_codex_tokens:null};
+  if(id==='offline-agent-loop') for(const name of ['tests/agent-task.test.mjs','tests/fixtures/agent-task.mjs','src/agent-task.mjs','src/verifier-loop.mjs','src/runtime.mjs','src/trace.mjs','src/tool-contracts.mjs','scripts/trace-inspect.mjs','package-lock.json'])result.source_hashes[name]=hash(path.join(root,name));
   const save=()=>fs.writeFileSync(path.join(dir,'result.json'),JSON.stringify(result,null,2)+'\n');save();
   try{
     signal?.throwIfAborted();
@@ -64,6 +67,15 @@ export async function runEvaluation(root,id,registry,{signal,session_directory,w
       result.source_hashes={...result.source_hashes,...validation.source_hashes};
       result.metrics={checks:validation.checks.map(({name,passed,test_count})=>({name,passed,test_count}))};
       if(!validation.passed||!validation.source_hashes?.['scripts/validate-agent-offline.mjs'])result.status='failed';
+    }else if(id==='offline-agent-loop'){
+      const log=path.join(dir,'scenarios.tap');
+      result.exit_code=await command(root,['--test','--test-reporter=tap','tests/agent-task.test.mjs'],signal,log);
+      const text=fs.readFileSync(log,'utf8');
+      result.scenarios=[...text.matchAll(/^(ok|not ok) \d+ - ([^:\n]+): ([^\n]+)/gm)].map(([,status,category,name])=>({category,name,passed:status==='ok'}));
+      result.metrics={total:result.scenarios.length,passed:result.scenarios.filter(row=>row.passed).length,
+        categories:Object.fromEntries([...new Set(result.scenarios.map(row=>row.category))].map(category=>[category,{total:result.scenarios.filter(row=>row.category===category).length,passed:result.scenarios.filter(row=>row.category===category&&row.passed).length}]))};
+      result.status=result.exit_code===0&&result.metrics.total>0&&result.metrics.passed===result.metrics.total?'passed':'failed';
+      result.detail_log='scenarios.tap';result.scope='Synthetic host lifecycle scenarios. No model, HDL compiler, Vivado or hidden benchmark executed.';
     }else if(id==='offline-retrieval'){
       result.metrics=evaluateRetrieval(root);result.status=result.metrics.after.hits>=result.metrics.before.hits&&result.metrics.unrelated.every(q=>q.returned===0)?'passed':'failed';
     }else if(id==='offline-evidence'){
@@ -79,6 +91,12 @@ export async function runEvaluation(root,id,registry,{signal,session_directory,w
         const session=artifact(root,session_directory),workflow=artifact(root,workflow_directory),manifest=JSON.parse(fs.readFileSync(path.join(session,'run.json'),'utf8'));
         const trace=inspectTrace(session,{checkCurrent:true}),task=inspectWorkflow(root,workflow),child=JSON.parse(fs.readFileSync(path.join(workflow,'run.json'),'utf8'));
         if(manifest.mode!=='pi-sdk-agent'||!trace.valid||trace.status!=='completed'||trace.input_drift||child.trace_id!==manifest.trace_id||child.parent_span_id!==manifest.span_id)throw new Error('Agent session evidence is incomplete, stale or not the workflow parent');
+        if(manifest.task) {
+          const delivery=taskDelivery(root,manifest.task,registry);
+          if(delivery.task_acceptance.status!=='passed'||manifest.task_acceptance?.status!=='passed'||path.resolve(root,delivery.evidence||'.')!==workflow)throw new Error('The current task delivery does not accept this workflow');
+          result.metrics={rounds:delivery.rounds,verifier_calls:delivery.calls,first_pass:delivery.rounds===1,repair_pass:delivery.rounds>1,
+            fixed_scope_valid:delivery.issues.length===0,originals_preserved:delivery.originals_preserved};
+        }
         result.session=path.relative(root,session);result.workflow=path.relative(root,workflow);result.task_acceptance=task.task_acceptance;
         result.status=task.valid&&task.outcome==='passed'&&task.task_acceptance.status==='passed'?'passed':'failed';
         result.scope='Recorded session/task result only; no held-out design or reference independence is inferred.';

@@ -1,11 +1,103 @@
 {
   "schema_version": 1,
-  "scope": "synthetic_generator_and_eda_real_workflow_and_upstream_python",
+  "scope": "fake_sdk_and_eda_real_task_session_workflow_delivery_and_upstream_python",
   "passed": true,
-  "directory": "E:\\GPTProject2\\EDAAgent\\artifacts\\repository-release-20261026-0152\\artifacts\\ace-loop-demo-2026-10-25T17-51-17-066Z-2f485d\\artifacts\\owned-loop",
-  "root": "E:\\GPTProject2\\EDAAgent\\artifacts\\repository-release-20261026-0152\\artifacts\\ace-loop-demo-2026-10-25T17-51-17-066Z-2f485d",
+  "directory": "E:\\GPTProject2\\EDAAgent\\artifacts\\framework-release-20261026-0222\\artifacts\\ace-loop-demo-2026-10-25T18-24-23-317Z-34a19b\\artifacts\\native-agent-2026-10-25T18-24-23-359Z-a3f1b4",
+  "root": "E:\\GPTProject2\\EDAAgent\\artifacts\\framework-release-20261026-0222\\artifacts\\ace-loop-demo-2026-10-25T18-24-23-317Z-34a19b",
   "generations": 2,
   "verifier_calls": 2,
+  "task": "artifacts/agent-task-771054cb-445f-4136-be62-7f1653945081",
+  "delivery": {
+    "schema_version": 1,
+    "task": "artifacts/agent-task-771054cb-445f-4136-be62-7f1653945081",
+    "goal": "Verify the harness repairs a rejected candidate while retaining the independent fixed verifier",
+    "status": "passed",
+    "task_acceptance": {
+      "profile": "rtl_simulation",
+      "status": "passed",
+      "reason": null,
+      "issues": [],
+      "domains": [
+        {
+          "domain": "functional",
+          "step": "simulation",
+          "status": "passed",
+          "observed": {
+            "status": "pass",
+            "pass_marker": "HARNESS_FIXTURE_PASS",
+            "marker_matches": 1,
+            "completion_observed": true,
+            "failure_diagnostic": false
+          },
+          "pointers": [
+            "/simulation_acceptance"
+          ],
+          "evidence": {
+            "result": "artifacts/2026-10-25T18-24-25-126Z-eda_workflow_run-4b00dfe7/simulation.result.json",
+            "sha256": "6acd76436c4ddec0a77b41be1fc3e77b96de61a71f73036775d464f1e786b127",
+            "child_directory": "artifacts/2026-10-25T18-24-25-321Z-eda_xsim-9070f7ac"
+          }
+        },
+        {
+          "domain": "synthesis",
+          "status": "not_requested"
+        },
+        {
+          "domain": "setup",
+          "status": "not_requested"
+        },
+        {
+          "domain": "hold",
+          "status": "not_requested"
+        },
+        {
+          "domain": "constraints",
+          "status": "not_requested"
+        },
+        {
+          "domain": "routing",
+          "status": "not_requested"
+        },
+        {
+          "domain": "drc",
+          "status": "not_requested"
+        },
+        {
+          "domain": "cdc",
+          "status": "not_requested"
+        },
+        {
+          "domain": "artifact_integrity",
+          "status": "not_requested"
+        }
+      ],
+      "scope": "Explicit testbench acceptance; no physical or formal signoff.",
+      "formal": "not_evaluated",
+      "hardware": "not_evaluated"
+    },
+    "candidate": "artifacts/agent-task-771054cb-445f-4136-be62-7f1653945081/candidate",
+    "editable_sources": [
+      "artifacts/agent-task-771054cb-445f-4136-be62-7f1653945081/candidate/candidate.sv"
+    ],
+    "evidence": "E:\\GPTProject2\\EDAAgent\\artifacts\\framework-release-20261026-0222\\artifacts\\ace-loop-demo-2026-10-25T18-24-23-317Z-34a19b\\artifacts\\2026-10-25T18-24-25-126Z-eda_workflow_run-4b00dfe7",
+    "rounds": 2,
+    "calls": 2,
+    "recovery": {
+      "ready": false,
+      "reason": "accepted",
+      "owner_active": false
+    },
+    "issues": [],
+    "originals_preserved": true,
+    "budget": {
+      "max_rounds": 3,
+      "max_calls": 3
+    },
+    "formal": "not_evaluated",
+    "hardware": "not_evaluated",
+    "checked_at": "2026-10-25T18:24:25.811Z"
+  },
+  "original_rtl_preserved": true,
   "round_statuses": [
     "failed",
     "passed"

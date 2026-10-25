@@ -30,3 +30,12 @@ test('project input hook handles text while model API is disabled', async () => 
   assert.deepEqual(await handlers.get('input')({ text: 'offline fixture' }, { ui: { notify: text => { notification = text; } } }), { action: 'handled' });
   assert.match(notification, /API/);
 });
+
+test('Pi dispatch hook receives nested tool calls before execution',async()=>{
+  const handlers=new Map(),seen=[];
+  extension({registerTool(){},registerCommand(){},appendEntry(){},on(event,handler){handlers.set(event,[...(handlers.get(event)||[]),handler]);}},
+    {toolPolicy:event=>{seen.push(event);return {block:true,reason:'fixed task scope'};}});
+  const event={toolName:'write',toolCallId:'code/1',parentToolCallId:'code',input:{path:'checker.sv',content:'tampered'}};
+  const results=await Promise.all(handlers.get('tool_call').map(fn=>fn(event)));
+  assert.equal(seen[0].parentToolCallId,'code');assert.ok(results.some(row=>row?.block===true));
+});

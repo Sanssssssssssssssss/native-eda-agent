@@ -13,7 +13,9 @@ test('official MCP client discovers registry, calls local preflight and rejects 
   try {
     await client.connect(transport);
     const listing = await client.listTools();
-    assert.equal(listing.tools.length, 55);
+    assert.equal(listing.tools.length, 57);
+    assert.ok(listing.tools.some(t => t.name === 'eda_task_prepare'));
+    assert.ok(listing.tools.some(t => t.name === 'eda_task_inspect'));
     assert.ok(listing.tools.some(t => t.name === 'eda_vivado_reports'));
     assert.ok(listing.tools.some(t => t.name === 'eda_benchmark'));
     assert.ok(listing.tools.find(t=>t.name==='eda_vivado_optimize').inputSchema.properties.resume_from);

@@ -1,0 +1,6 @@
+{
+  "spec": "examples/workflows/counter-simulation.json",
+  "editable_sources": ["examples/digital/counter.v"],
+  "max_rounds": 4,
+  "max_calls": 8
+}

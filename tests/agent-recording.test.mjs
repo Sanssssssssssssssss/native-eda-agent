@@ -341,9 +341,9 @@ function verificationFixture(t, {unbound = false} = {}) {
     async execute(id, args, signal, _update, context) {
       signal?.throwIfAborted();
       const trace = createTrace({root, tool: 'eda_xsim', args, toolCallId: id, context: context.edaTraceContext});
-      for (const file of ['rtl.sv', 'tb.sv']) trace.capture(path.join(root, file), 'fixed_verifier_input');
+      for (const file of args.sources) trace.capture(path.join(root, file), 'fixed_verifier_input');
       trace.finalizeDependencies(); calls.push(trace.directory);
-      const passed = fs.readFileSync(path.join(root, 'rtl.sv'), 'utf8').includes('CANDIDATE_OK');
+      const passed = fs.readFileSync(path.join(root, args.sources[0]), 'utf8').includes('CANDIDATE_OK');
       return {details: trace.finish('completed', null, {simulation_acceptance: {status: passed ? 'pass' : 'fail',
         pass_marker: 'FIXED_PASS', marker_matches: passed ? 1 : 0, completion_observed: true, failure_diagnostic: !passed}})};
     }});
@@ -365,7 +365,8 @@ test('session verifier uses the fixed workflow and meters the whole owned run on
       prompt: async text => {
         prompts++; assert.match(text, /Host verification contract/);
         listener({type: 'turn_start'});
-        fs.writeFileSync(path.join(f.root, 'rtl.sv'), 'module dut; // CANDIDATE_OK\nendmodule\n');
+        const contract=JSON.parse(text.split('[Host verification contract]\n')[1].split('\n')[0]);
+        fs.writeFileSync(path.join(f.root, contract.editable_sources[0]), 'module dut; // CANDIDATE_OK\nendmodule\n');
         totals.tokens.input += 6; totals.tokens.output += 4; totals.tokens.total += 10; totals.cost += 0.25;
         listener({type: 'message_end', message: {role: 'assistant', content: [{type: 'text', text: 'Candidate prepared'}], stopReason: 'stop'}});
       }}),
@@ -400,7 +401,8 @@ test('completed model text and stale coordinator success cannot upgrade a failin
       listener({type: 'message_end', message: {role: 'assistant', content: [{type: 'text', text: 'Everything passed.'}], stopReason: 'stop'}});
     }}),
   })});
-  assert.equal(result.status, 'completed'); assert.equal(result.answer, 'Everything passed.');
+  assert.equal(result.status, 'completed'); assert.match(result.answer, /工程验收：failed/);
+  assert.equal(fs.readFileSync(path.join(result.directory,'model-answer.md'),'utf8').trim(),'Everything passed.');
   assert.equal(result.run.verification.status, 'budget_exhausted'); assert.equal(result.run.task_acceptance.status, 'failed');
   assert.equal(result.run.task_state.binding.directory, result.run.verification.last_directory);
   assert.equal(f.calls.length, 1);
@@ -416,13 +418,16 @@ test('a verifier without an acceptance contract fails before generating or dispa
 });
 
 test('final independent evidence read rejects RTL drift after a passing loop', async t => {
-  const f = verificationFixture(t); let lastDirectory;
+  const f = verificationFixture(t); let lastDirectory, candidate;
   const result = await runAgentSession({...f, prompt: 'Repair RTL', sessionFactory: async () => ({
     registry: f.registry, bindTaskDirectory: directory => {lastDirectory = directory;},
-    session: fakeSession({prompt: async () => fs.writeFileSync(path.join(f.root, 'rtl.sv'), 'module dut; // CANDIDATE_OK\nendmodule\n')}),
+    session: fakeSession({prompt: async text => {
+      candidate=JSON.parse(text.split('[Host verification contract]\n')[1].split('\n')[0]).editable_sources[0];
+      fs.writeFileSync(path.join(f.root,candidate), 'module dut; // CANDIDATE_OK\nendmodule\n');
+    }}),
     refreshTaskState: () => {
       assert.ok(lastDirectory, 'the loop already produced bound evidence');
-      fs.appendFileSync(path.join(f.root, 'rtl.sv'), '// changed after verification\n');
+      fs.appendFileSync(path.join(f.root, candidate), '// changed after verification\n');
       return {binding: {directory: lastDirectory}, evidence_status: 'unknown', task_acceptance: {status: 'unknown', domains: []}};
     },
   })});
@@ -433,7 +438,7 @@ test('final independent evidence read rejects RTL drift after a passing loop', a
   assert.equal(result.run.verification.final_recheck.reason, 'final_evidence_recheck_failed');
   assert.equal(result.run.task_acceptance.status, 'unknown');
   assert.equal(result.run.verification.final_recheck.valid, false);
-  assert.ok(result.run.verification.final_recheck.issues.includes('input_changed:rtl.sv'));
+  assert.ok(result.run.verification.final_recheck.issues.includes(`input_changed:${candidate}`));
   const stored = JSON.parse(fs.readFileSync(path.join(result.directory, 'run.json')));
   assert.equal(stored.verification.final_recheck.status, 'invalid'); assert.equal(stored.task_acceptance.status, 'unknown');
 });

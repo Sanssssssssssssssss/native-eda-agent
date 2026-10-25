@@ -47,8 +47,10 @@
 
 ## 仍需工程补全的部分
 
+当前任务闭环由 [agent-task.mjs](../src/agent-task.mjs) 补齐候选准备、独占 attempt、累计续跑检查和证据交付；`agent-session.mjs` 统一 CLI/工作台入口。验证循环会自动按失败域选择 RAG/SOP，Pi context hook 重建固定范围和剩余预算。使用与明确边界见 [任务生命周期](agent-lifecycle.md)。
+
 - 独立盲测和新 workflow 的真实 AXI/多时钟全流程验收。
-- SOP 的逐项遵循评估、自动检索触发和答案引用核验。
+- SOP 的自然语言逐项遵循评估和答案引用核验；验证任务已有按证据自动检索，普通聊天仍按需检索。
 - 真实板卡、仪器、形式证明和完整 CDC 签核；当前是板外/OOC 证据。
 - IP 仿真模型与库的自动依赖编排、板级约束与 bitstream 交付流程。
 - DRC waiver 审查、更广的模型停滞治理、远端 Linux 执行及强隔离；当前 verifier loop 已覆盖同候选同失败重复停止。

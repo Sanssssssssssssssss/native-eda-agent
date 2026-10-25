@@ -18,7 +18,7 @@ function run(name,command,args){
   const count=['python','ace-feedback'].includes(name)?Number(output.match(/Ran (\d+) tests/)?.[1]):name==='node'?Number(output.match(/\btests (\d+)/)?.[1]):null;
   report.checks.push({name,passed:result.status===0&&!result.error,exit_code:result.status,test_count:count,duration_ms:Date.now()-start,log,error:result.error?.message});save();
 }
-const nodeTests=['proxy-export','otlp-upload','optimizer-recovery','optimizer-trace','artifact-storage','replay-experiment','runtime','runtime-concurrency','mcp','trace','results-contracts','fpga-tools','benchmark','workflow','knowledge','knowledge-retrieval','agent-recording','task-outcome','task-context-feedback','verifier-loop','eda-coordinator','extension','repository-layout','sync-public',
+const nodeTests=['proxy-export','otlp-upload','optimizer-recovery','optimizer-trace','artifact-storage','replay-experiment','runtime','runtime-concurrency','mcp','trace','results-contracts','fpga-tools','benchmark','workflow','knowledge','knowledge-retrieval','agent-recording','agent-task','task-outcome','task-context-feedback','verifier-loop','eda-coordinator','extension','repository-layout','sync-public',
   ...fs.readdirSync(path.join(root,'tests')).filter(name=>/^workbench.*\.test\.mjs$/.test(name)).map(name=>name.replace('.test.mjs',''))].map(name=>`tests/${name}.test.mjs`);
 try {
   const config=JSON.parse(fs.readFileSync(path.join(root,'.eda/config.json')));
@@ -38,7 +38,7 @@ try {
     'src/tool-contracts.mjs','src/tools/focused.mjs','src/results.mjs','src/tools/fpga.mjs','src/extension.ts','src/workflow.mjs','scripts/workflow.mjs','scripts/eda-tool.mjs','results/catalog.json',
     'package.json','.codex/config.toml','.pi/mcp.json','.pi/APPEND_SYSTEM.md','.eda/config.json','AGENTS.md','docs/agent-workflow-and-trace-contract.md','docs/agent-completion-2026-10-24.md'];
   files.push('web/workbench/index.html','web/workbench/style.css','web/workbench/app.js','src/task-outcome.mjs','src/task-context.mjs','src/evaluations.mjs','src/workbench.mjs','scripts/evaluate.mjs','scripts/workbench.mjs','src/agent-resources.mjs','scripts/evaluate-knowledge.mjs','knowledge/retrieval-cases.json',...knowledgeFiles(root).map(file=>path.relative(root,file).replaceAll('\\','/')));
-  files.push('src/agent-session.mjs','src/verifier-loop.mjs','src/eda-coordinator.mjs','scripts/ace-rtl-feedback.py','scripts/demo-verifier-loop.mjs','tests/test_ace_rtl_feedback.py',
+  files.push('src/agent-session.mjs','src/agent-task.mjs','tests/fixtures/agent-task.mjs','src/verifier-loop.mjs','src/eda-coordinator.mjs','scripts/ace-rtl-feedback.py','scripts/demo-verifier-loop.mjs','tests/test_ace_rtl_feedback.py',
     'scripts/check-repository.mjs','scripts/build-public.mjs','scripts/sync-public.mjs','release/upstreams.json',
     'vendor/ace-rtl/skills/ace-rtl/scripts/ace_rtl_agent/context_builder.py','vendor/ace-rtl/skills/ace-rtl/scripts/ace_rtl_agent/fresh_start_coordinator.py',
     ...fs.readdirSync(path.join(root,'src')).filter(name=>/^workbench.*\.mjs$/.test(name)).map(name=>`src/${name}`),

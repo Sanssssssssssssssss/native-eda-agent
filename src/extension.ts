@@ -10,6 +10,7 @@ import { validateArguments } from './tool-contracts.mjs';
 import { createWorkflowTools } from './workflow.mjs';
 import { createContextTools } from './task-context.mjs';
 import { createEdaCoordinator } from './eda-coordinator.mjs';
+import { createAgentTaskTools } from './agent-task.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 export default function extension(pi: any, options: any = {}) {
@@ -32,9 +33,10 @@ export default function extension(pi: any, options: any = {}) {
   for (const tool of createPlatformTools(root)) registerTool(tool);
   for (const tool of createWorkflowTools(root, registry)) registerTool(tool);
   for (const tool of createContextTools(root, registry)) registerTool(tool);
+  for (const tool of createAgentTaskTools(root, registry)) registerTool(tool);
   options.onRegistry?.(registry);
   if (!pi.on) return; // CLI registry construction has no interactive lifecycle.
-  const coordinator = createEdaCoordinator(root, { initialDirectory: options.taskDirectory, onState: options.onTaskState });
+  const coordinator = createEdaCoordinator(root, { initialDirectory: options.taskDirectory, onState: options.onTaskState,taskContext:options.taskContext });
   coordinator.install(pi);
   options.onCoordinator?.(coordinator);
   const lifecycle = (event: string, fields = {}) => {
@@ -52,6 +54,7 @@ export default function extension(pi: any, options: any = {}) {
     return { action: 'handled' };
   });
   pi.on('tool_call', (event: any) => lifecycle('tool_call', { tool: event.toolName, tool_call_id: event.toolCallId, parent_tool_call_id: event.parentToolCallId }));
+  pi.on('tool_call', (event: any) => options.toolPolicy?.(event));
   pi.on('tool_result', (event: any) => lifecycle('tool_result', { tool: event.toolName, tool_call_id: event.toolCallId, is_error: event.isError }));
   pi.registerCommand('eda-status', { description: 'Show local job states without a model call', handler: async (_args: any, ctx: any) => ctx.ui.notify(JSON.stringify(listRuns(root).slice(0, 10)), 'info') });
 }
