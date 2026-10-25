@@ -16,6 +16,7 @@ Gameboy/
 .env.*
 !.env.example
 *.log
+!tests/fixtures/**/*.log
 *.jou
 *.pb
 *.dcp
@@ -35,3 +36,18 @@ projects/**/runs/
 projects/**/latest-*.txt
 projects/**/latest-*.json
 projects/wb*/
+
+# Only reviewed, redistributable dependency snapshots belong to the repository.
+# Optional benchmark and research clones are fetched from release/upstreams.json.
+vendor/*
+!vendor/README.md
+!vendor/ace-rtl/
+!vendor/vivado-mcp-community/
+!vendor/routeagents-fpl26/
+.venv/
+.DS_Store
+Thumbs.db
+*.pem
+*.key
+auth.json
+credentials.json

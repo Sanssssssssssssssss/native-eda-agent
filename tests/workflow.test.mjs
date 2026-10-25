@@ -104,10 +104,12 @@ test('recovery refuses a live owner and a forged pointer without a committed eve
 test('a live unfinished child blocks recovery after its parent has failed',async t=>{
   let child;
   const f=fixture(t,async(_name,_args,_signal,_calls,trace)=>{child=trace;createRunState(f.root,trace);throw new Error('parent observes failure');});
-  const r=await f.run('run'),manifestFile=path.join(child.directory,'run.json'),manifest=JSON.parse(fs.readFileSync(manifestFile));
+  const r=await f.run('run'),manifestFile=path.join(child.directory,'run.json'),original=fs.readFileSync(manifestFile),manifest=JSON.parse(original);
   manifest.processes.push({pid:process.pid,ended_at:null});fs.writeFileSync(manifestFile,JSON.stringify(manifest));
   assert.ok(inspectWorkflow(f.root,r.details.directory,{resume:true}).issues.includes('child_may_be_alive'));
   manifest.processes[0].ended_at=new Date().toISOString();fs.writeFileSync(manifestFile,JSON.stringify(manifest));
+  assert.equal(inspectWorkflow(f.root,r.details.directory,{resume:true}).ready,false,'invented process has no lifecycle evidence');
+  fs.writeFileSync(manifestFile,original);
   assert.equal(inspectWorkflow(f.root,r.details.directory,{resume:true}).ready,true);
 });
 
@@ -133,4 +135,80 @@ test('completed step checks cannot upgrade an unobserved bound engineering goal 
   f.spec.acceptance={profile:'evidence_review',bindings:{artifact_integrity:'second'}};f.save();
   const r=await f.run('run');assert.equal(r.details.status,'completed');assert.equal(r.isError,true);assert.equal(r.details.outcome,'acceptance_unknown');assert.equal(r.details.task_acceptance.status,'unknown');
   const inspected=inspectWorkflow(f.root,r.details.directory,{resume:true});assert.equal(inspected.completed_steps.length,2);assert.equal(inspected.ready,false);
+});
+
+test('a compiler failure retains a bounded frozen log tail without satisfying acceptance',async t=>{
+  const f=fixture(t);
+  f.spec.steps[0].tool='eda_xsim';f.save();
+  f.registry.set('eda_xsim',{parameters:{type:'object',additionalProperties:false},async execute(id,args,_signal,_update,ctx){
+    const trace=createTrace({root:f.root,tool:'eda_xsim',args,toolCallId:id,context:ctx.edaTraceContext});
+    trace.capture(path.join(f.root,'input.txt'),'input');trace.finalizeDependencies();
+    fs.appendFileSync(path.join(trace.directory,'process.log'),'OMITTED_PREFIX\n'+'x'.repeat(9000)+'\nERROR: [VRFC 10-4982] syntax error near endmodule at rtl.sv:17\n');
+    const error=new Error('Compiler exited with code 1');
+    throw Object.assign(error,{receipt:trace.finish('failed',error)});
+  }});
+  const result=await f.run('run'),checked=inspectWorkflow(f.root,result.details.directory),record=checked.state.failed_tool;
+  assert.equal(checked.valid,true);assert.equal(checked.outcome,'tool_error');
+  assert.equal(record.step,'first');assert.equal(record.tool,'eda_xsim');
+  assert.equal(record.diagnostic_bytes,6144);assert.equal(record.diagnostic_truncated,true);
+  assert.match(checked.failure_diagnostic,/syntax error near endmodule at rtl.sv:17/);
+  assert.equal(checked.failure_diagnostic.includes('OMITTED_PREFIX'),false);
+  assert.equal(record.diagnostic_sha256,digest(fs.readFileSync(path.join(f.root,record.diagnostic_path))));
+  assert.equal(record.receipt_sha256,digest(fs.readFileSync(path.join(f.root,record.receipt_path))));
+  assert.deepEqual(checked.results,{});assert.notEqual(checked.task_acceptance.status,'passed');
+  assert.match(checked.failure_diagnostic_scope,/never acceptance evidence/);
+});
+
+for(const kind of ['external','unrelated']){
+  test(`a ${kind} failure receipt cannot supply compiler diagnostics`,async t=>{
+    const f=fixture(t),foreign=kind==='external'?fixture(t):f;
+    f.registry.get('eda_preflight').execute=async(id,args,_signal,_update,ctx)=>{
+      const trace=createTrace({root:foreign.root,tool:'eda_preflight',args,toolCallId:id,context:kind==='external'?ctx.edaTraceContext:{}});
+      trace.capture(path.join(foreign.root,'input.txt'),'input');trace.finalizeDependencies();
+      fs.appendFileSync(path.join(trace.directory,'process.log'),'UNTRUSTED_DIAGNOSTIC\n');
+      const error=new Error('Foreign tool failed');throw Object.assign(error,{receipt:trace.finish('failed',error)});
+    };
+    const result=await f.run('run'),checked=inspectWorkflow(f.root,result.details.directory);
+    assert.equal(checked.valid,false);assert.equal(checked.failure_diagnostic,null);
+    assert.equal(checked.state.failed_tool,undefined);
+    assert.ok(checked.issues.some(issue=>issue.startsWith('failed_tool_rejected:')));
+    assert.match(checked.state.failed_tool_rejected,kind==='external'?/escapes/:/causal child/);
+  });
+}
+
+test('changed frozen or original failure diagnostics are rejected on readback',async t=>{
+  for(const target of ['snapshot','source']){
+    const f=fixture(t,async(_name,_args,_signal,_calls,trace)=>{
+      fs.appendFileSync(path.join(trace.directory,'process.log'),'ERROR: missing semicolon\n');throw new Error('compile failure');
+    });
+    const result=await f.run('run'),before=inspectWorkflow(f.root,result.details.directory),record=before.state.failed_tool;
+    assert.match(before.failure_diagnostic,/missing semicolon/);
+    const file=target==='snapshot'?path.join(f.root,record.diagnostic_path):path.join(f.root,record.child_directory,'process.log');
+    fs.appendFileSync(file,'FORGED_PASS\n');
+    const after=inspectWorkflow(f.root,result.details.directory);
+    assert.equal(after.valid,false);assert.equal(after.failure_diagnostic,null);
+    assert.ok(after.issues.some(issue=>issue.startsWith('failed_tool_evidence:')));
+    assert.notEqual(after.task_acceptance.status,'passed');
+  }
+});
+
+test('failure diagnostics cannot survive drift in a captured child-only input',async t=>{
+  const f=fixture(t,async(_name,_args,_signal,_calls,trace)=>{
+    trace.capture(path.join(f.root,'compiler-extra.txt'),'compiler_dependency');
+    throw new Error('compile failure');
+  });
+  fs.writeFileSync(path.join(f.root,'compiler-extra.txt'),'original dependency');
+  const result=await f.run('run');assert.equal(inspectWorkflow(f.root,result.details.directory).valid,true);
+  fs.appendFileSync(path.join(f.root,'compiler-extra.txt'),'changed');
+  const checked=inspectWorkflow(f.root,result.details.directory);
+  assert.equal(checked.valid,false);assert.equal(checked.failure_diagnostic,null);
+  assert.ok(checked.issues.some(issue=>issue.startsWith('failed_tool_evidence:')));
+});
+
+test('an error string mentioning a log path is never treated as a failure receipt',async t=>{
+  const f=fixture(t);
+  f.registry.get('eda_preflight').execute=async()=>{throw new Error(`Compile failure; inspect ${path.join(f.root,'input.txt')}`);};
+  const result=await f.run('run'),checked=inspectWorkflow(f.root,result.details.directory);
+  assert.equal(checked.valid,true);assert.equal(checked.state.failed_tool,undefined);
+  assert.equal(checked.state.failed_tool_rejected,undefined);assert.equal(checked.failure_diagnostic,null);
 });

@@ -90,7 +90,10 @@ function codeHashes(root){
   const walk=d=>{if(!fs.existsSync(d))return;for(const e of fs.readdirSync(d,{withFileTypes:true})){
     const f=path.join(d,e.name);if(e.isDirectory()&&e.name!=='__pycache__')walk(f);else if(e.isFile()&&/\.(mjs|ts|py|tcl)$/.test(e.name))files.push(f);
   }};walk(path.join(root,'src'));
-  for(const name of ['package.json','package-lock.json','.eda/config.json','scripts/trace-inspect.mjs'])if(fs.existsSync(path.join(root,name)))files.push(path.join(root,name));
+  for(const name of ['package.json','package-lock.json','.eda/config.json','scripts/trace-inspect.mjs',
+    'scripts/ace-rtl-feedback.py',
+    'vendor/ace-rtl/skills/ace-rtl/scripts/ace_rtl_agent/context_builder.py',
+    'vendor/ace-rtl/skills/ace-rtl/scripts/ace_rtl_agent/fresh_start_coordinator.py'])if(fs.existsSync(path.join(root,name)))files.push(path.join(root,name));
   return Object.fromEntries(files.sort().map(f=>[relative(root,f),hashFile(f)]));
 }
 export function planWorkflow(root,specFile,registry){
@@ -170,6 +173,53 @@ function verifyStep(root,record,spec,{requireChecks=true}={}){
   for(const [file,sha]of Object.entries(record.artifact_hashes))if(hashFile(inside(root,file,{artifacts:true}))!==sha)throw new Error('Committed child artifact changed');
   return result;
 }
+const failureLogLimit=6*1024;
+function failedChild(root,workflowDirectory,state,record){
+  const step=state.plan.spec.steps.find(step=>step.id===record.step);
+  if(!step||step.tool!==record.tool)throw new Error('Failed tool does not match its workflow step');
+  const child=inside(root,record.child_directory,{artifacts:true});
+  const receiptPath=inside(child,'receipt.json');
+  if(inside(root,record.receipt_path,{artifacts:true})!==receiptPath||hashFile(receiptPath)!==record.receipt_sha256)throw new Error('Failed child receipt changed');
+  const receipt=json(receiptPath),inspection=inspectTrace(child,{checkCurrent:true});
+  const parent=json(inside(workflowDirectory,'run.json'));
+  if(!inspection.valid||inspection.input_drift||!['failed','timed_out','cancelled'].includes(inspection.status))throw new Error('Failed child trace is incomplete, drifted or not a failure');
+  if(inspection.tool!==record.tool||inspection.context?.parent_run_id!==state.run_id||inspection.trace_id!==parent.trace_id||inspection.parent_span_id!==parent.span_id)
+    throw new Error('Failed trace is not a causal child of this workflow');
+  if(receipt.status!==inspection.status||receipt.run_id!==inspection.run_id||receipt.context?.parent_run_id!==state.run_id||receipt.trace_id!==inspection.trace_id||receipt.span_id!==inspection.span_id||inside(root,receipt.directory,{artifacts:true})!==child)
+    throw new Error('Failure receipt disagrees with its original child trace');
+  return {child,receipt};
+}
+function failureLogTail(child){
+  const file=inside(child,'process.log'),fd=fs.openSync(file,'r');
+  try{
+    const stat=fs.fstatSync(fd);if(!stat.isFile())throw new Error('Child process log must be a file');
+    const size=Math.min(stat.size,failureLogLimit),bytes=Buffer.alloc(size);
+    let read=0;while(read<size){const count=fs.readSync(fd,bytes,read,size-read,stat.size-size+read);if(!count)throw new Error('Child process log changed while reading');read+=count;}
+    return {bytes,total_bytes:stat.size};
+  }finally{fs.closeSync(fd);}
+}
+function captureToolFailure(root,trace,state,receipt){
+  const step=state.plan.spec.steps.find(step=>step.id===state.current_step);
+  const child=inside(root,receipt?.directory,{artifacts:true}),receiptPath=inside(child,'receipt.json');
+  if(!isDeepStrictEqual(receipt,json(receiptPath)))throw new Error('Thrown failure receipt differs from original evidence');
+  const record={step:step.id,tool:step.tool,child_directory:relative(root,child),receipt_path:relative(root,receiptPath),receipt_sha256:hashFile(receiptPath)};
+  failedChild(root,trace.directory,state,record);
+  const tail=failureLogTail(child),file=path.join(trace.directory,`${step.id}.failure-diagnostic.log`);
+  durableWrite(file,tail.bytes);
+  return {...record,diagnostic_path:relative(root,file),diagnostic_sha256:digest(tail.bytes),diagnostic_bytes:tail.bytes.length,
+    source_log_bytes:tail.total_bytes,diagnostic_truncated:tail.total_bytes>tail.bytes.length,
+    diagnostic_scope:'Frozen child process.log tail only; diagnostic hints never satisfy engineering acceptance.'};
+}
+function verifyToolFailure(root,workflowDirectory,state){
+  const record=state.failed_tool,{child}=failedChild(root,workflowDirectory,state,record);
+  const diagnostic=inside(workflowDirectory,`${record.step}.failure-diagnostic.log`);
+  if(inside(root,record.diagnostic_path,{artifacts:true})!==diagnostic||fs.statSync(diagnostic).size>failureLogLimit||hashFile(diagnostic)!==record.diagnostic_sha256)
+    throw new Error('Frozen failure diagnostic changed');
+  const tail=failureLogTail(child);
+  if(tail.total_bytes!==record.source_log_bytes||tail.bytes.length!==record.diagnostic_bytes||digest(tail.bytes)!==record.diagnostic_sha256)
+    throw new Error('Original failure diagnostic changed');
+  return fs.readFileSync(diagnostic,'utf8');
+}
 export function inspectWorkflow(root,directory,{resume=false}={}){
   const {state,directory:dir}=readWorkflow(root,directory),issues=frozenIssues(root,state.plan),results={};
   // A hard crash can leave elapsed time after the last checkpoint unknown. Charge
@@ -188,6 +238,9 @@ export function inspectWorkflow(root,directory,{resume=false}={}){
   if(state.failed_step){
     try{results[state.failed_step.id]=verifyStep(root,state.failed_step,state.plan.spec.steps.find(s=>s.id===state.failed_step.id),{requireChecks:false});}catch(e){issues.push(`failed_evidence:${e.message}`);}
   }
+  let failureDiagnostic=null;
+  if(state.failed_tool){try{failureDiagnostic=verifyToolFailure(root,dir,state);}catch(error){issues.push(`failed_tool_evidence:${error.message}`);}}
+  if(state.failed_tool_rejected)issues.push(`failed_tool_rejected:${state.failed_tool_rejected}`);
   if(state.task_acceptance_hash){try{if(hashFile(inside(dir,'task-outcome.json'))!==state.task_acceptance_hash)issues.push('task_outcome_changed');}catch{issues.push('task_outcome_missing');}}
   const taskAcceptance=evaluateTask(state.plan.acceptance,results,[...state.passed,...(state.failed_step?[state.failed_step]:[])],issues);
   const recovery=recoveryAdvice({...state,task_acceptance:taskAcceptance},issues);
@@ -203,9 +256,12 @@ export function inspectWorkflow(root,directory,{resume=false}={}){
     if(recovery.stalled)issues.push('repeated_failure_requires_diagnosis');
     if(state.passed.length===state.plan.spec.steps.length&&state.outcome!=='passed')issues.push('all_steps_done_review_goal_before_new_task');
   }
+  if(issues.length)failureDiagnostic=null;
   return {schema_version:1,directory:dir,run_id:state.run_id,status:state.status,outcome:state.outcome,valid:issues.length===0,ready:resume?issues.length===0:undefined,
     issues,completed_steps:state.passed.map(s=>s.id),child_evidence:state.passed.map(s=>({step:s.id,directory:s.child_directory,result:s.result_path})),next_step:state.plan.spec.steps[state.passed.length]?.id||null,calls:state.calls,spent_ms:spent,uncheckpointed_wall_ms:uncheckpointed,
-    task_acceptance:taskAcceptance,recovery,boundary:'Checks cover the declared workflow only. No formal proof, CDC waiver or board signoff is inferred.',state,results};
+    task_acceptance:taskAcceptance,recovery,failure_diagnostic:failureDiagnostic,
+    failure_diagnostic_scope:'Verified failure log tail for repair hints only; never acceptance evidence.',
+    boundary:'Checks cover the declared workflow only. No formal proof, CDC waiver or board signoff is inferred.',state,results};
 }
 async function executeWorkflow(root,registry,trace,args,signal,update,resuming){
   const prior=resuming?inspectWorkflow(root,args.directory,{resume:true}):null;
@@ -256,6 +312,10 @@ async function executeWorkflow(root,registry,trace,args,signal,update,resuming){
     runtime.transition('finalizing');runtime.transition('completed');
   }catch(error){
     state.status=deadline?'timed_out':signal?.aborted?'cancelled':'failed';state.outcome||=deadline?'budget_exhausted':signal?.aborted?'cancelled':'tool_error';state.error=String(error);
+    if(error.receipt&&state.current_step){
+      try{state.failed_tool=captureToolFailure(root,trace,state,error.receipt);}
+      catch(rejected){state.failed_tool_rejected=String(rejected.message||rejected);}
+    }
     if(['tool_error','checks_failed'].includes(state.outcome)&&state.current_step){
       const step=plan.spec.steps.find(s=>s.id===state.current_step);
       const fingerprint=digest(JSON.stringify({step:step.id,tool:step.tool,args:step.args,inputs:plan.input_hashes,outcome:state.outcome}));

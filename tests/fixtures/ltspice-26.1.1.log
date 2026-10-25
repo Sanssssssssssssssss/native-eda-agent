@@ -1,0 +1,6 @@
+# Actual measurements from the official LTspice 26.1.1 MCP run, 2026-10-22.
+# Full raw logs: artifacts/ltspice-mcp/rc_ac.log and rc_tran.log.
+cutoff_hz: mag(V(out))=0.7071067811865476 AT 1591.54950775
+gain_1k: mag(V(out))=(-1.44507011621dB,0°) at 1000
+v_at_tau: V(out)=0.632117556958 at 0.0001
+v_final: V(out)=0.999954581261 at 0.001

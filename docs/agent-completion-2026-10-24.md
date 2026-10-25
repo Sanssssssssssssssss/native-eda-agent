@@ -60,4 +60,4 @@ node scripts/upload-traces.mjs artifacts/my-trace.json --endpoint http://127.0.0
 - 动态 Tcl 的完整依赖、功能形式证明、板卡结果、Ross 官方二进制/授权属于外部前提。工具完成和 trace 有效都不能代替这些证据。
 - 新增的 trace、恢复、代理生命周期仍需要未来的真实 EDA 验收；历史 FPGA 成绩不因本轮软件验收而增加。
 
-历史入口保留：[首次静态审计](agent-static-audit-2026-10-24.md)、[协作与 trace](agent-framework-and-traces.md)、[优化器实测](native-optimizer-2026-10-24.md)。
+历史入口保留：[首次静态审计](history/agent-static-audit-2026-10-24.md)、[协作与 trace](agent-framework-and-traces.md)、[优化器实测](native-optimizer-2026-10-24.md)。

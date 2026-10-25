@@ -8,6 +8,8 @@
 | 知识检索与 SOP | [knowledge](../src/knowledge.mjs) → [platform](../src/platform.mjs)；有排名、来源、适用条件、文件哈希和统一 SOP 入口 | 检索指导与设计证明分别判断；详见 [知识与 SOP](knowledge-and-sops.md) |
 | 阶段与工具选择 | [task-context](../src/task-context.mjs)；阶段、规则关联选择最多两个 SOP，返回对应实际 schema 与重新核验的任务状态 | 不自动替换模型当前工具集合；无 blind SOP 选择分数 |
 | 宿主工程目标 | [task-outcome](../src/task-outcome.mjs)；三类 profile，固定身份/时钟/DCP 来源，回读已提交结果，分领域判定 | 参考模型独立性、formal 与硬件另行验收 |
+| 生成与独立验证循环 | [verifier-loop](../src/verifier-loop.mjs) → 固定 workflow → 原版 ACE-RTL 反馈 → 同一 Pi 会话修复；限定 RTL、累计调用预算、重复失败停止、最终证据复核 | 显式配置启用；离线假 EDA 验证，真实模型/设计质量尚未测评；修改范围是漂移检查，不是 OS 沙箱 |
+| 长任务状态恢复 | [eda-coordinator](../src/eda-coordinator.mjs)；每次 context 回读绑定 workflow，按当前会话分支恢复目录指针，压缩后重建工程事实 | 保留 Pi 默认压缩；恢复公开状态和证据，不还原模型内部推理 |
 | Agent 上下文与会话 | [agent-resources](../src/agent-resources.mjs) → [agent-session](../src/agent-session.mjs)；CLI/工作台共用 Pi 驱动，加载项目技能、记录 resources_loaded、续接本项目会话文件并冻结续接前记录 | API 当前停用；真实 loader 与假 SDK 验证不等于真实 provider 评估；无 steer/compaction 操作界面 |
 | 多工具任务合同 | [workflow](../src/workflow.mjs)；固定规格/输入/知识/代码，解析前序结果引用，每步显式 checks；失败即停 | 串行流程；不自动补充未声明的设计验收项 |
 | 本地会话与评测 | [workbench](../src/workbench.mjs)、[workbench-state](../src/workbench-state.mjs)、[evaluations](../src/evaluations.mjs)；持久会话/任务/job/事件，计划哈希复核、取消和所有者检查；六类评测独立计分 | 本机单用户；重启不自动重放；真实线上会话成绩尚未实测 |
@@ -49,7 +51,7 @@
 - SOP 的逐项遵循评估、自动检索触发和答案引用核验。
 - 真实板卡、仪器、形式证明和完整 CDC 签核；当前是板外/OOC 证据。
 - IP 仿真模型与库的自动依赖编排、板级约束与 bitstream 交付流程。
-- DRC waiver 审查、一般模型停滞治理、远端 Linux 执行及强隔离。
+- DRC waiver 审查、更广的模型停滞治理、远端 Linux 执行及强隔离；当前 verifier loop 已覆盖同候选同失败重复停止。
 - 真实 Pi 多轮/压缩/steer 验收、动态模型工具发布、多用户权限与独立线上评测。
 
 本轮与 ERP 的具体源码对照、工作台用法见 [ERP 对照](erp-parity-and-workbench.md)，分类测评见 [评测协议](evaluation.md)。

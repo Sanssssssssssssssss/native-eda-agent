@@ -207,6 +207,8 @@ export function createWorkbench(root, registry, options = {}) {
         let result;
         try {
           result = await adapter({root, prompt, limits: {maxTurns: 24, timeoutSeconds: 600}, signal,
+            ...(data.taskDirectory ? {taskDirectory:data.taskDirectory} : {}),
+            ...(data.verification ? {verification:data.verification} : {}),
             resumeSessionFile: state.get('sessions', s.id).native_session_file, onEvent});
         } finally { flush(); }
         if (streamError) throw streamError;

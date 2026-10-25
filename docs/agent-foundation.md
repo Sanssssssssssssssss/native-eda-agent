@@ -2,7 +2,7 @@
 
 这套基座把现有 Pi Agent、真实 EDA 工具、测试目录、验收和证据放在同一条调用链中。当前模型 API 停用；Codex、CLI 或 MCP 可以直接运行本地实验。板卡实测、外部 formal 工具和盲测代码生成成绩仍须另行取得。
 
-早期交付与实跑记录见 [2026-10-23 验收报告](agent-foundation-validation-2026-10-23.md)。当前能力和缺口见 [机制核对](mechanisms.md)，成绩按功能见 [结果目录](results.md)。
+早期交付与实跑记录见 [2026-10-23 验收报告](history/agent-foundation-validation-2026-10-23.md)。当前能力和缺口见 [机制核对](mechanisms.md)，成绩按功能见 [结果目录](results.md)。
 
 当前工具选择、优化器事件链、Pi 兼容和失败恢复以 [Agent 工作流与 trace 接入合同](agent-workflow-and-trace-contract.md)为准；历史验收数按原报告保留。
 
@@ -30,7 +30,7 @@ flowchart LR
 | MCP | `src/mcp-server.mjs`, `.pi/mcp.json` | 官方 TypeScript SDK 2.3.1 stdio；同一注册表和资源额度 |
 | 调度 / 状态 / hooks | `src/runtime.mjs`, `.eda/config.json` | XSim 2、Vivado 1、LTspice 1、验收 4；跨进程 ticket 排队与文件租约 |
 | 测试与比较 | `benchmarks/`, `src/bench/` | 分类、种子、独立 oracle、验收、baseline/candidate 比较 |
-| 知识 / 技能 | `knowledge/`, `.pi/skills/`, `.agents/skills/` | 来源规则、本地技能及 [Ross 技能](ross-integration-2026-10-24.md)；加载时核对版本和前提 |
+| 知识 / 技能 | `knowledge/`, `.pi/skills/`, `.agents/skills/` | 来源规则、本地技能及 [Ross 技能](history/ross-integration-2026-10-24.md)；加载时核对版本和前提 |
 | 证据 / 存储 | `src/trace.mjs`, `scripts/trace-inspect.mjs` | 输入哈希、内容对象、事件、进程、关联 ID、完整性检查 |
 | 迭代检查 | `scripts/validate-platform.mjs`, `.github/workflows/validate.yml` | 本机真实回执；离线 CI 配置 |
 

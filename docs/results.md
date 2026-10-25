@@ -11,7 +11,7 @@
 | `verilogeval-24-extended` | 23/24 | 同一批 RTL，0 处 RTL 改动；watchdog 10,000,000 ps，仍有 1 项参考结果不一致 |
 | `campaign-61-frozen` | 51 PASS、1 FAIL、6 TIMEOUT、2 EXPECTED_FAILURE、1 EXPECTED_TIMEOUT | 48 个家族、61 个 case variants；后续单独复跑不抹去该批超时 |
 
-题目可见且经过人工选择，因此没有盲测 pass@1。8 题、24 题、61 variants 存在任务重叠；两种 watchdog 协议也不能直接合计。详见 [24 题报告](codex-verilogeval-24-2026-10-23.md) 与 [benchmark 目录](benchmark-catalog.md)。
+题目可见且经过人工选择，因此没有盲测 pass@1。8 题、24 题、61 variants 存在任务重叠；两种 watchdog 协议也不能直接合计。详见 [24 题报告](history/codex-verilogeval-24-2026-10-23.md) 与 [benchmark 目录](benchmark-catalog.md)。
 
 ## 系统工程、数值检查与实现
 
@@ -27,7 +27,7 @@
 | 三时钟 Ethernet | 通过 / 通过 | 2.510 / 0.073 | 1896 / 2964 | 7 / 2 |
 | RV32IM AES DMA | 通过 / 通过 | 0.518 / 0.096 | 5110 / 4866 | 16 / 0 |
 
-前四项为 `system-projects-4`；后三项为 `hard-projects-3`，各有命中特定 checker 的负控。Ethernet 留有 **34 条 CDC warning**，不宣称 CDC 签核。报告：[四系统](system-projects-2026-10-23.md)、[复杂系统](hard-system-projects-2026-10-23.md)。这些工程集成了固定版本的开源 IP，没有从零生成整个 IP 或板卡实测的成绩。
+前四项为 `system-projects-4`；后三项为 `hard-projects-3`，各有命中特定 checker 的负控。Ethernet 留有 **34 条 CDC warning**，不宣称 CDC 签核。报告：[四系统](history/system-projects-2026-10-23.md)、[复杂系统](history/hard-system-projects-2026-10-23.md)。这些工程集成了固定版本的开源 IP，没有从零生成整个 IP 或板卡实测的成绩。
 
 `fft-1024`：厂商 FFT IP 与本地 wrapper，16 帧 × 1024 点，共 16,384 个频点与独立数值参考比较；4 项负控。100 MHz OOC setup +1.6425 ns、hold +0.0459 ns。频点数是检查覆盖量，计分单位是 1 个系统工程。
 
@@ -40,7 +40,7 @@
 
 原生集成中的 AXI 运行：4 个种子，读写各 2,328 个 burst、37,824 个 beat，658,158 次协议检查；setup +2.393 ns、hold +0.058 ns，3,159/3,159 可布线网络完成，routing errors=0。它与上表的原始 hard-bench 运行有独立记录，不能覆盖原值。诊断结果仍为 `overall_design_acceptance=not_evaluated`、CDC unknown、board_signoff=false。
 
-详见 [原生工具验收](fpga-native-tools-validation-2026-10-24.md) 与 [Workbench 覆盖](vivado-workbench-coverage-2026-10-24.md)。生成 DRC 报告只证明报告生成；历史记录没有把它升级为“DRC 为零”。v0.6 workflow 另行核验严重级别计数；旧记录不补造该字段。
+详见 [原生工具验收](history/fpga-native-tools-validation-2026-10-24.md) 与 [Workbench 覆盖](vivado-workbench-coverage-2026-10-24.md)。生成 DRC 报告只证明报告生成；历史记录没有把它升级为“DRC 为零”。v0.6 workflow 另行核验严重级别计数；旧记录不补造该字段。
 
 ## 物理优化
 

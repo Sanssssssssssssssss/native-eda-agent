@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-26",
+  "scope": "repository_layout_and_fresh_export_validation",
+  "passed": true,
+  "source_files": 758,
+  "ace_bundled_files": 97,
+  "historical_reports_archived": 15,
+  "repository_check": {
+    "files": 758,
+    "markdown_files": 75,
+    "local_links": 411,
+    "issues": []
+  },
+  "software_checks": {
+    "node": 223,
+    "optimizer_python": 21,
+    "ace_python": 7,
+    "total": 251
+  },
+  "benchmark_catalog": {
+    "valid": true,
+    "cases": 77,
+    "executed_eda_cases": 0
+  },
+  "source_backup": {
+    "files": 226,
+    "mismatches": 0
+  },
+  "other_model_api_calls": 0,
+  "vivado_runs": 0,
+  "ltspice_runs": 0,
+  "outer_codex_tokens": null,
+  "boundary": "Software and repository acceptance; historical design scores and checker protocols remain unchanged."
+}

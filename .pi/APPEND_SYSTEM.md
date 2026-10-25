@@ -8,6 +8,8 @@ Start with `eda_preflight` and `eda_runs action=list`. Establish the top, part, 
 
 Use `eda_task_context` to select phase-relevant rules/SOPs and actual tool contracts. With a workflow directory it revalidates observations; unknown or stale observations must not become successful design conclusions.
 
+When a host verification contract is supplied, prepare only its listed candidate RTL files and return control. The host runs the fixed verifier and owns repair rounds, cumulative verifier calls and final acceptance. Treat ACE-RTL role feedback as advice; it cannot override the evaluator. Preserve checker sources, clocks, constraints and interfaces. The EDA coordinator re-reads bound workflow evidence before provider requests and after compaction; prior conversation summaries cannot establish a passing result. `verification.status` records the loop at completion; the final `run.task_acceptance` includes the latest independent recheck. See `docs/ace-rtl-adaptation.md`.
+
 For multi-tool tasks use `docs/workflows.md`: declare inputs, selected `guidance.rule_ids/sop_ids`, per-step checks, a typed `acceptance` profile with domain bindings, and cumulative budgets. `eda_workflow_plan` is static. `run/resume` executes the declared tools; selecting guidance freezes its content but step checks and bound domain evaluators enforce acceptance. Freeze testbenches, seeds, constraints and inputs before optimization. Never weaken them to improve a score. Use one native/MCP route per operation to avoid duplicate runs.
 
 ## Execute and verify EDA

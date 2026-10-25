@@ -35,6 +35,6 @@ FPL'26 的[计分规则](https://xilinx.github.io/fpl26_optimization_contest/sco
 
 教程仓库未发现单独 LICENSE；本次作为本地参考复刻保留来源，未再发布上游代码。FFT 算法来自 AMD IP，本次验证的是 Agent 的 IP 配置、集成、执行和结果检查能力。
 
-本机已完成的成绩、截图和局限见 [Codex 实测成绩单](codex-vivado-score-2026-10-23.md)：VerilogEval 小样本 7/8，FFT 16 帧通过，100 MHz OOC 报告为正余量；实际时钟源及接口位置仍待集成验证。
+本机已完成的成绩、截图和局限见 [Codex 实测成绩单](history/codex-vivado-score-2026-10-23.md)：VerilogEval 小样本 7/8，FFT 16 帧通过，100 MHz OOC 报告为正余量；实际时钟源及接口位置仍待集成验证。
 
 研究使用 GitHub 主仓库、Exa、B站匿名 API 和公开网页；Reddit 登录接口当前不可用，讨论使用公开网页可见内容。Agent Reach 1.5.0 更新检查为最新。

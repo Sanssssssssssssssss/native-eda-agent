@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "scope": "static_verifier_admission_only",
+  "valid": true,
+  "spec": "examples/workflows/axi-fabric-ooc.json",
+  "acceptance": {
+    "profile": "fpga_ooc",
+    "bindings": {
+      "functional": "simulation",
+      "synthesis": "synthesis",
+      "setup": "implementation",
+      "hold": "implementation",
+      "constraints": "implementation",
+      "routing": "implementation",
+      "drc": "drc-report"
+    },
+    "design": {
+      "top": "axi_fabric_top",
+      "part": "xc7a100tfgg676-2",
+      "clock": "clk",
+      "period_ns": 10
+    },
+    "required": [
+      "functional",
+      "synthesis",
+      "setup",
+      "hold",
+      "constraints",
+      "routing",
+      "drc"
+    ],
+    "pass_marker": "HARD_BENCH_PASS project=axi_fabric",
+    "sop_ids": [
+      "fpga-plan",
+      "fpga-rtl-verify",
+      "fpga-timing-triage"
+    ],
+    "scope": "Fixed-part OOC implementation; CDC is evaluated only when bound. No formal or hardware signoff."
+  },
+  "editable_sources": [
+    "projects/hard-bench/axi-fabric/rv_delay.sv"
+  ],
+  "protected_input_count": 25,
+  "max_rounds": 2,
+  "max_calls": 16,
+  "source_contract_sha256": "cb6ba6f8968178849aa02e8e5c459de3882ab0fd640229ebe00a29813e6a1fd1",
+  "launches_eda": false,
+  "model_api_calls": 0
+}

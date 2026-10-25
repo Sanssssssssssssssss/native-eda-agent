@@ -19,6 +19,7 @@ jobs:
       - run: npm ci --ignore-scripts
       - run: pwsh scripts/bootstrap-python.ps1
       - run: npm run setup:local
+      - run: npm run repository:check
       - run: npm run validate:agent
       - run: npm run knowledge:eval
       - run: node scripts/benchmark.mjs validate
@@ -30,7 +31,12 @@ jobs:
             artifacts/agent-offline-*/result.json
             artifacts/agent-offline-*/node.log
             artifacts/agent-offline-*/python.log
+            artifacts/agent-offline-*/ace-feedback.log
+            artifacts/agent-offline-*/verifier-demo.log
             artifacts/agent-offline-*/config.log
             artifacts/agent-offline-*/knowledge.log
+            artifacts/agent-offline-*/repository.log
+            artifacts/ace-loop-demo-*/result.json
+            artifacts/ace-loop-demo-*/artifacts/owned-loop/verification-loop.json
             artifacts/knowledge-eval-*/result.json
           retention-days: 7

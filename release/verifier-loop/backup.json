@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "scope": "local_source_backup_integrity_summary",
+  "created_at": "2026-10-26T01:19:54.2700467+08:00",
+  "files": 226,
+  "verified_files": 226,
+  "mismatches": 0,
+  "manifest_sha256": "60d5c3c5da57fdf45d7ed1c5f2fffda1d64e46c3c175ee5293d9b3772896be49",
+  "originals_bundled": false,
+  "boundary": "Backup bytes and local sessions remain in the development workspace; no private configuration contents are published."
+}

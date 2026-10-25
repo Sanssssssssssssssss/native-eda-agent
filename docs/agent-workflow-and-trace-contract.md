@@ -4,7 +4,7 @@
 
 统一代理、恢复和 OTLP 的操作入口见 [Agent 闭环交付](agent-completion-2026-10-24.md)。
 
-多工具任务使用 [持久化 workflow](workflows.md)：冻结规格、逐步验收、预算、子 trace 和恢复。成熟仓库对照及剩余差距见 [源码比较](repository-comparison-2026-10-25.md)。
+多工具任务使用 [持久化 workflow](workflows.md)：冻结规格、逐步验收、预算、子 trace 和恢复。成熟仓库对照及剩余差距见 [源码比较](history/repository-comparison-2026-10-25.md)。
 
 ## 按任务选择入口
 
@@ -100,4 +100,4 @@ node scripts/trace-inspect.mjs artifacts/<run>/optimizer
 
 自动复跑器 `replay-experiment.mjs` 仅支持最初四个工具。优化器使用独立 `recover-optimizer.mjs` 或 `resume_from`：验证 journal、代码/DCP 和所有者，复制已提交状态到新运行，重新测量后继续；不恢复旧进程内存。启动中的 MCP 服务需重连才能加载新代码。
 
-本次改动验收与限制见 [静态审计报告](agent-static-audit-2026-10-24.md)；存储和关联变量见 [trace 与存储](trace-storage.md)；实测优化基线见 [优化器历史报告](native-optimizer-2026-10-24.md)。
+本次改动验收与限制见 [静态审计报告](history/agent-static-audit-2026-10-24.md)；存储和关联变量见 [trace 与存储](trace-storage.md)；实测优化基线见 [优化器历史报告](native-optimizer-2026-10-24.md)。

@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+- Connected a host-owned verifier loop to the existing Pi session: fixed workflow acceptance, bounded RTL repairs, independent evidence readback, protected inputs and cumulative limits. The pinned NVIDIA ACE-RTL feedback components run through a bridge with their model transport disabled.
+- Reconstruct task context from current evidence after compaction or branch restoration, and keep session completion separate from engineering acceptance. Offline checks use fake generation/EDA; no new model-quality or FPGA performance result is claimed.
+- Organized dated reports under `docs/history/`, added source/local-data and Git publication guidance, and linked portable verifier receipts from the current documentation.
+
 ## 0.8.0 — 2026-10-25
 
 - Added an RTL project inventory with module declarations, testbenches, constraints, source previews and evidence-bound engineering domains. File presence never implies a verified implementation.

@@ -1,0 +1,7 @@
+{
+  "spec": "examples/workflows/axi-fabric-ooc.json",
+  "editable_sources": ["projects/hard-bench/axi-fabric/rv_delay.sv"],
+  "protected_sources": ["projects/hard-bench/axi-fabric/tb_axi_fabric.sv"],
+  "max_rounds": 2,
+  "max_calls": 16
+}

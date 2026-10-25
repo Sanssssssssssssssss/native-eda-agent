@@ -4,12 +4,13 @@
 
 当前重点是 **可追溯的知识指导、固定验收、可靠执行和结果复核**。模型提供商 API 默认关闭；下列本地工具和离线检查不需要模型 API key。
 
-[工程表盘与限定修改](docs/workbench-v08.md) · [会话工作台与验收](docs/workbench-v07-acceptance.md) · [分类评测](docs/evaluation.md) · [核心机制](docs/mechanisms.md) · [RAG 与 SOP](docs/knowledge-and-sops.md) · [功能成绩](docs/results.md) · [全部文档](docs/README.md)
+[验证闭环](docs/ace-rtl-adaptation.md) · [工程工作台](docs/workbench-v08.md) · [分类评测](docs/evaluation.md) · [核心机制](docs/mechanisms.md) · [RAG 与 SOP](docs/knowledge-and-sops.md) · [功能成绩](docs/results.md) · [仓库结构](docs/repository-layout.md) · [全部文档](docs/README.md)
 
 ## 项目亮点
 
 - **知识直接进入任务**：36 条规则带来源、版本、适用条件与所需证据；中英文检索有排名；6 个 SOP 同时支持 Pi 发现和 MCP 读取。workflow 固定所选知识与 SOP 的文件哈希。
 - **验收条件可执行**：任务声明输入、前序结果引用、逐步 checks、工程目标 profile 和累计预算；宿主重新读取证据，核验顶层、器件、时钟与 DCP 来源。工具完成、功能通过、时序通过、CDC/DRC 和上板分别判断。
+- **生成与验证形成闭环**：同一 Pi 会话修复限定 RTL，宿主按固定 workflow 独立验收，失败后接收 NVIDIA ACE-RTL 原版反馈并复验。输入漂移、停滞、取消与累计预算均可停止循环；会话完成与工程通过独立记录。
 - **任务可追踪和恢复**：每次调用保留输入快照、进程、失败、终态与因果 trace。恢复前核验所有者、输入、代码和产物；在新目录从已提交边界继续；同一恢复链重复三次失败后停止重放并要求诊断。
 - **EDA 执行受资源约束**：原生工具与社区 MCP 代理共享资源租约，支持队列、超时与取消。物理优化器另有候选准入、最佳结果保留、停滞停止和最终复测。
 - **会话驱动的工程工作台**：保存、查找、重命名与归档会话，在对话中准备工程任务、审阅固定计划、执行、取消并查看证据。任务、运行和事件持久化；离线、真实 EDA、Agent 会话评测分别记录。
@@ -29,6 +30,7 @@
 | 模拟电路 | LTspice RC AC/瞬态、独立解析解校验；历史四项测量误差均低于固定 0.2% 阈值 | RC 基础案例；新代理版本未重跑商业工具 |
 | 知识与 SOP | 36 规则 / 21 来源 / 6 SOP；24 条可见检索回归 Hit@5 为 24/24 | 检索相关性；不是回答正确率或设计通过率 |
 | Agent 工程机制 | 输入/知识冻结、预算、恢复、MCP、资源并发、trace、真实 Pi 资源加载等离线检查 | 假 EDA、本机进程与协议验收；当前回执见 release/validation.json 和 CI |
+| 独立 verifier 闭环 | 限定 RTL、固定 checker、失败诊断、修复复验、压缩后重建任务状态 | 离线两轮 failed → passed；真实上游反馈、假生成器/EDA；[公开回执](release/README.md) |
 
 详细协议、失败、资源和证据索引见 [功能成绩](docs/results.md)。历史 11 组成绩保持原协议；本轮新增 Counter 功能与真实 DRC 查询验证，完整 AXI 结果单列于功能成绩。接口数量单列在 [工具合同](docs/reference/tools.md)：55 个原生入口，其中 28 个为共享执行器的细粒度合同；可选社区后端另有 45 个工具与 11 个 prompts。
 
@@ -51,6 +53,10 @@ flowchart LR
 ```
 
 知识检索由工具调用触发，SOP 提供工程指导；代码强制执行的是显式参数、预算、检查与恢复条件。Pi 聊天与 CLI 共用会话驱动，支持本项目会话文件续接和公开文本事件；当前模型 API 关闭，驱动用假 SDK 检查。向量索引、自动答案引用核验与强沙箱尚未提供。具体实现和缺口见 [机制检查](docs/mechanisms.md)。
+
+可选 [ACE-RTL 验证循环](docs/ace-rtl-adaptation.md) 已接入同一 Pi 会话：候选 RTL → 固定工程验收 → NVIDIA 原版反馈组件 → 修复 → 复验。宿主判定通过条件、检查输入漂移并限制累计预算；压缩后重新读取工程证据。当前验证采用假 EDA/假生成器和真实上游反馈组件，未增加模型实跑成绩。
+
+静态检查 AXI 的闭环合同：`node src/agent.mjs verification plan examples/verification/axi-fabric.json`。离线演示两轮修复：`node scripts/demo-verifier-loop.mjs`。两者均不启动模型或 EDA。
 
 ## 本地启动
 
@@ -102,7 +108,10 @@ npm run evaluate -- run offline-retrieval
 | [results](results/catalog.json) | 11 组历史成绩及公开脱敏证据；不含大型原始产物 |
 | [web/workbench](web/workbench) | 本地会话、知识、任务证据与分类评测界面 |
 | [tests](tests) / [.github/workflows](.github/workflows) | 软件故障检查与 Windows CI |
-| [docs](docs/README.md) / [release](release/README.md) | 当前指南、历史报告、发布清单与验收回执 |
+| [docs](docs/README.md) / [docs/history](docs/history/README.md) | 当前使用指南、工具参考和历史研究/验收 |
+| [vendor](vendor) / [release](release/README.md) | 固定上游源码与许可、发布清单和公开验收回执 |
+
+目录职责、本地忽略项与发布流程见[仓库结构](docs/repository-layout.md)。
 
 安装环境、会话、凭据、波形和 DCP 保留在本机。Ross 技能、官方 Ross MCP 与 LTspice bridge 为可选依赖；公开包不保证其已安装或已连接。Synopsys 是独立项目，商业执行需要现成授权。
 

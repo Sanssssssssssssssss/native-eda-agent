@@ -2,7 +2,7 @@
 
 Four pinned public designs, integrated and tested locally by the current Codex session and three Codex subagents. No separate model API is used.
 
-The separate chat `[local-session-id]` also contributed framework tracing, baseline regression, replay/evidence tooling and independent result checks. See [Agent framework and traces](../../docs/agent-framework-and-traces.md) and [collaboration record](../../docs/parallel-coordination-2026-10-23.md). This campaign's usage snapshot covers its root and three child sessions; it excludes that separate chat and its subagents.
+The separate chat `[local-session-id]` also contributed framework tracing, baseline regression, replay/evidence tooling and independent result checks. See [Agent framework and traces](../../docs/agent-framework-and-traces.md) and [collaboration record](../../docs/history/parallel-coordination-2026-10-23.md). This campaign's usage snapshot covers its root and three child sessions; it excludes that separate chat and its subagents.
 
 | Project | Functional acceptance | Physical implementation |
 |---|---|---|
@@ -19,4 +19,4 @@ From the workspace root, run `python projects/system-bench/run.py <soc|dma|udp|a
 
 Functional simulations can run concurrently. On this 32 GB machine, leave memory headroom and run one physical implementation at a time: Vivado initialization intermittently failed to read existing Tcl installation files during this experiment, including one attempt without a second batch job. The root cause remains unconfirmed. GUI checkpoints also consume substantial memory.
 
-`collect_results.py` collects source hashes, actual elaborated module types, strict functional verdicts, and physical resource/timing reports. `collect_usage.py` exports numeric usage from the four known Codex session ledgers. See the final Chinese report in `docs/system-projects-2026-10-23.md`.
+`collect_results.py` collects source hashes, actual elaborated module types, strict functional verdicts, and physical resource/timing reports. `collect_usage.py` exports numeric usage from the four known Codex session ledgers. See the final Chinese report in `docs/history/system-projects-2026-10-23.md`.

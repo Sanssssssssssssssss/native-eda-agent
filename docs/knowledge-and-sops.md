@@ -18,6 +18,8 @@ flowchart LR
 
 `eda_task_context` 根据问题和 planning / simulation / timing / recovery / cdc / ip 阶段，整合前五条规则、最多两个 SOP 及其所需的实际工具合同。它可带 workflow 目录，重新核验工程状态与恢复建议。返回 schema bytes 便于观察上下文体积，不估算 token；不会自动改变 Pi 当前轮的工具集合。
 
+绑定任务时先核验再检索：失效证据或重复失败转 recovery，功能失败转 simulation，物理时序与约束问题转 timing，CDC 问题转 cdc。显式指定阶段仍保留，并记录与证据推断的冲突。Pi 的 context 钩子按当前分支目录指针重建有界状态，压缩后的历史摘要不能覆盖最新 verifier 结果。修复循环与上游来源见 [ACE-RTL 接入](ace-rtl-adaptation.md)。
+
 接入点是 Agent 的工具调用。模型可以按当前问题检索，再依据返回证据决定操作；框架没有对每个 prompt 自动检索，也没有自动审查最终回答的所有引用。模型 API 当前停用，本轮验证覆盖检索、资源加载、工具协议和任务状态，尚未验证真实模型生成答案的引用忠实度。
 
 | 环节 | 当前实现 | 边界 |

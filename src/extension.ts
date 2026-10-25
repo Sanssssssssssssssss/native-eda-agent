@@ -9,6 +9,7 @@ import { readConfig, listRuns } from './runtime.mjs';
 import { validateArguments } from './tool-contracts.mjs';
 import { createWorkflowTools } from './workflow.mjs';
 import { createContextTools } from './task-context.mjs';
+import { createEdaCoordinator } from './eda-coordinator.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 export default function extension(pi: any, options: any = {}) {
@@ -31,7 +32,11 @@ export default function extension(pi: any, options: any = {}) {
   for (const tool of createPlatformTools(root)) registerTool(tool);
   for (const tool of createWorkflowTools(root, registry)) registerTool(tool);
   for (const tool of createContextTools(root, registry)) registerTool(tool);
+  options.onRegistry?.(registry);
   if (!pi.on) return; // CLI registry construction has no interactive lifecycle.
+  const coordinator = createEdaCoordinator(root, { initialDirectory: options.taskDirectory, onState: options.onTaskState });
+  coordinator.install(pi);
+  options.onCoordinator?.(coordinator);
   const lifecycle = (event: string, fields = {}) => {
     const dir = path.join(root, '.eda-state'); fs.mkdirSync(dir, { recursive: true });
     fs.appendFileSync(path.join(dir, 'agent-hooks.jsonl'), JSON.stringify({ schema_version: 1,

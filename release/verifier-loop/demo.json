@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "scope": "synthetic_generator_and_eda_real_workflow_and_upstream_python",
+  "passed": true,
+  "generations": 2,
+  "verifier_calls": 2,
+  "round_statuses": [
+    "failed",
+    "passed"
+  ],
+  "upstream_commit": "94754d796350d42502c9a32639a20d86f50e9678",
+  "upstream_components": [
+    "ContextBuilder.build_context",
+    "FreshStartCoordinator.add_iteration_result",
+    "FreshStartCoordinator.should_fresh_start"
+  ],
+  "other_model_api_calls": 0,
+  "vivado_runs": 0,
+  "outer_codex_tokens": null,
+  "fixed_checker_sha256": "f4a38c2e66f024d65c54a495e25431e61d157b34eb0770854a25796f14de2287",
+  "loop_status": "passed",
+  "reason": null,
+  "phase": "verifier_loop_before_repository_reorganization",
+  "source_run_id": "ace-loop-demo-2026-10-25T17-36-59-548Z-c966c9",
+  "source_receipt_sha256": "842a5797e08e124406299361228c14e26d0390e85a26f99110506a18a510f386"
+}

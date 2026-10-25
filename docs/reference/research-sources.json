@@ -1,0 +1,68 @@
+{
+  "checked_on": "2026-10-21",
+  "timezone": "Asia/Singapore",
+  "scope": "Research and source inspection; no agent integration or EDA execution",
+  "amd": {
+    "repository": "https://github.com/Xilinx/ross-ai-assistant",
+    "local_path": "${WORKSPACE}/vendor/ross-ai-assistant",
+    "commit": "2cdc9eef1b6b5b17fa45f5e4d468e5483a1c92de",
+    "clone_depth": 1,
+    "version": "2026.9.1",
+    "working_tree_clean_at_check": true,
+    "windows_server": {
+      "filename": "vivado-mcp-server-windows-amd64-2026.9.1.exe",
+      "download_page": "https://www.amd.com/en/support/downloads/ross-agentic-ai.html",
+      "official_link": "https://account.amd.com/en/forms/downloads/ross-mcp-xef.html?filename=vivado-mcp-server-windows-amd64-2026.9.1.exe",
+      "observed_redirect": "https://account.amd.com/my.logout.php3?errorcode=19",
+      "downloaded": false
+    }
+  },
+  "ltspice": {
+    "official_update_source": "https://ltspice.analog.com/download/updates.txt",
+    "windows_version_observed": "26.1.1.1",
+    "official_release_date_field": "2026-09-23",
+    "local_search": "Not found in checked uninstall registry entries and common installation paths; no full disk scan",
+    "installed_or_launched_this_session": false
+  },
+  "maintenance_snapshots": [
+    {
+      "repository": "Cognitohazard/ltspice-mcp",
+      "commit": "ecaeb7311ceb4c742eb7d7278f0e93c92031e79f",
+      "commit_date": "2026-10-21",
+      "caveat": "Recent merged fixes were under Unreleased, not verified in a published package"
+    },
+    {
+      "repository": "LNC0831/SynthPilot",
+      "commit": "d301bdcdbd66bf2559748ed5c88cda42ecb9b43e",
+      "commit_date": "2026-08-17",
+      "caveat": "Public documentation repository; commercial product implementation not inspected"
+    },
+    {
+      "repository": "LNC0831/oh-my-fpga",
+      "commit": "df95c73aa3cb268a2a53d2271f24153c38581f94",
+      "commit_date": "2026-06-09"
+    },
+    {
+      "repository": "LNC0831/SynthPilot_Tutorial",
+      "commit": "c415ec77d296b38c2bb384141eb9952f1eb84344",
+      "commit_date": "2026-04-08"
+    },
+    {
+      "repository": "lucasgerads/spicelib-mcp",
+      "commit": "cf5e6e17def9ddf443e11a5398af4e8dc8dfc538",
+      "commit_date": "2026-04-21"
+    },
+    {
+      "repository": "sharc-lab/hlsfactory-agent",
+      "commit": "8fac504210fae6403808b2acaad1310300dedd69",
+      "commit_date": "2026-05-22"
+    }
+  ],
+  "validation": {
+    "source_checkout_inspected": true,
+    "mcp_connection_tested": false,
+    "simulation_executed": false,
+    "community_examples_reproduced": false,
+    "hardware_tested": false
+  }
+}

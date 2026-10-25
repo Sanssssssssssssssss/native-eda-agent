@@ -2,7 +2,7 @@
 
 本地 MCP / Pi 工具目录由 9 项增至 **15 项**。新增 6 个 Vivado 专用操作，并增强 XSim 参数化仿真；当前 Codex 可直接经 CLI 或 MCP 使用，全程无需额外模型 API。AMD ROSS 的官方 MCP 仍未连接。
 
-[实际验收与限制](fpga-native-tools-validation-2026-10-24.md)：12 项工具集成检查通过，AXI 完成功能仿真、综合和 100 MHz OOC 布局布线，全部 trace 核验通过。
+[实际验收与限制](history/fpga-native-tools-validation-2026-10-24.md)：12 项工具集成检查通过，AXI 完成功能仿真、综合和 100 MHz OOC 布局布线，全部 trace 核验通过。
 
 | 工具 | 工程输入与结果 |
 |---|---|
@@ -54,4 +54,4 @@ XSim 的 `simulation_acceptance` 要求唯一的指定 PASS 行、完成标记�
 
 IP catalog 查询已接入；XCI 读取入口不替代 IP 配置、输出产品生成或仿真库编译。复杂 IP 工程仍可使用 `eda_vivado` 的项目 Tcl 流程。VHDL 文件按显式清单顺序编译，再编译 Verilog；循环依赖与额外逻辑库需项目级流程。时序、CDC 结构报告和 OOC 实现均不能证明板级 IO、亚稳态 MTBF 或硬件行为。
 
-实现入口：[fpga.mjs](../src/tools/fpga.mjs)、[Vivado Tcl](../src/tools/vivado-common.tcl)、[XSim 参数](../src/tools/xsim-options.mjs)。既有[框架与 trace](agent-framework-and-traces.md)、[并行协作记录](parallel-coordination-2026-10-23.md)继续适用。
+实现入口：[fpga.mjs](../src/tools/fpga.mjs)、[Vivado Tcl](../src/tools/vivado-common.tcl)、[XSim 参数](../src/tools/xsim-options.mjs)。既有[框架与 trace](agent-framework-and-traces.md)、[并行协作记录](history/parallel-coordination-2026-10-23.md)继续适用。

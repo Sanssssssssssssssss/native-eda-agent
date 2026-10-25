@@ -25,7 +25,7 @@ test('project extension associates supplied SDK context and parent trace with to
 
 test('project input hook handles text while model API is disabled', async () => {
   const handlers = new Map();
-  extension({ registerTool() {}, registerCommand() {}, on: (event, handler) => handlers.set(event, handler) });
+  extension({ registerTool() {}, registerCommand() {}, appendEntry() {}, on: (event, handler) => handlers.set(event, handler) });
   let notification;
   assert.deepEqual(await handlers.get('input')({ text: 'offline fixture' }, { ui: { notify: text => { notification = text; } } }), { action: 'handled' });
   assert.match(notification, /API/);
