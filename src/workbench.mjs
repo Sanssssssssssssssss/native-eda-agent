@@ -10,6 +10,9 @@ import {inspectWorkflow} from './workflow.mjs';
 import {evaluationSuites, evaluationPlan, runEvaluation, evaluationFreshness} from './evaluations.mjs';
 import {createWorkbenchState, activeJobStates, contained, readJson, now, safeId} from './workbench-state.mjs';
 import {listRunArtifacts, readRunArtifact} from './workbench-artifacts.mjs';
+import {listProjects, getProject, readProjectSource} from './workbench-projects.mjs';
+import {getTestingOverview} from './workbench-testing.mjs';
+import {listChanges, getChange, planChange, previewChange, applyChange, checkChange} from './workbench-changes.mjs';
 
 const digest = value => createHash('sha256').update(JSON.stringify(value)).digest('hex');
 // Each preview has its own trace directory; the executable contract excludes only that receipt location.
@@ -137,6 +140,22 @@ export function createWorkbench(root, registry, options = {}) {
       s.updated_at = now(); state.save('sessions', s); publish(s.id, 'session_updated', {title: s.title, archived: s.archived}); return state.session(s.id);
     } finally { release(); }
   }
+  function changes(data) {
+    if (!['plan', 'preview', 'apply', 'check'].includes(data.action)) throw new Error('Unknown modification action');
+    const previous = data.action === 'plan' ? null : getChange(root, data.id);
+    const sessionId = previous?.session_id || data.session_id;
+    if (previous?.session_id && data.session_id && data.session_id !== previous.session_id) throw conflict('Modification belongs to another session');
+    if (sessionId) availableSession(sessionId);
+    const release = sessionId ? state.acquire(sessionId) : null;
+    try {
+      const result = data.action === 'plan' ? planChange(root, data) : data.action === 'preview' ? previewChange(root, data) : data.action === 'apply' ? applyChange(root, data) : checkChange(root, data.id);
+      if (sessionId) {
+        if (data.action === 'plan') state.appendMessage(sessionId, {role: 'change', change_id: result.id, project_id: result.project_id, text: result.goal});
+        publish(sessionId, 'change_status', {change_id: result.id, project_id: result.project_id, status: result.status});
+      }
+      return result;
+    } finally { release?.(); }
+  }
   async function workflow(data) {
     if (!['plan', 'run'].includes(data.action)) throw new Error('Choose a known task action');
     if (data.plan_id && !data.session_id) throw conflict('A saved plan requires its owning session');
@@ -244,6 +263,15 @@ export function createWorkbench(root, registry, options = {}) {
       }
       if (req.method === 'GET' && route === '/api/overview') return send(200, {config: {model_api_enabled: readConfig(root).model_api_enabled}, runs: runList(), sessions: sessionList(), jobs: jobsList(), sops: querySop(root).sops, specimens, suites: evaluationSuites,
         history: loadResults(root).records.map(({evidence, ...r}) => ({...r, evidence_count: evidence.length}))});
+      if (req.method === 'GET' && route === '/api/projects') return send(200, listProjects(root));
+      if (req.method === 'GET' && route === '/api/project') return send(200, getProject(root, url.searchParams.get('id')));
+      if (req.method === 'GET' && route === '/api/project-source') return send(200, readProjectSource(root, url.searchParams.get('id'), url.searchParams.get('path'), {
+        ...(url.searchParams.has('start_line') ? {start_line: Number(url.searchParams.get('start_line'))} : {}),
+        ...(url.searchParams.has('line_count') ? {line_count: Number(url.searchParams.get('line_count'))} : {}),
+      }));
+      if (req.method === 'GET' && route === '/api/testing') return send(200, getTestingOverview(root));
+      if (req.method === 'GET' && route === '/api/changes') return send(200, listChanges(root, url.searchParams.get('project_id')));
+      if (req.method === 'GET' && route === '/api/change') return send(200, getChange(root, url.searchParams.get('id')));
       if (req.method === 'GET' && route === '/api/run') {
         const dir = contained(artifacts, url.searchParams.get('id')), m = readJson(path.join(dir, 'run.json')); let workflow = null;
         try { if (fs.existsSync(path.join(dir, 'workflow.json'))) {
@@ -301,6 +329,7 @@ export function createWorkbench(root, registry, options = {}) {
       if (route === '/api/context') return send(200, (await registry.get('eda_task_context').execute(`ui-${randomUUID()}`, data)).details);
       if (route === '/api/sop') return send(200, querySop(root, {id: data.id}));
       if (route === '/api/session') return send(200, data.action ? editSession(data) : await sendMessage(data));
+      if (route === '/api/changes') return send(200, changes(data));
       if (route === '/api/workflow') { const r = await workflow(data); return send(r.statusCode, r.result); }
       if (route === '/api/agent') return send(202, await agent(data));
       if (route === '/api/recovery') { const r = await recover(data); return send(r.statusCode, r.result); }

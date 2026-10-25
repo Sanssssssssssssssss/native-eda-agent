@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.8.0 — 2026-10-25
+
+- Added an RTL project inventory with module declarations, testbenches, constraints, source previews and evidence-bound engineering domains. File presence never implies a verified implementation.
+- Added five test lanes with named software outcomes, retrieval queries, benchmark variants, engineering domains and real Agent receipts. Missing runs, expected failures and historical outcomes retain independent counts.
+- Added file-and-line modification scopes, frozen inputs, reviewed previews and exclusive candidate creation. Tests, constraints and dependencies remain protected; candidate integrity and original drift are checked separately from engineering validation.
+- Reused catalog, test-report and patch-review patterns from maintained open-source projects without importing their runtimes. Model APIs remain disabled.
+
 ## 0.7.0 — 2026-10-25
 
 - Rebuilt the workbench around persistent conversations, task proposals, execution state and evidence inspection, following the local ERP workbench's session/workspace separation.

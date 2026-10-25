@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "scope": "synthetic_agent_and_local_mcp_control_plane",
-  "started_at": "2026-10-25T14:19:07.968Z",
-  "directory": "${WORKSPACE}\\artifacts\\agent-offline-2026-10-25T14-19-07-967Z-d62ad9",
+  "started_at": "2026-10-25T15:17:01.977Z",
+  "directory": "${WORKSPACE}\\artifacts\\agent-offline-2026-10-25T15-17-01-973Z-f9e5d0",
   "other_model_api_calls": 0,
   "vivado_runs": 0,
   "ltspice_runs": 0,
@@ -12,33 +12,33 @@
       "name": "node",
       "passed": true,
       "exit_code": 0,
-      "test_count": 136,
-      "duration_ms": 6450,
-      "log": "${WORKSPACE}\\artifacts\\agent-offline-2026-10-25T14-19-07-967Z-d62ad9\\node.log"
+      "test_count": 161,
+      "duration_ms": 6845,
+      "log": "${WORKSPACE}\\artifacts\\agent-offline-2026-10-25T15-17-01-973Z-f9e5d0\\node.log"
     },
     {
       "name": "python",
       "passed": true,
       "exit_code": 0,
       "test_count": 21,
-      "duration_ms": 2226,
-      "log": "${WORKSPACE}\\artifacts\\agent-offline-2026-10-25T14-19-07-967Z-d62ad9\\python.log"
+      "duration_ms": 2142,
+      "log": "${WORKSPACE}\\artifacts\\agent-offline-2026-10-25T15-17-01-973Z-f9e5d0\\python.log"
     },
     {
       "name": "config",
       "passed": true,
       "exit_code": 0,
       "test_count": null,
-      "duration_ms": 94,
-      "log": "${WORKSPACE}\\artifacts\\agent-offline-2026-10-25T14-19-07-967Z-d62ad9\\config.log"
+      "duration_ms": 92,
+      "log": "${WORKSPACE}\\artifacts\\agent-offline-2026-10-25T15-17-01-973Z-f9e5d0\\config.log"
     },
     {
       "name": "knowledge",
       "passed": true,
       "exit_code": 0,
       "test_count": null,
-      "duration_ms": 72,
-      "log": "${WORKSPACE}\\artifacts\\agent-offline-2026-10-25T14-19-07-967Z-d62ad9\\knowledge.log"
+      "duration_ms": 81,
+      "log": "${WORKSPACE}\\artifacts\\agent-offline-2026-10-25T15-17-01-973Z-f9e5d0\\knowledge.log"
     }
   ],
   "source_hashes": {
@@ -82,7 +82,10 @@
     "tests/task-outcome.test.mjs": "b8212cdfe6e7e5b8fddac2d9423da0bbc9a2908ef7af11cb4b6c4e5af4457ea0",
     "tests/workbench-acceptance.test.mjs": "edb69c2620d51da67d2eb9020c9e4a58e1408a15795f220ef7c7f5a78b870110",
     "tests/workbench-artifacts.test.mjs": "a11f83b12d765ee3941e31757d3d0567ecfac319ca800e939cad13f953f6c83a",
+    "tests/workbench-changes.test.mjs": "a4124e75e4d606eec276bb9e0fab6a288a8aea7db1d5a15da87463ba466555f7",
+    "tests/workbench-projects.test.mjs": "26347b7a30479d7ecd62e6cea136d548d66dfa41c1e2ceb17bcecbec4a8d6511",
     "tests/workbench-runtime.test.mjs": "41fa604c0c0e1842f0060e10709fbc044a74722ea6393c6f169b31f27bb50e6a",
+    "tests/workbench-testing.test.mjs": "0e897716d5ebc48f3d8a03245e0598eea5ffe048242e4f2303b8fef9f9d6cebc",
     "tests/workbench.test.mjs": "0cccd25ee2561fdff98b3bacc8e219eac1f64c9feaabe082a3e6dbf1b881fe93",
     "src/tool-contracts.mjs": "293725e9a65d12c4698b68b7b2e6fa4eb763f212a5e48f5e755613458c732608",
     "src/tools/focused.mjs": "7b720ef6e13ba6abcbcb586d810206e576a0bd9a5e01213c17537674c8b63a95",
@@ -93,7 +96,7 @@
     "scripts/workflow.mjs": "1ac569632b8686943abc4e926f22f1e23402a6727048410e658dddd2c046bdc6",
     "scripts/eda-tool.mjs": "94f6ff9b821e45d9efc9bcc5c7caddd49cc2173537bb4dab90d258fe4014e1f3",
     "results/catalog.json": "03f7f41e9e8a15b9f4ec37869f7728857aec3a1a2da5a842659a22c7d22eab04",
-    "package.json": "d0d2a98e71d2f87100c17122b434b74fed36d0abcde886739e4ec0966fc6a66d",
+    "package.json": "b8e2dfdda0a5a9751bc69a0e89b5d0304037888159e89ea3fc15647e8c8bfb3c",
     ".codex/config.toml": "635bea447a9def48f374178f9e957ec1ef6e811555abf328c1b7336eb304af77",
     ".pi/mcp.json": "07e9dfaff84cf686967819798b60dc73220c36dee8cbf196898bb01d86e36387",
     ".pi/APPEND_SYSTEM.md": "f79b802f54236653bd24aab5004495eb71fc3a74d7702a8d5917cf4bf29db879",
@@ -102,12 +105,12 @@
     "docs/agent-workflow-and-trace-contract.md": "c8dba9a79eb8460b9ec8c6c55229f0ab02caa567c1230e025ce4273a2a7be1f3",
     "docs/agent-completion-2026-10-24.md": "35a427fb928bd03e48c07ba05ee182d5579c78df3976b06fb79dbcde487d5db0",
     "web/workbench/index.html": "ab3852d427c5603ff0910a955ad113ff359187b75ec7b791f04abd1643960c29",
-    "web/workbench/style.css": "7fbfefe2b99e50f5f5bd4dcdd2afc62e1c715c6c7b3ca20483a6d3fc9b936812",
-    "web/workbench/app.js": "86ddcda859f91f246b0313edba75e6c7b15e82a0aa382bce00608487e6a8fe52",
+    "web/workbench/style.css": "2692bf74a16d78fa319ede6b465634dcab62d030905da0be702563f405962409",
+    "web/workbench/app.js": "b244e628b65b9a250204112eda1930ac87c5b5cacde2990b2805eb2c8360654f",
     "src/task-outcome.mjs": "d957a04d2ae4b9e55eef2a5b8e7518fcd5d2507f87235fdcb813032866178e5f",
     "src/task-context.mjs": "776f671692a65eccbdf42ac9cbaef530b24b28eb98de3d25aea6ae981d2f7425",
     "src/evaluations.mjs": "ccffc723a9d7bb346f4ec599b73c5c487384d4a6da5fdca454d3a769dd47e776",
-    "src/workbench.mjs": "05693427e1ca61302a25f6c9c3b7a89be6031c51e2810b19bddadd065cdbb512",
+    "src/workbench.mjs": "4e80f7fb42c68be3f6aa21130873f4df99b99e224c26911eca4b4ad609e46d23",
     "scripts/evaluate.mjs": "b33dd917eafc6ef20d670a58645157c270a40b0e79f8fd4845cdefa5a9632e45",
     "scripts/workbench.mjs": "8b6098d303852fb02834a9552a5c0fd1696db27b66a3ad0e6667ca7a053e4281",
     "src/agent-resources.mjs": "910ecf5ffbf6881f0c4f7d2123bebaa149d229ad4bd7abb8fa98ab0a9791dba9",
@@ -127,8 +130,11 @@
     ".pi/skills/fpga-ip-integrate/SKILL.md": "ad1ece2837b3dd31fe1a4cc8e20bcefa4f9ae99f887056a6552a3b5e2757790e",
     "src/agent-session.mjs": "cb20fe9a2117afd7689ae673c12335402f2f24cbe6df514600f7030a74b845d2",
     "src/workbench-artifacts.mjs": "b009790b14d99427a8c991264a558a7d45f8e92f14c9ea8e364c73198e67f967",
-    "src/workbench-state.mjs": "82425676546711c7d99345efaa3569a65b1745909413491ca228582893508dfd"
+    "src/workbench-changes.mjs": "7741ebfef375b850d4a42de81e0dd9e1d4d58259a42718b4e38cdff9989ac1be",
+    "src/workbench-projects.mjs": "2b9238f8a56e770db299ef9bea7cd50b79976d15222ea1b91a1df7c5b54b3001",
+    "src/workbench-state.mjs": "82425676546711c7d99345efaa3569a65b1745909413491ca228582893508dfd",
+    "src/workbench-testing.mjs": "527563f0b8d8d3fab46d0d6d038562ffca2ef89a0445fe5bf143f7a9b43fd331"
   },
   "passed": true,
-  "finished_at": "2026-10-25T14:19:16.846Z"
+  "finished_at": "2026-10-25T15:17:11.184Z"
 }

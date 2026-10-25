@@ -10,4 +10,6 @@ For v0.6, `evaluation-v06.json` indexes local software, browser and real EDA rec
 
 For v0.7, see [workbench acceptance](../docs/workbench-v07-acceptance.md) for conversation/task interactions, browser screenshots and offline lifecycle checks. The new UI does not change the retained v0.6 engineering scores. Pi session continuation and streaming were tested with a fake SDK while provider calls remained disabled.
 
+For v0.8, see [project workspace and scoped edits](../docs/workbench-v08.md). Project inventory, test classifications and line-scoped source candidates share the local workbench. Candidate creation verifies the selected changes and preserved inputs; it does not establish buildability or engineering acceptance. `evaluation-v08.json` records this release's software and browser validation; historical design scores retain their original protocols.
+
 Maintain the export allowlist in `scripts/build-public.mjs`; see [contribution guidance](../CONTRIBUTING.md). Do not copy runtime installations, credentials, conversations or large EDA artifacts into this directory.

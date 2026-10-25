@@ -11,6 +11,8 @@
 | Agent 上下文与会话 | [agent-resources](../src/agent-resources.mjs) → [agent-session](../src/agent-session.mjs)；CLI/工作台共用 Pi 驱动，加载项目技能、记录 resources_loaded、续接本项目会话文件并冻结续接前记录 | API 当前停用；真实 loader 与假 SDK 验证不等于真实 provider 评估；无 steer/compaction 操作界面 |
 | 多工具任务合同 | [workflow](../src/workflow.mjs)；固定规格/输入/知识/代码，解析前序结果引用，每步显式 checks；失败即停 | 串行流程；不自动补充未声明的设计验收项 |
 | 本地会话与评测 | [workbench](../src/workbench.mjs)、[workbench-state](../src/workbench-state.mjs)、[evaluations](../src/evaluations.mjs)；持久会话/任务/job/事件，计划哈希复核、取消和所有者检查；六类评测独立计分 | 本机单用户；重启不自动重放；真实线上会话成绩尚未实测 |
+| 工程资产与测试分类 | [workbench-projects](../src/workbench-projects.mjs)、[workbench-testing](../src/workbench-testing.mjs)；工程/源码/模块声明关联固定输入、领域报告；五层测试展开逐例、历史与独立分母 | 词法声明不等于层次展开；历史证据不代表当前重跑；只有汇总日志的测试不补造逐例结果 |
+| 限定源码修改 | [workbench-changes](../src/workbench-changes.mjs)；预览 SHA、文件与行范围、原件快照、差异指纹、受保护输入和单次候选创建；每次写前检查漂移 | 仅此修改接口约束；不是任意 shell 的沙箱；源码候选尚需绑定完整依赖与工程验证 |
 | 资源与进程管理 | [runtime](../src/runtime.mjs)；FIFO 资源租约，跨进程调度、超时、取消与所有者检查 | 默认 XSim 2 / Vivado 1 / LTspice 1；主机执行，不是容器或 VM 沙箱 |
 | 输入与 trace | [trace](../src/trace.mjs)；依赖捕获、字节快照、哈希、进程状态、因果 span；保留失败 | 动态 Tcl/文件依赖可能无法解析；前后哈希不能检测修改后又恢复的瞬时变化 |
 | 功能验收 | [bench/acceptance](../src/bench/acceptance.mjs)；检查 PASS、计数、错误、超时、负控原因及数值 oracle | 特定 harness 的覆盖；仿真通过不代表无界证明 |

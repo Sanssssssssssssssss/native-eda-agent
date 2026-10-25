@@ -4,7 +4,7 @@
 
 当前重点是 **可追溯的知识指导、固定验收、可靠执行和结果复核**。模型提供商 API 默认关闭；下列本地工具和离线检查不需要模型 API key。
 
-[会话工作台与验收](docs/workbench-v07-acceptance.md) · [ERP 机制对照](docs/erp-parity-and-workbench.md) · [分类评测](docs/evaluation.md) · [核心机制](docs/mechanisms.md) · [RAG 与 SOP](docs/knowledge-and-sops.md) · [功能成绩](docs/results.md) · [全部文档](docs/README.md)
+[工程表盘与限定修改](docs/workbench-v08.md) · [会话工作台与验收](docs/workbench-v07-acceptance.md) · [分类评测](docs/evaluation.md) · [核心机制](docs/mechanisms.md) · [RAG 与 SOP](docs/knowledge-and-sops.md) · [功能成绩](docs/results.md) · [全部文档](docs/README.md)
 
 ## 项目亮点
 
@@ -13,6 +13,8 @@
 - **任务可追踪和恢复**：每次调用保留输入快照、进程、失败、终态与因果 trace。恢复前核验所有者、输入、代码和产物；在新目录从已提交边界继续；同一恢复链重复三次失败后停止重放并要求诊断。
 - **EDA 执行受资源约束**：原生工具与社区 MCP 代理共享资源租约，支持队列、超时与取消。物理优化器另有候选准入、最佳结果保留、停滞停止和最终复测。
 - **会话驱动的工程工作台**：保存、查找、重命名与归档会话，在对话中准备工程任务、审阅固定计划、执行、取消并查看证据。任务、运行和事件持久化；离线、真实 EDA、Agent 会话评测分别记录。
+- **RTL 工程表盘与限定修改**：项目清单关联源码、模块声明、测试台、约束和分领域验证；选择具体 RTL 行范围，冻结输入、预览差异，再生成隔离的源码候选。约束、测试台、依赖和范围外内容保留原始哈希。
+- **逐例测试视图**：软件机制、检索、工具案例、工程领域、真实 Agent 任务使用独立分母；按类别、难度和结果筛选，展开失败原因与历史证据。未运行、预期失败、当前源码变化明确保留。
 - **成绩可以复核**：保留原测试协议、失败和公开证据哈希。不同题集、watchdog 和计分单位不合并成总分。
 
 ## 按功能看能力与证据
@@ -73,7 +75,7 @@ node scripts/results.mjs verify hard-projects-3
 
 上述例子只使用本地知识、前检与历史证据。`workflow run/resume` 按规格决定是否启动 EDA；`eda_vivado_optimize` 的 plan 也会启动 Vivado。真实工程可从 [counter](examples/workflows/counter-simulation.json) 或 [AXI fabric](examples/workflows/axi-fabric-ooc.json) 开始，先按 [工程索引](projects/README.md) 获取固定 RTL 依赖并核对验收范围。
 
-## 会话与评测界面
+## 工程工作区
 
 ```powershell
 npm run workbench
@@ -82,9 +84,11 @@ npm run evaluate -- list
 npm run evaluate -- run offline-retrieval
 ```
 
-![EDA Agent 会话工作台](docs/media/workbench.png)
+![EDA Agent RTL 工程工作区](docs/media/workbench-project.png)
 
 新建会话后输入设计问题，选择阶段检索规则与 SOP。在会话内选择示例或仓库中已有 workflow 规格，预览输入、检查项与预算，再启动任务。任务卡展示执行状态并关联原始证据；计划之后源码或输入变化会要求重新预览。
+
+从“工程资产”进入项目，可查看 RTL 和验证状态、逐行阅读源码并选择修改范围。当前模型停用时可手动填写替换内容，审阅差异后创建候选；原工程保持原件，候选单独保存且标为未验证。候选只覆盖已枚举源码与测试输入，生成目录不表示独立可构建或工程通过。流程与借鉴来源见 [v0.8 工作台](docs/workbench-v08.md)。
 
 当前使用本地检索与工具模式。原生 Pi 聊天入口已接入同一会话工作台，但受 `model_api_enabled=false` 阻止；本轮没有真实模型聊天或模型质量成绩。应用重启可以重新查看会话和任务；中断任务保留证据，不自动重放。服务限本机单用户，尚无独立桌面安装包、多用户权限或 steer/compaction 操作界面。
 

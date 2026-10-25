@@ -62,6 +62,16 @@ const statusNames = {
   blocked: "缺少前提",
   interrupted: "已中断",
   queued: "排队中",
+  not_run: "未执行",
+  not_required: "未要求",
+  historical: "历史证据",
+  current_evidence: "当前证据",
+  sources_present: "源码已收录",
+  metadata_only: "仅项目说明",
+  previewed: "差异已预览",
+  candidate_created: "候选已生成",
+  expected_failure: "预期失败",
+  expected_timeout: "预期超时",
 };
 const badge = (status) =>
   `<span class="badge ${esc(status)}"><span class="dot"></span>${esc(statusNames[status] || status || "待核验")}</span>`;
@@ -146,11 +156,38 @@ const suiteDescriptions = {
 };
 const unitNames = {
   software_test: "软件检查",
+  case_variant: "案例变体",
+  project_domain: "工程验收项",
   visible_query: "可见检索问题",
   scorecard_integrity: "成绩记录",
   workflow_run: "工程任务",
   session_task: "会话任务",
 };
+const categoryNames = {
+  "rtl.combinational": "组合逻辑",
+  "rtl.sequential": "时序逻辑",
+  "rtl.fsm": "状态机",
+  protocol: "通信协议",
+  bus: "总线互连",
+  memory: "存储系统",
+  arithmetic: "算术运算",
+  dsp: "数字信号处理",
+  system: "系统工程",
+  analog: "模拟电路",
+  tool_error: "工具错误处理",
+  timeout: "超时处理",
+  trace: "执行追踪",
+  reproducibility: "复现与证据",
+};
+const tierNames = {
+  smoke: "冒烟检查",
+  light: "模块级",
+  system: "系统级",
+  implementation: "实现与时序",
+  external: "外部基准",
+};
+const categoryLabel = (value) =>
+  categoryNames[value] || tierNames[value] || value;
 const eventNames = {
   run_started: "开始执行",
   run_finished: "执行结束",
@@ -186,8 +223,21 @@ const state = {
   interaction: "local",
   live: new Map(),
   stream: null,
-  evalLane: "offline",
+  evalLane: "tool_execution",
   evaluations: null,
+  testing: null,
+  testingFilters: { query: "", category: "", tier: "", family: "", status: "" },
+  projects: null,
+  project: null,
+  projectQuery: "",
+  projectFilter: "implemented",
+  projectFileFilter: "all",
+  projectFileQuery: "",
+  projectSource: null,
+  projectSourceVersion: 0,
+  projectSelections: new Map(),
+  changes: [],
+  change: null,
   runTab: "acceptance",
   runFilter: "workflow",
   runQuery: "",
@@ -300,13 +350,15 @@ function go(view, id = "") {
   $("#app").classList.remove("rail-open");
 }
 function parseRoute() {
-  const [view = "sessions", id = ""] = location.hash
+  const [view = "projects", id = ""] = location.hash
     .replace(/^#\/?/, "")
     .split("/");
   return {
-    view: ["sessions", "runs", "knowledge", "evaluations"].includes(view)
+    view: ["sessions", "projects", "runs", "knowledge", "evaluations"].includes(
+      view,
+    )
       ? view
-      : "sessions",
+      : "projects",
     id: decodeURIComponent(id),
   };
 }
@@ -335,10 +387,11 @@ function renderSidebar() {
   const o = state.overview;
   if (!o) return;
   const nav = [
-    ["sessions", "工作会话", "chat"],
+    ["projects", "工程", "chip"],
+    ["sessions", "Agent 会话", "chat"],
     ["runs", "执行记录", "runs"],
     ["knowledge", "知识与流程", "book"],
-    ["evaluations", "评测中心", "chart"],
+    ["evaluations", "Test Explorer", "chart"],
   ];
   $("#sidebar").innerHTML =
     `<div class="brand"><span class="brand-mark">${icon("chip")}</span><div>EDA Agent<span class="brand-sub">FPGA 工作台</span></div></div>${button("new-session", "新建会话", "plus", "", "new-session")}<nav class="main-nav" aria-label="主要页面">${nav.map(([id, label, i]) => `<button class="nav-item ${state.view === id ? "active" : ""}" data-action="navigate" data-view="${id}" ${state.view === id ? 'aria-current="page"' : ""}>${icon(i)}<span>${label}</span>${id === "runs" ? `<span class="count">${o.runs.filter((r) => r.workflow).length}</span>` : ""}</button>`).join("")}</nav><div class="session-section-heading"><span>${state.archive ? "已归档会话" : "最近会话"}</span><button data-action="toggle-archive">${state.archive ? "返回活跃" : "查看归档"}</button></div><label class="session-search">${icon("search")}<input id="session-search" aria-label="搜索会话" placeholder="搜索会话" value="${esc(state.sessionQuery)}"></label><div id="session-list" class="session-list"></div><div class="rail-footer"><div class="connection-row"><span class="dot"></span><span>本地工作区已连接</span></div>${button("settings", "运行模式与连接", "settings", "", "subtle")}</div>`;
@@ -368,37 +421,7 @@ function renderHeader(title, subtitle = "", actions = "") {
     `${iconButton("toggle-rail", "打开导航", "menu").replace('class="icon-button"', 'class="icon-button mobile-menu"')}<div class="header-title"><h1 class="truncate">${esc(title)}</h1>${subtitle ? `<p>${esc(subtitle)}</p>` : ""}</div><div class="header-actions"><span class="mode-label">${icon("shield")}<span>${state.overview?.config.model_api_enabled ? "本地工具流程" : "本地流程模式"}</span></span>${actions ? '<span class="header-divider"></span>' + actions : ""}</div>`;
 }
 function welcome() {
-  const starters = [
-    [
-      "wave",
-      "准备 RTL 功能验证",
-      "固定接口、激励与验收条件",
-      "请帮我规划 RTL 功能仿真，检查复位、背压和 scoreboard 的验收条件。",
-      "simulation",
-    ],
-    [
-      "clock",
-      "分析时序收敛路径",
-      "从时钟约束到关键路径",
-      "时序收敛应该先检查哪些时钟约束、关键路径和 setup hold 证据？",
-      "timing",
-    ],
-    [
-      "flow",
-      "审查跨时钟设计",
-      "检查同步器与总线一致性",
-      "跨时钟总线一致性与异步 FIFO 需要哪些 CDC 审查证据？",
-      "cdc",
-    ],
-    [
-      "shield",
-      "复核已有工程结果",
-      "核验记录、来源和恢复条件",
-      "请复核已有 FPGA 工程的输入、证据和恢复条件。",
-      "recovery",
-    ],
-  ];
-  return `<section class="welcome"><div class="welcome-symbol">${icon("chip")}</div><h2>从一个 FPGA 任务开始</h2><p>整理设计目标，选择工程流程，让每一步执行都有依据。<br>在同一个会话中连接知识、工具和验收结果。</p><div class="pipeline"><span>${icon("chat")}任务规格</span><span class="pipe-line"></span><span>${icon("book")}知识与 SOP</span><span class="pipe-line"></span><span>${icon("flow")}工具执行</span><span class="pipe-line"></span><span>${icon("shield")}证据验收</span></div><div class="starter-grid">${starters.map(([i, t, d, q, p]) => `<button class="starter" aria-label="${esc(t)}" data-action="starter" data-query="${esc(q)}" data-phase="${p}">${icon(i)}<span><strong>${t}</strong><small>${d}</small></span></button>`).join("")}</div><div class="welcome-foot">${icon("shield")}${state.overview.config.model_api_enabled ? "可使用本地工程流程，也可切换至 Pi Agent 会话。" : "当前使用本地检索与工程工具；模型 API 已停用。"}</div></section>`;
+  return `<section class="conversation-empty"><h2>Agent 会话</h2><p>输入工程目标或报告问题。任务计划、工具结果与引用会保存在本会话。</p><small>${state.overview.config.model_api_enabled ? "可切换 Pi Agent" : "模型 API 已停用 · 本地检索与工程流程可用"}</small></section>`;
 }
 function contextHtml(context, key) {
   state.contexts.set(key, context);
@@ -439,7 +462,11 @@ function messagesHtml() {
         label,
         avatar,
         kind = m.role;
-      if (m.role === "task") {
+      if (m.role === "change") {
+        body = `<div class="context-callout"><p>${esc(m.text || "限定范围的工程修改")}</p></div>${button("change-open", "查看修改草案", "file", `data-id="${esc(m.change_id)}"`)}`;
+        label = "工程修改";
+        avatar = icon("file");
+      } else if (m.role === "task") {
         const t = tasks.get(m.task_id);
         if (!t) return "";
         included.add(t.id);
@@ -1092,28 +1119,558 @@ function runEvidence() {
     { wide: true },
   );
 }
+const fileKindNames = {
+  rtl: "RTL 源码",
+  testbench: "测试平台",
+  constraint: "时钟与约束",
+  metadata: "工程配置",
+  script: "脚本",
+  firmware: "固件",
+  documentation: "说明",
+  analog: "模拟电路",
+  test_data: "测试数据",
+};
+const evidenceScopeNames = {
+  unknown: "尚无领域证据",
+  historical: "记录时的结果",
+  current: "当前输入一致",
+  aggregate_not_project_specific: "多项目聚合记录",
+};
+
+async function loadProjects() {
+  const version = state.routeVersion;
+  const value = await api("projects");
+  if (version !== state.routeVersion) return;
+  state.projects = value;
+  renderProjects();
+}
+function renderProjects() {
+  renderHeader(
+    "工程",
+    "本地源文件与关联证据",
+    button("refresh", "刷新", "refresh"),
+  );
+  $("#content").innerHTML =
+    `<div class="page engineering-page"><div class="toolbar"><label class="search-box">${icon("search")}<input id="project-search" aria-label="搜索工程" placeholder="搜索工程名称或目录" value="${esc(state.projectQuery)}"></label><select id="project-filter" aria-label="工程证据筛选"><option value="implemented">有实现文件</option><option value="all">所有工程</option><option value="current_evidence">当前证据</option><option value="historical">历史证据</option><option value="unknown">尚待验证</option><option value="metadata_only">仅项目说明</option></select></div><div id="project-list"></div></div>`;
+  $("#project-filter").value = state.projectFilter;
+  renderProjectList();
+}
+function renderProjectList() {
+  const rows = (state.projects?.projects || []).filter(
+    (p) =>
+      `${p.title} ${p.publicPath}`
+        .toLowerCase()
+        .includes(state.projectQuery.toLowerCase()) &&
+      (state.projectFilter === "all" ||
+        (state.projectFilter === "implemented" &&
+          p.implementation === "sources_present") ||
+        p.verification === state.projectFilter ||
+        p.implementation === state.projectFilter),
+  );
+  $("#project-list").innerHTML = rows.length
+    ? `<div class="table-wrap project-table"><table><thead><tr><th>工程与目录</th><th>RTL / 声明</th><th>测试 / 约束</th><th>证据状态</th><th>最近更新</th></tr></thead><tbody>${rows.map((p) => `<tr><td><button class="project-open" data-action="project-open" data-id="${esc(p.id)}">${icon("chip")}<span><strong>${esc(p.title)}</strong><small>${esc(p.publicPath)}</small></span>${icon("right")}</button></td><td class="numeric">${p.counts?.rtl || 0} / ${p.counts?.rtl_modules ?? p.counts?.modules ?? 0}</td><td class="numeric">${p.counts?.testbench || 0} / ${p.counts?.constraint || 0}</td><td>${badge(p.verification)}${p.implementation === "metadata_only" ? '<small class="project-meta">仅项目说明</small>' : ""}</td><td class="meta">${date(p.last_modified)}</td></tr>`).join("")}</tbody></table></div><p class="pagination-note">显示 ${rows.length} / ${state.projects.projects.length} 个工程</p>`
+    : empty("没有匹配的工程", "调整名称或证据筛选后重试。", "folder");
+}
+async function loadProject(id) {
+  const version = state.routeVersion;
+  const [project, changes] = await Promise.all([
+    api("project?id=" + encodeURIComponent(id)),
+    api("changes?project_id=" + encodeURIComponent(id)),
+  ]);
+  if (version !== state.routeVersion || state.id !== id) return;
+  state.project = project;
+  state.changes = changes.changes || [];
+  state.projectSource = null;
+  state.projectFileQuery = "";
+  state.projectFileFilter = "all";
+  renderProject();
+  const top = project.workflows.find((w) => w.top)?.top;
+  const first =
+    project.files.find((f) => f.modules?.some((m) => m.name === top)) ||
+    project.files.find((f) => f.editable) ||
+    project.files[0];
+  if (first) await openProjectSource(first.path);
+}
+function selectedProjectRanges() {
+  if (!state.projectSelections.has(state.id))
+    state.projectSelections.set(state.id, new Map());
+  return state.projectSelections.get(state.id);
+}
+function projectMatrix() {
+  const matrix = state.project.verification_matrix || {};
+  const values = ["functional", "synthesis", "setup", "hold", "routing", "drc"];
+  return `<section class="project-reports"><h2>关联工程证据</h2><table class="report-table"><tbody>${values
+    .map((name) => {
+      const value = matrix[name] || { status: "unknown", scope: "unknown" };
+      const observed =
+        name === "setup" && typeof value.observed === "number"
+          ? `WNS ${value.observed} ns`
+          : name === "hold" && typeof value.observed === "number"
+            ? `WHS ${value.observed} ns`
+            : name === "drc" &&
+                typeof value.observed === "object" &&
+                value.observed
+              ? `${value.observed.errors ?? "?"} error / ${value.observed.warnings ?? "?"} warning`
+              : "";
+      return `<tr><th>${esc(domainNames[name])}<small>${esc(value.scope === "historical" ? "历史" : value.scope === "current" ? "输入一致" : "无证据")}</small></th><td>${value.run_id ? `<button data-action="project-report" data-domain="${esc(name)}" title="查看关联工程报告">${badge(value.status)}</button>` : badge(value.status)}${observed ? `<small>${esc(observed)}</small>` : ""}</td></tr>`;
+    })
+    .join(
+      "",
+    )}</tbody></table><details class="other-domains"><summary>CDC · 形式验证 · 板卡实测</summary>${["cdc", "formal", "hardware"].map((n) => `<div><span>${esc({ cdc: "CDC", formal: "形式验证", hardware: "板卡实测" }[n])}</span>${badge(matrix[n]?.status || "unknown")}</div>`).join("")}</details></section>`;
+}
+function renderProject() {
+  const p = state.project,
+    w = p.workflows.find((w) => w.top) || p.workflows[0] || {};
+  const facts = [
+    w.top ? `Top ${w.top}` : "",
+    w.part,
+    w.clock ? `${w.clock}${w.period_ns ? ` · ${w.period_ns} ns` : ""}` : "",
+  ]
+    .filter(Boolean)
+    .join("  /  ");
+  renderHeader(
+    p.title,
+    facts || p.publicPath,
+    button("navigate", "切换工程", "folder", 'data-view="projects"'),
+  );
+  $("#content").className = "content project-content";
+  $("#content").innerHTML =
+    `<div class="eda-workspace"><aside class="project-files"><div class="panel-heading"><h2>Sources</h2><small>${p.counts?.rtl_modules ?? p.counts?.modules ?? 0} RTL 声明</small></div><label class="source-search search-box">${icon("search")}<input id="project-file-search" aria-label="搜索文件或模块" placeholder="文件 / 模块"></label><select id="project-file-filter" aria-label="文件类型"><option value="all">所有源文件</option>${Object.entries(
+      fileKindNames,
+    )
+      .filter(([key]) => p.files.some((f) => f.kind === key))
+      .map(([key, title]) => `<option value="${key}">${title}</option>`)
+      .join(
+        "",
+      )}</select><div id="project-file-list"></div></aside><section class="project-code"><div id="project-source"></div></section><aside class="project-inspector">${projectMatrix()}<section class="scope-selection"><div class="panel-heading"><h2>修改范围</h2></div><div id="scope-selection"></div></section><section class="project-history"><div class="panel-heading"><h2>修改草案</h2></div><div id="project-changes">${projectChangesHtml()}</div></section><details class="project-protection"><summary>${icon("shield")} 保护文件与依赖</summary><div class="protected-files">${
+      p.files
+        .filter(
+          (f) =>
+            (f.editable === false &&
+              ["testbench", "constraint", "test_data"].includes(f.kind)) ||
+            f.dependency,
+        )
+        .map(
+          (f) =>
+            `<span><code>${esc(f.path)}</code><small>${esc(f.dependency ? "只读依赖" : fileKindNames[f.kind])}</small></span>`,
+        )
+        .join("") || '<span class="meta">未收录</span>'
+    }</div></details></aside></div>`;
+  renderProjectFiles();
+  renderScopeSelection();
+}
+function renderProjectFiles() {
+  const selected = state.projectSource?.path;
+  const files = state.project.files.filter(
+    (f) =>
+      (state.projectFileFilter === "all" ||
+        f.kind === state.projectFileFilter) &&
+      `${f.path} ${(f.modules || []).map((m) => m.name).join(" ")}`
+        .toLowerCase()
+        .includes(state.projectFileQuery.toLowerCase()),
+  );
+  const groups = [
+    { name: "Design", test: (f) => f.kind === "rtl" && !f.dependency },
+    {
+      name: "Simulation",
+      test: (f) => ["testbench", "test_data"].includes(f.kind) && !f.dependency,
+    },
+    {
+      name: "Constraints",
+      test: (f) => f.kind === "constraint",
+    },
+    {
+      name: "Dependencies",
+      test: (f) => f.dependency && f.kind !== "constraint",
+    },
+    {
+      name: "Other",
+      test: (f) =>
+        !["rtl", "testbench", "test_data", "constraint"].includes(f.kind) &&
+        !f.dependency,
+    },
+  ];
+  $("#project-file-list").innerHTML =
+    groups
+      .map((group) => {
+        const entries = files.filter(group.test);
+        return entries.length
+          ? `<details class="source-group" ${["Design", "Simulation", "Constraints"].includes(group.name) || state.projectFileQuery ? "open" : ""}><summary>${icon("folder")}${group.name}<small>${entries.length}</small></summary>${entries.map((f) => `<div class="source-entry"><button class="project-file ${selected === f.path ? "active" : ""}" data-action="project-source" data-path="${esc(f.path)}" title="${esc(f.path)}" aria-label="打开 ${esc(f.path)}"><span>${icon(f.editable ? "file" : "shield")}<strong>${esc(basename(f.path))}</strong></span></button>${selected === f.path ? (f.modules || []).map((m) => `<button class="module-link" data-action="project-module" data-path="${esc(f.path)}" data-line="${m.line}">${icon("chip")}${esc(m.name)}<small>:${m.line}</small></button>`).join("") : ""}</div>`).join("")}</details>`
+          : "";
+      })
+      .join("") || '<p class="empty-result">没有匹配文件。</p>';
+}
+async function openProjectSource(file, start = 1, count = 160) {
+  const version = state.routeVersion,
+    request = ++state.projectSourceVersion,
+    projectId = state.id;
+  const target = state.project.files.find((f) => f.path === file);
+  if (!target) throw new Error("请从当前工程中选择文件。");
+  $("#project-source").innerHTML =
+    '<div class="loading-state">正在读取源文件…</div>';
+  try {
+    const source = await api(
+      `project-source?id=${encodeURIComponent(projectId)}&path=${encodeURIComponent(file)}&start_line=${start}&line_count=${count}`,
+    );
+    if (
+      version !== state.routeVersion ||
+      request !== state.projectSourceVersion ||
+      projectId !== state.id
+    )
+      return;
+    state.projectSource = { ...source, path: file, file: target };
+    renderProjectSource();
+    renderProjectFiles();
+  } catch (error) {
+    if (
+      version === state.routeVersion &&
+      request === state.projectSourceVersion
+    )
+      $("#project-source").innerHTML =
+        `<div class="source-error"><h3>暂时无法预览这个文件</h3><p>${esc(error.message)}</p></div>`;
+  }
+}
+function highlightRtl(line) {
+  const tokens =
+    /(\/\/.*|"(?:\\.|[^"\\])*"|\b(?:module|endmodule|input|output|inout|wire|reg|logic|parameter|localparam|assign|always|always_ff|always_comb|begin|end|if|else|case|endcase|default|posedge|negedge|generate|endgenerate|genvar|for|integer|function|endfunction|task|endtask|initial|typedef|enum)\b|\b\d+(?:'[bBhHdD][0-9a-fA-F_xXzZ]+)?\b)/g;
+  let result = "",
+    last = 0;
+  for (const match of line.matchAll(tokens)) {
+    const token = match[0],
+      kind = token.startsWith("//")
+        ? "comment"
+        : token.startsWith('"')
+          ? "string"
+          : /^\d/.test(token)
+            ? "number"
+            : "keyword";
+    result +=
+      esc(line.slice(last, match.index)) +
+      `<span class="rtl-${kind}">${esc(token)}</span>`;
+    last = match.index + token.length;
+  }
+  return result + esc(line.slice(last));
+}
+async function projectReport(domain) {
+  const project = state.project,
+    value = project?.verification_matrix?.[domain],
+    version = state.routeVersion;
+  if (!value?.run_id) return;
+  const evidence = value.evidence || {},
+    file = basename(evidence.result || evidence.file || ""),
+    child = basename(evidence.child_directory || "");
+  const report = file
+    ? await api(
+        "artifact?run_id=" +
+          encodeURIComponent(value.run_id) +
+          "&file=" +
+          encodeURIComponent(file),
+      )
+    : null;
+  let readable = null;
+  if (child) {
+    const listing = await api("artifacts?run_id=" + encodeURIComponent(child));
+    const pattern =
+      domain === "drc"
+        ? /drc.*\.rpt$/i
+        : ["setup", "hold"].includes(domain)
+          ? /timing.*\.rpt$/i
+          : domain === "synthesis"
+            ? /utilization.*\.rpt$/i
+            : null;
+    const match = pattern
+      ? listing.files?.find(
+          (f) => f.previewable !== false && pattern.test(f.file),
+        )
+      : null;
+    if (match)
+      readable = await api(
+        "artifact?run_id=" +
+          encodeURIComponent(child) +
+          "&file=" +
+          encodeURIComponent(match.file),
+      );
+  }
+  if (version !== state.routeVersion || project.id !== state.project?.id)
+    return;
+  const observed =
+    typeof value.observed === "object"
+      ? Object.entries(value.observed || {})
+          .map(
+            ([k, v]) =>
+              `${k}: ${typeof v === "object" ? JSON.stringify(v) : v}`,
+          )
+          .join(" · ")
+      : String(value.observed ?? "未记录");
+  openDrawer(
+    domainNames[domain] || domain,
+    `<div class="row wrap">${badge(value.status)}<span class="meta">${esc(evidenceScopeNames[value.scope] || value.scope)}</span></div><p class="report-observed">${esc(observed)}${["setup", "hold"].includes(domain) ? " ns" : ""}</p><p class="technical-note">${esc(project.title)} · 关联工程运行</p>${readable ? `<h3>${esc(readable.file)}</h3><pre class="eda-report-text">${esc(readable.text)}</pre>` : ""}${report ? `<details class="tool-contract"><summary>原始回执 · ${esc(report.file)}</summary><pre>${esc(report.text)}</pre><p class="technical-note">SHA-256 ${esc(report.sha256)}</p></details>` : ""}${button("open-run", "打开运行详情", "runs", `data-id="${esc(value.run_id)}"`)}`,
+    { wide: true },
+  );
+}
+function renderProjectSource() {
+  const source = state.projectSource,
+    file = source.file,
+    selected = selectedProjectRanges().get(source.path),
+    start = selected?.start_line || source.start_line,
+    end = selected?.end_line || start;
+  $("#project-source").innerHTML =
+    `<div class="source-header"><span>${icon("file")}<strong>${esc(basename(source.path))}</strong><small>${file.editable ? "RTL" : "只读"}</small></span><small>${source.total_lines} 行</small></div><div class="source-range"><label>行 <input id="source-start" type="number" min="1" max="${source.total_lines}" value="${start}" aria-label="修改起始行"></label><span>—</span><input id="source-end" type="number" min="1" max="${source.total_lines}" value="${end}" aria-label="修改结束行">${button("source-range-load", "定位", "search", "", "subtle")}${button("scope-add", "限定修改", "plus", file.editable && !state.project.truncated ? "" : "disabled")}</div><div class="source-lines" role="region" aria-label="${esc(basename(source.path))} 源码" tabindex="0">${source.lines.map((row) => `<div class="source-line ${row.number >= start && row.number <= end ? "selected" : ""}" data-line="${row.number}"><button data-action="source-line" data-line="${row.number}" aria-label="选择第 ${row.number} 行">${row.number}</button><code>${highlightRtl(row.text)}</code></div>`).join("")}</div><div class="source-footer"><span>Ln ${source.start_line}–${source.end_line} / ${source.total_lines}</span>${source.end_line < source.total_lines ? button("source-next", "下一段", "right", `data-start="${source.end_line + 1}"`, "subtle") : ""}<small title="${esc(source.sha256)}">SHA ${esc(source.sha256.slice(0, 10))}</small><span class="source-hint">Shift + 点击连续选行</span></div>${(file.evidence_links || []).length ? `<div class="file-evidence">参与 ${file.evidence_links.length} 次关联工程验收 · 不代表模块独立证明</div>` : ""}`;
+}
+function sourceRange() {
+  const start = Number($("#source-start")?.value),
+    end = Number($("#source-end")?.value);
+  if (
+    !Number.isSafeInteger(start) ||
+    !Number.isSafeInteger(end) ||
+    start < 1 ||
+    end < start ||
+    end > state.projectSource.total_lines ||
+    end - start + 1 > 400
+  )
+    throw new Error("请选择文件内连续的 1 至 400 行，结束行不能早于起始行。");
+  return {
+    path: state.projectSource.path,
+    start_line: start,
+    end_line: end,
+    sha256: state.projectSource.sha256,
+  };
+}
+function addScopeRange() {
+  if (!state.projectSource.file.editable)
+    throw new Error("测试、约束与依赖文件为只读，不能加入修改范围。");
+  const range = sourceRange(),
+    selected = selectedProjectRanges();
+  if (!selected.has(range.path) && selected.size >= 8)
+    throw new Error("一个修改草案最多选择 8 个文件。");
+  selected.set(range.path, range);
+  renderScopeSelection();
+  toast("已加入限定范围；原始文件保持不变。");
+}
+function renderScopeSelection() {
+  const selection = [...selectedProjectRanges().values()];
+  $("#scope-selection").innerHTML = selection.length
+    ? `<div class="scope-items">${selection.map((r) => `<div><span>${icon("file")}<code>${esc(r.path)}</code><small>第 ${r.start_line}–${r.end_line} 行</small></span>${iconButton("scope-remove", "移除范围", "close", `data-path="${esc(r.path)}"`)}</div>`).join("")}</div><div class="scope-actions"><p>${selection.length} 个文件，${selection.reduce((n, r) => n + r.end_line - r.start_line + 1, 0)} 行。测试与约束保持受保护。</p>${button("change-plan", "创建修改草案", "file", "", "primary")}</div>`
+    : '<div class="scope-empty">选定 RTL 行后点击“限定修改”。</div>';
+}
+function projectChangesHtml() {
+  return state.changes.length
+    ? `<div class="change-list">${state.changes.map((c) => `<button class="change-row" data-action="change-open" data-id="${esc(c.id)}"><span>${icon("file")}<strong>${esc(c.goal || "工程修改草案")}</strong><small>${date(c.created_at)}</small></span>${badge(c.status)}${icon("right")}</button>`).join("")}</div>`
+    : '<p class="meta">暂无草案</p>';
+}
+function newChangeDrawer() {
+  const selections = [...selectedProjectRanges().values()];
+  if (!selections.length)
+    throw new Error("请先选择至少一个 RTL 文件的连续行范围。");
+  openDrawer(
+    "创建限定范围的修改草案",
+    `<p>说明目标后保存范围。下一步编辑替换内容并审阅差异。</p><form id="change-plan-form" class="form-grid"><label>修改目标<textarea id="change-goal" required maxlength="2048" rows="4" placeholder="例如：为这个状态机补充默认分支，保留接口与时序约束。"></textarea></label><div class="scope-items">${selections.map((s) => `<div><code>${esc(s.path)}</code><span>第 ${s.start_line}–${s.end_line} 行</span></div>`).join("")}</div><label>关联工作会话<select id="change-session"><option value="">仅保存工程草案</option>${state.overview.sessions
+      .filter((s) => !s.archived)
+      .map((s) => `<option value="${esc(s.id)}">${esc(s.title)}</option>`)
+      .join(
+        "",
+      )}</select></label><button type="submit" class="button primary">保存范围并编辑内容</button></form><p class="technical-note">此步骤只保存草案与输入指纹。模型 API 保持停用。</p>`,
+    { wide: true },
+  );
+}
+async function openChange(id) {
+  const change = await api("change?id=" + encodeURIComponent(id));
+  state.change = change;
+  renderChangeDrawer(change);
+}
+function renderChangeDrawer(change) {
+  state.change = change;
+  const done = change.status === "candidate_created",
+    previewed = change.status === "previewed";
+  const checks = change.checks
+    ? `<div class="change-checks">${Object.entries(change.checks)
+        .map(
+          ([name, value]) =>
+            `<span>${icon(value === true ? "check" : "warning")}${esc({ scope: "修改范围", baseline: "原件指纹", protected: "保护文件" }[name] || name)} ${value === true ? "一致" : "需核对"}</span>`,
+        )
+        .join("")}</div>`
+    : "";
+  let body = `<div class="change-heading"><p>${esc(change.goal)}</p>${badge(change.status)}</div><div class="scope-summary">${change.scope.map((s) => `<span><code>${esc(s.path)}</code> 第 ${s.start_line}–${s.end_line} 行</span>`).join("")}</div>`;
+  if (done)
+    body += `<div class="notice neutral">${icon("shield")}<span>隔离源码候选已生成。依赖仍按工程清单引用；功能、时序与设计规则尚未验证。</span></div>${checks}<dl class="definition-list"><dt>候选目录</dt><dd><code>${esc(change.candidate?.directory || "未记录")}</code></dd><dt>工程验证</dt><dd>${badge(change.validation?.status || "not_run")}</dd><dt>原件状态</dt><dd>${change.baseline_current === false ? "原件已有变化，需重新核对" : change.baseline_current === true ? "当前原件指纹一致" : "生成时已核对，当前状态可重新检查"}</dd></dl>${change.candidate_integrity !== undefined ? `<p class="candidate-integrity">${icon(change.candidate_integrity ? "check" : "warning")}候选文件完整性：${change.candidate_integrity ? "核验一致" : "存在差异，需复核"}</p>` : ""}${button("change-check", "核对候选与原件", "shield", `data-id="${esc(change.id)}"`)}`;
+  else if (previewed)
+    body += `${checks}<p class="meta">审阅以下差异后，生成隔离源码候选。源工程与保护文件保持原样，依赖按工程清单引用。</p>${change.diff.map((d) => `<section class="change-diff"><h3>${esc(d.path)} <small>−${d.removed_lines} / +${d.added_lines} 行</small></h3><div class="diff-columns"><div><span>原范围</span><pre class="diff-before">${esc(d.before)}</pre></div><div><span>替换内容</span><pre class="diff-after">${esc(d.after)}</pre></div></div></section>`).join("")}<div class="change-actions">${button("change-edit", "继续编辑", "file")}${button("change-apply", "生成修改候选", "check", `data-id="${esc(change.id)}"`, "primary")}</div><p class="technical-note">仅此按钮会写入隔离候选。当前工程验证状态：未执行。</p>`;
+  else
+    body += `<form id="change-preview-form" class="change-edit-form">${change.scope.map((s, i) => `<label class="replacement-editor"><span>${esc(s.path)} <small>第 ${s.start_line}–${s.end_line} 行</small></span><textarea data-edit-path="${esc(s.path)}" spellcheck="false" maxlength="16384" rows="${Math.min(16, Math.max(6, s.end_line - s.start_line + 3))}" aria-label="${esc(s.path)} 替换内容">${esc(change.diff?.find((d) => d.path === s.path)?.after ?? s.before)}</textarea></label>`).join("")}<button type="submit" class="button primary">预览修改差异</button></form><p class="technical-note">每个文件最多 16 KiB 替换内容。需产生真实修改，才能进入候选生成步骤。</p>`;
+  body += `<details class="protected-details"><summary>${icon("shield")} ${change.protected_files.length} 份受保护文件</summary><div class="protected-files">${change.protected_files.map((f) => `<span><code>${esc(f.path)}</code><small>${esc(fileKindNames[f.kind] || f.kind)}</small></span>`).join("") || "<p>当前项目未收录保护文件。</p>"}</div></details>`;
+  openDrawer(
+    done ? "修改候选" : previewed ? "审阅修改差异" : "编辑限定范围",
+    body,
+    { wide: true },
+  );
+}
+async function refreshProjectChanges() {
+  if (state.view !== "projects" || !state.project) return;
+  const id = state.id,
+    version = state.routeVersion,
+    data = await api("changes?project_id=" + encodeURIComponent(id));
+  if (version !== state.routeVersion || id !== state.id) return;
+  state.changes = data.changes || [];
+  if ($("#project-changes"))
+    $("#project-changes").innerHTML = projectChangesHtml();
+}
+
 async function loadEvaluations() {
   const version = state.routeVersion;
-  const data = await api("evaluations");
+  const [data, testing] = await Promise.all([
+    api("evaluations"),
+    api("testing"),
+  ]);
   if (version !== state.routeVersion) return;
   state.evaluations = data;
+  state.testing = testing;
   renderEvaluations();
 }
 function renderEvaluations() {
   renderHeader(
-    "评测中心",
-    "各类评测保留自己的计分单位和证据",
-    button("refresh", "刷新", "refresh"),
+    "Test Explorer",
+    "保留回执 · 分类分母独立",
+    button("evaluation-launcher", "运行评测", "play") +
+      button("refresh", "刷新", "refresh"),
   );
   $("#content").className = "content";
-  const lanes = [
-    ["offline", "离线回归"],
-    ["online_eda", "真实 EDA"],
-    ["online_agent", "Agent 端到端"],
-    ["history", "历史成绩"],
-  ];
+  const lanes = (
+    state.testing?.lanes || [
+      { id: "software", title: "软件机制" },
+      { id: "retrieval", title: "RAG 检索" },
+      { id: "tool_execution", title: "工具测试" },
+      { id: "engineering", title: "工程验收" },
+      { id: "online_agent", title: "Agent 任务" },
+    ]
+  ).map((l) => [l.id, l.title]);
+  lanes.push(["history", "历史成绩"]);
+  if (!lanes.some(([id]) => id === state.evalLane)) state.evalLane = "software";
   $("#content").innerHTML =
-    `<div class="page"><div class="page-intro"><div><h1>用证据衡量每一层能力</h1><p>软件机制、知识检索与 FPGA 工程分别计分。每次评测生成独立回执，可追溯输入与源码版本。</p></div></div><div class="tabs" role="tablist" aria-label="评测分类">${lanes.map(([id, label]) => `<button role="tab" aria-selected="${state.evalLane === id}" data-action="eval-tab" data-tab="${id}" class="${state.evalLane === id ? "active" : ""}">${label}</button>`).join("")}</div><div id="active-jobs">${busyJobsHtml()}</div>${state.evalLane === "history" ? historyHtml() : suitesHtml()}</div>`;
+    `<div class="page engineering-page"><div class="tabs testing-tabs" role="tablist" aria-label="评测分类">${lanes.map(([id, label]) => `<button role="tab" aria-selected="${state.evalLane === id}" data-action="eval-tab" data-tab="${id}" class="${state.evalLane === id ? "active" : ""}">${esc(label)}</button>`).join("")}</div><div id="active-jobs">${busyJobsHtml()}</div>${state.evalLane === "history" ? historyHtml() : testingLaneHtml()}</div>`;
+  if (state.evalLane !== "history" && state.testing) {
+    for (const key of ["category", "tier", "family", "status"])
+      if ($("#testing-" + key))
+        $("#testing-" + key).value = state.testingFilters[key];
+    renderTestingCases();
+  }
+}
+function testingLane() {
+  return state.testing?.lanes.find((l) => l.id === state.evalLane);
+}
+function testingLaneHtml() {
+  const lane = testingLane();
+  if (!lane) return '<div class="loading-state">正在读取分类与逐项证据…</div>';
+  const cases = lane.groups.flatMap((g) => g.cases),
+    summary = lane.summary || {},
+    filters = state.testingFilters;
+  const options = (key) =>
+    [...new Set(cases.map((c) => c[key]).filter(Boolean))]
+      .sort()
+      .map(
+        (value) =>
+          `<option value="${esc(value)}">${esc(key === "tier" ? tierNames[value] || value : categoryLabel(value))}</option>`,
+      )
+      .join("");
+  const statusOptions = [
+    ...new Set(cases.map((c) => c.status).filter(Boolean)),
+  ].sort();
+  const stats = [
+    ["total", "本类分母"],
+    ["passed", "通过"],
+    ["failed", "失败"],
+    ["not_run", "未执行"],
+    ["unknown", "待核验"],
+    ["blocked", "缺少前提"],
+    ["review_required", "需审查"],
+    ["expected_failure", "预期失败"],
+    ["expected_timeout", "预期超时"],
+  ].filter(
+    ([key]) =>
+      key === "total" ||
+      key === "passed" ||
+      key === "failed" ||
+      key === "not_run" ||
+      summary[key],
+  );
+  const scopeNote =
+    {
+      tool_execution: "最近保留结果；按案例定义关联工具回执，未复跑当前 RTL。",
+      engineering: "保留的工程领域验收；输入变化会单独标注。",
+      retrieval: "24 条可见检索问题与 3 条无关问题；不计作盲测答案分。",
+      software: "保留的软件检查回执；源码变化不抹去历史记录。",
+      online_agent: "核验已有会话与工程任务的关联证据。",
+    }[state.evalLane] || "";
+  return `<p class="testing-scope">${esc(scopeNote)}</p><div class="testing-summary">${stats.map(([key, title]) => `<div class="summary-${key}"><strong>${summary[key] ?? 0}</strong><span>${title}</span></div>`).join("")}<p>单位：${esc(unitNames[lane.unit] || lane.unit)}<br>只统计当前分类，不合并为总分</p></div>${lane.receipt?.current_sources_match === false ? '<div class="notice neutral">' + icon("clock") + "<span>当前显示保留回执；源码已经变化，请结合具体用例证据判断适用范围。</span></div>" : ""}<div class="testing-filters"><label class="search-box">${icon("search")}<input id="testing-query" aria-label="搜索测试用例" placeholder="搜索测试名称、工具或工程" value="${esc(filters.query)}"></label><label>类别<select id="testing-category"><option value="">全部类别</option>${options("category")}</select></label><label>层级<select id="testing-tier"><option value="">全部层级</option>${options("tier")}</select></label><label>工具族<select id="testing-family"><option value="">全部工具族</option>${options("family")}</select></label><label>状态<select id="testing-status"><option value="">全部状态</option>${statusOptions.map((s) => `<option value="${esc(s)}">${esc(statusNames[s] || s)}</option>`).join("")}</select></label></div><div id="testing-cases"></div>${(lane.aggregates || []).length ? `<section class="aggregate-receipts"><h3>Runner 汇总回执</h3>${lane.aggregates.map((a) => `<div><span>${esc(a.name)} <small>${a.recorded_test_count ?? "—"} 项${a.individual_results === 0 ? "，未保存逐项结果" : ""}</small></span>${badge(a.status)}</div>`).join("")}<p>汇总数量与可展开的逐项用例分别保留。</p></section>` : ""}`;
+}
+function renderTestingCases() {
+  const lane = testingLane();
+  if (!lane || !$("#testing-cases")) return;
+  const filters = state.testingFilters,
+    total = lane.groups.reduce((n, g) => n + g.cases.length, 0);
+  let visible = 0;
+  const groups = lane.groups
+    .map((group) => {
+      const cases = group.cases.filter(
+        (c) =>
+          ["category", "tier", "family", "status"].every(
+            (key) => !filters[key] || c[key] === filters[key],
+          ) &&
+          `${c.title} ${c.id} ${c.tool || ""} ${c.project || ""}`
+            .toLowerCase()
+            .includes(filters.query.toLowerCase()),
+      );
+      visible += cases.length;
+      return cases.length
+        ? `<section class="testing-group"><div class="section-heading"><h2>${esc(categoryLabel(group.title))}</h2><small>${cases.length} 项</small></div><div class="testing-case-list">${cases
+            .map(
+              (c) =>
+                `<button class="testing-case" data-action="testing-case" data-id="${esc(c.id)}" data-group="${esc(group.id)}"><span class="testing-case-main"><strong>${esc(c.title)}</strong><span class="case-tags">${[
+                  c.category,
+                  c.tier,
+                  c.family,
+                ]
+                  .filter(Boolean)
+                  .map((tag) => `<small>${esc(categoryLabel(tag))}</small>`)
+                  .join(
+                    "",
+                  )}${c.latest?.current_definition_match === false ? '<small class="historical-label">定义已变化</small>' : ""}${c.latest?.current_inputs?.current_sources_match === false ? '<small class="historical-label">输入已变化</small>' : ""}</span></span><span class="case-evidence">${c.latest ? date(c.latest.started_at) : "尚无执行回执"}${c.history_count > 1 ? `<small>${c.history_count} 次历史记录</small>` : ""}</span>${badge(c.status)}${icon("right")}</button>`,
+            )
+            .join("")}</div></section>`
+        : "";
+    })
+    .join("");
+  $("#testing-cases").innerHTML =
+    `<p class="testing-filter-count">当前显示 ${visible} / ${total} 个可展开用例</p>` +
+    (groups ||
+      empty("没有匹配的测试", "调整搜索词、层级或状态筛选。", "search"));
+}
+function testingCaseDetail(groupId, id) {
+  const group = testingLane()?.groups.find((g) => g.id === groupId),
+    item = group?.cases.find((c) => c.id === id);
+  if (!item) throw new Error("测试记录已经变化，请刷新后重试。");
+  const evidence = item.latest?.evidence || item.evidence || [];
+  const rows = Array.isArray(evidence) ? evidence : [evidence];
+  const warnings = [
+    item.latest?.current_definition_match === false ? "用例定义已经变化" : "",
+    item.latest?.receipt_integrity === false ? "回执完整性未通过" : "",
+    item.latest?.current_inputs?.current_sources_match === false
+      ? "输入源码已变化"
+      : "",
+    item.latest?.current_sources_match === false ? "本轮源码与记录时不同" : "",
+  ].filter(Boolean);
+
+  openDrawer(
+    item.title,
+    `<div class="row wrap">${badge(item.status)}<span class="meta">${esc(categoryLabel(group.title))}</span></div><dl class="definition-list"><dt>计分单位</dt><dd>${esc(unitNames[item.unit] || item.unit || testingLane().unit)}</dd><dt>类别 / 层级</dt><dd>${esc(categoryLabel(item.category) || "未分类")} / ${esc(tierNames[item.tier] || item.tier || "未记录")}</dd><dt>工具族</dt><dd>${esc(item.family || item.tool || "未记录")}</dd><dt>最近执行</dt><dd>${item.latest ? date(item.latest.started_at) : "未发现执行回执"}</dd>${item.latest?.reason ? `<dt>执行说明</dt><dd>${esc(item.latest.reason)}</dd>` : ""}${item.latest?.raw_status ? `<dt>原始状态</dt><dd>${esc(item.latest.raw_status)}</dd>` : ""}${Number.isFinite(item.latest?.duration_ms) ? `<dt>耗时</dt><dd>${(item.latest.duration_ms / 1000).toFixed(2)} s</dd>` : ""}</dl>${item.status === "not_run" ? '<div class="notice neutral">' + icon("clock") + "<span>目录中存在此测试定义，尚未发现对应执行证据。</span></div>" : ""}${["expected_failure", "expected_timeout"].includes(item.status) ? '<div class="notice neutral">' + icon("warning") + "<span>这是预期失败或超时场景的记录，不计作设计功能通过。</span></div>" : ""}${warnings.length ? `<div class="notice neutral">${icon("warning")}<span>${esc(warnings.join("；"))}。此处保留原始执行记录。</span></div>` : ""}<h3>证据来源</h3>${rows.length ? rows.map((e) => `<div class="evidence-link">${icon("file")}<span><code>${esc(typeof e === "string" ? e : e.path || e.file || JSON.stringify(e))}</code>${e.sha256 ? `<details class="evidence-hash"><summary>SHA-256 指纹</summary><code>${esc(e.sha256)}</code></details>` : ""}</span></div>`).join("") : '<p class="meta">没有可定位的证据文件。</p>'}<h3>保留的执行历史</h3>${(item.history || []).length ? `<div class="case-history">${item.history.map((h) => `<div><span>${date(h.started_at)}<small>${esc(h.id || h.run_id || "")}</small></span>${badge(h.status)}</div>`).join("")}</div>` : '<p class="meta">尚无执行历史。</p>'}${item.history_count > (item.history || []).length ? `<p class="technical-note">共 ${item.history_count} 条历史，当前展示最近 ${(item.history || []).length} 条。</p>` : ""}<details class="tool-contract"><summary>查看检查字段与适用范围</summary><pre>${esc(JSON.stringify(item.latest || { status: item.status, source: item.source, scope: item.scope }, null, 2))}</pre></details>`,
+    { wide: true },
+  );
+}
+function evaluationLauncher() {
+  openDrawer(
+    "运行分类评测",
+    `<p>选择套件后查看执行范围。真实 EDA 套件需要本机工具与固定输入。</p>${suitesHtml("all")}`,
+    { wide: true },
+  );
 }
 function freshnessText(receipt) {
   if (receipt?.freshness?.reason === "software_validation_sources_unbound")
@@ -1133,10 +1690,10 @@ function softwareMetrics(receipt) {
     )
     .join(" ");
 }
-function suitesHtml() {
+function suitesHtml(lane = state.evalLane) {
   const data = state.evaluations;
   if (!data) return '<div class="loading-state">正在读取评测记录…</div>';
-  const suites = data.suites.filter((s) => s.lane === state.evalLane);
+  const suites = data.suites.filter((s) => lane === "all" || s.lane === lane);
   return `<div class="suite-list">${suites
     .map((s) => {
       const receipt = data.receipts.find((r) => r.suite === s.id);
@@ -1324,10 +1881,12 @@ async function renderRoute() {
   state.session = null;
   state.run = null;
   $("#content").className = "content";
+  $("#app").classList.toggle("engineering-mode", state.view !== "sessions");
   renderSidebar();
   renderHeader(
     {
       sessions: "工作会话",
+      projects: "工程资产",
       runs: "执行记录",
       knowledge: "知识与流程",
       evaluations: "评测中心",
@@ -1351,6 +1910,9 @@ async function renderRoute() {
         state.run = run;
         renderRun();
       } else renderRuns();
+    } else if (state.view === "projects") {
+      if (state.id) await loadProject(state.id);
+      else await loadProjects();
     } else if (state.view === "knowledge") renderKnowledge();
     else {
       renderEvaluations();
@@ -1435,6 +1997,85 @@ document.addEventListener(
     const actions = {
       navigate: () => go(b.dataset.view),
       "new-session": newSession,
+      "project-open": () => go("projects", b.dataset.id),
+      "project-source": () => openProjectSource(b.dataset.path),
+      "project-report": () => projectReport(b.dataset.domain),
+      "project-module": () =>
+        openProjectSource(b.dataset.path, Number(b.dataset.line)),
+      "source-range-load": async () => {
+        const range = sourceRange();
+        await openProjectSource(
+          range.path,
+          range.start_line,
+          range.end_line - range.start_line + 1,
+        );
+        if (state.projectSource?.path === range.path && $("#source-end")) {
+          $("#source-start").value = range.start_line;
+          $("#source-end").value = range.end_line;
+          document
+            .querySelectorAll(".source-line")
+            .forEach((row) =>
+              row.classList.toggle(
+                "selected",
+                Number(row.dataset.line) >= range.start_line &&
+                  Number(row.dataset.line) <= range.end_line,
+              ),
+            );
+        }
+      },
+      "source-next": () =>
+        openProjectSource(state.projectSource.path, Number(b.dataset.start)),
+      "source-line": () => {
+        const line = Number(b.dataset.line),
+          start = Number($("#source-start").value);
+        if (event.shiftKey) {
+          $("#source-start").value = Math.min(start, line);
+          $("#source-end").value = Math.max(start, line);
+        } else {
+          $("#source-start").value = line;
+          $("#source-end").value = line;
+        }
+        document
+          .querySelectorAll(".source-line")
+          .forEach((row) =>
+            row.classList.toggle(
+              "selected",
+              Number(row.dataset.line) >= Number($("#source-start").value) &&
+                Number(row.dataset.line) <= Number($("#source-end").value),
+            ),
+          );
+      },
+      "scope-add": addScopeRange,
+      "scope-remove": () => {
+        selectedProjectRanges().delete(b.dataset.path);
+        renderScopeSelection();
+      },
+      "change-plan": newChangeDrawer,
+      "change-open": () => openChange(b.dataset.id),
+      "change-edit": () =>
+        renderChangeDrawer({ ...state.change, status: "planned" }),
+      "change-check": async () => {
+        const result = await api("changes", {
+          action: "check",
+          id: b.dataset.id,
+        });
+        renderChangeDrawer(result);
+      },
+      "change-apply": async () => {
+        b.disabled = true;
+        try {
+          const result = await api("changes", {
+            action: "apply",
+            id: b.dataset.id,
+            preview_digest: state.change.preview_digest,
+          });
+          renderChangeDrawer(result);
+          await refreshProjectChanges();
+          toast("已生成隔离源码候选，工程验证尚未执行。");
+        } finally {
+          if (b.isConnected) b.disabled = false;
+        }
+      },
       "select-session": () => go("sessions", b.dataset.id),
       "toggle-archive": () => {
         state.archive = !state.archive;
@@ -1500,8 +2141,17 @@ document.addEventListener(
       "recovery-resume": () => resumeRecovery(b.dataset.id),
       "eval-tab": () => {
         state.evalLane = b.dataset.tab;
+        state.testingFilters = {
+          query: "",
+          category: "",
+          tier: "",
+          family: "",
+          status: "",
+        };
         renderEvaluations();
       },
+      "evaluation-launcher": evaluationLauncher,
+      "testing-case": () => testingCaseDetail(b.dataset.group, b.dataset.id),
       evaluate: () => evaluate(b.dataset.suite),
       "evaluation-detail": () => evaluationDetail(b.dataset.id),
       refresh: async () => {
@@ -1540,6 +2190,51 @@ document.addEventListener(
       } finally {
         if (b.isConnected) b.disabled = false;
       }
+    } else if (event.target.id === "change-plan-form") {
+      const b = event.target.querySelector('button[type="submit"]');
+      b.disabled = true;
+      try {
+        const sessionId = $("#change-session").value;
+        const result = await api("changes", {
+          action: "plan",
+          project_id: state.project.id,
+          goal: $("#change-goal").value.trim(),
+          selections: [...selectedProjectRanges().values()],
+          ...(sessionId ? { session_id: sessionId } : {}),
+        });
+        renderChangeDrawer(result);
+        await refreshProjectChanges();
+      } finally {
+        if (b.isConnected) b.disabled = false;
+      }
+    } else if (event.target.id === "change-preview-form") {
+      const b = event.target.querySelector('button[type="submit"]');
+      b.disabled = true;
+      try {
+        const edits = [
+          ...event.target.querySelectorAll("[data-edit-path]"),
+        ].map((t) => {
+          const scope = state.change.scope.find(
+            (s) => s.path === t.dataset.editPath,
+          );
+          return {
+            path: t.dataset.editPath,
+            replacement: t.value.replace(
+              /\r?\n/g,
+              scope.before.includes("\r\n") ? "\r\n" : "\n",
+            ),
+          };
+        });
+        const result = await api("changes", {
+          action: "preview",
+          id: state.change.id,
+          edits,
+        });
+        renderChangeDrawer(result);
+        await refreshProjectChanges();
+      } finally {
+        if (b.isConnected) b.disabled = false;
+      }
     } else if (event.target.id === "agent-evaluation") {
       await launchEvaluation("online-agent", {
         session_directory: $("#agent-session").value.trim(),
@@ -1558,6 +2253,15 @@ document.addEventListener("input", (event) => {
   } else if (event.target.id === "run-search") {
     state.runQuery = event.target.value;
     renderRunList();
+  } else if (event.target.id === "project-search") {
+    state.projectQuery = event.target.value;
+    renderProjectList();
+  } else if (event.target.id === "project-file-search") {
+    state.projectFileQuery = event.target.value;
+    renderProjectFiles();
+  } else if (event.target.id === "testing-query") {
+    state.testingFilters.query = event.target.value;
+    renderTestingCases();
   }
 });
 document.addEventListener("change", (event) => {
@@ -1569,6 +2273,25 @@ document.addEventListener("change", (event) => {
   if (event.target.id === "run-filter") {
     state.runFilter = event.target.value;
     renderRunList();
+  }
+  if (event.target.id === "project-filter") {
+    state.projectFilter = event.target.value;
+    renderProjectList();
+  }
+  if (event.target.id === "project-file-filter") {
+    state.projectFileFilter = event.target.value;
+    renderProjectFiles();
+  }
+  if (
+    [
+      "testing-category",
+      "testing-tier",
+      "testing-family",
+      "testing-status",
+    ].includes(event.target.id)
+  ) {
+    state.testingFilters[event.target.id.slice(8)] = event.target.value;
+    renderTestingCases();
   }
 });
 document.addEventListener("keydown", (event) => {
@@ -1605,6 +2328,21 @@ document.addEventListener("keydown", (event) => {
 window.addEventListener("hashchange", () => void renderRoute());
 try {
   await refreshOverview();
+  if (!location.hash) {
+    const inventory = await api("projects");
+    const preferred =
+      inventory.projects.find((p) =>
+        /axi.*fabric|fabric.*axi/i.test(p.title + " " + p.publicPath),
+      ) ||
+      inventory.projects.find((p) => p.implementation === "sources_present");
+    history.replaceState(
+      null,
+      "",
+      preferred
+        ? "#/projects/" + encodeURIComponent(preferred.id)
+        : "#/projects",
+    );
+  }
   await renderRoute();
 } catch (error) {
   $("#content").innerHTML =

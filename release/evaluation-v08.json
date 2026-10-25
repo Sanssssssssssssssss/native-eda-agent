@@ -1,0 +1,153 @@
+{
+  "schema_version": 1,
+  "version": "0.8.0",
+  "date": "2026-10-25",
+  "provider_calls": 0,
+  "vivado_runs": 0,
+  "outer_codex_tokens": null,
+  "scope": "RTL project workspace, retained test-case projection and line-scoped source-candidate validation; no new design or live model score",
+  "root_software": {
+    "passed": true,
+    "checks": [
+      {
+        "name": "node",
+        "passed": true,
+        "test_count": 161
+      },
+      {
+        "name": "python",
+        "passed": true,
+        "test_count": 21
+      },
+      {
+        "name": "config",
+        "passed": true,
+        "test_count": null
+      },
+      {
+        "name": "knowledge",
+        "passed": true,
+        "test_count": null
+      }
+    ],
+    "receipt": "artifacts/agent-offline-2026-10-25T15-15-15-809Z-3687c7/result.json"
+  },
+  "publication_software": {
+    "passed": true,
+    "checks": [
+      {
+        "name": "node",
+        "passed": true,
+        "test_count": 161
+      },
+      {
+        "name": "python",
+        "passed": true,
+        "test_count": 21
+      },
+      {
+        "name": "config",
+        "passed": true,
+        "test_count": null
+      },
+      {
+        "name": "knowledge",
+        "passed": true,
+        "test_count": null
+      }
+    ],
+    "receipt": "release/validation.json"
+  },
+  "retrieval": {
+    "hit_at_5": "24/24",
+    "unrelated_empty": "3/3",
+    "scope": "Visible regression",
+    "receipt": "release/knowledge-evaluation.json"
+  },
+  "browser": {
+    "viewports": [
+      [
+        1520,
+        960
+      ],
+      [
+        1280,
+        720
+      ],
+      [
+        390,
+        844
+      ]
+    ],
+    "console_errors_final": 0,
+    "console_warnings_final": 0,
+    "horizontal_page_overflow": false,
+    "checks": [
+      "default AXI design-top source",
+      "module declaration navigation",
+      "external XDC as protected dependency",
+      "retained WNS/hold and DRC report with original hash",
+      "case classification and five failed cases out of 77",
+      "scope plan to preview to exclusive candidate to integrity check",
+      "mobile source and test view"
+    ],
+    "boundary": "Manual Playwright interaction and local HTTP tests, no live provider or new EDA execution"
+  },
+  "scoped_demo": {
+    "id": "a61ae140-a30b-4479-9a8e-5cff7b4b7349",
+    "project": "projects/hard-bench/axi-fabric",
+    "status": "candidate_created",
+    "scope": [
+      {
+        "path": "axi_fabric_top.sv",
+        "start_line": 1,
+        "end_line": 1,
+        "sha256": "876c4bbdbd2662756e4ce29a72e6c127bec76b788706bd16e617366a42bf3b80"
+      }
+    ],
+    "baseline_current": true,
+    "snapshot_integrity": true,
+    "candidate_integrity": true,
+    "protected_files": 45,
+    "changed_files": [
+      {
+        "path": "axi_fabric_top.sv",
+        "sha256": "10d086c8a5cd7907945650174b61c506a26c6653184a3147011c3bef4d0c89ec",
+        "baseline_sha256": "876c4bbdbd2662756e4ce29a72e6c127bec76b788706bd16e617366a42bf3b80",
+        "changed": true
+      }
+    ],
+    "engineering_validation": "not_run",
+    "scope_description": "One comment-only browser acceptance demonstration; original RTL bytes unchanged"
+  },
+  "retained_case_projection": {
+    "scope": "Local recorded campaigns, no rerun; raw campaigns are not exported",
+    "total": 77,
+    "passed": 55,
+    "failed": 5,
+    "unknown": 2,
+    "not_run": 12,
+    "expected_failure": 2,
+    "expected_timeout": 1
+  },
+  "remaining": [
+    "Candidate contains enumerated source inputs, not a standalone runnable project",
+    "No model-generated patch or live Pi task quality evaluated",
+    "Module declarations are lexical, not elaborated hierarchy or per-module proof",
+    "Historical report outcomes remain distinct from current design signoff"
+  ],
+  "screenshots": [
+    {
+      "file": "docs/media/workbench-project.png",
+      "sha256": "bc85a6fff36ef88c7910d4a46415fb3fb544494b8208aabde30a12d173e0b567"
+    },
+    {
+      "file": "docs/media/workbench-scope.png",
+      "sha256": "c5c9ae14fa37e6e67b69670c12ac3691b9e0bab0a199cd584341443c60930847"
+    },
+    {
+      "file": "docs/media/workbench-tests.png",
+      "sha256": "0c7d663b2c9cb1f32d0b20ad578ef4313d988f428933c4a6987bab66f4763d07"
+    }
+  ]
+}
