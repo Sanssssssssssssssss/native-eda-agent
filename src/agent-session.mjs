@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { createHash, randomUUID } from 'node:crypto';
 import { readConfig } from './runtime.mjs';
-import { edaResourceOptions, skillDirectories } from './agent-resources.mjs';
+import { edaResourceOptions, skillDirectories, edaCodemodeOptions } from './agent-resources.mjs';
 import {prepareAgentTask,claimAgentTask,taskDelivery,guardTaskTool,activeTaskContext} from './agent-task.mjs';
 
 const save = (file, data) => fs.writeFileSync(file, JSON.stringify(data, null, 2) + '\n');
@@ -61,7 +61,7 @@ async function createPiSession({ root, agentDir, resumeSessionFile, traceContext
   const settingsManager = sdk.SettingsManager.create(root, agentDir);
   let coordinator, registry;
   const loader = new sdk.DefaultResourceLoader(edaResourceOptions({ root, agentDir, settingsManager,
-    extensionFactories: [pi => extension(pi, { traceContext, taskDirectory, onTaskState, toolPolicy,taskContext, onCoordinator: value => { coordinator = value; }, onRegistry: value => { registry = value; } }), sdk.createCodemodeExtension({ mode: 'on' }), sdk.createToolSearchExtension(), sdk.createMcpExtension()],
+    extensionFactories: [pi => extension(pi, { traceContext, taskDirectory, onTaskState, toolPolicy,taskContext, onCoordinator: value => { coordinator = value; }, onRegistry: value => { registry = value; } }), sdk.createCodemodeExtension(edaCodemodeOptions), sdk.createToolSearchExtension(), sdk.createMcpExtension()],
   }));
   await loader.reload();
   const sessions = path.join(root, '.eda-state/pi-sessions');
@@ -84,17 +84,22 @@ function checkedResume(root, file) {
 
 export async function runAgentSession({ root, prompt, limits = { maxTurns: 24, timeoutSeconds: 600 }, signal, onEvent = () => {}, resumeSessionFile, taskDirectory, verification, task, resumeTask=false, sessionFactory = createPiSession }) {
   root = path.resolve(root);
+  limits = {maxToolCalls:128, ...limits};
   if (readConfig(root).model_api_enabled !== true) throw new Error('Model API is disabled in .eda/config.json');
   if (typeof prompt !== 'string' || !prompt.trim() || prompt.length > 32000) throw new Error('Supply a nonempty prompt of at most 32000 characters');
   if (task && verification !== undefined) throw new Error('Choose an existing task or a new verification contract');
   if (resumeTask && !task) throw new Error('Task resume requires an explicit task directory');
   const verified = verification !== undefined || task !== undefined;
-  if (!Number.isSafeInteger(limits.maxTurns) || limits.maxTurns < 1 || limits.maxTurns > 100 || !Number.isSafeInteger(limits.timeoutSeconds) || limits.timeoutSeconds < 1 || limits.timeoutSeconds > 3600) throw new Error('Invalid agent limits');
+  if (!Number.isSafeInteger(limits.maxTurns) || limits.maxTurns < 1 || limits.maxTurns > 100 || !Number.isSafeInteger(limits.timeoutSeconds) || limits.timeoutSeconds < 1 || limits.timeoutSeconds > 3600 || !Number.isSafeInteger(limits.maxToolCalls) || limits.maxToolCalls < 1 || limits.maxToolCalls > 4096) throw new Error('Invalid agent limits');
   resumeSessionFile = checkedResume(root, resumeSessionFile);
   const directory = path.join(root, 'artifacts', `native-agent-${new Date().toISOString().replace(/[:.]/g, '-')}-${randomUUID().slice(0, 6)}`);
   fs.mkdirSync(directory, { recursive: true });
   const started = performance.now();
   const run = { schemaVersion: 1, runId: path.basename(directory), mode: 'pi-sdk-agent', workspace: root, startedAt: new Date().toISOString(), status: 'initializing', limits, nodeVersion: process.version,
+    execution_provenance: {schema_version:1, session_factory:sessionFactory === createPiSession ? 'builtin_pi_sdk' : 'injected',
+      basis:'Host factory identity; provider/model labels cannot promote an injected session to a live session.'},
+    provider_observation: {assistant_messages:0, successful_assistant_messages:0, scope:'Prompt-time SDK message events, not an HTTP request or billing count.'},
+    tool_budget: {scope:'This run, including nested and denied model tool requests; host verifier calls have a separate cumulative task budget.',max_calls:limits.maxToolCalls,attempted:0,admitted:0,denied:0,nested:0},
     inputSnapshotScope: 'Listed orchestration files only; tool runs record their own dependencies.', inputs: [], resumed: Boolean(resumeSessionFile),
     task_state: null, task_acceptance: unknownAcceptance('workflow_unbound') };
   run.trace_id = hash(run.runId).slice(0, 32); run.span_id = hash(`span:${run.runId}`).slice(0, 16);
@@ -120,9 +125,10 @@ export async function runAgentSession({ root, prompt, limits = { maxTurns: 24, t
   save(path.join(directory, 'run.json'), run);
   const events = fs.openSync(path.join(directory, 'events.jsonl'), 'a');
   let sequence = 0, publicSequence = 0, session, unsubscribe = () => {}, timer, turns = 0, failure = null, stoppedReason = null, answer = '', promptStarted = false;
-  let initialStats = null, refreshTaskState, taskStateFingerprint, verificationState, ownedTask, registry;
+  let initialStats = null, refreshTaskState, taskStateFingerprint, verificationState, ownedTask, registry, abortSettled, eventsClosed=false;
   const executionController = new AbortController();
   const record = event => {
+    if (eventsClosed) return;
     const timestamp = new Date().toISOString();
     fs.writeSync(events, JSON.stringify({ ...event, schema_version: 1, timestamp_utc: timestamp, seq: ++sequence, sequence, run_id: run.runId, agent_run_id: run.runId, session_id: run.sessionId, trace_id: run.trace_id, span_id: run.span_id, parent_span_id: null }) + '\n');
     const visible = publicAgentEvent(event);
@@ -148,21 +154,52 @@ export async function runAgentSession({ root, prompt, limits = { maxTurns: 24, t
   const abort = reason => {
     stoppedReason ||= reason;
     if (!executionController.signal.aborted) executionController.abort(Object.assign(new Error(stoppedReason), {name: 'AbortError'}));
-    if (session) Promise.resolve().then(() => session.abort?.()).catch(() => {});
+    if (session && !abortSettled) abortSettled = Promise.resolve().then(() => session.abort?.()).catch(error => {
+      run.abort_error=String(error); record({type:'abort_error',error:String(error)});
+    });
+  };
+  const toolPolicy = event => {
+    const budget=run.tool_budget;
+    budget.attempted++;
+    if(event.parentToolCallId)budget.nested++;
+    let denial;
+    if(executionController.signal.aborted) denial={block:true,reason:'Agent run is stopping; no further tool dispatch is admitted.'};
+    else if(budget.attempted>budget.max_calls) {
+      denial={block:true,reason:'Model tool request budget exhausted.'};abort('model-tool-limit');
+    } else if(verified) denial=guardTaskTool(root,ownedTask?.configuration,event);
+    if(denial?.block)budget.denied++;else budget.admitted++;
+    record({type:'tool_policy',toolName:event.toolName,toolCallId:event.toolCallId,parentToolCallId:event.parentToolCallId,
+      admitted:!denial?.block,reason:denial?.reason,budget:{...budget}});
+    return denial;
   };
   const onAbort = () => abort('user-interrupt');
   signal?.addEventListener('abort', onAbort, { once: true });
   if (signal?.aborted) onAbort();
-  record({ type: 'run_start', phase: 'initializing', limits });
+  record({ type: 'run_start', phase: 'initializing', limits, execution_provenance:run.execution_provenance });
   let usage;
   try {
     timer = setTimeout(() => abort('wall-time-limit'), limits.timeoutSeconds * 1000);
     if (!stoppedReason) {
       const created = await sessionFactory({ root, agentDir: path.join(root, '.pi-state'), resumeSessionFile, taskDirectory, onTaskState: onCoordinatorState,
-        toolPolicy: verified ? event => guardTaskTool(root,ownedTask?.configuration,event) : undefined,
-        taskContext: verified ? () => ownedTask ? activeTaskContext(root,task,registry) : null : undefined,
+        toolPolicy,
+        taskContext: verified ? () => ownedTask ? {...activeTaskContext(root,task,registry),
+          session_budget:{...run.tool_budget,max_turns:limits.maxTurns,used_turns:turns,
+            remaining_tool_calls:Math.max(0,limits.maxToolCalls-run.tool_budget.attempted),
+            remaining_ms:Math.max(0,Math.floor(limits.timeoutSeconds*1000-(performance.now()-started)))}} : null : undefined,
         traceContext: () => ({ parent_run_id: run.runId, session_id: run.sessionId, trace_id: run.trace_id, parent_span_id: run.span_id }) });
       session = created.session;
+      // Pi's core loop can enter another request boundary with an aborted signal.
+      // Stop before preparing/provider dispatch, rather than relying on each provider
+      // transport to honour that signal. Preserve Pi's native context/compaction hook.
+      if(session.agent) {
+        const prepare=session.agent.prepareRequest;
+        session.agent.prepareRequest=async (request,requestSignal)=>{
+          executionController.signal.throwIfAborted();requestSignal?.throwIfAborted();
+          const result=await prepare?.(request,requestSignal);
+          executionController.signal.throwIfAborted();requestSignal?.throwIfAborted();
+          return result;
+        };
+      }
       registry = created.registry;
       initialStats = sessionStats(session);
       refreshTaskState = created.refreshTaskState;
@@ -182,6 +219,10 @@ export async function runAgentSession({ root, prompt, limits = { maxTurns: 24, t
         }
         if (event.type === 'turn_start' && ++turns > limits.maxTurns) abort('model-turn-limit');
         if (event.type === 'message_end' && event.message?.role === 'assistant') {
+          if(promptStarted) {
+            run.provider_observation.assistant_messages++;
+            if(['stop','length','toolUse'].includes(event.message.stopReason))run.provider_observation.successful_assistant_messages++;
+          }
           if (promptStarted) answer = publicAgentEvent(event)?.text || '';
           if (event.message.stopReason === 'error') failure = event.message.errorMessage || 'Model request failed';
           if (event.message.stopReason === 'aborted') abort('model-aborted');
@@ -191,6 +232,7 @@ export async function runAgentSession({ root, prompt, limits = { maxTurns: 24, t
       if (!stoppedReason) await session.bindExtensions({});
       if (!stoppedReason) {
         promptStarted = true;
+        record({type:'prompt_start'});
         if (verified) {
           if (!task) task = prepareAgentTask(root,verification,registry).directory;
           ownedTask = claimAgentTask(root,task,registry,directory,{resume:resumeTask});
@@ -224,7 +266,10 @@ export async function runAgentSession({ root, prompt, limits = { maxTurns: 24, t
     failure = String(error);
     run.status = stoppedReason ? 'stopped' : run.status === 'initializing' ? 'initialization_failed' : 'failed';
   } finally {
-    clearTimeout(timer); signal?.removeEventListener('abort', onAbort); unsubscribe();
+    clearTimeout(timer); signal?.removeEventListener('abort', onAbort);
+    try { unsubscribe(); }
+    catch(error) {run.status='unsubscribe_failed';run.unsubscribe_error=String(error);record({type:'unsubscribe_error',error:String(error)});}
+    await abortSettled;
     try {
       const state = await refreshTaskState?.();
       if (state !== undefined) onCoordinatorState(state);
@@ -260,14 +305,17 @@ export async function runAgentSession({ root, prompt, limits = { maxTurns: 24, t
         decision: {action: finalStatus === 'passed' ? 'deliver_evidence' : 'inspect_evidence', phase: 'verification'}});
     }
     run.stoppedReason = stoppedReason;
-    run.inputDrift = run.inputs.filter(input => !fs.existsSync(path.join(root, input.path)) || hash(fs.readFileSync(path.join(root, input.path))) !== input.sha256).map(input => input.path);
     const stats = sessionStats(session);
     usage = { scope: 'pi-sdk-agent-only', agentRunId: run.runId, outerCodexUsage: 'Not included in Pi statistics.', costBasis: 'Pi provider catalog estimate, not an invoice', piVersion: '1.3.0', provider: session?.model?.provider, model: session?.model?.id, thinking: session?.thinkingLevel, limits, turns, stoppedReason,
+      execution_provenance:run.execution_provenance,provider_observation:run.provider_observation,tool_budget:run.tool_budget,
       stats, stats_scope: 'session_cumulative', session_total: stats, run_delta: usageDelta(initialStats, stats), run_delta_basis: 'session_statistics_after_creation_before_prompt' };
     try { await session?.extensionRunner?.emit({ type: 'session_shutdown', reason: 'quit' }); }
     catch (error) { run.status = 'shutdown_failed'; run.shutdownError = String(error); record({ type: 'shutdown_error', error: String(error) }); }
-    try { session?.dispose(); }
+    try { await session?.dispose(); }
     catch (error) { run.status = 'dispose_failed'; run.disposeError = String(error); record({ type: 'dispose_error', error: String(error) }); }
+    run.inputDrift = run.inputs.filter(input => {
+      try {return hash(fs.readFileSync(path.join(root,input.path)))!==input.sha256;}catch{return true;}
+    }).map(input=>input.path);
     if (ownedTask) {
       try {
         ownedTask.finish();
@@ -286,13 +334,13 @@ export async function runAgentSession({ root, prompt, limits = { maxTurns: 24, t
         answer=`工程验收：unknown。任务交付复核失败：${String(error)}。请检查 ${directory} 的证据。`;
       }
     }
-    run.error = failure || run.delivery_error || run.shutdownError || run.disposeError || null;
+    run.error = failure || run.delivery_error || run.shutdownError || run.disposeError || run.unsubscribe_error || run.abort_error || null;
     run.endedAt = new Date().toISOString(); run.wallSeconds = (performance.now() - started) / 1000;
     usage.status = run.status; usage.error = run.error;
     fs.writeFileSync(path.join(directory, 'answer.md'), answer + '\n');
     save(path.join(directory, 'run.json'), run); save(path.join(directory, 'usage.json'), usage);
     record({ type: 'run_end', status: run.status, stoppedReason, wallSeconds: run.wallSeconds });
-    fs.closeSync(events);
+    eventsClosed=true;fs.closeSync(events);
   }
   return { directory, status: run.status, answer, sessionId: run.sessionId, sessionFile: session?.sessionFile, usage, run };
 }

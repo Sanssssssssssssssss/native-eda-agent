@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "root": "E:\\GPTProject2\\EDAAgent\\artifacts\\framework-release-20261026-0222",
+  "root": "E:\\GPTProject2\\EDAAgent\\artifacts\\prelive-release-20261026-0320",
   "scope": "export-manifest",
   "tracked_check": false,
-  "files_checked": 768,
+  "files_checked": 773,
   "markdown_files": 76,
-  "local_links": 435,
+  "local_links": 440,
   "issues": [],
   "warnings": [],
   "passed": true

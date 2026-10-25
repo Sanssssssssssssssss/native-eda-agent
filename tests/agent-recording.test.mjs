@@ -6,6 +6,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { runAgentSession, publicAgentEvent } from '../src/agent-session.mjs';
 import {createTrace} from '../src/trace.mjs';
+import {runEvaluation} from '../src/evaluations.mjs';
 
 const fixtureConfig = enabled => JSON.stringify({schema_version:1,model_api_enabled:enabled,resources:{xsim:2,vivado:1,ltspice:1,verify:4},queue_timeout_ms:1000});
 
@@ -70,6 +71,8 @@ test('records completed session, ordered timestamps and scoped usage', async () 
   assert.equal(result.run.sessionId, 'fixture-session');
   assert.equal(result.answer, 'Offline fixture response');
   assert.equal(result.usage.scope, 'pi-sdk-agent-only');
+  assert.equal(result.run.execution_provenance.session_factory,'injected');
+  assert.equal(result.run.provider_observation.successful_assistant_messages,1);
   assert.equal(result.events.at(-1).type, 'run_end');
   let ready=false;
   result.events.forEach((event, i) => {
@@ -320,6 +323,7 @@ function verificationFixture(t, {unbound = false} = {}) {
   const root = recordingFixture(t), project = path.resolve(import.meta.dirname, '..');
   for (const directory of ['knowledge', '.pi/skills']) fs.cpSync(path.join(project, directory), path.join(root, directory), {recursive: true});
   for (const file of ['src/workflow.mjs', 'src/knowledge.mjs', 'src/trace.mjs', 'src/verifier-loop.mjs', 'scripts/check-knowledge.mjs',
+    'src/evaluations.mjs','src/evaluation-contracts.mjs','src/agent-session.mjs','src/agent-task.mjs','src/task-context.mjs','src/task-outcome.mjs','scripts/evaluate-knowledge.mjs',
     'scripts/eda-tool.mjs', 'scripts/replay-experiment.mjs', 'scripts/collect-system-evidence.py', 'projects/system-bench/run.py',
     'projects/system-bench/implement-common.tcl', 'docs/workflows.md', 'docs/reference/tools.md', 'docs/results.md']) {
     fs.mkdirSync(path.dirname(path.join(root, file)), {recursive: true});
@@ -387,6 +391,63 @@ test('session verifier uses the fixed workflow and meters the whole owned run on
   assert.equal(publicEvents.filter(event => event.type === 'eda_task_state').at(-1).task_acceptance.status, 'passed');
   assert.ok(publicEvents.filter(event => event.type === 'eda_task_state' && event.task_acceptance.status === 'passed')
     .every(event => event.execution_status === 'passed'));
+  const evaluated=await runEvaluation(f.root,'online-agent',f.registry,{session_directory:result.directory,workflow_directory:result.run.verification.last_directory});
+  assert.equal(evaluated.status,'blocked');assert.equal(evaluated.reason,'injected_session_not_live');
+});
+
+test('nested and denied model tool requests share a bounded run budget, including after cancellation',async t=>{
+  const f=verificationFixture(t);let dispatches=0,context,aborted=false;
+  const result=await runAgentSession({...f,prompt:'Inspect scope',limits:{maxTurns:3,timeoutSeconds:5,maxToolCalls:2},sessionFactory:async options=>({registry:f.registry,
+    session:fakeSession({abort:async()=>{await Promise.resolve();aborted=true;},prompt:async text=>{
+      const file=JSON.parse(text.split('[Host verification contract]\n')[1].split('\n')[0]).editable_sources[0];
+      const admitted=options.toolPolicy({toolName:'read',toolCallId:'code/1',parentToolCallId:'code',input:{path:file}});
+      if(!admitted?.block)dispatches++;
+      assert.equal(options.toolPolicy({toolName:'powershell',toolCallId:'code/2',parentToolCallId:'code',input:{command:'blocked'}}).block,true);
+      context=options.taskContext();
+      assert.equal(context.session_budget.remaining_tool_calls,0);
+      assert.equal(options.toolPolicy({toolName:'read',toolCallId:'code/3',parentToolCallId:'code',input:{path:file}}).block,true);
+      assert.equal(options.toolPolicy({toolName:'read',toolCallId:'code/4',parentToolCallId:'code',input:{path:file}}).block,true);
+    }})})});
+  assert.equal(result.status,'stopped');assert.equal(result.run.stoppedReason,'model-tool-limit');
+  assert.equal(dispatches,1);assert.equal(f.calls.length,0);assert.equal(aborted,true);
+  assert.equal(result.run.tool_budget.attempted,4);assert.equal(result.run.tool_budget.admitted,1);assert.equal(result.run.tool_budget.denied,3);
+  assert.equal(result.run.tool_budget.nested,4);assert.equal(result.run.task_acceptance.status,'unknown');
+  assert.deepEqual(result.usage.tool_budget,result.run.tool_budget);
+});
+
+test('non-verified sessions also enforce model tool limits and reject invalid budgets before initialization',async t=>{
+  const root=recordingFixture(t);let called=0;
+  await assert.rejects(runAgentSession({root,prompt:'x',limits:{maxTurns:1,timeoutSeconds:5,maxToolCalls:0},sessionFactory:async()=>{called++;}}),/Invalid agent limits/);
+  assert.equal(called,0);
+  const result=await runAgentSession({root,prompt:'inspect',limits:{maxTurns:1,timeoutSeconds:5,maxToolCalls:1},sessionFactory:async options=>({session:fakeSession({prompt:async()=>{
+    assert.equal(options.toolPolicy({toolName:'read',input:{path:'file'}}),undefined);
+    assert.equal(options.toolPolicy({toolName:'read',input:{path:'file'}}).block,true);
+  }})})});
+  assert.equal(result.run.stoppedReason,'model-tool-limit');
+});
+
+test('unsubscribe failure still closes the task, disposes the SDK and records one terminal event',async t=>{
+  const f=verificationFixture(t);let disposed=false;
+  const result=await runAgentSession({...f,prompt:'verify',sessionFactory:async()=>({registry:f.registry,session:fakeSession({
+    subscribe:()=>()=>{throw new Error('unsubscribe fixture failure');},dispose:async()=>{await Promise.resolve();disposed=true;},
+  })})});
+  assert.equal(result.status,'unsubscribe_failed');assert.match(result.run.error,/unsubscribe fixture/);assert.equal(disposed,true);
+  assert.equal(fs.existsSync(path.join(f.root,result.run.task,'owner.json')),false);
+  assert.equal(JSON.parse(fs.readFileSync(path.join(f.root,result.run.task,'task.json'))).attempts.at(-1).closed,true);
+  const events=fs.readFileSync(path.join(result.directory,'events.jsonl'),'utf8').trim().split('\n').map(JSON.parse);
+  assert.equal(events.filter(row=>row.type==='run_end').length,1);assert.equal(events.at(-1).status,'unsubscribe_failed');
+});
+
+test('async disposal is awaited before final input and candidate evidence checks',async t=>{
+  const f=verificationFixture(t);let candidate;
+  const result=await runAgentSession({...f,prompt:'verify',sessionFactory:async()=>({registry:f.registry,session:fakeSession({
+    prompt:async text=>{candidate=JSON.parse(text.split('[Host verification contract]\n')[1].split('\n')[0]).editable_sources[0];
+      fs.writeFileSync(path.join(f.root,candidate),'module dut; // CANDIDATE_OK\nendmodule\n');},
+    dispose:async()=>{await new Promise(resolve=>setTimeout(resolve,5));fs.appendFileSync(path.join(f.root,candidate),'// post-verification change\n');
+      fs.appendFileSync(path.join(f.root,'src/agent-session.mjs'),'// post-run drift\n');},
+  })})});
+  assert.equal(result.run.verification.status,'passed');assert.equal(result.run.delivery.task_acceptance.status,'unknown');
+  assert.ok(result.run.inputDrift.includes('src/agent-session.mjs'));assert.match(result.answer,/工程验收：unknown/);
 });
 
 test('completed model text and stale coordinator success cannot upgrade a failing verifier', async t => {

@@ -123,6 +123,7 @@ if (command === 'doctor') {
     if (option === '--resume-task') {resumeTask=true;continue;}
     const value = args.shift();
     if (option === '--max-turns') limits.maxTurns = Number(value);
+    else if (option === '--max-tool-calls') limits.maxToolCalls = Number(value);
     else if (option === '--timeout') limits.timeoutSeconds = Number(value);
     else if (option === '--prompt-file') file = value;
     else if (option === '--verification') verificationFile = value;
@@ -140,5 +141,5 @@ if (command === 'doctor') {
     ...(task ? {task,resumeTask} : {}),
   });
 } else {
-  console.log('EDA Agent — Pi SDK + local tools + MCP\n\n  .\\eda.ps1 doctor\n  .\\eda.ps1 benchmark list|plan|run|report|compare\n  .\\eda.ps1 knowledge timing\n  .\\eda.ps1 trace RUN_DIRECTORY\n  .\\eda.ps1 recover RUN_DIRECTORY --check-only\n  .\\eda.ps1 export-trace RUN_DIRECTORY --output FILE.json\n  .\\eda.ps1 storage --plan\n  .\\eda.ps1 runs [--reconcile]\n  npm run knowledge -- QUERY\n  npm run sop -- [SOP_ID]\n  npm run workflow -- plan|run SPEC.json\n  npm run validate:agent\n  .\\eda.ps1 verify\n  .\\eda.ps1 chat\n  .\\eda.ps1 run "任务描述"   # requires model_api_enabled=true\n\nrun/demo: --max-turns 24 --timeout 600 --verification FILE.json --task-directory WORKFLOW_DIR; run also accepts --prompt-file PATH');
+  console.log('EDA Agent — Pi SDK + local tools + MCP\n\n  .\\eda.ps1 doctor\n  .\\eda.ps1 benchmark list|plan|run|report|compare\n  .\\eda.ps1 knowledge timing\n  .\\eda.ps1 trace RUN_DIRECTORY\n  .\\eda.ps1 recover RUN_DIRECTORY --check-only\n  .\\eda.ps1 export-trace RUN_DIRECTORY --output FILE.json\n  .\\eda.ps1 storage --plan\n  .\\eda.ps1 runs [--reconcile]\n  npm run knowledge -- QUERY\n  npm run sop -- [SOP_ID]\n  npm run workflow -- plan|run SPEC.json\n  npm run validate:agent\n  .\\eda.ps1 verify\n  .\\eda.ps1 chat\n  .\\eda.ps1 run "任务描述"   # requires model_api_enabled=true\n\nrun/demo: --max-turns 24 --max-tool-calls 128 --timeout 600 --verification FILE.json --task-directory WORKFLOW_DIR; run also accepts --prompt-file PATH');
 }

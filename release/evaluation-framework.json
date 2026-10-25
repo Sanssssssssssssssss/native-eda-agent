@@ -18,7 +18,7 @@
         "test_count": 7
       }
     ],
-    "receipt": "release/validation.json"
+    "receipt": "https://github.com/Sanssssssssssssssss/native-eda-agent/blob/25629717a50761dd4ad555a97c5e0e0178003319/release/validation.json"
   },
   "scenarios": {
     "suite": "offline-agent-loop",

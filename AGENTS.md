@@ -4,6 +4,8 @@
 
 宿主修复任务按 [任务生命周期](docs/agent-lifecycle.md)执行：`eda_task_prepare` 静态生成隔离候选，`run --task` 接入 verifier；`eda_task_inspect` 检查当前交付和恢复条件。只有已提交的取消回合且预算、所有者与证据检查通过时，才用 `--resume-task`。不得以新会话重置同一任务的验证预算。最终答复以重新检查的 `delivery.json` 为准，保留原模型文字。
 
+原生会话的普通、嵌套及被拒绝工具请求共用 `maxToolCalls`；宿主 verifier 调用另按任务预算累计。注入 factory 的执行来源为 `injected`；假 SDK 或真实 SDK 配固定响应都属于离线软件检查，不能计为线上 Agent 成绩。不得用提供商名称或补写来源字段升级历史成绩。
+
 机制核对见 [源码落点](docs/mechanisms.md)，知识选择见 [RAG 与 SOP](docs/knowledge-and-sops.md)。用 `eda_task_context` 按阶段选择上下文并核验已有任务，用 `eda_knowledge` 检索规则、`eda_sop` 读取完整流程；确认来源版本、适用范围与所需证据。workflow 的 `guidance` 冻结所选规则和 SOP；验收仍由明确的 step checks 执行，不能仅凭检索命中或选用 SOP 宣称通过。
 
 - 先核对任务规格、固定验收条件、输入 RTL/XDC/DCP、器件和时钟。用 `eda_preflight`、`eda_runs action=list` 查看前提和资源状态。

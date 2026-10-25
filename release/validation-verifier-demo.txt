@@ -2,14 +2,14 @@
   "schema_version": 1,
   "scope": "fake_sdk_and_eda_real_task_session_workflow_delivery_and_upstream_python",
   "passed": true,
-  "directory": "E:\\GPTProject2\\EDAAgent\\artifacts\\framework-release-20261026-0222\\artifacts\\ace-loop-demo-2026-10-25T18-24-23-317Z-34a19b\\artifacts\\native-agent-2026-10-25T18-24-23-359Z-a3f1b4",
-  "root": "E:\\GPTProject2\\EDAAgent\\artifacts\\framework-release-20261026-0222\\artifacts\\ace-loop-demo-2026-10-25T18-24-23-317Z-34a19b",
+  "directory": "E:\\GPTProject2\\EDAAgent\\artifacts\\prelive-release-20261026-0320\\artifacts\\ace-loop-demo-2026-10-25T19-08-57-235Z-87d3cf\\artifacts\\native-agent-2026-10-25T19-08-57-280Z-588292",
+  "root": "E:\\GPTProject2\\EDAAgent\\artifacts\\prelive-release-20261026-0320\\artifacts\\ace-loop-demo-2026-10-25T19-08-57-235Z-87d3cf",
   "generations": 2,
   "verifier_calls": 2,
-  "task": "artifacts/agent-task-771054cb-445f-4136-be62-7f1653945081",
+  "task": "artifacts/agent-task-25694521-25ed-420e-b856-75b801a589ca",
   "delivery": {
     "schema_version": 1,
-    "task": "artifacts/agent-task-771054cb-445f-4136-be62-7f1653945081",
+    "task": "artifacts/agent-task-25694521-25ed-420e-b856-75b801a589ca",
     "goal": "Verify the harness repairs a rejected candidate while retaining the independent fixed verifier",
     "status": "passed",
     "task_acceptance": {
@@ -33,9 +33,9 @@
             "/simulation_acceptance"
           ],
           "evidence": {
-            "result": "artifacts/2026-10-25T18-24-25-126Z-eda_workflow_run-4b00dfe7/simulation.result.json",
-            "sha256": "6acd76436c4ddec0a77b41be1fc3e77b96de61a71f73036775d464f1e786b127",
-            "child_directory": "artifacts/2026-10-25T18-24-25-321Z-eda_xsim-9070f7ac"
+            "result": "artifacts/2026-10-25T19-08-59-135Z-eda_workflow_run-f5fecfab/simulation.result.json",
+            "sha256": "1649ca0471947fc7b5183c6b108ef56999003320a2515760a75936cbc5bd2e73",
+            "child_directory": "artifacts/2026-10-25T19-08-59-343Z-eda_xsim-b75f369e"
           }
         },
         {
@@ -75,11 +75,11 @@
       "formal": "not_evaluated",
       "hardware": "not_evaluated"
     },
-    "candidate": "artifacts/agent-task-771054cb-445f-4136-be62-7f1653945081/candidate",
+    "candidate": "artifacts/agent-task-25694521-25ed-420e-b856-75b801a589ca/candidate",
     "editable_sources": [
-      "artifacts/agent-task-771054cb-445f-4136-be62-7f1653945081/candidate/candidate.sv"
+      "artifacts/agent-task-25694521-25ed-420e-b856-75b801a589ca/candidate/candidate.sv"
     ],
-    "evidence": "E:\\GPTProject2\\EDAAgent\\artifacts\\framework-release-20261026-0222\\artifacts\\ace-loop-demo-2026-10-25T18-24-23-317Z-34a19b\\artifacts\\2026-10-25T18-24-25-126Z-eda_workflow_run-4b00dfe7",
+    "evidence": "E:\\GPTProject2\\EDAAgent\\artifacts\\prelive-release-20261026-0320\\artifacts\\ace-loop-demo-2026-10-25T19-08-57-235Z-87d3cf\\artifacts\\2026-10-25T19-08-59-135Z-eda_workflow_run-f5fecfab",
     "rounds": 2,
     "calls": 2,
     "recovery": {
@@ -95,7 +95,7 @@
     },
     "formal": "not_evaluated",
     "hardware": "not_evaluated",
-    "checked_at": "2026-10-25T18:24:25.811Z"
+    "checked_at": "2026-10-25T19:08:59.908Z"
   },
   "original_rtl_preserved": true,
   "round_statuses": [

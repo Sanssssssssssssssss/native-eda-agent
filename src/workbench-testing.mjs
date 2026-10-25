@@ -14,12 +14,12 @@ const domainTitles = { functional: '功能仿真', synthesis: '综合', setup: '
 const softwareGroups = [
   ['workbench', '工作台与修改边界', /workbench/],
   ['agent_loop', 'Agent 候选、验证与交付', /agent-task|verifier-loop|eda-coordinator/],
-  ['agent_runtime', 'Agent 会话与资源', /agent-recording|agent-lifecycle|runtime|platform|mcp/],
+  ['agent_runtime', 'Agent 会话与资源', /agent-recording|agent-lifecycle|pi-sdk-dispatch|runtime|platform|mcp/],
   ['workflow', '任务、验收与恢复', /workflow|task-context|task-outcome/],
   ['retrieval_contract', 'RAG 与 SOP 契约', /knowledge/],
   ['trace', 'Trace、证据与导出', /trace|artifact|results|proxy|otlp/],
   ['optimization', '优化、恢复与复测', /optimizer|replay/],
-  ['benchmark_contract', 'Benchmark 运行与判分', /bench/],
+  ['benchmark_contract', 'Benchmark 运行与判分', /bench|evaluation-contract/],
   ['tool_contract', '工具输入与报告解析', /fpga|contract/],
 ];
 

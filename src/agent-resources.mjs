@@ -2,6 +2,9 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 export const skillDirectories = ['.pi/skills','.agents/skills'];
+// Auxiliary classifier/image calls bypass tool_call and the host verifier budget.
+// Keep codemode as a tool orchestrator within the owning model session.
+export const edaCodemodeOptions = Object.freeze({mode:'on',models:false});
 export function edaResourceOptions({root,agentDir,settingsManager,extensionFactories=[]}) {
   const directories=skillDirectories.map(dir=>path.join(root,dir)).filter(dir=>fs.existsSync(dir));
   return {

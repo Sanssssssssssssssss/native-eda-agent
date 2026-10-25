@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Bound native model tool requests, including nested and denied calls, and stop at the request boundary after cancellation or budget exhaustion. Disabled auxiliary codemode model access; verified dispatch with real Pi SDK and local scripted responses.
+- Record session execution provenance and require it for online evaluation. Reject incomplete, skipped or duplicate lifecycle coverage; preserve terminal receipts after unsubscribe failures and await disposal before delivery rechecks.
 - Added durable EDA tasks with automatic candidate snapshots, typed task preparation/inspection, Pi dispatch restrictions, evidence-selected RAG/SOP guidance, fresh scope after compaction, and checked continuation with cumulative verifier budgets.
 - Connected task scope, rounds, verdicts and recovery to the workbench. Final answers now use independently rechecked delivery; original model text remains in the local trace. Added classified offline task scenarios and stricter existing-session evaluation.
 

@@ -14,7 +14,9 @@
 | `online-axi` | 真实 EDA / 工作流 | AXI 仿真→综合→布线→DRC；固定器件和 100 MHz 时钟、逐领域验收 |
 | `online-agent` | Agent 端到端 / 会话任务 | 已有 Pi SDK 会话、输入快照、终态、直接关联 workflow 的 trace/span 与工程目标 |
 
-这里的 online EDA 指实际运行 EDA 工具，不要求网络或模型。`online-agent` 是已有会话的验收入口，不会启动模型提供商；缺目录记 blocked，证据不满足记 failed。它只证明这一次已记录会话与工程目标，不证明模型一般能力、盲测或独立参考质量。
+这里的 online EDA 指实际运行 EDA 工具，不要求网络或模型。`online-agent` 是已有会话的验收入口，不会启动模型提供商；缺目录、注入会话、缺少执行来源的旧会话或无有效响应事件均记 blocked。来源必须是宿主内置 Pi SDK factory，并与起始事件、prompt 之后的响应计数一致；provider/model 名称不能代替执行来源。工程证据不满足记 failed。它只证明这一次已记录会话与工程目标，不证明模型一般能力、盲测、独立参考质量或提供商账单。
+
+`offline-agent-loop` 要求完整的 12 场景、9 类覆盖与 TAP 汇总一致；SKIP、TODO、缺项、重复或提前结束不能记作全通过。覆盖协议见 [evaluation-contracts](../src/evaluation-contracts.mjs)，新增场景需同步更新协议。
 
 ```powershell
 npm run evaluate -- list

@@ -9,6 +9,7 @@ import {inspectTrace} from '../scripts/trace-inspect.mjs';
 import {inspectWorkflow} from './workflow.mjs';
 import {knowledgeFiles} from './knowledge.mjs';
 import {taskDelivery} from './agent-task.mjs';
+import {assessLifecycleTap,sessionExecutionEligibility} from './evaluation-contracts.mjs';
 const hash=file=>createHash('sha256').update(fs.readFileSync(file)).digest('hex');
 export function evaluationFreshness(root,receipt){
   const entries=Object.entries(receipt.source_hashes||{}),changed=[];
@@ -34,7 +35,7 @@ export const evaluationSuites=[
 export function evaluationPlan(root,id){
   const suite=evaluationSuites.find(s=>s.id===id);if(!suite)throw new Error('Unknown evaluation suite');
   return {...suite,model_api_enabled:readConfig(root).model_api_enabled,provider_launch:false,
-    prerequisites:suite.lane==='online_agent'?['A recorded agent session and its child workflow; new provider sessions remain disabled by current config']:suite.launches_eda?['Installed licensed EDA','Pinned sources, checker and constraints']:[],
+    prerequisites:suite.lane==='online_agent'?['A built-in Pi SDK session with recorded response events and its child workflow. Injected and legacy sessions without provenance are ineligible; new provider sessions remain disabled by current config']:suite.launches_eda?['Installed licensed EDA','Pinned sources, checker and constraints']:[],
     comparability:['same suite','same source/protocol hashes','same unit'],scope:'Categories and units remain separate; no aggregate offline/online score.'};
 }
 async function command(root,args,signal,log){
@@ -50,7 +51,7 @@ function artifact(root,value){
 export async function runEvaluation(root,id,registry,{signal,session_directory,workflow_directory}={}){
   const plan=evaluationPlan(root,id),dir=path.join(root,'artifacts',`evaluation-${new Date().toISOString().replace(/[:.]/g,'-')}-${randomUUID().slice(0,6)}`);
   fs.mkdirSync(dir,{recursive:true});
-  const files=[...new Set(['src/evaluations.mjs','src/task-outcome.mjs','src/task-context.mjs','src/workflow.mjs','scripts/evaluate-knowledge.mjs','knowledge/retrieval-cases.json',...knowledgeFiles(root).map(f=>path.relative(root,f).replaceAll('\\','/')),...(plan.spec?[plan.spec]:[])])];
+  const files=[...new Set(['src/evaluations.mjs','src/evaluation-contracts.mjs','src/agent-session.mjs','src/agent-task.mjs','src/task-outcome.mjs','src/task-context.mjs','src/workflow.mjs','scripts/evaluate-knowledge.mjs','knowledge/retrieval-cases.json',...knowledgeFiles(root).map(f=>path.relative(root,f).replaceAll('\\','/')),...(plan.spec?[plan.spec]:[])])];
   const result={schema_version:1,suite:id,lane:plan.lane,category:plan.category,unit:plan.unit,started_at:new Date().toISOString(),status:'running',
     source_hashes:Object.fromEntries(files.map(f=>[f,createHash('sha256').update(fs.readFileSync(path.join(root,f))).digest('hex')])),provider_calls_by_evaluator:0,outer_codex_tokens:null};
   if(id==='offline-agent-loop') for(const name of ['tests/agent-task.test.mjs','tests/fixtures/agent-task.mjs','src/agent-task.mjs','src/verifier-loop.mjs','src/runtime.mjs','src/trace.mjs','src/tool-contracts.mjs','scripts/trace-inspect.mjs','package-lock.json'])result.source_hashes[name]=hash(path.join(root,name));
@@ -71,10 +72,7 @@ export async function runEvaluation(root,id,registry,{signal,session_directory,w
       const log=path.join(dir,'scenarios.tap');
       result.exit_code=await command(root,['--test','--test-reporter=tap','tests/agent-task.test.mjs'],signal,log);
       const text=fs.readFileSync(log,'utf8');
-      result.scenarios=[...text.matchAll(/^(ok|not ok) \d+ - ([^:\n]+): ([^\n]+)/gm)].map(([,status,category,name])=>({category,name,passed:status==='ok'}));
-      result.metrics={total:result.scenarios.length,passed:result.scenarios.filter(row=>row.passed).length,
-        categories:Object.fromEntries([...new Set(result.scenarios.map(row=>row.category))].map(category=>[category,{total:result.scenarios.filter(row=>row.category===category).length,passed:result.scenarios.filter(row=>row.category===category&&row.passed).length}]))};
-      result.status=result.exit_code===0&&result.metrics.total>0&&result.metrics.passed===result.metrics.total?'passed':'failed';
+      Object.assign(result,assessLifecycleTap(text,result.exit_code));
       result.detail_log='scenarios.tap';result.scope='Synthetic host lifecycle scenarios. No model, HDL compiler, Vivado or hidden benchmark executed.';
     }else if(id==='offline-retrieval'){
       result.metrics=evaluateRetrieval(root);result.status=result.metrics.after.hits>=result.metrics.before.hits&&result.metrics.unrelated.every(q=>q.returned===0)?'passed':'failed';
@@ -89,6 +87,9 @@ export async function runEvaluation(root,id,registry,{signal,session_directory,w
       if(!session_directory||!workflow_directory){result.status='blocked';result.reason='agent_session_and_workflow_required';}
       else{
         const session=artifact(root,session_directory),workflow=artifact(root,workflow_directory),manifest=JSON.parse(fs.readFileSync(path.join(session,'run.json'),'utf8'));
+        const events=fs.readFileSync(path.join(session,'events.jsonl'),'utf8').trim().split('\n').filter(Boolean).map(JSON.parse);
+        result.execution=sessionExecutionEligibility(manifest,events);
+        if(!result.execution.eligible) {result.status='blocked';result.reason=result.execution.reason;result.finished_at=new Date().toISOString();save();return {...result,directory:dir};}
         const trace=inspectTrace(session,{checkCurrent:true}),task=inspectWorkflow(root,workflow),child=JSON.parse(fs.readFileSync(path.join(workflow,'run.json'),'utf8'));
         if(manifest.mode!=='pi-sdk-agent'||!trace.valid||trace.status!=='completed'||trace.input_drift||child.trace_id!==manifest.trace_id||child.parent_span_id!==manifest.span_id)throw new Error('Agent session evidence is incomplete, stale or not the workflow parent');
         if(manifest.task) {

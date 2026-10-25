@@ -64,7 +64,11 @@ node src/agent.mjs run --verification examples/verification/counter.json "完成
 
 只有取消在**完整验证回合之后**，最新候选、工具证据、合同和所有者检查通过且额度足够时，才允许续跑。生成中断、验证中断、未提交 attempt、存活/未知所有者、证据变化或预算不足均拒绝自动续跑。硬崩溃若没有完整提交边界，也不能凭耗时推测可恢复；保留现场并重新准备任务。
 
-验证 `max_rounds/max_calls` 跨续跑累计。模型 `maxTurns/timeoutSeconds` 按每次宿主会话计量，usage 保留 Pi 会话累计量与本次增量；未取得统计记未知。ACE 桥接的 0 API 调用不表示外层 Codex token 为 0。
+验证 `max_rounds/max_calls` 跨续跑累计。模型 `maxTurns/timeoutSeconds/maxToolCalls` 按每次宿主会话计量；普通工具、被拒绝请求与 codemode 嵌套调用共用 `maxToolCalls`（默认 128，可用 `--max-tool-calls` 设置）。额度耗尽或取消后，宿主在 Pi 的下一次请求边界阻止继续派发。当前任务上下文在压缩后重新附带剩余工具额度、轮数和时间。Pi 原生压缩逻辑保留；这些上限不是精确的 HTTP 请求数或 token 预算。
+
+原生 SDK 的 codemode 使用 `models:false`，关闭脚本内额外分类/图像模型入口；脚本仍可组合已准入工具。该限制属于原生 `run` / 工作台会话驱动；直接启动上游 Pi TUI 的探索会话不具备相同宿主预算。
+
+usage 保留 Pi 会话累计量、本次增量、工具准入计数与 `execution_provenance`。使用注入 session factory 的测试自动标记 `injected`，不能因 provider 名称看起来真实而计入线上成绩。未取得统计记未知。ACE 桥接的 0 API 调用不表示外层 Codex token 为 0。
 
 ## 证据布局
 
@@ -84,11 +88,13 @@ artifacts/native-agent-*/
   events.jsonl / usage.json
 ```
 
-失败产物和历史成绩保留。候选可交付给用户审阅；系统不会自动合并到原始设计。
+失败产物和历史成绩保留。候选可交付给用户审阅；系统不会自动合并到原始设计。取消订阅异常会记录失败终态并继续关闭任务；异步 dispose 完成后才复核当前输入与候选。进程硬崩溃或磁盘无法写入仍按未提交 attempt 处理。
 
 ## 已验证与尚未验收
 
 `offline-agent-loop` 按 isolation、guidance、context、dispatch、integrity、ownership、recovery、budget、delivery 分类运行模拟场景。它使用真实任务/workflow/trace 代码和假 EDA，不衡量 RTL 能力。完整软件检查、真实原版 ACE 反馈演示见 `npm run validate:agent`；最新公开回执见 [release](../release/README.md)。
+
+[真实 SDK 调度检查](../tests/pi-sdk-dispatch.test.mjs) 用 Pi 1.3.0 和 QuickJS 执行嵌套工具，通过内存中的固定响应验证正常结束、工具超限、轮次超限及 checker 保护。测试不创建提供商客户端、不读取真实凭据、不启动 EDA；它验证 SDK 兼容性，不计入真实模型成绩。
 
 候选快照仅覆盖声明的文件；IP 生成模型、自定义仿真库、数据文件的运行期定位仍需 workflow 明确编排。工具 hook 和哈希检查不是 OS 沙箱；不能对恶意插件、外部进程或对抗性 HDL 宣称强隔离。当前只提供固定测试的工程证据，不是形式等价、CDC 签核或板卡实测。
 
