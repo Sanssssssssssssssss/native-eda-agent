@@ -69,6 +69,7 @@ export function createWorkbench(root, registry, options = {}) {
   const sessionList = () => state.list('sessions').map(s => ({id: s.id, title: s.title, updated_at: s.updated_at, created_at: s.created_at, mode: s.mode, archived: Boolean(s.archived), archived_at: s.archived_at || null, task_count: s.task_ids?.length || 0})).sort((a, b) => b.updated_at.localeCompare(a.updated_at));
   function availableSession(id) { const s = state.get('sessions', id); if (s.archived) throw conflict('Restore this archived session before continuing'); return s; }
   async function body(req) {
+    req.setEncoding('utf8'); // Node's decoder preserves code points split across HTTP chunks.
     let value = ''; for await (const chunk of req) { value += chunk; if (Buffer.byteLength(value) > 32768) throw new Error('Request exceeds 32 KiB'); }
     return JSON.parse(value || '{}');
   }
@@ -97,6 +98,9 @@ export function createWorkbench(root, registry, options = {}) {
       publish(sessionId, 'job_status', {job_id: id, task_id: task?.id, status: 'running'});
       const result = await execute(controller.signal, update); job.result = result;
       job.status = result?.status && !activeJobStates.has(result.status) ? result.status : 'completed';
+      // Native Pi settles interruption as `stopped`; keep that run receipt intact,
+      // while acknowledging this job's own cancellation only for user-interrupt.
+      if (kind === 'agent' && controller.signal.aborted && result?.status === 'stopped' && result.run?.stoppedReason === 'user-interrupt') job.status = 'cancelled';
       if (controller.signal.aborted && job.status !== 'cancelled') job.cancel_acknowledged = false;
       if (job.status === 'cancelled') job.cancel_acknowledged = true;
     }).catch(error => {

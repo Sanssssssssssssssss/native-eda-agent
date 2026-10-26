@@ -45,7 +45,7 @@ npm run evaluate -- run offline-agent-loop
 
 需要独立依赖的复杂工程可使用 [AXI 配置](../examples/verification/axi-fabric.json)。先按 [工程索引](../projects/README.md) 准备固定依赖。静态准入通过只说明任务合同可用。
 
-以下命令会调用已配置模型及 workflow 中的 EDA；当前 `.eda/config.json` 仍关闭模型 API，本轮没有启动这些命令：
+以下命令会调用已配置模型及 workflow 中的 EDA；仓库默认关闭模型 API，执行前须按当前授权配置本机提供商：
 
 ```powershell
 node src/agent.mjs run --task artifacts/agent-task-UUID --timeout 3600 "修复候选 RTL，满足固定验收"
@@ -62,7 +62,7 @@ node src/agent.mjs run --verification examples/verification/counter.json "完成
 
 `prepared → generating → verifying → boundary` 是任务执行过程。独立结论可能为 `passed`、`failed`、`unknown`、`review_required`；循环也可能以 `cancelled`、`invalid` 或 `budget_exhausted` 结束。会话 `completed` 只说明驱动结束。
 
-只有取消在**完整验证回合之后**，最新候选、工具证据、合同和所有者检查通过且额度足够时，才允许续跑。生成中断、验证中断、未提交 attempt、存活/未知所有者、证据变化或预算不足均拒绝自动续跑。硬崩溃若没有完整提交边界，也不能凭耗时推测可恢复；保留现场并重新准备任务。
+只有取消后的工具终态与证据已收齐，并提交到 **boundary**，最新候选、合同和所有者检查通过且额度足够时，才允许续跑。运行中的仿真被正常取消后可以形成此边界，验收仍是 `unknown`；续跑会重新执行固定验证。生成中断、未收齐证据的验证中断、未提交 attempt、存活/未知所有者、证据变化或预算不足均拒绝自动续跑。硬崩溃若没有完整提交边界，也不能凭耗时推测可恢复；保留现场并重新准备任务。
 
 验证 `max_rounds/max_calls` 跨续跑累计。模型 `maxTurns/timeoutSeconds/maxToolCalls` 按每次宿主会话计量；普通工具、被拒绝请求与 codemode 嵌套调用共用 `maxToolCalls`（默认 128，可用 `--max-tool-calls` 设置）。额度耗尽或取消后，宿主在 Pi 的下一次请求边界阻止继续派发。当前任务上下文在压缩后重新附带剩余工具额度、轮数和时间。Pi 原生压缩逻辑保留；这些上限不是精确的 HTTP 请求数或 token 预算。
 
@@ -94,8 +94,8 @@ artifacts/native-agent-*/
 
 `offline-agent-loop` 按 isolation、guidance、context、dispatch、integrity、ownership、recovery、budget、delivery 分类运行模拟场景。它使用真实任务/workflow/trace 代码和假 EDA，不衡量 RTL 能力。完整软件检查、真实原版 ACE 反馈演示见 `npm run validate:agent`；最新公开回执见 [release](../release/README.md)。
 
-[真实 SDK 调度检查](../tests/pi-sdk-dispatch.test.mjs) 用 Pi 1.3.0 和 QuickJS 执行嵌套工具，通过内存中的固定响应验证正常结束、工具超限、轮次超限及 checker 保护。测试不创建提供商客户端、不读取真实凭据、不启动 EDA；它验证 SDK 兼容性，不计入真实模型成绩。
+[真实 SDK 调度检查](../tests/pi-sdk-dispatch.test.mjs) 用 Pi 1.4.0 和 QuickJS 执行嵌套工具，通过内存中的固定响应验证正常结束、工具超限、轮次超限、checker 保护、worker 排队/取消、原生压缩和重试终态。测试不创建提供商客户端、不读取真实凭据、不启动 EDA；它验证 SDK 兼容性，不计入真实模型成绩。
 
 候选快照仅覆盖声明的文件；IP 生成模型、自定义仿真库、数据文件的运行期定位仍需 workflow 明确编排。工具 hook 和哈希检查不是 OS 沙箱；不能对恶意插件、外部进程或对抗性 HDL 宣称强隔离。当前只提供固定测试的工程证据，不是形式等价、CDC 签核或板卡实测。
 
-模型 API 关闭期间没有真实 Pi 模型修复分数。独立盲测、答案引用忠实度和自然语言 SOP 遵循率仍需单独评估。向量检索、远端商业 EDA 和多用户权限未接入本闭环。历史真实工程结果保持各自原协议，见 [功能成绩](results.md) 与 [分类测评](evaluation.md)。
+授权后的原生 Pi/CommandCode 修复、压缩、取消、恢复与 MCP 实测见 [稳定性记录](stability-2026-10-26.md)。独立盲测、答案引用忠实度和自然语言 SOP 遵循率仍需单独评估。向量检索、远端商业 EDA 和多用户权限未接入本闭环。历史真实工程结果保持各自原协议，见 [功能成绩](results.md) 与 [分类测评](evaluation.md)。

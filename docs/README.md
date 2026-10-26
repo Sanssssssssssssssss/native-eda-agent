@@ -7,6 +7,7 @@
 | 想了解什么 | 当前入口 |
 |---|---|
 | 项目能做什么、怎样启动 | [项目 README](../README.md) |
+| 原生 Pi 与真实提供商的稳定性修复和实测 | [2026-10-26 稳定性记录](stability-2026-10-26.md) |
 | EDA Agent 的关键机制是否实际接入 | [机制与源码落点](mechanisms.md) |
 | 本地会话界面、任务可视化和 ERP 对照 | [v0.7 工作台验收](workbench-v07-acceptance.md) · [机制比较](erp-parity-and-workbench.md) |
 | RTL 工程表盘、限定行修改与逐例测试 | [v0.8 使用与边界](workbench-v08.md) · [复用来源](workbench-reuse-v08.md) |

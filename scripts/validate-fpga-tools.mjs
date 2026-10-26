@@ -33,7 +33,12 @@ function previousCheckpoint(project) {
 }
 try {
   await client.connect(new StdioClientTransport({command:process.execPath,args:[path.join(root,'src/mcp-server.mjs')],cwd:root,stderr:'inherit'}));
-  const listing=await client.listTools();assert.equal(listing.tools.length,15);receipt.tool_count=listing.tools.length;persist();
+  const listing=await client.listTools(),names=new Set(listing.tools.map(tool=>tool.name));
+  for(const name of ['eda_xsim','eda_vivado_catalog','eda_vivado_synthesize','eda_vivado_implement','eda_vivado_reports','eda_vivado_timing_paths','eda_vivado_objects'])assert.ok(names.has(name),`Required integration tool missing: ${name}`);
+  receipt.tool_count=listing.tools.length;persist();
+  // This historical adapter suite needs the retained routed designs. Check
+  // them before spending time on simulation/synthesis in a fresh checkout.
+  const ethernet=previousCheckpoint('ethernet-cdc'),crypto=previousCheckpoint('crypto-soc');
   const options={sources:['projects/fpga-tool-validation/xor_vhdl.vhd','projects/fpga-tool-validation/tb_options.sv'],top:'tb_fpga_options',include_dirs:['projects/fpga-tool-validation/include files'],defines:['BUILD_VALUE=37'],generics:['CYCLES=23'],plusargs:['SEED=17'],sv_seed:123,libraries:['unisims_ver'],pass_marker:'FPGA_OPTIONS_PASS',timeout_seconds:60};
   const xsim=async()=>{
     await check('xsim-options-mixed-language','eda_xsim',options,d=>assert.equal(d.simulation_acceptance.status,'pass'));
@@ -54,12 +59,10 @@ try {
     const synthesized=await check('axi-synthesize','eda_vivado_synthesize',{...source,part:'xc7a100tfgg676-2',constraints:['projects/fpga-tool-validation/axi.xdc']},d=>{assert.equal(d.fpga.black_boxes,0);assert.ok(d.fpga.artifacts['synthesized.dcp']);assert.equal(d.fpga.clocks[0].period_ns,10);});
     const routed=await check('axi-implement','eda_vivado_implement',{checkpoint:path.relative(root,synthesized.fpga.artifacts['synthesized.dcp'])},d=>{assert.equal(d.fpga.assessment.setup_hold,'pass');assert.equal(d.fpga.assessment.routing,'pass');assert.equal(d.fpga.assessment.clock_and_internal_constraints,'pass');assert.ok(d.fpga.artifacts['routed.dcp']);});
     receipt.new_axi_route=routed.directory;persist();
-    const ethernet=previousCheckpoint('ethernet-cdc');
     await check('ethernet-cdc-diagnostics','eda_vivado_reports',{checkpoint:ethernet,reports:['timing','utilization','cdc','drc','methodology','clocks','exceptions','route']},d=>{
       assert.equal(d.fpga.clocks.length,3);assert.equal(d.fpga.assessment.setup_hold,'pass');assert.equal(d.fpga.assessment.io_constraints,'review_required');assert.equal(d.fpga.assessment.cdc,'review_required');
       assert.equal(d.fpga.parsed_reports.cdc_rules.filter(x=>x.severity==='Warning').reduce((n,x)=>n+x.count,0),34);
     });
-    const crypto=previousCheckpoint('crypto-soc');
     await check('crypto-critical-paths','eda_vivado_timing_paths',{checkpoint:crypto,delay_type:'max',from_clock:'clk',to_clock:'clk',limit:5},d=>{assert.equal(d.fpga.paths.length,5);assert.ok(d.fpga.paths.every(p=>Number.isFinite(p.slack_ns)&&p.startpoint&&p.endpoint));assert.equal(d.fpga.whole_design_tns,null);});
     await check('crypto-block-ram-objects','eda_vivado_objects',{checkpoint:crypto,kind:'cells',pattern:'*ram*',limit:10},d=>{assert.equal(d.fpga.items.length,10);assert.ok(d.fpga.total>=10);});
   };

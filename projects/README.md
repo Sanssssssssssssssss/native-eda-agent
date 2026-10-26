@@ -13,6 +13,8 @@
 
 公开 checkout 用 `node scripts/fetch-example-upstreams.mjs` 获取固定版本的公共 RTL。历史工程可能保留旧绝对路径：先运行 `node scripts/relocate-examples.mjs` 查看迁移计划，需要时加 `--apply`，脚本保留备份；部分固件生成另需 RISC-V 工具链。
 
-新增任务可参考 [counter workflow](../examples/workflows/counter-simulation.json) 与 [AXI workflow](../examples/workflows/axi-fabric-ooc.json)，在 guidance 中声明使用的 SOP，在 steps 中固定验收。当前新 AXI 编排只静态计划过，不能用旧工程成绩代替本版本全流程实跑。
+新增任务可参考 [counter workflow](../examples/workflows/counter-simulation.json) 与 [AXI workflow](../examples/workflows/axi-fabric-ooc.json)，在 guidance 中声明使用的 SOP，在 steps 中固定验收。加强内部协议检查的 [独立 AXI workflow](../examples/workflows/axi-fabric-protocol-ooc.json) 已在全新导出包实跑，功能和实现通过、DRC 待审查，见[实测范围](../docs/stability-2026-10-26.md)；历史协议仍单独保留。
+
+`scripts/validate-fpga-tools.mjs` 是已有工程的实机适配器回归，需要 `ethernet-cdc` 和 `crypto-soc` 的本地 `latest-impl.json` 及对应 routed DCP。这些大型历史产物不随公开包分发；缺失时在启动 EDA 前停止。全新 checkout 的完整 AXI 验证使用上面的独立 workflow。
 
 Tcl 通过 EDA_WORKSPACE 获取根目录，每次原生执行使用新的 artifacts 目录。LTspice 输入放在 examples/analog；AC 和 transient 分开执行，并读取实际 .meas 结果。

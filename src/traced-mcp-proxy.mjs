@@ -31,6 +31,9 @@ function resultFailed(result) {
 function incomingContext(ctx) { return mcpTraceContext(ctx); }
 
 export async function createProxy(config, workspace = root) {
+  // Reuse the backend's existing polling implementation. An asynchronous RPC
+  // return cannot release the shared execution lease while its EDA run continues.
+  const waitingFlows = new Set(config.name === 'vivado-community' ? ['run_synthesis','run_implementation'] : []);
   const client = new Client({ name: 'eda-traced-proxy', version: '1.0.0' });
   const transport = new StdioClientTransport({ command: config.command, args: config.args, cwd: config.cwd, env: config.env, stderr: 'pipe' });
   // Diagnostics remain on stderr, never mixed into the MCP transport.
@@ -58,7 +61,13 @@ export async function createProxy(config, workspace = root) {
     trace?.event('backend_quarantined', { owned_backend_pid: pid, reconnect_required: true });
   };
   if (capabilities.tools) {
-    server.server.setRequestHandler('tools/list', request => client.listTools(request.params));
+    server.server.setRequestHandler('tools/list', async request => {
+      const result = await client.listTools(request.params);
+      return {...result, tools:result.tools.map(tool => waitingFlows.has(tool.name) ? {...tool,
+        description:`${tool.description || ''}\nThis traced adapter requires wait=true so the resource lease covers the entire EDA run.`,
+        inputSchema:{...tool.inputSchema,properties:{...tool.inputSchema.properties,wait:{...tool.inputSchema.properties?.wait,type:'boolean',const:true,default:true}}},
+      } : tool)};
+    });
     server.server.setRequestHandler('tools/call', async (request, ctx) => {
       const { name, arguments: args = {} } = request.params;
       const trace = createTrace({ root: workspace, tool: `mcp_${config.name}_${name}`, toolCallId: `proxy-${randomUUID()}`,
@@ -70,9 +79,11 @@ export async function createProxy(config, workspace = root) {
       let lease, dispatched = false, safeToRelease = true;
       try {
         state.transition('preflight');
-        if (quarantined) throw new Error('Backend quarantined; reconnect this MCP server before continuing.');
-        state.transition('snapshotting');
         trace.capture(path.join(root, 'src/traced-mcp-proxy.mjs'), 'proxy');
+        if (quarantined) throw new Error('Backend quarantined; reconnect this MCP server before continuing.');
+        if (waitingFlows.has(name) && args.wait !== undefined && args.wait !== true)
+          throw new Error('This traced EDA flow requires wait=true; asynchronous return would release its resource lease before completion.');
+        state.transition('snapshotting');
         if (config.name === 'vivado-community') trace.capture(path.join(root, 'src/vivado_workbench.py'), 'backend');
         state.transition('waiting');
         lease = await acquireResource({ root: workspace, resource: config.resource, runId: trace.manifest.run_id, directory: trace.directory, signal: ctx.mcpReq.signal });

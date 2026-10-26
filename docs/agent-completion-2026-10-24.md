@@ -55,7 +55,7 @@ node scripts/upload-traces.mjs artifacts/my-trace.json --endpoint http://127.0.0
 ## 运行边界与维护
 
 - `.codex/config.toml` 的社区服务、`.pi/mcp.json` 的社区/LTspice 服务已经切换代理；**现有连接需要重连**。配置改前副本在 交付目录 (local/optional evidence; see results/catalog.json)。
-- 租约覆盖一次 MCP 调用。任意 Tcl 启动异步工程后须 `wait_on_run` 等待完成；单凭 RPC 返回不能证明其后台工程结束。元数据、Prompt、资源读取不作为设计修改执行。
+- 租约覆盖一次 MCP 调用。代理要求 `run_synthesis`、`run_implementation` 使用 `wait=true`，沿用上游等待流程；`wait=false` 在派发前拒绝。任意 Tcl 启动异步工程后仍须 `wait_on_run` 等待完成；单凭 RPC 返回不能证明其后台工程结束。元数据、Prompt、资源读取不作为设计修改执行。实测依据见[稳定性记录](stability-2026-10-26.md)。
 - 恢复从已持久化候选边界开始，不恢复 Vivado 内存或崩溃时半写的 DCP。代码变化、证据损坏、原进程仍活跃/状态未知均拒绝自动恢复；不杀其他会话来强行通过检查。
 - 动态 Tcl 的完整依赖、功能形式证明、板卡结果、Ross 官方二进制/授权属于外部前提。工具完成和 trace 有效都不能代替这些证据。
 - 新增的 trace、恢复、代理生命周期仍需要未来的真实 EDA 验收；历史 FPGA 成绩不因本轮软件验收而增加。

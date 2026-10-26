@@ -46,7 +46,26 @@ test('testing catalog retains unrun and failed denominators and separates expect
   assert.equal(tools.summary.expected_failure, 1);
   assert.equal(tools.summary.expected_timeout, 1);
   assert.equal(tools.summary.executed, 4);
-  assert.equal(lane(result, 'online_agent').summary.not_run, 1);
+  assert.equal(lane(result, 'online_agent').summary.total, 0);
+});
+
+test('online tasks keep separate denominators, repeated assessments and unbound failures', t => {
+  const f=fixture(t);
+  const receipts=[
+    {session:'artifacts/session-a',workflow:'artifacts/workflow-a',status:'passed'},
+    {session:'artifacts/session-b',workflow:'artifacts/workflow-b',status:'passed'},
+    {session:'artifacts\\session-a',workflow:'artifacts\\workflow-a',status:'failed',error:'Current evidence drift'},
+    {status:'blocked',reason:'agent_session_and_workflow_required'},
+    {status:'failed',error:'Legacy failure without subject paths'},
+  ];
+  receipts.forEach((value,i)=>f.write(`artifacts/evaluation-2026-10-26T08-00-0${i}-000Z-test/result.json`,
+    {suite:'online-agent',started_at:`2026-10-26T08:00:0${i}Z`,...value}));
+  const online=lane(f.read(),'online_agent');
+  assert.equal(online.summary.total,2);assert.equal(online.summary.passed,1);assert.equal(online.summary.failed,1);
+  const first=cases(online).find(item=>item.session==='artifacts/session-a');
+  assert.deepEqual(first.history.map(item=>item.status),['failed','passed']);assert.equal(first.history_count,2);
+  assert.equal(first.latest.reason,'Current evidence drift');
+  assert.equal(online.unbound_history.length,2);assert.ok(online.unbound_history.every(item=>item.evidence.length===1));
 });
 
 test('changed benchmark definitions and tampered case receipts cannot inherit a recorded pass', t => {
@@ -164,6 +183,6 @@ test('testing scan skips external directory links and reports malformed receipts
   f.write('artifacts/evaluation-2026-10-25T14-00-00-malformed/result.json', '{');
   const result = f.read();
   assert.equal(lane(result, 'online_agent').summary.passed, 0);
-  assert.equal(lane(result, 'online_agent').summary.not_run, 1);
+  assert.equal(lane(result, 'online_agent').summary.total, 0);
   assert.equal(result.scan.errors[0].reason, 'invalid_json');
 });

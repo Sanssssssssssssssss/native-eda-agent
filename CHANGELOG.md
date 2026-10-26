@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Stabilized native Pi sessions against CommandCode and real XSim/Vivado workflows: use upstream Pi 1.4 worker queuing, reject unrecovered output truncation before verification, and preserve native compaction/retry behavior.
+- Replaced incomplete shared JSON Schema validation with pinned TypeBox; fixed confirmed cancellation status and UTF-8 decoding across HTTP and ACE process chunks.
+- Count online evaluations by session/workflow subject and retain failed/unbound history. Added a separately versioned AXI internal protocol checker after a mutation exposed a historical checker gap; prior scores retain their original protocol.
+- See the [stability campaign](docs/stability-2026-10-26.md) for bounded live repairs, cancellation/recovery, failures, offline regressions and usage accounting.
+
 - Bound native model tool requests, including nested and denied calls, and stop at the request boundary after cancellation or budget exhaustion. Disabled auxiliary codemode model access; verified dispatch with real Pi SDK and local scripted responses.
 - Record session execution provenance and require it for online evaluation. Reject incomplete, skipped or duplicate lifecycle coverage; preserve terminal receipts after unsubscribe failures and await disposal before delivery rechecks.
 - Added durable EDA tasks with automatic candidate snapshots, typed task preparation/inspection, Pi dispatch restrictions, evidence-selected RAG/SOP guidance, fresh scope after compaction, and checked continuation with cumulative verifier budgets.

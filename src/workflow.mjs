@@ -235,10 +235,16 @@ export function inspectWorkflow(root,directory,{resume=false}={}){
     const record=state.passed[i],step=state.plan.spec.steps[i];
     try{if(record.id!==step.id)throw new Error('Steps are not a committed prefix');results[step.id]=verifyStep(root,record,step);}catch(e){issues.push(`${record.id}:${e.message}`);}
   }
-  if(state.failed_step){
-    try{results[state.failed_step.id]=verifyStep(root,state.failed_step,state.plan.spec.steps.find(s=>s.id===state.failed_step.id),{requireChecks:false});}catch(e){issues.push(`failed_evidence:${e.message}`);}
-  }
   let failureDiagnostic=null;
+  if(state.failed_step){
+    try{
+      const result=verifyStep(root,state.failed_step,state.plan.spec.steps.find(s=>s.id===state.failed_step.id),{requireChecks:false});
+      results[state.failed_step.id]=result;
+      // XSim can exit normally after a checker Fatal. Its committed result is
+      // already hash-checked above; reuse the captured transcript as repair hints.
+      if(typeof result.transcript_tail==='string')failureDiagnostic=Buffer.from(result.transcript_tail,'utf8').subarray(-failureLogLimit).toString('utf8');
+    }catch(e){issues.push(`failed_evidence:${e.message}`);}
+  }
   if(state.failed_tool){try{failureDiagnostic=verifyToolFailure(root,dir,state);}catch(error){issues.push(`failed_tool_evidence:${error.message}`);}}
   if(state.failed_tool_rejected)issues.push(`failed_tool_rejected:${state.failed_tool_rejected}`);
   if(state.task_acceptance_hash){try{if(hashFile(inside(dir,'task-outcome.json'))!==state.task_acceptance_hash)issues.push('task_outcome_changed');}catch{issues.push('task_outcome_missing');}}
@@ -260,7 +266,7 @@ export function inspectWorkflow(root,directory,{resume=false}={}){
   return {schema_version:1,directory:dir,run_id:state.run_id,status:state.status,outcome:state.outcome,valid:issues.length===0,ready:resume?issues.length===0:undefined,
     issues,completed_steps:state.passed.map(s=>s.id),child_evidence:state.passed.map(s=>({step:s.id,directory:s.child_directory,result:s.result_path})),next_step:state.plan.spec.steps[state.passed.length]?.id||null,calls:state.calls,spent_ms:spent,uncheckpointed_wall_ms:uncheckpointed,
     task_acceptance:taskAcceptance,recovery,failure_diagnostic:failureDiagnostic,
-    failure_diagnostic_scope:'Verified failure log tail for repair hints only; never acceptance evidence.',
+    failure_diagnostic_scope:'Verified failed-tool log or committed result transcript tail for repair hints only; never acceptance evidence.',
     boundary:'Checks cover the declared workflow only. No formal proof, CDC waiver or board signoff is inferred.',state,results};
 }
 async function executeWorkflow(root,registry,trace,args,signal,update,resuming){

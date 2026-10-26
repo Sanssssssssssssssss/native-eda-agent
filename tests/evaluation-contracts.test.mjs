@@ -32,4 +32,5 @@ test('online eligibility uses factory and prompt-time event evidence, not provid
   assert.equal(sessionExecutionEligibility({...manifest,execution_provenance:undefined},events).reason,'session_execution_origin_unknown');
   for(const missing of [[],events.slice(1),events.slice(0,2)])assert.equal(sessionExecutionEligibility(manifest,missing).eligible,false);
   assert.equal(sessionExecutionEligibility({...manifest,provider_observation:{assistant_messages:999,successful_assistant_messages:1}},events).eligible,false);
+  assert.equal(sessionExecutionEligibility(manifest,[...events.slice(0,-1),{type:'message_end',message:{role:'assistant',stopReason:'length'}}]).eligible,false);
 });

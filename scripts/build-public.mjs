@@ -32,7 +32,7 @@ function walk(relative,accept=(next,name)=>permitted(name)){
   }
 }
 for(const name of ['src','scripts','tests','benchmarks','knowledge','examples','prompts','docs','results','web','.github','.pi/extensions','.pi/skills'])walk(name,(relative,filename)=>permitted(filename)||(relative.startsWith('tests/fixtures/')&&filename.endsWith('.log')));
-for(const image of ['workbench.png','workbench-axi.png','workbench-evaluations.png','workbench-project.png','workbench-scope.png','workbench-tests.png']){
+for(const image of ['workbench.png','workbench-axi.png','workbench-evaluations.png','workbench-project.png','workbench-scope.png','workbench-tests.png','workbench-native-loop.png']){
   if(fs.existsSync(path.join(root,'docs/media',image)))copy(`docs/media/${image}`);
 }
 for(const name of ['fft-spectrum','fpga-tool-validation','hard-bench','system-bench','verilogeval-24','verilogeval-mini','native-vivado-workbench'])walk(`projects/${name}`);

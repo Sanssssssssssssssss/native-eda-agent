@@ -7,7 +7,13 @@ import {loadResults,getResult,verifyResult,compareResults,resultPath} from '../s
 import {validateArguments,specializeSchema} from '../src/tool-contracts.mjs';
 import {fpgaSurfaces} from '../src/tools/focused.mjs';
 import {createFpgaTools} from '../src/tools/fpga.mjs';
+import {createOptimizerTools} from '../src/tools/optimizer.mjs';
+import {doctor} from '../src/platform.mjs';
 const root=path.resolve(import.meta.dirname,'..');
+test('doctor reports the installed ESM-only Pi package version without starting a provider',()=>{
+  const pinned=JSON.parse(fs.readFileSync(path.join(root,'package.json'),'utf8')).dependencies['@earendil-works/pi-coding-agent'];
+  assert.equal(doctor(root).pi,pinned);
+});
 test('historical protocols and denominators remain distinct, with every packaged hash verified',()=>{
   const catalog=loadResults(root);
   assert.equal(catalog.records.length,11);
@@ -46,4 +52,16 @@ test('CLI contract rejects nonfinite numbers and hidden control fields',()=>{
   assert.throws(()=>validateArguments({n:1,action:'run'},s),/unexpected/);
   assert.throws(()=>specializeSchema(s,['missing']),/Unknown/);
   validateArguments({n:1},s);
+});
+
+test('optimizer schema enforces required alternatives and sibling limits before dispatch',()=>{
+  const schema=createOptimizerTools(root,()=>{})[0].parameters;
+  for(const args of [{},null,[],{checkpoint:''},{checkpoint:'input.dcp',mode:'invalid'},
+    {checkpoint:'input.dcp',max_trials:8},{checkpoint:'input.dcp',max_seconds:59},
+    {checkpoint:'input.dcp',min_gain_ns:NaN},{resume_from:'run',hidden:true}]) {
+    assert.throws(()=>validateArguments(args,schema));
+  }
+  for(const args of [{checkpoint:'input.dcp',max_trials:7,mode:'plan'},{resume_from:'run',mode:'run'}]) {
+    const original=structuredClone(args);validateArguments(args,schema);assert.deepEqual(args,original);
+  }
 });

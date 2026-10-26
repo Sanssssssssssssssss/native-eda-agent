@@ -704,7 +704,7 @@ function renderConversation() {
   );
   $("#content").className = "content conversation-content";
   $("#content").innerHTML =
-    `<div id="conversation-scroll" class="conversation-scroll"></div><div class="composer-wrap">${s?.agent_task_summary?`<div class="agent-task-strip"><span>${icon("shield")}<strong>${esc(s.agent_task_summary.goal || "验证任务")}</strong>${badge(s.agent_task_summary.task_acceptance?.status || "unknown")}</span>${button("agent-task-details","范围与证据","file","","subtle")}</div>`:""}${
+    `<div id="conversation-scroll" class="conversation-scroll"></div><div class="composer-wrap">${agentTaskStripHtml(s?.agent_task_summary)}${
       archived
         ? `<div class="composer"><div class="row"><span class="meta">该会话已归档。恢复后可以继续任务。</span><span class="spacer"></span>${button("restore-session", "恢复会话", "archive", `data-id="${esc(s.id)}"`)}</div></div>`
         : `<form id="composer" class="composer"><label class="sr-only" for="message-input">会话消息</label><textarea id="message-input" rows="2" maxlength="2048" placeholder="描述设计目标，或粘贴需要排查的工程问题…">${esc(state.drafts[state.id || "new"] || "")}</textarea><div class="composer-footer"><label class="composer-select">${icon("flow")}<select id="phase-select" aria-label="任务阶段">${Object.entries(
@@ -720,6 +720,14 @@ function renderConversation() {
     }<p class="composer-hint">Enter 发送，Shift + Enter 换行 · 本地模式不生成模型回复 · 工程执行需先确认计划</p></div>`;
   renderMessages({ scroll: true });
   syncComposerMode();
+}
+function agentTaskStripHtml(task) {
+  return task ? `<div class="agent-task-strip"><span>${icon("shield")}<strong>${esc(task.goal || "验证任务")}</strong>${badge(task.task_acceptance?.status || "unknown")}</span>${button("agent-task-details","范围与证据","file","","subtle")}</div>` : "";
+}
+function updateAgentTaskStrip() {
+  const current = document.querySelector('.agent-task-strip'), html = agentTaskStripHtml(state.session?.agent_task_summary);
+  if (current) { if (html) current.outerHTML = html; else current.remove(); }
+  else if (html) document.querySelector('.composer-wrap')?.insertAdjacentHTML('afterbegin', html);
 }
 function syncComposerMode() {
   const agent = state.interaction === "agent";
@@ -742,7 +750,7 @@ async function newSession() {
   await refreshOverview();
   go("sessions", session.id);
 }
-async function ensureSession() {
+async function ensureSession({navigate = true} = {}) {
   if (
     state.view === "sessions" &&
     state.session &&
@@ -753,7 +761,7 @@ async function ensureSession() {
   const s = await api("session", { action: "create", title: "工程任务" });
   state.session = s;
   await refreshOverview();
-  go("sessions", s.id);
+  if (navigate) go("sessions", s.id);
   return s;
 }
 async function sendMessage(event) {
@@ -836,11 +844,13 @@ function templatesDrawer() {
   );
 }
 function agentTaskDrawer() {
-  openDrawer("固定验证任务",`<p>指定现有验收规格和可修改的 RTL。工作台会创建候选副本；测试文件、约束、器件和验收检查一起冻结。</p><form id="agent-task-form" class="form-grid"><label>验收规格<input id="agent-task-spec" required value="examples/workflows/counter-simulation.json" placeholder="projects/my-fpga/workflow.json"></label><label>可修改的 RTL（每行一个路径）<textarea id="agent-task-editable" rows="3" required>examples/digital/counter.v</textarea></label><div class="row"><label>最多修复轮次<input id="agent-task-rounds" type="number" min="1" max="8" value="4" required></label><label>累计验证调用<input id="agent-task-calls" type="number" min="1" max="100" value="8" required></label></div><p class="meta">准备任务只复制并核对文件。开始修复后，Agent 分析和修改候选，固定工具检查决定结果。</p><button type="submit" class="button primary">创建候选并固定范围</button></form>`);
+  openDrawer("固定验证任务",`<p>指定 examples/workflows 或 projects 下的验收规格和可修改的 RTL。工作台会创建候选副本；测试文件、约束、器件和验收检查一起冻结。</p><form id="agent-task-form" class="form-grid"><label>验收规格<input id="agent-task-spec" required value="examples/workflows/counter-simulation.json" placeholder="projects/my-fpga/workflow.json"></label><label>可修改的 RTL（每行一个路径）<textarea id="agent-task-editable" rows="3" required>examples/digital/counter.v</textarea></label><div class="row"><label>最多修复轮次<input id="agent-task-rounds" type="number" min="1" max="8" value="4" required></label><label>累计验证调用<input id="agent-task-calls" type="number" min="1" max="100" value="8" required></label></div><p class="meta">准备任务只复制并核对文件。开始修复后，Agent 分析和修改候选，固定工具检查决定结果。</p><button type="submit" class="button primary">创建候选并固定范围</button></form>`);
 }
 async function prepareAgentTaskFromForm() {
   const configuration={spec:$('#agent-task-spec').value.trim(),editable_sources:$('#agent-task-editable').value.split(/\r?\n/).map(s=>s.trim()).filter(Boolean),max_rounds:Number($('#agent-task-rounds').value),max_calls:Number($('#agent-task-calls').value)};
-  const session=await ensureSession();
+  // Keep the form and its values while the first session is created. Navigate
+  // only after admission succeeds, so a server validation error remains editable.
+  const session=await ensureSession({navigate:false});
   await api('agent-task',{action:'prepare',session_id:session.id,configuration});
   state.session=await api('session?id='+encodeURIComponent(session.id));
   closeDrawer();
@@ -859,6 +869,7 @@ async function startAgentTask() {
   const task=state.session?.agent_task_summary;
   if(!task?.recovery?.ready)throw new Error('请先检查任务恢复条件');
   await api('agent',{session_id:state.session.id,message:`请完成此验证任务：${task.goal}。根据独立验证反馈修复候选 RTL，并交付当前证据。`,resumeTask:task.status==='cancelled'});
+  state.interaction='agent';
   closeDrawer();await refreshOverview();renderConversation();
 }
 async function planTask(spec) {
@@ -1645,9 +1656,11 @@ function testingLaneHtml() {
       engineering: "保留的工程领域验收；输入变化会单独标注。",
       retrieval: "24 条可见检索问题与 3 条无关问题；不计作盲测答案分。",
       software: "保留的软件检查回执；源码变化不抹去历史记录。",
-      online_agent: "核验已有会话与工程任务的关联证据。",
+      online_agent: "每个会话与工程关联单独计数；重复评估保留在该任务的历史中。",
     }[state.evalLane] || "";
-  return `<p class="testing-scope">${esc(scopeNote)}</p><div class="testing-summary">${stats.map(([key, title]) => `<div class="summary-${key}"><strong>${summary[key] ?? 0}</strong><span>${title}</span></div>`).join("")}<p>单位：${esc(unitNames[lane.unit] || lane.unit)}<br>只统计当前分类，不合并为总分</p></div>${lane.receipt?.current_sources_match === false ? '<div class="notice neutral">' + icon("clock") + "<span>当前显示保留回执；源码已经变化，请结合具体用例证据判断适用范围。</span></div>" : ""}<div class="testing-filters"><label class="search-box">${icon("search")}<input id="testing-query" aria-label="搜索测试用例" placeholder="搜索测试名称、工具或工程" value="${esc(filters.query)}"></label><label>类别<select id="testing-category"><option value="">全部类别</option>${options("category")}</select></label><label>层级<select id="testing-tier"><option value="">全部层级</option>${options("tier")}</select></label><label>工具族<select id="testing-family"><option value="">全部工具族</option>${options("family")}</select></label><label>状态<select id="testing-status"><option value="">全部状态</option>${statusOptions.map((s) => `<option value="${esc(s)}">${esc(statusNames[s] || s)}</option>`).join("")}</select></label></div><div id="testing-cases"></div>${(lane.aggregates || []).length ? `<section class="aggregate-receipts"><h3>Runner 汇总回执</h3>${lane.aggregates.map((a) => `<div><span>${esc(a.name)} <small>${a.recorded_test_count ?? "—"} 项${a.individual_results === 0 ? "，未保存逐项结果" : ""}</small></span>${badge(a.status)}</div>`).join("")}<p>汇总数量与可展开的逐项用例分别保留。</p></section>` : ""}`;
+  const unbound = lane.unbound_history || [];
+  const unboundHtml = unbound.length ? '<details class="tool-contract"><summary>未关联会话的评估：' + unbound.length + ' 条，不计入任务分母</summary><pre>' + esc(JSON.stringify(unbound, null, 2)) + '</pre></details>' : '';
+  return unboundHtml + `<p class="testing-scope">${esc(scopeNote)}</p><div class="testing-summary">${stats.map(([key, title]) => `<div class="summary-${key}"><strong>${summary[key] ?? 0}</strong><span>${title}</span></div>`).join("")}<p>单位：${esc(unitNames[lane.unit] || lane.unit)}<br>只统计当前分类，不合并为总分</p></div>${lane.receipt?.current_sources_match === false ? '<div class="notice neutral">' + icon("clock") + "<span>当前显示保留回执；源码已经变化，请结合具体用例证据判断适用范围。</span></div>" : ""}<div class="testing-filters"><label class="search-box">${icon("search")}<input id="testing-query" aria-label="搜索测试用例" placeholder="搜索测试名称、工具或工程" value="${esc(filters.query)}"></label><label>类别<select id="testing-category"><option value="">全部类别</option>${options("category")}</select></label><label>层级<select id="testing-tier"><option value="">全部层级</option>${options("tier")}</select></label><label>工具族<select id="testing-family"><option value="">全部工具族</option>${options("family")}</select></label><label>状态<select id="testing-status"><option value="">全部状态</option>${statusOptions.map((s) => `<option value="${esc(s)}">${esc(statusNames[s] || s)}</option>`).join("")}</select></label></div><div id="testing-cases"></div>${(lane.aggregates || []).length ? `<section class="aggregate-receipts"><h3>Runner 汇总回执</h3>${lane.aggregates.map((a) => `<div><span>${esc(a.name)} <small>${a.recorded_test_count ?? "—"} 项${a.individual_results === 0 ? "，未保存逐项结果" : ""}</small></span>${badge(a.status)}</div>`).join("")}<p>汇总数量与可展开的逐项用例分别保留。</p></section>` : ""}`;
 }
 function renderTestingCases() {
   const lane = testingLane();
@@ -1680,7 +1693,7 @@ function renderTestingCases() {
                   .map((tag) => `<small>${esc(categoryLabel(tag))}</small>`)
                   .join(
                     "",
-                  )}${c.latest?.current_definition_match === false ? '<small class="historical-label">定义已变化</small>' : ""}${c.latest?.current_inputs?.current_sources_match === false ? '<small class="historical-label">输入已变化</small>' : ""}</span></span><span class="case-evidence">${c.latest ? date(c.latest.started_at) : "尚无执行回执"}${c.history_count > 1 ? `<small>${c.history_count} 次历史记录</small>` : ""}</span>${badge(c.status)}${icon("right")}</button>`,
+                  )}${c.latest?.current_sources_match === false ? '<small class="historical-label">源码已变化</small>' : ""}${c.latest?.current_definition_match === false ? '<small class="historical-label">定义已变化</small>' : ""}${c.latest?.current_inputs?.current_sources_match === false ? '<small class="historical-label">输入已变化</small>' : ""}</span></span><span class="case-evidence">${c.latest ? date(c.latest.started_at) : "尚无执行回执"}${c.history_count > 1 ? `<small>${c.history_count} 次历史记录</small>` : ""}</span>${badge(c.status)}${icon("right")}</button>`,
             )
             .join("")}</div></section>`
         : "";
@@ -1916,7 +1929,7 @@ async function updateSession(id, action, title) {
 function settings() {
   showDialog(
     "运行模式与连接",
-    `<dl class="definition-list"><dt>当前模式</dt><dd>本地上下文与工程工具</dd><dt>模型 API</dt><dd>${state.overview.config.model_api_enabled ? "配置允许，需明确启动会话" : "已停用"}</dd><dt>工作区连接</dt><dd>${esc(location.origin)}</dd><dt>数据保存</dt><dd>本机会话、任务与 artifacts 证据目录</dd></dl><p>本地模式可以检索知识、准备计划、运行工程工具和核验结果。自由对话由原生 Pi Agent 承载，需要单独启用模型配置。</p><p class="technical-note">本轮本地工具流程的其他模型 API 调用为 0；外层 Codex token 未计量。</p>`,
+    `<dl class="definition-list"><dt>当前模式</dt><dd>本地上下文与工程工具</dd><dt>模型 API</dt><dd>${state.overview.config.model_api_enabled ? "配置允许，需明确启动会话" : "已停用"}</dd><dt>工作区连接</dt><dd>${esc(location.origin)}</dd><dt>数据保存</dt><dd>本机会话、任务与 artifacts 证据目录</dd></dl><p>本地模式可以检索知识、准备计划、运行工程工具和核验结果。自由对话由原生 Pi Agent 承载，需要单独启用模型配置。</p><p class="technical-note">本地检索不调用模型。提供商用量以原生会话回执为准；外层 Codex token 单独计量。</p>`,
     [{ label: "知道了", primary: true, action: () => {} }],
   );
 }
@@ -1991,12 +2004,15 @@ async function poll() {
     if (state.view === "sessions" && id) {
       const fresh = await api("session?id=" + encodeURIComponent(id));
       if (version !== state.routeVersion || id !== state.id) return;
-      if (
+      const taskSummaryChanged = JSON.stringify([fresh.agent_task_summary?.task, fresh.agent_task_summary?.goal, fresh.agent_task_summary?.task_acceptance?.status]) !==
+        JSON.stringify([state.session?.agent_task_summary?.task, state.session?.agent_task_summary?.goal, state.session?.agent_task_summary?.task_acceptance?.status]);
+      const messagesChanged =
         JSON.stringify(fresh.messages) !==
           JSON.stringify(state.session?.messages) ||
-        JSON.stringify(fresh.tasks) !== JSON.stringify(state.session?.tasks)
-      ) {
-        state.session = fresh;
+        JSON.stringify(fresh.tasks) !== JSON.stringify(state.session?.tasks);
+      state.session = fresh;
+      if (taskSummaryChanged) updateAgentTaskStrip();
+      if (messagesChanged) {
         renderMessages();
         renderSessionList();
       }

@@ -123,7 +123,7 @@ test('recovered SDK retry retains error history and records final success', asyn
   assert.ok(result.events.some(event => event.type === 'auto_retry_end' && event.success));
 });
 
-test('real Pi compaction events are recorded while public events omit the summary', async () => {
+test('injected Pi compaction events are recorded while public events omit the summary', async () => {
   const result = await exercise('compaction');
   const raw = result.events.find(event => event.type === 'compaction_end');
   assert.equal(raw.result.summary, 'private compacted context');
@@ -393,6 +393,8 @@ test('session verifier uses the fixed workflow and meters the whole owned run on
     .every(event => event.execution_status === 'passed'));
   const evaluated=await runEvaluation(f.root,'online-agent',f.registry,{session_directory:result.directory,workflow_directory:result.run.verification.last_directory});
   assert.equal(evaluated.status,'blocked');assert.equal(evaluated.reason,'injected_session_not_live');
+  assert.equal(evaluated.session,path.relative(f.root,result.directory).replaceAll('\\','/'));
+  assert.equal(evaluated.workflow,path.relative(f.root,result.run.verification.last_directory).replaceAll('\\','/'));
 });
 
 test('nested and denied model tool requests share a bounded run budget, including after cancellation',async t=>{
@@ -476,6 +478,42 @@ test('a verifier without an acceptance contract fails before generating or dispa
     session: fakeSession({prompt: async () => {prompts++;}})})});
   assert.equal(result.status, 'failed'); assert.match(result.run.error, /requires a bound acceptance profile/);
   assert.equal(result.run.task_acceptance.status, 'unknown'); assert.equal(prompts, 0); assert.equal(f.calls.length, 0);
+});
+
+test('truncated generation cannot verify or accept an otherwise passing candidate', async t => {
+  const f=verificationFixture(t);let listener;
+  fs.writeFileSync(path.join(f.root,'rtl.sv'),'module dut; // CANDIDATE_OK\nendmodule\n');
+  const result=await runAgentSession({...f,prompt:'Check design',sessionFactory:async()=>({registry:f.registry,session:fakeSession({
+    subscribe:fn=>{listener=fn;return ()=>{};},prompt:async()=>{
+      listener({type:'message_end',message:{role:'assistant',content:[{type:'text',text:'PASS'}],stopReason:'length'}});
+    },
+  })})});
+  assert.equal(result.status,'failed');assert.match(result.run.error,/truncated/);
+  assert.equal(result.run.task_acceptance.status,'unknown');assert.equal(f.calls.length,0);
+  assert.equal(result.run.provider_observation.assistant_messages,1);
+  assert.equal(result.run.provider_observation.successful_assistant_messages,0);
+});
+
+test('SDK recovery after a length response can complete before host verification', async t => {
+  const f=verificationFixture(t);let listener;
+  fs.writeFileSync(path.join(f.root,'rtl.sv'),'module dut; // CANDIDATE_OK\nendmodule\n');
+  const result=await runAgentSession({...f,prompt:'Check design',sessionFactory:async()=>({registry:f.registry,session:fakeSession({
+    subscribe:fn=>{listener=fn;return ()=>{};},prompt:async()=>{
+      for(const stopReason of ['length','toolUse','stop'])listener({type:'message_end',message:{role:'assistant',content:[],stopReason}});
+    },
+  })})});
+  assert.equal(result.status,'completed');assert.equal(result.run.error,null);
+  assert.equal(result.run.task_acceptance.status,'passed');assert.equal(f.calls.length,1);
+  assert.equal(result.run.provider_observation.assistant_messages,3);
+  assert.equal(result.run.provider_observation.successful_assistant_messages,2);
+});
+
+test('ordinary sessions also preserve an unrecovered length response as failed', async t => {
+  const root=recordingFixture(t);let listener;
+  const result=await runAgentSession({root,prompt:'Complete analysis',sessionFactory:async()=>({session:fakeSession({
+    subscribe:fn=>{listener=fn;return ()=>{};},prompt:async()=>listener({type:'message_end',message:{role:'assistant',content:[],stopReason:'length'}}),
+  })})});
+  assert.equal(result.status,'failed');assert.match(result.run.error,/truncated/);
 });
 
 test('final independent evidence read rejects RTL drift after a passing loop', async t => {

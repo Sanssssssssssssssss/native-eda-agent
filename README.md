@@ -4,7 +4,7 @@
 
 当前重点是 **可追溯的知识指导、固定验收、可靠执行和结果复核**。模型提供商 API 默认关闭；下列本地工具和离线检查不需要模型 API key。
 
-[任务闭环](docs/agent-lifecycle.md) · [NVIDIA 反馈接入](docs/ace-rtl-adaptation.md) · [工程工作台](docs/workbench-v08.md) · [分类评测](docs/evaluation.md) · [核心机制](docs/mechanisms.md) · [RAG 与 SOP](docs/knowledge-and-sops.md) · [功能成绩](docs/results.md) · [仓库结构](docs/repository-layout.md) · [全部文档](docs/README.md)
+[任务闭环](docs/agent-lifecycle.md) · [稳定性实测](docs/stability-2026-10-26.md) · [NVIDIA 反馈接入](docs/ace-rtl-adaptation.md) · [工程工作台](docs/workbench-v08.md) · [分类评测](docs/evaluation.md) · [核心机制](docs/mechanisms.md) · [RAG 与 SOP](docs/knowledge-and-sops.md) · [功能成绩](docs/results.md) · [仓库结构](docs/repository-layout.md) · [全部文档](docs/README.md)
 
 ## 项目亮点
 
@@ -31,8 +31,8 @@
 | 物理优化 | 7 个本地策略、准入与复测；历史 AXI 运行 2 个候选，实测 WNS 收益 0 ns | 仅其中 2 类 reroute 有实跑；未复现竞赛排名 |
 | 模拟电路 | LTspice RC AC/瞬态、独立解析解校验；历史四项测量误差均低于固定 0.2% 阈值 | RC 基础案例；新代理版本未重跑商业工具 |
 | 知识与 SOP | 36 规则 / 21 来源 / 6 SOP；24 条可见检索回归 Hit@5 为 24/24 | 检索相关性；不是回答正确率或设计通过率 |
-| Agent 工程机制 | 输入/知识冻结、预算、恢复、MCP、资源并发、trace、真实 Pi 资源加载等离线检查 | 假 EDA、本机进程与协议验收；当前回执见 release/validation.json 和 CI |
-| 独立 verifier 闭环 | 限定 RTL、固定 checker、失败诊断、修复复验、压缩后重建任务状态 | 离线两轮 failed → passed；真实上游反馈、假生成器/EDA；[公开回执](release/README.md) |
+| Agent 工程机制 | 输入/知识冻结、预算、恢复、MCP、资源并发、trace、真实 Pi 资源加载等离线检查 | 假 EDA、本机进程与协议验收；当前回执见 release/validation-stability.json 和 CI |
+| 独立 verifier 闭环 | 原生 Pi / CommandCode 驱动 Counter、AXI、DMA、AES SoC、Ethernet 修复；固定 checker 与真实 XSim | 可见定向任务；AXI OOC 因 DRC 待审查，限额停止与中断流均保留；[实测范围](docs/stability-2026-10-26.md) |
 
 详细协议、失败、资源和证据索引见 [功能成绩](docs/results.md)。历史 11 组成绩保持原协议；Counter、真实 DRC 查询和完整 AXI 结果单列于功能成绩。接口数量单列在 [工具合同](docs/reference/tools.md)：57 个原生入口，其中 28 个为共享执行器的细粒度合同；可选社区后端另有 45 个工具与 11 个 prompts。
 
@@ -54,9 +54,9 @@ flowchart LR
   T --> B[离线 / 真实 EDA / Agent 会话评测]
 ```
 
-验证任务会按实际失败域自动检索 RAG/SOP，普通探索会话仍可按需调用知识工具。宿主执行固定参数、预算、检查与恢复条件；模型负责分析、查阅和修复。Pi 会话与 CLI 共用驱动，支持会话续接和公开事件；当前模型 API 关闭，驱动用假 SDK 检查。向量索引、自动答案引用核验与强沙箱尚未提供。具体实现和缺口见 [机制检查](docs/mechanisms.md)。
+验证任务会按实际失败域自动检索 RAG/SOP，普通探索会话仍可按需调用知识工具。宿主执行固定参数、预算、检查与恢复条件；模型负责分析、查阅和修复。Pi 会话与 CLI 共用驱动，支持会话续接和公开事件。仓库默认关闭模型 API；授权后在本机配置提供商。原生 Pi 1.4、CommandCode 与真实 XSim/Vivado 的限定实测见 [稳定性记录](docs/stability-2026-10-26.md)。向量索引、自动答案引用核验与强沙箱尚未提供。
 
-可选 [ACE-RTL 验证循环](docs/ace-rtl-adaptation.md) 已接入同一 Pi 会话：候选 RTL → 固定工程验收 → NVIDIA 原版反馈组件 → 修复 → 复验。宿主判定通过条件、检查输入漂移并限制累计预算；压缩后重新读取工程证据。当前验证采用假 EDA/假生成器和真实上游反馈组件，未增加模型实跑成绩。
+可选 [ACE-RTL 验证循环](docs/ace-rtl-adaptation.md) 已接入同一 Pi 会话：候选 RTL → 固定工程验收 → NVIDIA 原版反馈组件 → 修复 → 复验。宿主判定通过条件、检查输入漂移并限制累计预算；压缩后重新读取工程证据。已实测 Counter、AXI 协议、DMA、AES SoC 和三时钟 Ethernet 修复；完整 AXI 实现因 DRC 警告保持待审查。可见 checker 的调试成绩不计为盲测 pass@1。
 
 静态检查 AXI 的闭环合同：`node src/agent.mjs verification plan examples/verification/axi-fabric.json`。离线演示两轮修复：`node scripts/demo-verifier-loop.mjs`。两者均不启动模型或 EDA。
 
@@ -100,7 +100,7 @@ npm run evaluate -- run offline-retrieval
 
 从“工程资产”进入项目，可查看 RTL 和验证状态、逐行阅读源码并选择修改范围。当前模型停用时可手动填写替换内容，审阅差异后创建候选；原工程保持原件，候选单独保存且标为未验证。候选只覆盖已枚举源码与测试输入，生成目录不表示独立可构建或工程通过。流程与借鉴来源见 [v0.8 工作台](docs/workbench-v08.md)。
 
-当前使用本地检索与工具模式。原生 Pi 聊天入口已接入同一会话工作台，但受 `model_api_enabled=false` 阻止；本轮没有真实模型聊天或模型质量成绩。应用重启可以重新查看会话和任务；中断任务保留证据，不自动重放。服务限本机单用户，尚无独立桌面安装包、多用户权限或 steer/compaction 操作界面。
+默认使用本地检索与工具模式。原生 Pi 聊天入口已接入同一会话工作台，提供商调用由 `model_api_enabled` 与本机配置控制。真实取消、续跑、压缩和 MCP 调用已有限定实测。应用重启可以重新查看会话和任务；中断任务保留证据，不自动重放。服务限本机单用户，尚无独立桌面安装包、多用户权限或 steer/compaction 操作界面。
 
 ## 仓库导航
 

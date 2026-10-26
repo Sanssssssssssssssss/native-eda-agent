@@ -6,10 +6,28 @@ import path from 'node:path';
 import {createHash} from 'node:crypto';
 import {createTrace} from '../src/trace.mjs';
 import {inspectWorkflow} from '../src/workflow.mjs';
-import {runVerifiedLoop} from '../src/verifier-loop.mjs';
+import {runVerifiedLoop,aceFeedback} from '../src/verifier-loop.mjs';
 
 const project=path.resolve(import.meta.dirname,'..');
 const sha=value=>createHash('sha256').update(value).digest('hex');
+
+test('feedback subprocess preserves UTF-8 split across stdout and stderr chunks',async t=>{
+  const root=fs.mkdtempSync(path.join(os.tmpdir(),'eda-feedback-utf8-'));
+  t.after(()=>{assert.equal(path.dirname(fs.realpathSync(root)),fs.realpathSync(os.tmpdir()));assert.ok(path.basename(root).startsWith('eda-feedback-utf8-'));fs.rmSync(root,{recursive:true,force:true});});
+  fs.mkdirSync(path.join(root,'scripts'));
+  fs.writeFileSync(path.join(root,'scripts/ace-rtl-feedback.py'),String.raw`import sys, json, time
+request = json.loads(sys.stdin.buffer.read())
+data = json.dumps({"context":"AXI时序🔧复核"}, ensure_ascii=False).encode("utf-8")
+stream = sys.stderr.buffer if request.get("fail") else sys.stdout.buffer
+cut = data.index("时".encode("utf-8")) + 1
+stream.write(data[:cut]); stream.flush()
+time.sleep(0.05)
+stream.write(data[cut:]); stream.flush()
+sys.exit(2 if request.get("fail") else 0)
+`);
+  assert.equal((await aceFeedback(root,{})).context,'AXI时序🔧复核');
+  await assert.rejects(aceFeedback(root,{fail:true}),/ACE feedback failed \(2\).*AXI时序🔧复核/);
+});
 
 function fixture(t,{unbound=false,unknown=false,beforeVerify}={}){
   const root=fs.mkdtempSync(path.join(os.tmpdir(),'eda-verifier-loop-'));

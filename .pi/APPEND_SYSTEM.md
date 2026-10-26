@@ -1,6 +1,6 @@
 # EDA workspace
 
-Use Chinese unless requested otherwise. Read `.eda/config.json`: model provider APIs are currently disabled. Local tools, knowledge lookup and offline checks remain available. Respect current user scope and authorization; never read or persist credentials. Do not launch vendored model optimizers. Report other-model API calls separately from unknown outer Codex usage.
+Use Chinese unless requested otherwise. Read `.eda/config.json` for the current model API policy; provider calls require both an enabled configuration and the user's authorization. Local tools, knowledge lookup and offline checks remain available. Respect current user scope and authorization; never read or persist credentials. Do not launch vendored model optimizers. Report other-model API calls separately from unknown outer Codex usage.
 
 ## Choose guidance and freeze the task
 

@@ -38,6 +38,21 @@ test('plan dispatches nothing; run resolves prior outputs and records causal chi
   assert.equal(child.trace_id,r.details.receipt.trace_id);assert.equal(child.parent_span_id,r.details.receipt.span_id);
   assert.ok(inspectWorkflow(f.root,r.details.directory,{resume:true}).issues.includes('already_completed'));
 });
+
+test('a completed child with failed checks supplies bounded verified diagnostics, rejected after tampering',async t=>{
+  const message='Fatal: IPV4_LENGTH_REJECTION expected=drop actual=forward';
+  const f=fixture(t,async()=>({ok:false,transcript_tail:'earlier output\n'.repeat(2000)+message}));
+  const result=await f.run('run'),checked=inspectWorkflow(f.root,result.details.directory);
+  assert.equal(checked.valid,true);assert.equal(checked.outcome,'checks_failed');
+  assert.ok(checked.failure_diagnostic.endsWith(message));
+  assert.ok(Buffer.byteLength(checked.failure_diagnostic)<=6144);
+  assert.equal(f.calls.length,1,'A failed checker must not dispatch the second workflow step');
+  const file=path.join(f.root,checked.state.failed_step.result_path),saved=JSON.parse(fs.readFileSync(file,'utf8'));
+  saved.transcript_tail='FORGED_PASS';fs.writeFileSync(file,JSON.stringify(saved));
+  const changed=inspectWorkflow(f.root,result.details.directory);
+  assert.equal(changed.valid,false);assert.equal(changed.failure_diagnostic,null);
+  assert.ok(changed.issues.some(issue=>issue.startsWith('failed_evidence:')));
+});
 test('tool failure resumes in a new run and reuses only the committed prefix',async t=>{
   let second=0;const f=fixture(t,async name=>{if(name==='eda_results_verify'&&second++===0)throw new Error('synthetic tool failure');return {ok:true,token:'evidence'};});
   const failed=await f.run('run');assert.equal(failed.isError,true);assert.equal(failed.details.outcome,'tool_error');
@@ -72,7 +87,7 @@ test('invalid references, missing checks and arbitrary Tcl are rejected before d
   const f=fixture(t);f.spec.steps[1].args.hidden='override';f.save();assert.throws(()=>planWorkflow(f.root,'task.json',f.registry),/unexpected/);delete f.spec.steps[1].args.hidden;
   f.spec.steps[0].args={token:{$result:{step:'second',pointer:'/token'}}};f.save();assert.throws(()=>planWorkflow(f.root,'task.json',f.registry),/earlier/);
   f.spec.steps[0].args={};f.spec.steps[0].tool='eda_vivado';f.save();assert.throws(()=>planWorkflow(f.root,'task.json',f.registry),/Unsupported/);
-  f.spec.steps[0].tool='eda_preflight';f.spec.steps[0].checks=[];f.save();assert.throws(()=>planWorkflow(f.root,'task.json',f.registry),/array/);
+  f.spec.steps[0].tool='eda_preflight';f.spec.steps[0].checks=[];f.save();assert.throws(()=>planWorkflow(f.root,'task.json',f.registry),/checks/);
   assert.equal(f.calls.length,0);
   assert.throws(()=>pointerValue({},'/__proto__'),/Missing/);assert.equal(evaluateChecks({slack:null},[{pointer:'/slack',op:'gte',value:0}])[0].passed,false);
 });

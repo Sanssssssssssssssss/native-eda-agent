@@ -1,0 +1,349 @@
+{
+  "schema_version": 1,
+  "scope": "Real EDA validation of exported code; no model calls and no new autonomous repair score",
+  "model_api_calls": 0,
+  "axi_protocol_workflow": {
+    "execution": "completed",
+    "outcome": "acceptance_review_required",
+    "acceptance": "review_required",
+    "domains": [
+      {
+        "domain": "functional",
+        "status": "passed",
+        "observed": {
+          "status": "pass",
+          "pass_marker": "HARD_BENCH_PASS project=axi_fabric_protocol",
+          "marker_matches": 1,
+          "completion_observed": true,
+          "failure_diagnostic": false,
+          "scope": "Explicit testbench marker, completion and diagnostic checks; semantic assertions remain the testbench responsibility."
+        }
+      },
+      {
+        "domain": "synthesis",
+        "status": "passed",
+        "observed": 0
+      },
+      {
+        "domain": "setup",
+        "status": "passed",
+        "observed": 2.393
+      },
+      {
+        "domain": "hold",
+        "status": "passed",
+        "observed": 0.058
+      },
+      {
+        "domain": "constraints",
+        "status": "passed",
+        "observed": {
+          "internal": "pass",
+          "io": "pass"
+        }
+      },
+      {
+        "domain": "routing",
+        "status": "passed",
+        "observed": "pass"
+      },
+      {
+        "domain": "drc",
+        "status": "review_required",
+        "observed": {
+          "errors": 0,
+          "critical_warnings": 0,
+          "warnings": 2
+        }
+      },
+      {
+        "domain": "cdc",
+        "status": "not_requested"
+      },
+      {
+        "domain": "artifact_integrity",
+        "status": "not_requested"
+      }
+    ],
+    "workflow_receipt_sha256": "9e9d9abef2bfc3442622ad8616836b4d065b32e726ed459a2fd045ce57e96a0e",
+    "checker_sha256": "5383621fe7348127c14742b4cdacb9cbd21043fdad4e844af8f85838c9b0fa54",
+    "coverage": {
+      "bursts": 4656,
+      "internal_channels": 15,
+      "each_internal_channel_nonzero": true
+    },
+    "note": "Original preserved RTL under the strengthened checker. Setup/hold are not comparable as optimization gain against separately modified model candidates."
+  },
+  "adapter_integration": {
+    "passed": true,
+    "checks": [
+      {
+        "label": "catalog-commands",
+        "tool": "eda_vivado_catalog",
+        "passed": true,
+        "duration_ms": 3726,
+        "run_id": "2026-10-26T10-19-48-039Z-eda_vivado_catalog-05dd9e16",
+        "trace_manifest_sha256": "99ae5951aea22063da9bcb4bf9ac543967808fe1c8a23dc41d23ef45d68562e1"
+      },
+      {
+        "label": "catalog-query-is-data",
+        "tool": "eda_vivado_catalog",
+        "passed": true,
+        "duration_ms": 3729,
+        "run_id": "2026-10-26T10-19-51-699Z-eda_vivado_catalog-d388b68c",
+        "trace_manifest_sha256": "9b7a3336266aedd0f88e015cdacc6007df0c11fae4569285cbfc863db781714b"
+      },
+      {
+        "label": "catalog-part",
+        "tool": "eda_vivado_catalog",
+        "passed": true,
+        "duration_ms": 3493,
+        "run_id": "2026-10-26T10-19-55-429Z-eda_vivado_catalog-52dff786",
+        "trace_manifest_sha256": "5d37e42c0ec037b4c3545c542fa8964c9da0d5e1e070ee8af7e968e5fabfbf25"
+      },
+      {
+        "label": "xsim-options-mixed-language",
+        "tool": "eda_xsim",
+        "passed": true,
+        "duration_ms": 11749,
+        "run_id": "2026-10-26T10-19-47-976Z-eda_xsim-fc23b5b2",
+        "trace_manifest_sha256": "89f32100b0079c2378b154977ad42bc111792845426b45d7776728fc793c7bfd"
+      },
+      {
+        "label": "catalog-ip",
+        "tool": "eda_vivado_catalog",
+        "passed": true,
+        "duration_ms": 6649,
+        "run_id": "2026-10-26T10-19-58-923Z-eda_vivado_catalog-fa23d119",
+        "trace_manifest_sha256": "06616eede259254b2ccc214daff6d1f214782726d8fa13e887c86a48ac477782"
+      },
+      {
+        "label": "xsim-fatal-negative",
+        "tool": "eda_xsim",
+        "passed": true,
+        "duration_ms": 10770,
+        "run_id": "2026-10-26T10-19-59-722Z-eda_xsim-60d6790a",
+        "trace_manifest_sha256": "f175124e04fb25a245a0f3bae3a42e8e06a34f613fa240459994ba83012059d5"
+      },
+      {
+        "label": "axi-functional-regression",
+        "tool": "eda_xsim",
+        "passed": true,
+        "duration_ms": 22226,
+        "run_id": "2026-10-26T10-20-10-493Z-eda_xsim-e08eed6c",
+        "trace_manifest_sha256": "ef1552473f86df60b789232380528437fba03d8216f016979cec425abf29b7ab"
+      },
+      {
+        "label": "axi-synthesize",
+        "tool": "eda_vivado_synthesize",
+        "passed": true,
+        "duration_ms": 79552,
+        "run_id": "2026-10-26T10-20-05-573Z-eda_vivado_synthesize-e3737a1f",
+        "trace_manifest_sha256": "af7f5f955247d4228c17910d294dfad26c9179c2eaa76fc59cf86752b4c6ca90"
+      },
+      {
+        "label": "axi-implement",
+        "tool": "eda_vivado_implement",
+        "passed": true,
+        "duration_ms": 54466,
+        "run_id": "2026-10-26T10-21-25-125Z-eda_vivado_implement-7afdd0be",
+        "trace_manifest_sha256": "8e5e82f050ba525fb1cb430bddab4a08e4042cc82deaf7626e8caf57fe7c2bae"
+      },
+      {
+        "label": "ethernet-cdc-diagnostics",
+        "tool": "eda_vivado_reports",
+        "passed": true,
+        "duration_ms": 24995,
+        "run_id": "2026-10-26T10-22-19-592Z-eda_vivado_reports-565b350f",
+        "trace_manifest_sha256": "baf48d6e54090ccfdbe1ac643cf80ff5ddae1a1401cc8280fb42e5f7eb6e178d"
+      },
+      {
+        "label": "crypto-critical-paths",
+        "tool": "eda_vivado_timing_paths",
+        "passed": true,
+        "duration_ms": 21975,
+        "run_id": "2026-10-26T10-22-44-588Z-eda_vivado_timing_paths-9f721c66",
+        "trace_manifest_sha256": "e285b38e8646f17b563072502ce528027b2c99f6a9c237d397884f9678b3d2fb"
+      },
+      {
+        "label": "crypto-block-ram-objects",
+        "tool": "eda_vivado_objects",
+        "passed": true,
+        "duration_ms": 19842,
+        "run_id": "2026-10-26T10-23-06-563Z-eda_vivado_objects-ffeed8d3",
+        "trace_manifest_sha256": "9d5d767bc03b815c3d48a5b6d96acd13c0b4eab2d0b8479daf8d5253441b6bf0"
+      }
+    ],
+    "receipt_sha256": "1b28c69955179b876190eac9fcdcc7d5f3ed2e204af4bca910612d20825c6632",
+    "script_sha256": "a77def63c080dbfc94135579a399366a0897edaf6a49a26010074676e5e4c49a",
+    "checkpoint_inputs": [
+      {
+        "project": "ethernet-cdc",
+        "sha256": "4d664b25fcf1109267c3074248b5821113967e6de7c54e755bf07709a3a4ff1b",
+        "scope": "Historical routed checkpoint; adapter diagnostic check only, not a new source build"
+      },
+      {
+        "project": "crypto-soc",
+        "sha256": "966e85f3f14e0f580dccf25826f4c77f5c7d5ff2e118ad6667d6f1642696b1bf",
+        "scope": "Historical routed checkpoint; adapter diagnostic check only, not a new source build"
+      }
+    ],
+    "retained_baseline": {
+      "reason": "hardcoded 15-tool assertion rejected the current 57-tool registry",
+      "receipt_sha256": "0e34bbf4945e098762164563f3c3841ce6a6547987f25ca1736bf49182bc65dc"
+    },
+    "missing_checkpoint_preflight": {
+      "stopped_before_eda": true,
+      "checks": 0,
+      "receipt_sha256": "fe037af7710a2b426c1390b4384400b4cb8b302ef45c4bc904924a89bdef90d7"
+    }
+  },
+  "generated_at": "2026-10-26T10:27:45.235Z",
+  "project_ip_bd": {
+    "passed": true,
+    "checks": 33,
+    "tools": 45,
+    "prompts": 11,
+    "source_unchanged": true,
+    "receipt_sha256": "e19828bc15c85a21220d2ab6571c3afbddedced918a2eb8dd32ff1934e1a8ded",
+    "scope": "Upgraded main-workspace traced MCP proxy project/IP/Block Design integration, adapted from the existing acceptance script; expected negative results require proxy isError; not a design benchmark",
+    "labels": [
+      {
+        "label": "start",
+        "passed": true
+      },
+      {
+        "label": "create-project",
+        "passed": true
+      },
+      {
+        "label": "duplicate-project-rejected",
+        "passed": true
+      },
+      {
+        "label": "vivado-illegal-filename-rejected",
+        "passed": true
+      },
+      {
+        "label": "add-source-with-special-path",
+        "passed": true
+      },
+      {
+        "label": "wrong-project-rejected",
+        "passed": true
+      },
+      {
+        "label": "create-clock-ip",
+        "passed": true
+      },
+      {
+        "label": "invalid-ip-property-rejected",
+        "passed": true
+      },
+      {
+        "label": "configure-clock-ip",
+        "passed": true
+      },
+      {
+        "label": "generate-clock-ip",
+        "passed": true
+      },
+      {
+        "label": "create-bd",
+        "passed": true
+      },
+      {
+        "label": "add-axi-interconnect",
+        "passed": true
+      },
+      {
+        "label": "add-gpio-0",
+        "passed": true
+      },
+      {
+        "label": "connect-axi-0",
+        "passed": true
+      },
+      {
+        "label": "expose-gpio-0",
+        "passed": true
+      },
+      {
+        "label": "add-gpio-1",
+        "passed": true
+      },
+      {
+        "label": "connect-axi-1",
+        "passed": true
+      },
+      {
+        "label": "expose-gpio-1",
+        "passed": true
+      },
+      {
+        "label": "invalid-endpoint-rejected",
+        "passed": true
+      },
+      {
+        "label": "expose-slave-axi",
+        "passed": true
+      },
+      {
+        "label": "expose-clock",
+        "passed": true
+      },
+      {
+        "label": "expose-reset",
+        "passed": true
+      },
+      {
+        "label": "connect-clocks",
+        "passed": true
+      },
+      {
+        "label": "connect-resets",
+        "passed": true
+      },
+      {
+        "label": "assign-addresses",
+        "passed": true
+      },
+      {
+        "label": "validate-generate-export-bd",
+        "passed": true
+      },
+      {
+        "label": "export-project",
+        "passed": true
+      },
+      {
+        "label": "close-project",
+        "passed": true
+      },
+      {
+        "label": "reopen-project",
+        "passed": true
+      },
+      {
+        "label": "reopen-validate-bd",
+        "passed": true
+      },
+      {
+        "label": "reconstruct-exported-project",
+        "passed": true
+      },
+      {
+        "label": "stop",
+        "passed": true
+      },
+      {
+        "label": "sessions-closed",
+        "passed": true
+      }
+    ]
+  },
+  "retained_operator_error": {
+    "scope": "Initial test project path was outside the exported workspace and was rejected before mutation; subsequent run used the upgraded main workspace.",
+    "receipt_sha256": "0bfabee84d90f49ff3ac7adec9ae120ca1470c80f9c7650059c7f338f98d94ff"
+  }
+}

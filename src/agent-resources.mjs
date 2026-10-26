@@ -1,5 +1,14 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import {fileURLToPath} from 'node:url';
+
+// Inspect the installed package without initializing the SDK or its providers.
+export function installedPiVersion() {
+  try {
+    const entry=fileURLToPath(import.meta.resolve('@earendil-works/pi-coding-agent'));
+    return JSON.parse(fs.readFileSync(path.join(path.dirname(entry),'../package.json'),'utf8')).version;
+  } catch {return null;}
+}
 
 export const skillDirectories = ['.pi/skills','.agents/skills'];
 // Auxiliary classifier/image calls bypass tool_call and the host verifier budget.

@@ -16,6 +16,8 @@
 
 这里的 online EDA 指实际运行 EDA 工具，不要求网络或模型。`online-agent` 是已有会话的验收入口，不会启动模型提供商；缺目录、注入会话、缺少执行来源的旧会话或无有效响应事件均记 blocked。来源必须是宿主内置 Pi SDK factory，并与起始事件、prompt 之后的响应计数一致；provider/model 名称不能代替执行来源。工程证据不满足记 failed。它只证明这一次已记录会话与工程目标，不证明模型一般能力、盲测、独立参考质量或提供商账单。
 
+在线任务的分母按规范化的 **session/workflow 对**计算；同一对的重复评估进入该任务历史。失败回执也保留已经验证合法的关联路径。旧回执缺少关联对象时展示在未关联历史中，不补造一个任务；当前源码变化会在案例行标记。模型以 `length` 截断结束且没有被 Pi 原生机制恢复时，不进入宿主 verifier，也不计为有效完成响应。
+
 `offline-agent-loop` 要求完整的 12 场景、9 类覆盖与 TAP 汇总一致；SKIP、TODO、缺项、重复或提前结束不能记作全通过。覆盖协议见 [evaluation-contracts](../src/evaluation-contracts.mjs)，新增场景需同步更新协议。
 
 ```powershell
@@ -41,7 +43,7 @@ npm run evaluate -- run online-agent --session artifacts/NATIVE_AGENT --workflow
 
 本轮真实 Counter 验证固定 `COUNTER_PASS`，321 次检查、1 次回绕、7 次保持、3 次复位；只覆盖功能 profile。真实 Ethernet DCP 的 DRC 查询得到 0 error、0 critical warning、2 warning，按严格策略需要审查。这两项与历史 11 组成绩分别记录。完整发布回执见 [release](../release/README.md)，AXI 本轮结果见 [功能成绩](results.md)。
 
-模型 API 当前停用；评测器提供商调用为 0。没有新真实 Agent 端到端分数，没有独立盲测/答案忠实度结果。外层 Codex token 未计量，不能由 0 个提供商调用推算为 0 token。
+评测器本身的提供商调用为 0；已有会话可能包含真实模型调用。2026-10-26 使用授权的 CommandCode 接口进行了原生 Pi 稳定性实测，见 [限定场景、失败和用量口径](stability-2026-10-26.md)。这些可见场景没有独立盲测或答案忠实度分数。外层 Codex token 与提供商用量分别计量，未回执预留不能记作实际消耗。
 
 协议或验收变化后另建运行，保留旧失败。改时钟、放宽 watchdog、替换 checker 或更换 DUT 参数后的成绩不可直接当作同一协议的提升。SOP 自然语言遵循率目前没有自动评分器。
 

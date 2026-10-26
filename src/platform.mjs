@@ -9,6 +9,7 @@ import { platformSurfaces } from './tools/focused.mjs';
 import { specializeSchema } from './tool-contracts.mjs';
 import { historyDefinitions, getResult, resultPath } from './results.mjs';
 import { queryKnowledge, querySop, knowledgeFiles } from './knowledge.mjs';
+import { installedPiVersion } from './agent-resources.mjs';
 export { queryKnowledge } from './knowledge.mjs';
 
 const string = { type: 'string', minLength: 1 };
@@ -27,7 +28,7 @@ export function artifactPath(root, value) {
 export function doctor(root) {
   const vivado = path.join(process.env.EDA_VIVADO_BIN || 'E:\\Xilinx\\Vivado\\2020.2\\bin', 'vivado.bat');
   const ltspice = path.join(root, 'runtime/ltspice/LTspice.exe');
-  return { schema_version: 1, node: process.version, pi: '1.3.0', workspace: root,
+  return { schema_version: 1, node: process.version, pi: installedPiVersion(), workspace: root,
     config: readConfig(root), vivado: { path: vivado, exists: fs.existsSync(vivado) },
     ltspice: { path: ltspice, exists: fs.existsSync(ltspice) },
     provider: { model_api_enabled: readConfig(root).model_api_enabled, key_present: Boolean(process.env.DEEPSEEK_API_KEY), key_value_recorded: false },

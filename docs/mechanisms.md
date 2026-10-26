@@ -8,11 +8,11 @@
 | 知识检索与 SOP | [knowledge](../src/knowledge.mjs) → [platform](../src/platform.mjs)；有排名、来源、适用条件、文件哈希和统一 SOP 入口 | 检索指导与设计证明分别判断；详见 [知识与 SOP](knowledge-and-sops.md) |
 | 阶段与工具选择 | [task-context](../src/task-context.mjs)；阶段、规则关联选择最多两个 SOP，返回对应实际 schema 与重新核验的任务状态 | 不自动替换模型当前工具集合；无 blind SOP 选择分数 |
 | 宿主工程目标 | [task-outcome](../src/task-outcome.mjs)；三类 profile，固定身份/时钟/DCP 来源，回读已提交结果，分领域判定 | 参考模型独立性、formal 与硬件另行验收 |
-| 生成与独立验证循环 | [verifier-loop](../src/verifier-loop.mjs) → 固定 workflow → 原版 ACE-RTL 反馈 → 同一 Pi 会话修复；限定 RTL、累计调用预算、重复失败停止、最终证据复核 | 显式配置启用；离线假 EDA 验证，真实模型/设计质量尚未测评；修改范围是漂移检查，不是 OS 沙箱 |
+| 生成与独立验证循环 | [verifier-loop](../src/verifier-loop.mjs) → 固定 workflow → 原版 ACE-RTL 反馈 → 同一 Pi 会话修复；限定 RTL、累计调用预算、重复失败停止、最终证据复核 | 显式配置启用；已有真实提供商限定修复实测，无盲测质量分数；修改范围是漂移检查，不是 OS 沙箱 |
 | 长任务状态恢复 | [eda-coordinator](../src/eda-coordinator.mjs)；每次 context 回读绑定 workflow，按当前会话分支恢复目录指针，压缩后重建工程事实 | 保留 Pi 默认压缩；恢复公开状态和证据，不还原模型内部推理 |
-| Agent 上下文与会话 | [agent-resources](../src/agent-resources.mjs) → [agent-session](../src/agent-session.mjs)；CLI/工作台共用 Pi 驱动，加载项目技能、记录 resources_loaded、续接本项目会话文件并冻结续接前记录 | API 当前停用；真实 loader 与假 SDK 验证不等于真实 provider 评估；无 steer/compaction 操作界面 |
+| Agent 上下文与会话 | [agent-resources](../src/agent-resources.mjs) → [agent-session](../src/agent-session.mjs)；CLI/工作台共用 Pi 1.4 驱动，加载项目技能、记录 resources_loaded、续接本项目会话文件并冻结续接前记录 | API 默认关闭；授权实测见[稳定性记录](stability-2026-10-26.md)；无 steer/compaction 操作界面 |
 | 多工具任务合同 | [workflow](../src/workflow.mjs)；固定规格/输入/知识/代码，解析前序结果引用，每步显式 checks；失败即停 | 串行流程；不自动补充未声明的设计验收项 |
-| 本地会话与评测 | [workbench](../src/workbench.mjs)、[workbench-state](../src/workbench-state.mjs)、[evaluations](../src/evaluations.mjs)；持久会话/任务/job/事件，计划哈希复核、取消和所有者检查；六类评测独立计分 | 本机单用户；重启不自动重放；真实线上会话成绩尚未实测 |
+| 本地会话与评测 | [workbench](../src/workbench.mjs)、[workbench-state](../src/workbench-state.mjs)、[evaluations](../src/evaluations.mjs)；持久会话/任务/job/事件，计划哈希复核、取消和所有者检查；六类评测独立计分 | 本机单用户；重启不自动重放；在线任务按会话/工程对计数，未关联旧回执不进分母 |
 | 工程资产与测试分类 | [workbench-projects](../src/workbench-projects.mjs)、[workbench-testing](../src/workbench-testing.mjs)；工程/源码/模块声明关联固定输入、领域报告；五层测试展开逐例、历史与独立分母 | 词法声明不等于层次展开；历史证据不代表当前重跑；只有汇总日志的测试不补造逐例结果 |
 | 限定源码修改 | [workbench-changes](../src/workbench-changes.mjs)；预览 SHA、文件与行范围、原件快照、差异指纹、受保护输入和单次候选创建；每次写前检查漂移 | 仅此修改接口约束；不是任意 shell 的沙箱；源码候选尚需绑定完整依赖与工程验证 |
 | 资源与进程管理 | [runtime](../src/runtime.mjs)；FIFO 资源租约，跨进程调度、超时、取消与所有者检查 | 默认 XSim 2 / Vivado 1 / LTspice 1；主机执行，不是容器或 VM 沙箱 |

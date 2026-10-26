@@ -82,13 +82,14 @@ export function aceFeedback(root, request, signal) {
     const bundled = path.join(root,'runtime/vivado-community-venv/Scripts/python.exe');
     const child = spawn(fs.existsSync(bundled)?bundled:'python',[path.join(root,'scripts/ace-rtl-feedback.py')],
       {cwd:root,windowsHide:true,stdio:['pipe','pipe','pipe'],env:{...process.env,PYTHONIOENCODING:'utf-8',PYTHONDONTWRITEBYTECODE:'1'}});
+    child.stdout.setEncoding('utf8'); child.stderr.setEncoding('utf8');
     let stdout='',stderr='',settled=false;
     const finish=(error,value)=>{if(settled)return;settled=true;clearTimeout(timer);signal?.removeEventListener('abort',abort);error?reject(error):resolve(value);};
     const abort=()=>{child.kill();finish(signal?.reason||new Error('Feedback cancelled'));};
     const timer=setTimeout(()=>{child.kill();finish(new Error('ACE feedback exceeded 15 seconds'));},15000);
     child.on('error',error=>finish(error));child.stdin.on('error',error=>finish(error));
-    child.stdout.on('data',bytes=>{stdout+=bytes.toString();if(Buffer.byteLength(stdout)>131072){child.kill();finish(new Error('ACE feedback exceeded output budget'));}});
-    child.stderr.on('data',bytes=>{stderr=(stderr+bytes.toString()).slice(-4000);});
+    child.stdout.on('data',text=>{stdout+=text;if(Buffer.byteLength(stdout)>131072){child.kill();finish(new Error('ACE feedback exceeded output budget'));}});
+    child.stderr.on('data',text=>{stderr=(stderr+text).slice(-4000);});
     child.on('close',code=>{if(code!==0)return finish(new Error(`ACE feedback failed (${code}): ${stderr}`));try{finish(null,JSON.parse(stdout));}catch(error){finish(error);}});
     signal?.addEventListener('abort',abort,{once:true});
     if(signal?.aborted)abort();else child.stdin.end(JSON.stringify(request));

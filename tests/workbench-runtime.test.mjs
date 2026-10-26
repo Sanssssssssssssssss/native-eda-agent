@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import os from 'node:os';
+import http from 'node:http';
 import {setTimeout as delay} from 'node:timers/promises';
 import {createWorkbench} from '../src/workbench.mjs';
 import {createWorkbenchState} from '../src/workbench-state.mjs';
@@ -22,7 +23,7 @@ async function fixture(t, execute = async () => ({details: {status: 'completed'}
     const app = createWorkbench(root, registry, options); apps.push(app);
     await new Promise(resolve => app.server.listen(0, '127.0.0.1', resolve));
     const base = `http://127.0.0.1:${app.server.address().port}`;
-    return {get: route => fetch(base + route), post: (route, body) => fetch(base + route, {method: 'POST', headers: {Origin: base, 'Content-Type': 'application/json'}, body: JSON.stringify(body)})};
+    return {base, get: route => fetch(base + route), post: (route, body) => fetch(base + route, {method: 'POST', headers: {Origin: base, 'Content-Type': 'application/json'}, body: JSON.stringify(body)})};
   }
   const api = await server();
   t.after(async () => {
@@ -44,6 +45,22 @@ async function terminal(api, id) {
   }
   throw new Error('Job failed to finish');
 }
+
+test('fragmented HTTP requests preserve Chinese and supplementary Unicode in persisted sessions',async t=>{
+  const f=await fixture(t),title='AXI时序🔧复核';
+  for(const character of ['时','🔧']) {
+    const bytes=Buffer.from(JSON.stringify({action:'create',title})),split=bytes.indexOf(Buffer.from(character))+1;
+    const response=await new Promise((resolve,reject)=>{
+      const request=http.request(f.base+'/api/session',{method:'POST',headers:{Origin:f.base,'Content-Type':'application/json'}},incoming=>{
+        let body='';incoming.setEncoding('utf8');incoming.on('data',chunk=>body+=chunk);incoming.on('end',()=>resolve({status:incoming.statusCode,value:JSON.parse(body)}));
+      });
+      request.on('error',reject);request.write(bytes.subarray(0,split));
+      delay(15).then(()=>request.end(bytes.subarray(split)));
+    });
+    assert.equal(response.status,200);assert.equal(response.value.title,title);
+    assert.equal((await (await f.get(`/api/session?id=${response.value.id}`)).json()).title,title);
+  }
+});
 test('session rename and archive preserve messages and archived sessions require explicit restore', async t => {
   const f = await fixture(t), session = await f.session();
   await f.post('/api/session', {id: session.id, message: 'Clock constraints'});
@@ -96,6 +113,32 @@ test('late cancellation does not replace a completed backend result with a cance
   const session = await f.session(), plan = await f.plan(session.id), job = await f.run(session.id, plan); await started;
   await f.post('/api/cancel', {id: job.id}); release();
   const done = await terminal(f, job.id); assert.equal(done.status, 'completed'); assert.equal(done.cancel_acknowledged, false); assert.equal(done.result.task_acceptance.status, 'review_required');
+});
+
+test('native agent cancellation acknowledges user interruption while retaining other stop reasons', async t => {
+  for (const reason of ['user-interrupt', 'wall-time-limit']) {
+    let release, entered;
+    const gate = new Promise(resolve => { release = resolve; }), started = new Promise(resolve => { entered = resolve; });
+    const f = await fixture(t, undefined, {agentAdapter: async ({signal}) => {
+      entered(); await gate; assert.equal(signal.aborted, true);
+      return {status:'stopped', answer:'', run:{stoppedReason:reason}};
+    }});
+    fs.mkdirSync(path.join(f.root,'.eda'));
+    fs.writeFileSync(path.join(f.root,'.eda/config.json'),JSON.stringify({schema_version:1,model_api_enabled:true,resources:{xsim:2,vivado:1,ltspice:1,verify:4},queue_timeout_ms:900000}));
+    const session=await f.session(), job=await (await f.post('/api/agent',{session_id:session.id,message:'Cancellation contract fixture'})).json();
+    await started;
+    try {
+      await f.post('/api/cancel',{id:job.id,session_id:session.id});
+      assert.equal((await (await f.get(`/api/job?id=${job.id}`)).json()).status,'cancel_requested');
+    } finally {release();}
+    const done=await terminal(f,job.id);
+    assert.equal(done.status,reason==='user-interrupt'?'cancelled':'stopped');
+    assert.equal(done.cancel_acknowledged,reason==='user-interrupt');
+    assert.equal(done.result.status,'stopped');assert.equal(done.result.run.stoppedReason,reason);
+    const events=(await (await f.get(`/api/events?session_id=${session.id}`)).json()).events;
+    assert.equal(events.filter(e=>e.type==='job_status').at(-1).status,done.status);
+    assert.equal((await f.post('/api/session',{id:session.id,action:'archive'})).status,200,'terminal cancellation releases the owning session');
+  }
 });
 test('recovery rechecks eligibility and saves a new task with source lineage without replaying its parent', async t => {
   const f = await fixture(t), session = await f.session(), plan = await f.plan(session.id);

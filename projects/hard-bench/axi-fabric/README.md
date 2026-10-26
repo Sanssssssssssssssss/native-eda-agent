@@ -30,3 +30,6 @@
 复现：在工作区根目录运行 `python projects/hard-bench/axi-fabric/generate.py`，然后运行 `run.py sim`、`run.py negative` 或 `run.py trace`（`run.py` 使用此目录的完整路径）。`collect_results.py` 仅汇总证据。负控翻转一个观测读数据位，必须产生指定 `Fatal: FABRIC_READ_DATA`，不能出现正式 PASS；短 trace 仅用于波形，不增加测试分数。所有执行只使用本地 XSim/Vivado，其他模型 API 调用 0。
 
 边界：仅对齐 32-bit INCR、1–64 beat；未覆盖 FIXED/WRAP、窄传输、独占、USER/QoS。并发读写使用不同地址区，共享读在写完成后发起，不声称覆盖同地址竞争。BID/BRESP 完全相同的两笔响应无法凭 AXI B 通道单独区分互换。只在种子间复位，未测 fabric 在途复位；无板卡、形式证明或外部榜单排名。
+# 2026-10-26 protocol checker
+
+`tb_axi_fabric_protocol.sv` extends the historical transaction checker with VALID/payload hold assertions on all 15 internal delay outputs. Every channel must observe a stalled transfer. A VALID-withdrawal mutation is rejected; correct RTL passes 4,656 bursts. The original checker and historical results below retain their original protocol. Use `sim-protocol.json` or `examples/workflows/axi-fabric-protocol-ooc.json` for a new run; this does not waive physical DRC warnings. See [stability evidence](../../../docs/stability-2026-10-26.md).

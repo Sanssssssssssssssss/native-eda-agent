@@ -1,0 +1,562 @@
+{
+  "schema_version": 1,
+  "scope": "Directed native Pi stability campaign; visible checkers, injected faults and retained failures. No aggregate model score or blind pass@1.",
+  "started_at": "2026-10-26T07:05:00Z",
+  "planned_deadline": "2026-10-26T12:05:00Z",
+  "generated_at": "2026-10-26T10:40:36.962Z",
+  "usage": {
+    "provider": "CommandCode",
+    "requested_model": "deepseek/deepseek-v4-flash",
+    "observed_model": "deepseek/deepseek-v4.1-flash",
+    "metered_requests": 114,
+    "initial_probe_requests": 1,
+    "known_tokens": 3598843,
+    "unknown_reserved_tokens": 808488,
+    "token_cap": 50000000,
+    "unfinished_requests": 0,
+    "unknown_receipts": [
+      {
+        "id": "0008",
+        "wave": "workbench-cancel-baseline",
+        "reserved_tokens": 134456,
+        "transport_status": "transport_error"
+      },
+      {
+        "id": "0009",
+        "wave": "workbench-cancel-fixed",
+        "reserved_tokens": 134456,
+        "transport_status": "transport_error"
+      },
+      {
+        "id": "0019",
+        "wave": "axi-protocol-fixed",
+        "reserved_tokens": 240168,
+        "transport_status": "completed"
+      },
+      {
+        "id": "0110",
+        "wave": "browser-cancel-resume",
+        "reserved_tokens": 299408,
+        "transport_status": "stream_error"
+      }
+    ],
+    "scope": "Provider usage receipts, including the initial probe. Cached tokens are already included in prompt tokens. Unknown reservations are not measured consumption. Outer Codex usage and invoice cost are not included.",
+    "ledger_sha256": "cd0b5fb46a2328486117244ef9648cdc366ffa4ad7a516bcb50b4809510dbe95"
+  },
+  "repairs": [
+    {
+      "name": "Counter",
+      "unit": "directed_visible_repair",
+      "coverage": {
+        "checks": 321
+      },
+      "execution": "completed",
+      "acceptance": "passed",
+      "rounds": 2,
+      "verifier_calls": 2,
+      "wall_seconds": 70.09668070000001,
+      "tool_budget": {
+        "scope": "This run, including nested and denied model tool requests; host verifier calls have a separate cumulative task budget.",
+        "max_calls": 48,
+        "attempted": 4,
+        "admitted": 4,
+        "denied": 0,
+        "nested": 0
+      },
+      "native_compactions": 0,
+      "evidence": {
+        "local_receipt": {
+          "file": "counter-loop-result.json",
+          "sha256": "718508b9c494c0f9e2d3e96a984bbd1359dd67db8856f4b3852cc56985ae184e"
+        },
+        "run": {
+          "file": "run.json",
+          "sha256": "c2ce5e03ee08e18db3277d24a6bbcbd647d354a477bc3dfea9e2e8257a5a7d43"
+        },
+        "loop": {
+          "file": "verification-loop.json",
+          "sha256": "3600b188735a0ad164faa7f0e18a1876df297a6b7f06c7b96a0b66919a6dad51"
+        },
+        "delivery": {
+          "file": "delivery.json",
+          "sha256": "5132dc242111bbf0619cf47527f595da717cfb0bfd89b58f19a4e603842c9490"
+        }
+      },
+      "source_hashes": {
+        "src/agent.mjs": "5b803886cdba9445ab6cf5068bbe56a29b6f56d1d204a3e8030e3619bda3c962",
+        "src/agent-session.mjs": "45aa5fd7b29c2e570e194e7021a61015d3a4862b88d4d3187ba29c36223a2b78",
+        "src/agent-task.mjs": "d0edddc98ff3084110ba8e5832305c8964a319b9d87ef03d66a2189d865a8bf7",
+        "src/eda-coordinator.mjs": "97b79a484ecb94c7240870584cbd8bbd5f0887546f658f18178be48937e62fad",
+        "src/verifier-loop.mjs": "aa1127d57505ada1fe15143341b0e79b0a1c3b7c1f150a278e8939692e817b16",
+        "src/task-context.mjs": "3104ca37f4f6ebaa6e27d44d98b298859b1f94e09caf0a35d308aade35f74d4c",
+        "src/task-outcome.mjs": "d957a04d2ae4b9e55eef2a5b8e7518fcd5d2507f87235fdcb813032866178e5f",
+        "src/workflow.mjs": "b6ad58686164df8b40478492eb987bbacb3c589df05f90dd117f642e7f58c78b",
+        "src/agent-resources.mjs": "6b95987ed582beaa04fe2f45038de27c5b9adbd18a05e70640e35ff041574bd6",
+        "src/knowledge.mjs": "5f84ab00272ba98b8297b2d19d6083bec2ec6cf0d7870dd0c7959290fd078351",
+        "src/extension.ts": "342920e5d4e5b9a30998fe7d5eff6a293a7e04de21a01b980e38fb956cab0001",
+        "src/platform.mjs": "c2e632952b2183144c048134b072f36ad50bd1e9ab42676e9eec04ee787aa3a0",
+        "src/runtime.mjs": "b506190fd0e09a119261efe4673554af24e4e4dc95d893b00d53855c6b8e0854",
+        "src/tools/eda.ts": "01252f7fe70ebd8c65ae07b27839d56e29f4586de0e0bb1ec2767700b6e6eb2e",
+        "src/tools/fpga.mjs": "7442f34908b74d681c3cb5b2219a6236ba859b6c9789b207bc4554a0b7ff65b0",
+        "src/tools/optimizer.mjs": "d03b62b10329486696fda3124647c964efffe5b8a6af01a1731308637f6c65ee",
+        "src/optimizer-inspection.mjs": "07bfddb9b9389e9b7fae40bd62d1cff9a67b30c5e3e9a5a3d237021ccc2c1968",
+        "src/fpga_optimizer/trace.py": "92b691d99ec71749b494d80142385d2e5d292e7b0cfd0ddb3a481bc3a95a7a24",
+        "src/fpga_optimizer/runner.py": "c4be5e1e151f8eaa09c8e795c25145335def1718b7e4fe03fa1a42f90f5d65e5",
+        "src/fpga_optimizer/core.py": "bd743634eb1550e489c0fa8d1937f3d018dfd2c3cfe4ec2dfb82a809878a0a28",
+        "src/fpga_optimizer/backend.py": "8b44aa7993533cc7f18551a53dc4ebc82d7d6b45635b58c5641e0efafd379cab",
+        "src/tools/vivado-common.tcl": "4b8bdbb8898d877d861d1c766e084d5b331e88dc3398bfb20ac795b38e478723",
+        "src/tools/xsim-options.mjs": "be6e1a6f7809d809c93327c6f96facf1775f4bf4ba2a4910f107ffe32ec53554",
+        "src/trace.mjs": "196fd77d341886c090b5a32eb53a089c680fd752d982a20d31ff1ca97b8fc38b",
+        "package-lock.json": "48880817201e5f43ffd4d10e2d889a79a60927549fedede7bb52eb4693f6408d"
+      }
+    },
+    {
+      "name": "AXI protocol",
+      "unit": "directed_visible_repair",
+      "coverage": {
+        "bursts": 4656,
+        "internal_channels": 15
+      },
+      "execution": "completed",
+      "acceptance": "passed",
+      "rounds": 1,
+      "verifier_calls": 1,
+      "wall_seconds": 102.1957734,
+      "tool_budget": {
+        "scope": "This run, including nested and denied model tool requests; host verifier calls have a separate cumulative task budget.",
+        "max_calls": 48,
+        "attempted": 6,
+        "admitted": 6,
+        "denied": 0,
+        "nested": 0
+      },
+      "native_compactions": 0,
+      "evidence": {
+        "local_receipt": {
+          "file": "axi-protocol-retry-1-result.json",
+          "sha256": "7bb2c46d789aff3338985d06a1bc624ef0fd96e662e42cf2560585b760ebe882"
+        },
+        "run": {
+          "file": "run.json",
+          "sha256": "d6331d65bd4686ad47f984a06bb011e5b6c08637daf9a9c8956b8ca43e41d997"
+        },
+        "loop": {
+          "file": "verification-loop.json",
+          "sha256": "feef3b1e58a7539413d68b19a0544042c9854b48b59ee55bb5b2f53febde2dd4"
+        },
+        "delivery": {
+          "file": "delivery.json",
+          "sha256": "bbd4603fc3af3bc8964b61670b723baf335d34e0c175b7a1d4c6cd1a5c1b7ba0"
+        }
+      },
+      "source_hashes": {
+        "src/agent.mjs": "5b803886cdba9445ab6cf5068bbe56a29b6f56d1d204a3e8030e3619bda3c962",
+        "src/agent-session.mjs": "c3b5c1bbde96dffa8fae82d21de2b5484cc71bc4c5065e6407a29b6d9d0e559c",
+        "src/agent-task.mjs": "d0edddc98ff3084110ba8e5832305c8964a319b9d87ef03d66a2189d865a8bf7",
+        "src/eda-coordinator.mjs": "97b79a484ecb94c7240870584cbd8bbd5f0887546f658f18178be48937e62fad",
+        "src/verifier-loop.mjs": "aa1127d57505ada1fe15143341b0e79b0a1c3b7c1f150a278e8939692e817b16",
+        "src/task-context.mjs": "3104ca37f4f6ebaa6e27d44d98b298859b1f94e09caf0a35d308aade35f74d4c",
+        "src/task-outcome.mjs": "d957a04d2ae4b9e55eef2a5b8e7518fcd5d2507f87235fdcb813032866178e5f",
+        "src/workflow.mjs": "b6ad58686164df8b40478492eb987bbacb3c589df05f90dd117f642e7f58c78b",
+        "src/agent-resources.mjs": "ce73c52941cac601c5a83ee3f5b93851d606ef44619c7d676184f0d1d0b7f454",
+        "src/knowledge.mjs": "5f84ab00272ba98b8297b2d19d6083bec2ec6cf0d7870dd0c7959290fd078351",
+        "src/extension.ts": "342920e5d4e5b9a30998fe7d5eff6a293a7e04de21a01b980e38fb956cab0001",
+        "src/platform.mjs": "e587c484eb1ebe5014c636bae2b615deaf928496bb552da4ac9b2e57313d72c7",
+        "src/runtime.mjs": "b506190fd0e09a119261efe4673554af24e4e4dc95d893b00d53855c6b8e0854",
+        "src/tools/eda.ts": "01252f7fe70ebd8c65ae07b27839d56e29f4586de0e0bb1ec2767700b6e6eb2e",
+        "src/tools/fpga.mjs": "7442f34908b74d681c3cb5b2219a6236ba859b6c9789b207bc4554a0b7ff65b0",
+        "src/tools/optimizer.mjs": "d03b62b10329486696fda3124647c964efffe5b8a6af01a1731308637f6c65ee",
+        "src/optimizer-inspection.mjs": "07bfddb9b9389e9b7fae40bd62d1cff9a67b30c5e3e9a5a3d237021ccc2c1968",
+        "src/fpga_optimizer/trace.py": "92b691d99ec71749b494d80142385d2e5d292e7b0cfd0ddb3a481bc3a95a7a24",
+        "src/fpga_optimizer/runner.py": "c4be5e1e151f8eaa09c8e795c25145335def1718b7e4fe03fa1a42f90f5d65e5",
+        "src/fpga_optimizer/core.py": "bd743634eb1550e489c0fa8d1937f3d018dfd2c3cfe4ec2dfb82a809878a0a28",
+        "src/fpga_optimizer/backend.py": "8b44aa7993533cc7f18551a53dc4ebc82d7d6b45635b58c5641e0efafd379cab",
+        "src/tools/vivado-common.tcl": "4b8bdbb8898d877d861d1c766e084d5b331e88dc3398bfb20ac795b38e478723",
+        "src/tools/xsim-options.mjs": "be6e1a6f7809d809c93327c6f96facf1775f4bf4ba2a4910f107ffe32ec53554",
+        "src/trace.mjs": "196fd77d341886c090b5a32eb53a089c680fd752d982a20d31ff1ca97b8fc38b",
+        "package-lock.json": "48ade5f91c1bdd425134860137844939ee793d14784645d2490a4357feff871e"
+      }
+    },
+    {
+      "name": "DMA compiler repair",
+      "unit": "directed_visible_repair",
+      "coverage": {
+        "scenarios": 717,
+        "byte_checks": 3064242,
+        "protocol_checks": 10568464
+      },
+      "execution": "completed",
+      "acceptance": "passed",
+      "rounds": 2,
+      "verifier_calls": 2,
+      "wall_seconds": 139.6694708,
+      "tool_budget": {
+        "scope": "This run, including nested and denied model tool requests; host verifier calls have a separate cumulative task budget.",
+        "max_calls": 48,
+        "attempted": 14,
+        "admitted": 14,
+        "denied": 0,
+        "nested": 0
+      },
+      "native_compactions": 0,
+      "evidence": {
+        "local_receipt": {
+          "file": "dma-compile-retry-result.json",
+          "sha256": "c264dfd2b3c232d3b8cc8cb5b80d2f7fe144632700c19727184f1b2145a2d77c"
+        },
+        "run": {
+          "file": "run.json",
+          "sha256": "0adee5be2c96a3bc2cfe0922bb73f57bcf949feffdfef2572b7b87ccc18ed1cb"
+        },
+        "loop": {
+          "file": "verification-loop.json",
+          "sha256": "1579338db132071f052c8e637d19f36206cbc4b5dcfd87ddead2f483de97770d"
+        },
+        "delivery": {
+          "file": "delivery.json",
+          "sha256": "0548f9b5ecf826bc7dfc4bacf221e627671636163f62cf74db7ea985ee590493"
+        }
+      },
+      "source_hashes": {
+        "src/agent.mjs": "5b803886cdba9445ab6cf5068bbe56a29b6f56d1d204a3e8030e3619bda3c962",
+        "src/agent-session.mjs": "c3b5c1bbde96dffa8fae82d21de2b5484cc71bc4c5065e6407a29b6d9d0e559c",
+        "src/agent-task.mjs": "d0edddc98ff3084110ba8e5832305c8964a319b9d87ef03d66a2189d865a8bf7",
+        "src/eda-coordinator.mjs": "97b79a484ecb94c7240870584cbd8bbd5f0887546f658f18178be48937e62fad",
+        "src/verifier-loop.mjs": "aa1127d57505ada1fe15143341b0e79b0a1c3b7c1f150a278e8939692e817b16",
+        "src/task-context.mjs": "3104ca37f4f6ebaa6e27d44d98b298859b1f94e09caf0a35d308aade35f74d4c",
+        "src/task-outcome.mjs": "d957a04d2ae4b9e55eef2a5b8e7518fcd5d2507f87235fdcb813032866178e5f",
+        "src/workflow.mjs": "b6ad58686164df8b40478492eb987bbacb3c589df05f90dd117f642e7f58c78b",
+        "src/agent-resources.mjs": "ce73c52941cac601c5a83ee3f5b93851d606ef44619c7d676184f0d1d0b7f454",
+        "src/knowledge.mjs": "5f84ab00272ba98b8297b2d19d6083bec2ec6cf0d7870dd0c7959290fd078351",
+        "src/extension.ts": "342920e5d4e5b9a30998fe7d5eff6a293a7e04de21a01b980e38fb956cab0001",
+        "src/platform.mjs": "e587c484eb1ebe5014c636bae2b615deaf928496bb552da4ac9b2e57313d72c7",
+        "src/runtime.mjs": "b506190fd0e09a119261efe4673554af24e4e4dc95d893b00d53855c6b8e0854",
+        "src/tools/eda.ts": "01252f7fe70ebd8c65ae07b27839d56e29f4586de0e0bb1ec2767700b6e6eb2e",
+        "src/tools/fpga.mjs": "7442f34908b74d681c3cb5b2219a6236ba859b6c9789b207bc4554a0b7ff65b0",
+        "src/tools/optimizer.mjs": "d03b62b10329486696fda3124647c964efffe5b8a6af01a1731308637f6c65ee",
+        "src/optimizer-inspection.mjs": "07bfddb9b9389e9b7fae40bd62d1cff9a67b30c5e3e9a5a3d237021ccc2c1968",
+        "src/fpga_optimizer/trace.py": "92b691d99ec71749b494d80142385d2e5d292e7b0cfd0ddb3a481bc3a95a7a24",
+        "src/fpga_optimizer/runner.py": "c4be5e1e151f8eaa09c8e795c25145335def1718b7e4fe03fa1a42f90f5d65e5",
+        "src/fpga_optimizer/core.py": "bd743634eb1550e489c0fa8d1937f3d018dfd2c3cfe4ec2dfb82a809878a0a28",
+        "src/fpga_optimizer/backend.py": "8b44aa7993533cc7f18551a53dc4ebc82d7d6b45635b58c5641e0efafd379cab",
+        "src/tools/vivado-common.tcl": "4b8bdbb8898d877d861d1c766e084d5b331e88dc3398bfb20ac795b38e478723",
+        "src/tools/xsim-options.mjs": "be6e1a6f7809d809c93327c6f96facf1775f4bf4ba2a4910f107ffe32ec53554",
+        "src/trace.mjs": "196fd77d341886c090b5a32eb53a089c680fd752d982a20d31ff1ca97b8fc38b",
+        "package-lock.json": "953ac596f048705eec519d56309661f24c11fe7638896d448988b2521a3db59b"
+      }
+    },
+    {
+      "name": "PicoRV32 AES-CTR DMA",
+      "unit": "directed_visible_repair",
+      "coverage": {
+        "seeds": 3,
+        "descriptors": 42,
+        "ciphertext_bytes": 26592,
+        "error_recoveries": 21
+      },
+      "execution": "completed",
+      "acceptance": "passed",
+      "rounds": 2,
+      "verifier_calls": 2,
+      "wall_seconds": 254.6236005,
+      "tool_budget": {
+        "scope": "This run, including nested and denied model tool requests; host verifier calls have a separate cumulative task budget.",
+        "max_calls": 48,
+        "attempted": 9,
+        "admitted": 5,
+        "denied": 4,
+        "nested": 0
+      },
+      "native_compactions": 0,
+      "evidence": {
+        "local_receipt": {
+          "file": "crypto-firmware-loop-result.json",
+          "sha256": "435451ec567bec5bf70678bfc0aad273c5bb83e0ef7cf06151f6890d97c718f1"
+        },
+        "run": {
+          "file": "run.json",
+          "sha256": "1055b169daebb059277db0db55d65e08df6f9ef332f7bed31991dfb80a38c2ea"
+        },
+        "loop": {
+          "file": "verification-loop.json",
+          "sha256": "a582355ba3c905c26d98a5312715fbde037e6744ff12bff18843e9d439063176"
+        },
+        "delivery": {
+          "file": "delivery.json",
+          "sha256": "0afe308bd41fafbf12c0d39c05bf2b87085540697483bda7411857813959dc35"
+        }
+      },
+      "source_hashes": {
+        "src/agent.mjs": "5b803886cdba9445ab6cf5068bbe56a29b6f56d1d204a3e8030e3619bda3c962",
+        "src/agent-session.mjs": "c3b5c1bbde96dffa8fae82d21de2b5484cc71bc4c5065e6407a29b6d9d0e559c",
+        "src/agent-task.mjs": "d0edddc98ff3084110ba8e5832305c8964a319b9d87ef03d66a2189d865a8bf7",
+        "src/eda-coordinator.mjs": "97b79a484ecb94c7240870584cbd8bbd5f0887546f658f18178be48937e62fad",
+        "src/verifier-loop.mjs": "06932c24215961035bac46e9b77c75d6daec3044c1383ab2f67314bd6ada6059",
+        "src/task-context.mjs": "3104ca37f4f6ebaa6e27d44d98b298859b1f94e09caf0a35d308aade35f74d4c",
+        "src/task-outcome.mjs": "d957a04d2ae4b9e55eef2a5b8e7518fcd5d2507f87235fdcb813032866178e5f",
+        "src/workflow.mjs": "b6ad58686164df8b40478492eb987bbacb3c589df05f90dd117f642e7f58c78b",
+        "src/agent-resources.mjs": "ce73c52941cac601c5a83ee3f5b93851d606ef44619c7d676184f0d1d0b7f454",
+        "src/knowledge.mjs": "5f84ab00272ba98b8297b2d19d6083bec2ec6cf0d7870dd0c7959290fd078351",
+        "src/extension.ts": "342920e5d4e5b9a30998fe7d5eff6a293a7e04de21a01b980e38fb956cab0001",
+        "src/platform.mjs": "e587c484eb1ebe5014c636bae2b615deaf928496bb552da4ac9b2e57313d72c7",
+        "src/runtime.mjs": "b506190fd0e09a119261efe4673554af24e4e4dc95d893b00d53855c6b8e0854",
+        "src/tools/eda.ts": "01252f7fe70ebd8c65ae07b27839d56e29f4586de0e0bb1ec2767700b6e6eb2e",
+        "src/tools/fpga.mjs": "7442f34908b74d681c3cb5b2219a6236ba859b6c9789b207bc4554a0b7ff65b0",
+        "src/tools/optimizer.mjs": "d03b62b10329486696fda3124647c964efffe5b8a6af01a1731308637f6c65ee",
+        "src/optimizer-inspection.mjs": "07bfddb9b9389e9b7fae40bd62d1cff9a67b30c5e3e9a5a3d237021ccc2c1968",
+        "src/fpga_optimizer/trace.py": "92b691d99ec71749b494d80142385d2e5d292e7b0cfd0ddb3a481bc3a95a7a24",
+        "src/fpga_optimizer/runner.py": "c4be5e1e151f8eaa09c8e795c25145335def1718b7e4fe03fa1a42f90f5d65e5",
+        "src/fpga_optimizer/core.py": "bd743634eb1550e489c0fa8d1937f3d018dfd2c3cfe4ec2dfb82a809878a0a28",
+        "src/fpga_optimizer/backend.py": "8b44aa7993533cc7f18551a53dc4ebc82d7d6b45635b58c5641e0efafd379cab",
+        "src/tools/vivado-common.tcl": "4b8bdbb8898d877d861d1c766e084d5b331e88dc3398bfb20ac795b38e478723",
+        "src/tools/xsim-options.mjs": "be6e1a6f7809d809c93327c6f96facf1775f4bf4ba2a4910f107ffe32ec53554",
+        "src/trace.mjs": "196fd77d341886c090b5a32eb53a089c680fd752d982a20d31ff1ca97b8fc38b",
+        "package-lock.json": "953ac596f048705eec519d56309661f24c11fe7638896d448988b2521a3db59b"
+      }
+    },
+    {
+      "name": "Ethernet UDP echo",
+      "unit": "directed_visible_repair",
+      "coverage": {
+        "rtl_files": 30,
+        "rtl_lines": 12513,
+        "clock_ratios": 2
+      },
+      "execution": "completed",
+      "acceptance": "passed",
+      "rounds": 2,
+      "verifier_calls": 3,
+      "wall_seconds": 317.2522725,
+      "tool_budget": {
+        "scope": "This run, including nested and denied model tool requests; host verifier calls have a separate cumulative task budget.",
+        "max_calls": 48,
+        "attempted": 20,
+        "admitted": 20,
+        "denied": 0,
+        "nested": 0
+      },
+      "native_compactions": 0,
+      "evidence": {
+        "local_receipt": {
+          "file": "ethernet-two-clocks-result.json",
+          "sha256": "0550f552cef06c319ad1ccbb32fb32cc89314a7128d48c82e54dc79bfa5d9317"
+        },
+        "run": {
+          "file": "run.json",
+          "sha256": "e2ae7d72344a640e36d11c09c1360d9101958babc45e9bfb398dcf2e059689a6"
+        },
+        "loop": {
+          "file": "verification-loop.json",
+          "sha256": "511e161e65d401f4f2edf9097bf4736a7f1282285d79863846842ff2cf1e2dd6"
+        },
+        "delivery": {
+          "file": "delivery.json",
+          "sha256": "525cd8514abdc983452dcada515226d40abf15c9458ab7ecec56366b7eb911e9"
+        }
+      },
+      "source_hashes": {
+        "src/agent.mjs": "5b803886cdba9445ab6cf5068bbe56a29b6f56d1d204a3e8030e3619bda3c962",
+        "src/agent-session.mjs": "c3b5c1bbde96dffa8fae82d21de2b5484cc71bc4c5065e6407a29b6d9d0e559c",
+        "src/agent-task.mjs": "d0edddc98ff3084110ba8e5832305c8964a319b9d87ef03d66a2189d865a8bf7",
+        "src/eda-coordinator.mjs": "97b79a484ecb94c7240870584cbd8bbd5f0887546f658f18178be48937e62fad",
+        "src/verifier-loop.mjs": "06932c24215961035bac46e9b77c75d6daec3044c1383ab2f67314bd6ada6059",
+        "src/task-context.mjs": "3104ca37f4f6ebaa6e27d44d98b298859b1f94e09caf0a35d308aade35f74d4c",
+        "src/task-outcome.mjs": "d957a04d2ae4b9e55eef2a5b8e7518fcd5d2507f87235fdcb813032866178e5f",
+        "src/workflow.mjs": "b6ad58686164df8b40478492eb987bbacb3c589df05f90dd117f642e7f58c78b",
+        "src/agent-resources.mjs": "ce73c52941cac601c5a83ee3f5b93851d606ef44619c7d676184f0d1d0b7f454",
+        "src/knowledge.mjs": "5f84ab00272ba98b8297b2d19d6083bec2ec6cf0d7870dd0c7959290fd078351",
+        "src/extension.ts": "342920e5d4e5b9a30998fe7d5eff6a293a7e04de21a01b980e38fb956cab0001",
+        "src/platform.mjs": "e587c484eb1ebe5014c636bae2b615deaf928496bb552da4ac9b2e57313d72c7",
+        "src/runtime.mjs": "b506190fd0e09a119261efe4673554af24e4e4dc95d893b00d53855c6b8e0854",
+        "src/tools/eda.ts": "01252f7fe70ebd8c65ae07b27839d56e29f4586de0e0bb1ec2767700b6e6eb2e",
+        "src/tools/fpga.mjs": "7442f34908b74d681c3cb5b2219a6236ba859b6c9789b207bc4554a0b7ff65b0",
+        "src/tools/optimizer.mjs": "d03b62b10329486696fda3124647c964efffe5b8a6af01a1731308637f6c65ee",
+        "src/optimizer-inspection.mjs": "07bfddb9b9389e9b7fae40bd62d1cff9a67b30c5e3e9a5a3d237021ccc2c1968",
+        "src/fpga_optimizer/trace.py": "92b691d99ec71749b494d80142385d2e5d292e7b0cfd0ddb3a481bc3a95a7a24",
+        "src/fpga_optimizer/runner.py": "c4be5e1e151f8eaa09c8e795c25145335def1718b7e4fe03fa1a42f90f5d65e5",
+        "src/fpga_optimizer/core.py": "bd743634eb1550e489c0fa8d1937f3d018dfd2c3cfe4ec2dfb82a809878a0a28",
+        "src/fpga_optimizer/backend.py": "8b44aa7993533cc7f18551a53dc4ebc82d7d6b45635b58c5641e0efafd379cab",
+        "src/tools/vivado-common.tcl": "4b8bdbb8898d877d861d1c766e084d5b331e88dc3398bfb20ac795b38e478723",
+        "src/tools/xsim-options.mjs": "be6e1a6f7809d809c93327c6f96facf1775f4bf4ba2a4910f107ffe32ec53554",
+        "src/trace.mjs": "196fd77d341886c090b5a32eb53a089c680fd752d982a20d31ff1ca97b8fc38b",
+        "package-lock.json": "953ac596f048705eec519d56309661f24c11fe7638896d448988b2521a3db59b"
+      }
+    }
+  ],
+  "retained_non_passes": [
+    {
+      "label": "Original AXI checker false acceptance",
+      "reason": "VALID-withdrawal mutant passed historical checker; original receipt retained, stronger protocol version introduced.",
+      "evidence": {
+        "file": "axi-compact-loop-result.json",
+        "sha256": "917bcfc9cab183f931a0327146e460db478c94c26324611b549b12e12c57b7bd"
+      }
+    },
+    {
+      "label": "Provider stream missing terminal usage",
+      "reason": "HTTP 200 without finish_reason or usage; SDK failed before verifier; conservative reservation retained.",
+      "evidence": {
+        "file": "axi-protocol-fixed-result.json",
+        "sha256": "6c05a8757f6ff8cddf290716b35c14b9da7d4c9188fe077f51a37f2ed8ac2177"
+      }
+    },
+    {
+      "label": "Unrecovered output truncation",
+      "reason": "Generation failed; verifier calls zero.",
+      "evidence": {
+        "file": "truncated-fixed.json",
+        "sha256": "d4d57064b4968a0b7f45a66ae3579065f39b484a86a6b84a7295881ec9a90556"
+      }
+    },
+    {
+      "label": "Ethernet diagnostic canary",
+      "execution": "stopped",
+      "acceptance": "unknown",
+      "reason": "model-turn-limit (12); no efficiency improvement established",
+      "evidence": {
+        "file": "ethernet-diagnostic-fixed-result.json",
+        "sha256": "b7f7355c4f1d9a7b94b910014cb6fe6ba7c874c886b2aac95739043c1fa3ca67"
+      }
+    },
+    {
+      "label": "Workbench repair prompt did not finish",
+      "run": "native-agent-2026-10-26T10-00-18-714Z-ca1cec",
+      "reason": "model-turn-limit",
+      "max_turns": 6,
+      "evidence": {
+        "file": "run.json",
+        "sha256": "bc64b1ffab06c95d044c2681732f2ea9d6f4737a4f794061113f83d0a63ddbd7"
+      }
+    },
+    {
+      "label": "Workbench repair prompt did not finish",
+      "run": "native-agent-2026-10-26T10-05-22-073Z-988bd7",
+      "reason": "wall-time-limit",
+      "timeout_seconds": 180,
+      "evidence": {
+        "file": "run.json",
+        "sha256": "d12c9df142422bd01b496b2b757a65612103d0078871ab51930db9d2f41ef66d"
+      }
+    }
+  ],
+  "mechanisms": [
+    {
+      "name": "Pi worker pool before upgrade",
+      "evidence": {
+        "file": "pool-pi-1.3.json",
+        "sha256": "04b1502a4af9b1085657469ac8e6b6c06257079b8e40269096cb66949911ae31"
+      }
+    },
+    {
+      "name": "Pi upstream worker queue",
+      "evidence": {
+        "file": "pool-pi-1.4.json",
+        "sha256": "fdeb39223ff55b5c5ffbcd397d78ab07fa6e77a147c315ac0afadd2a012bad5c"
+      }
+    },
+    {
+      "name": "Boundary resume",
+      "evidence": {
+        "file": "boundary-resume.json",
+        "sha256": "678e31200b4166d6a9b7adfdd92424595c8a753c2064c9d7ca6809b48e8abcbf"
+      }
+    },
+    {
+      "name": "Three concurrent native sessions, same design",
+      "evidence": {
+        "file": "concurrent-three.json",
+        "sha256": "63332e8b8b8e70a79228990ae228fca32ca5d0fcce643341377a9cb06447c78e"
+      }
+    },
+    {
+      "name": "Active XSim cancellation",
+      "evidence": {
+        "file": "active-eda-cancel.json",
+        "sha256": "43a6a99a9bcea9542b07bc1096187b1e224f0c747651cf42c7a9d76e2c3264ce"
+      }
+    },
+    {
+      "name": "Native MCP discovery",
+      "evidence": {
+        "file": "native-mcp-discovery-result.json",
+        "sha256": "a71c35dce856d22654a5a8205c6bf21e333f366ec1854ef48b7bd51bcdd4585b"
+      }
+    },
+    {
+      "name": "Community async early release baseline",
+      "evidence": {
+        "file": "mcp-async-baseline.json",
+        "sha256": "45199a70a7995bb71686b9860c4f34b2e4e8b582a5681272f7b3e83d82f1ac8c"
+      }
+    },
+    {
+      "name": "Community wait enforcement and lease",
+      "evidence": {
+        "file": "mcp-wait-fixed.json",
+        "sha256": "6f410b33bd6f7a26c288e929f7d2ca69e53a8c3606ebd823c04bfb6c117a9027"
+      }
+    },
+    {
+      "name": "Community process-tree cancellation",
+      "evidence": {
+        "file": "mcp-active-cancel.json",
+        "sha256": "3843d74648686400c77fed7772a31161dfa21f79a6836485e6148f5db208305f"
+      }
+    },
+    {
+      "name": "Workbench native task and response fixture",
+      "evidence": {
+        "file": "browser-receipt.json",
+        "sha256": "0d14b38e603ffc8784de9f290637369345a6e153c56bde227ef006fe32f5dae3"
+      }
+    },
+    {
+      "name": "Workbench active cancel and resume",
+      "evidence": {
+        "file": "browser-dma-recovery.json",
+        "sha256": "4372907a877e1f971de946d8fcea7be9bf6debcbb0d3c181f368fdc7424c9d21"
+      }
+    },
+    {
+      "name": "1500 persisted events",
+      "evidence": {
+        "file": "event-journal-result.json",
+        "sha256": "997b08b27d0c880126a4fe592ed082c0c9b70c025030dc170cc9a016e3e6c205"
+      }
+    },
+    {
+      "name": "Meter fake-transport controls",
+      "evidence": {
+        "file": "meter-controls.json",
+        "sha256": "3f93f68c0ded3585f0f1a898b9fff729ebd3b10a3541d7c57f99850d97857e62"
+      }
+    }
+  ],
+  "browser_recovery": {
+    "passed": true,
+    "same_native_session": true,
+    "rounds": 2,
+    "verifier_calls": 2,
+    "owned_processes_stopped": 4,
+    "scope": "Real browser clicks, native Pi/CommandCode and XSim; directed validation of already-correct DMA, not a repair-quality score"
+  },
+  "engineering_limits": [
+    "Full AXI OOC remains review_required with DRC warnings; no automatic waiver.",
+    "No formal proof or physical board testing.",
+    "Cancellation, transport failures and tighter test budgets are retained, not relabeled as successful repairs.",
+    "Each run retains its own source hashes. Earlier passing records do not establish acceptance under later source revisions."
+  ],
+  "outer_codex": {
+    "observed_at": "2026-10-26T10:35:56.462Z",
+    "window_delta": {
+      "input_tokens": 52152009,
+      "cached_input_tokens": 51280384,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 207316,
+      "reasoning_output_tokens": 86106,
+      "total_tokens": 52359325
+    },
+    "scope": "Session counters as of last recorded event; no inferred final-turn tokens.",
+    "budget_note": "The CommandCode cap did not include outer Codex. Combined counters exceeded 50M; further tests stopped early."
+  }
+}

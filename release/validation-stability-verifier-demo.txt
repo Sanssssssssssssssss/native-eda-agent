@@ -1,0 +1,117 @@
+{
+  "schema_version": 1,
+  "scope": "fake_sdk_and_eda_real_task_session_workflow_delivery_and_upstream_python",
+  "passed": true,
+  "directory": "${WORKSPACE}\\artifacts\\ace-loop-demo-2026-10-26T10-38-43-065Z-20481a\\artifacts\\native-agent-2026-10-26T10-38-43-114Z-a08ea0",
+  "root": "${WORKSPACE}\\artifacts\\ace-loop-demo-2026-10-26T10-38-43-065Z-20481a",
+  "generations": 2,
+  "verifier_calls": 2,
+  "task": "artifacts/agent-task-5393636f-2d23-4f87-95d3-1fce96a65281",
+  "delivery": {
+    "schema_version": 1,
+    "task": "artifacts/agent-task-5393636f-2d23-4f87-95d3-1fce96a65281",
+    "goal": "Verify the harness repairs a rejected candidate while retaining the independent fixed verifier",
+    "status": "passed",
+    "task_acceptance": {
+      "profile": "rtl_simulation",
+      "status": "passed",
+      "reason": null,
+      "issues": [],
+      "domains": [
+        {
+          "domain": "functional",
+          "step": "simulation",
+          "status": "passed",
+          "observed": {
+            "status": "pass",
+            "pass_marker": "HARNESS_FIXTURE_PASS",
+            "marker_matches": 1,
+            "completion_observed": true,
+            "failure_diagnostic": false
+          },
+          "pointers": [
+            "/simulation_acceptance"
+          ],
+          "evidence": {
+            "result": "artifacts/2026-10-26T10-38-44-912Z-eda_workflow_run-c122c8d7/simulation.result.json",
+            "sha256": "82fa55e8b8767843d7ab51722dc340fdad9236a9b1d1b6e43ffbf2bf937ba1ba",
+            "child_directory": "artifacts/2026-10-26T10-38-45-122Z-eda_xsim-04fdd387"
+          }
+        },
+        {
+          "domain": "synthesis",
+          "status": "not_requested"
+        },
+        {
+          "domain": "setup",
+          "status": "not_requested"
+        },
+        {
+          "domain": "hold",
+          "status": "not_requested"
+        },
+        {
+          "domain": "constraints",
+          "status": "not_requested"
+        },
+        {
+          "domain": "routing",
+          "status": "not_requested"
+        },
+        {
+          "domain": "drc",
+          "status": "not_requested"
+        },
+        {
+          "domain": "cdc",
+          "status": "not_requested"
+        },
+        {
+          "domain": "artifact_integrity",
+          "status": "not_requested"
+        }
+      ],
+      "scope": "Explicit testbench acceptance; no physical or formal signoff.",
+      "formal": "not_evaluated",
+      "hardware": "not_evaluated"
+    },
+    "candidate": "artifacts/agent-task-5393636f-2d23-4f87-95d3-1fce96a65281/candidate",
+    "editable_sources": [
+      "artifacts/agent-task-5393636f-2d23-4f87-95d3-1fce96a65281/candidate/candidate.sv"
+    ],
+    "evidence": "${WORKSPACE}\\artifacts\\ace-loop-demo-2026-10-26T10-38-43-065Z-20481a\\artifacts\\2026-10-26T10-38-44-912Z-eda_workflow_run-c122c8d7",
+    "rounds": 2,
+    "calls": 2,
+    "recovery": {
+      "ready": false,
+      "reason": "accepted",
+      "owner_active": false
+    },
+    "issues": [],
+    "originals_preserved": true,
+    "budget": {
+      "max_rounds": 3,
+      "max_calls": 3
+    },
+    "formal": "not_evaluated",
+    "hardware": "not_evaluated",
+    "checked_at": "2026-10-26T10:38:45.673Z"
+  },
+  "original_rtl_preserved": true,
+  "round_statuses": [
+    "failed",
+    "passed"
+  ],
+  "upstream_commit": "94754d796350d42502c9a32639a20d86f50e9678",
+  "upstream_components": [
+    "ContextBuilder.build_context",
+    "FreshStartCoordinator.add_iteration_result",
+    "FreshStartCoordinator.should_fresh_start"
+  ],
+  "other_model_api_calls": 0,
+  "vivado_runs": 0,
+  "outer_codex_tokens": null,
+  "fixed_checker_sha256": "f4a38c2e66f024d65c54a495e25431e61d157b34eb0770854a25796f14de2287",
+  "loop_status": "passed",
+  "reason": null
+}

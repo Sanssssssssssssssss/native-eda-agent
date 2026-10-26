@@ -35,7 +35,7 @@ export const evaluationSuites=[
 export function evaluationPlan(root,id){
   const suite=evaluationSuites.find(s=>s.id===id);if(!suite)throw new Error('Unknown evaluation suite');
   return {...suite,model_api_enabled:readConfig(root).model_api_enabled,provider_launch:false,
-    prerequisites:suite.lane==='online_agent'?['A built-in Pi SDK session with recorded response events and its child workflow. Injected and legacy sessions without provenance are ineligible; new provider sessions remain disabled by current config']:suite.launches_eda?['Installed licensed EDA','Pinned sources, checker and constraints']:[],
+    prerequisites:suite.lane==='online_agent'?['A built-in Pi SDK session with recorded response events and its child workflow. Injected and legacy sessions without provenance are ineligible. Provider dispatch follows model_api_enabled; this evaluator never calls a model.']:suite.launches_eda?['Installed licensed EDA','Pinned sources, checker and constraints']:[],
     comparability:['same suite','same source/protocol hashes','same unit'],scope:'Categories and units remain separate; no aggregate offline/online score.'};
 }
 async function command(root,args,signal,log){
@@ -86,7 +86,12 @@ export async function runEvaluation(root,id,registry,{signal,session_directory,w
     }else{
       if(!session_directory||!workflow_directory){result.status='blocked';result.reason='agent_session_and_workflow_required';}
       else{
-        const session=artifact(root,session_directory),workflow=artifact(root,workflow_directory),manifest=JSON.parse(fs.readFileSync(path.join(session,'run.json'),'utf8'));
+        const session=artifact(root,session_directory),workflow=artifact(root,workflow_directory);
+        // Keep the assessed subject even when provenance or engineering checks fail.
+        // These paths identify the request; eligibility and acceptance remain separate.
+        result.session=path.relative(root,session).replaceAll('\\','/');
+        result.workflow=path.relative(root,workflow).replaceAll('\\','/');
+        const manifest=JSON.parse(fs.readFileSync(path.join(session,'run.json'),'utf8'));
         const events=fs.readFileSync(path.join(session,'events.jsonl'),'utf8').trim().split('\n').filter(Boolean).map(JSON.parse);
         result.execution=sessionExecutionEligibility(manifest,events);
         if(!result.execution.eligible) {result.status='blocked';result.reason=result.execution.reason;result.finished_at=new Date().toISOString();save();return {...result,directory:dir};}
@@ -98,7 +103,7 @@ export async function runEvaluation(root,id,registry,{signal,session_directory,w
           result.metrics={rounds:delivery.rounds,verifier_calls:delivery.calls,first_pass:delivery.rounds===1,repair_pass:delivery.rounds>1,
             fixed_scope_valid:delivery.issues.length===0,originals_preserved:delivery.originals_preserved};
         }
-        result.session=path.relative(root,session);result.workflow=path.relative(root,workflow);result.task_acceptance=task.task_acceptance;
+        result.task_acceptance=task.task_acceptance;
         result.status=task.valid&&task.outcome==='passed'&&task.task_acceptance.status==='passed'?'passed':'failed';
         result.scope='Recorded session/task result only; no held-out design or reference independence is inferred.';
       }

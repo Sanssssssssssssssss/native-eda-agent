@@ -56,7 +56,7 @@ node scripts/demo-verifier-loop.mjs
 node src/agent.mjs run --verification verification.json --timeout 3600 "检查并修复限定 RTL，使其满足固定 workflow 验收；保留需审查项"
 ```
 
-这是执行入口，会调用所配置模型与 workflow 中的 EDA 工具。当前用户要求关闭额外模型 API，配置门保持关闭，本轮没有执行此命令。`max_calls` 仅计宿主 verifier 的工具调用；Pi 轮数和整段时间由会话预算约束。可用 `protected_sources` 补充固定辅助 checker；每轮失败不会放宽原验收条件。AXI 的历史 DRC warning 仍为需审查，不能算本轮优化收益。
+这是执行入口，会调用所配置模型与 workflow 中的 EDA 工具。仓库默认关闭提供商 API；用户授权后通过本机配置启用，真实实测见[稳定性记录](stability-2026-10-26.md)。`max_calls` 仅计宿主 verifier 的工具调用；Pi 轮数、工具请求数和整段时间由会话预算约束。可用 `protected_sources` 补充固定辅助 checker；每轮失败不会放宽原验收条件。AXI 的 DRC warning 仍需审查，不能算优化收益。
 
 `run --verification` 现在自动创建候选副本、重写仿真/综合输入并保留原始文件。也可先 `task prepare`，再用 `run --task` 执行该任务。工作台“验证任务”提供配置表单、候选范围、验证状态和恢复入口；`/api/agent` 复用同一宿主驱动。底层 `runVerifiedLoop` 仍是对显式给定路径工作的原语；直接使用该函数时由调用方准备隔离范围。
 

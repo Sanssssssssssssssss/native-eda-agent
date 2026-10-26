@@ -31,7 +31,7 @@ export function sessionExecutionEligibility(manifest,events=[]) {
   if(start?.execution_provenance?.session_factory!==provenance.session_factory||prompt<0)
     return {eligible:false,reason:'session_execution_events_missing'};
   const messages=events.slice(prompt+1).filter(row=>row.type==='message_end'&&row.message?.role==='assistant');
-  const successful=messages.filter(row=>['stop','length','toolUse'].includes(row.message.stopReason)).length;
+  const successful=messages.filter(row=>['stop','toolUse'].includes(row.message.stopReason)).length;
   if(!manifest.provider||!manifest.model||successful<1||manifest.provider_observation?.successful_assistant_messages!==successful||manifest.provider_observation?.assistant_messages!==messages.length)
     return {eligible:false,reason:'provider_response_evidence_missing_or_inconsistent'};
   return {eligible:true,reason:'builtin_session_with_observed_responses',successful_assistant_messages:successful,

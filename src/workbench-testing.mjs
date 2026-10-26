@@ -246,6 +246,22 @@ function engineering(root, read) {
   return [...records.values()].map(({ definition, history }) => makeCase(definition, history));
 }
 
+function onlineAgent(read, evaluations) {
+  const records = new Map(), unbound = [];
+  for (const {id, value, evidence} of evaluations.filter(item => item.value.suite === 'online-agent')) {
+    const session = typeof value.session === 'string' && value.session ? slash(value.session) : null;
+    const workflow = typeof value.workflow === 'string' && value.workflow ? slash(value.workflow) : null;
+    const observation = {id, started_at:value.started_at, status:status(value.status), session, workflow,
+      reason:value.reason || value.error || null, evidence:[evidence].filter(Boolean), ...read.freshness(value.source_hashes)};
+    if (!session || !workflow) {unbound.push(observation);continue;}
+    const key = hash(JSON.stringify([session, workflow]));
+    if (!records.has(key)) records.set(key, {definition:{id:`online-agent-${key}`,title:`Pi 会话 · ${path.posix.basename(session)}`,
+      category:'end_to_end',group:'end_to_end',group_title:'端到端任务',tier:'online',unit:'session_task',session,workflow},history:[]});
+    records.get(key).history.push(observation);
+  }
+  return {cases:[...records.values()].map(({definition,history})=>makeCase(definition,history)),unbound_history:unbound};
+}
+
 /** A read-only projection: browsing this endpoint never executes EDA, retrieval or a model. */
 export function getTestingOverview(root) {
   root = fs.realpathSync(root);
@@ -255,13 +271,13 @@ export function getTestingOverview(root) {
     return value?.suite ? [{ id, value, evidence: read.evidence(`artifacts/${id}/result.json`) }] : [];
   });
   const code = software(root, read);
-  const onlineHistory = evaluations.filter(item => item.value.suite === 'online-agent').map(item => ({ id: item.id, started_at: item.value.started_at, status: status(item.value.status), workflow: item.value.workflow || null, reason: item.value.reason || null, evidence: [item.evidence].filter(Boolean), ...read.freshness(item.value.source_hashes) }));
+  const online = onlineAgent(read, evaluations);
   const definitions = [
     { id: 'software', title: '软件机制', unit: 'software_test', cases: code.cases, aggregates: code.aggregates, receipt: code.receipt, scope: 'Named Node test results. Python and other runner totals remain separate aggregates.' },
     { id: 'retrieval', title: 'RAG 与 SOP', unit: 'visible_query', cases: retrieval(root, read, evaluations), scope: 'Visible retrieval and unrelated-query regression; no blind answer correctness claim.' },
     { id: 'tool_execution', title: '工具与案例', unit: 'case_variant', cases: toolsLane(root, read, catalog), scope: 'Catalog variants joined to recorded campaign receipts. Missing runs remain not_run. Expected negative controls remain separate from design passes.' },
     { id: 'engineering', title: '工程验收', unit: 'project_domain', cases: engineering(root, read), scope: 'Latest recorded verdict per project and domain. Formal and board-level acceptance require their own evidence.' },
-    { id: 'online_agent', title: 'Agent 在线任务', unit: 'session_task', cases: [makeCase({ id: 'online-agent', title: '真实 Pi 会话与关联工程任务', category: 'end_to_end', group: 'end_to_end', group_title: '端到端任务', tier: 'online', unit: 'session_task' }, onlineHistory)], scope: 'Only online-agent evaluator receipts count. Fake SDK and browser fixtures stay in software tests.' },
+    { id: 'online_agent', title: 'Agent 在线任务', unit: 'session_task', ...online, scope: 'One case per recorded session/workflow pair; repeated assessments remain history. Unbound receipts are retained outside the task denominator. Fake SDK and browser fixtures cannot count as live successes.' },
   ];
   let historical = [];
   try { historical = loadResults(root).records.map(({ evidence, ...item }) => ({ ...item, evidence, scope_kind: 'historical_scorecard' })); } catch { /* A new workspace may not have a history catalog. */ }

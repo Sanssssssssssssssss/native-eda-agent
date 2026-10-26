@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { createHash, randomUUID } from 'node:crypto';
 import { readConfig } from './runtime.mjs';
-import { edaResourceOptions, skillDirectories, edaCodemodeOptions } from './agent-resources.mjs';
+import { edaResourceOptions, skillDirectories, edaCodemodeOptions, installedPiVersion } from './agent-resources.mjs';
 import {prepareAgentTask,claimAgentTask,taskDelivery,guardTaskTool,activeTaskContext} from './agent-task.mjs';
 
 const save = (file, data) => fs.writeFileSync(file, JSON.stringify(data, null, 2) + '\n');
@@ -221,10 +221,14 @@ export async function runAgentSession({ root, prompt, limits = { maxTurns: 24, t
         if (event.type === 'message_end' && event.message?.role === 'assistant') {
           if(promptStarted) {
             run.provider_observation.assistant_messages++;
-            if(['stop','length','toolUse'].includes(event.message.stopReason))run.provider_observation.successful_assistant_messages++;
+            if(['stop','toolUse'].includes(event.message.stopReason))run.provider_observation.successful_assistant_messages++;
           }
           if (promptStarted) answer = publicAgentEvent(event)?.text || '';
           if (event.message.stopReason === 'error') failure = event.message.errorMessage || 'Model request failed';
+          if (event.message.stopReason === 'length') failure = 'Model response was truncated by its output limit; generation is incomplete.';
+          // Let the SDK perform its own recovery. A later complete response clears
+          // the failed attempt; an unrecovered length response cannot enter EDA.
+          if (['stop','toolUse'].includes(event.message.stopReason)) failure = null;
           if (event.message.stopReason === 'aborted') abort('model-aborted');
         }
         if (event.type === 'auto_retry_end') failure = event.success ? null : event.finalError || failure || 'Model retries exhausted';
@@ -306,7 +310,7 @@ export async function runAgentSession({ root, prompt, limits = { maxTurns: 24, t
     }
     run.stoppedReason = stoppedReason;
     const stats = sessionStats(session);
-    usage = { scope: 'pi-sdk-agent-only', agentRunId: run.runId, outerCodexUsage: 'Not included in Pi statistics.', costBasis: 'Pi provider catalog estimate, not an invoice', piVersion: '1.3.0', provider: session?.model?.provider, model: session?.model?.id, thinking: session?.thinkingLevel, limits, turns, stoppedReason,
+    usage = { scope: 'pi-sdk-agent-only', agentRunId: run.runId, outerCodexUsage: 'Not included in Pi statistics.', costBasis: 'Pi provider catalog estimate, not an invoice', piVersion: installedPiVersion(), provider: session?.model?.provider, model: session?.model?.id, thinking: session?.thinkingLevel, limits, turns, stoppedReason,
       execution_provenance:run.execution_provenance,provider_observation:run.provider_observation,tool_budget:run.tool_budget,
       stats, stats_scope: 'session_cumulative', session_total: stats, run_delta: usageDelta(initialStats, stats), run_delta_basis: 'session_statistics_after_creation_before_prompt' };
     try { await session?.extensionRunner?.emit({ type: 'session_shutdown', reason: 'quit' }); }

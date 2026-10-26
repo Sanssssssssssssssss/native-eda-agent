@@ -65,7 +65,18 @@ test('production community proxy exposes 45 tools and 11 prompts without startin
   let errors=''; transport.stderr?.on('data',b=>{errors+=b;});
   try {
     await client.connect(transport);
-    assert.equal((await client.listTools()).tools.length,45,errors);
+    const advertised=(await client.listTools()).tools;
+    assert.equal(advertised.length,45,errors);
+    for(const name of ['run_synthesis','run_implementation']) {
+      assert.equal(advertised.find(tool=>tool.name===name).inputSchema.properties.wait.const,true);
+      const denied=await client.callTool({name,arguments:{session_id:'no-session-offline-check',wait:false}});
+      assert.equal(denied.isError,true);assert.match(denied.content[0].text,/requires wait=true/);
+      const directory=denied._meta['eda.trace'].directory;
+      assert.equal(inspectTrace(directory).valid,true);
+      const events=fs.readFileSync(path.join(directory,'events.jsonl'),'utf8').trim().split('\n').map(JSON.parse);
+      assert.ok(!events.some(event=>event.type==='mcp_request'),'Async EDA must be rejected before backend dispatch');
+    }
+    assert.equal(advertised.find(tool=>tool.name==='generate_bitstream').inputSchema.properties.wait,undefined, 'Always-synchronous upstream bitstream API has no wait argument');
     assert.equal((await client.listPrompts()).prompts.length,11);
     const resources=await client.listResources(); assert.ok(resources.resources.length>0);
     const response=await client.callTool({name:'run_tcl',arguments:{session_id:'no-session-offline-check',command:'puts SHOULD_NEVER_EXECUTE'}});
