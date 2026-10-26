@@ -1,0 +1,255 @@
+{
+  "schema_version": 1,
+  "recorded_at": "2026-10-26T12:40:59.144Z",
+  "scope": "Two visible full-system acceptance reruns after fixing candidate evidence attribution; no new RTL repair or blind score.",
+  "cases": [
+    {
+      "name": "crypto-soc",
+      "classification": "known_implementation_full_flow_validation",
+      "native_run": "native-agent-2026-10-26T12-19-03-226Z-624539",
+      "workflow_run": "2026-10-26T12-19-34-455Z-eda_workflow_run-58475cc5",
+      "source_files": 10,
+      "source_lines": 5728,
+      "native_status": "completed",
+      "task_status": "failed",
+      "acceptance": "review_required",
+      "rounds": 1,
+      "verifier_calls": 4,
+      "task_integrity": true,
+      "originals_preserved": true,
+      "domains": [
+        {
+          "domain": "functional",
+          "status": "passed",
+          "observed": {
+            "status": "pass",
+            "pass_marker": "HARD_BENCH_PASS project=crypto-soc",
+            "marker_matches": 1,
+            "completion_observed": true,
+            "failure_diagnostic": false,
+            "scope": "Explicit testbench marker, completion and diagnostic checks; semantic assertions remain the testbench responsibility."
+          }
+        },
+        {
+          "domain": "synthesis",
+          "status": "passed",
+          "observed": 0
+        },
+        {
+          "domain": "setup",
+          "status": "passed",
+          "observed": 0.135
+        },
+        {
+          "domain": "hold",
+          "status": "passed",
+          "observed": 0.101
+        },
+        {
+          "domain": "constraints",
+          "status": "passed",
+          "observed": {
+            "internal": "pass",
+            "io": "pass"
+          }
+        },
+        {
+          "domain": "routing",
+          "status": "passed",
+          "observed": "pass"
+        },
+        {
+          "domain": "drc",
+          "status": "review_required",
+          "observed": {
+            "errors": 0,
+            "critical_warnings": 0,
+            "warnings": 2
+          }
+        },
+        {
+          "domain": "cdc",
+          "status": "not_requested"
+        },
+        {
+          "domain": "artifact_integrity",
+          "status": "not_requested"
+        }
+      ],
+      "synthesis": {
+        "utilization": {
+          "Slice LUTs": 5166,
+          "Slice Registers": 4854,
+          "Block RAM Tile": 16,
+          "RAMB36/FIFO*": 16,
+          "RAMB18": 0,
+          "DSPs": 0
+        },
+        "setup_ns": 1.629,
+        "hold_ns": 0.187
+      },
+      "implementation": {
+        "utilization": {
+          "Slice LUTs": 5108,
+          "Slice Registers": 4854,
+          "Block RAM Tile": 16,
+          "RAMB36/FIFO*": 16,
+          "RAMB18": 0,
+          "DSPs": 0
+        },
+        "setup_ns": 0.135,
+        "hold_ns": 0.101,
+        "drc": {
+          "errors": 0,
+          "critical_warnings": 0,
+          "warnings": 2
+        }
+      },
+      "evidence_sha256": {
+        "run.json": "9ba9ffa81a5f3484a7d0e288c0329379d07bff2359590403da481151051fc15b",
+        "task-outcome.json": "2b6242964c2e3aede302fb753490e9dc5fc35699cf44fd356a641b068b2d96ed",
+        "synthesis.result.json": "18940e36f35d3ede7b6539d4bad2d635907c307da836f7fa837ed7d466d6cb4b",
+        "implementation.result.json": "f7a88a6ac5c2041eaaa595e4840bb3604d98dae3f56759bfb4b4b9992588a448"
+      },
+      "online_evaluation": "failed"
+    },
+    {
+      "name": "ethernet-cdc",
+      "classification": "known_implementation_full_flow_validation",
+      "native_run": "native-agent-2026-10-26T12-19-05-184Z-0e04a8",
+      "workflow_run": "2026-10-26T12-19-33-805Z-eda_workflow_run-4878ddeb",
+      "source_files": 30,
+      "source_lines": 12513,
+      "native_status": "completed",
+      "task_status": "budget_exhausted",
+      "acceptance": "failed",
+      "rounds": 1,
+      "verifier_calls": 4,
+      "task_integrity": true,
+      "originals_preserved": true,
+      "domains": [
+        {
+          "domain": "functional",
+          "status": "passed",
+          "observed": {
+            "status": "pass",
+            "pass_marker": "HARD_BENCH_PASS project=ethernet-cdc",
+            "marker_matches": 1,
+            "completion_observed": true,
+            "failure_diagnostic": false,
+            "scope": "Explicit testbench marker, completion and diagnostic checks; semantic assertions remain the testbench responsibility."
+          }
+        },
+        {
+          "domain": "synthesis",
+          "status": "passed",
+          "observed": 0
+        },
+        {
+          "domain": "setup",
+          "status": "failed",
+          "observed": -0.078
+        },
+        {
+          "domain": "hold",
+          "status": "passed",
+          "observed": 0.072
+        },
+        {
+          "domain": "constraints",
+          "status": "review_required",
+          "observed": {
+            "internal": "pass",
+            "io": "review_required"
+          }
+        },
+        {
+          "domain": "routing",
+          "status": "passed",
+          "observed": "pass"
+        },
+        {
+          "domain": "drc",
+          "status": "unknown"
+        },
+        {
+          "domain": "cdc",
+          "status": "not_requested"
+        },
+        {
+          "domain": "artifact_integrity",
+          "status": "not_requested"
+        }
+      ],
+      "synthesis": {
+        "utilization": {
+          "Slice LUTs": 1934,
+          "Slice Registers": 2964,
+          "Block RAM Tile": 8,
+          "RAMB36/FIFO*": 7,
+          "RAMB18": 2,
+          "DSPs": 0
+        },
+        "setup_ns": -0.197,
+        "hold_ns": 0.159
+      },
+      "implementation": {
+        "utilization": {
+          "Slice LUTs": 1896,
+          "Slice Registers": 2964,
+          "Block RAM Tile": 8,
+          "RAMB36/FIFO*": 7,
+          "RAMB18": 2,
+          "DSPs": 0
+        },
+        "setup_ns": -0.078,
+        "hold_ns": 0.072,
+        "drc": {
+          "errors": 0,
+          "critical_warnings": 0,
+          "warnings": 2
+        }
+      },
+      "evidence_sha256": {
+        "run.json": "4e638296af30e5974160a0ecebe6e27b9b123ccb1703b30d3e6d5d8ad600fdcf",
+        "task-outcome.json": "70a575ec52d81352e246d47e19df7a291cd380114ea7358620ca9a037e4a575f",
+        "synthesis.result.json": "cbbf2c31e38ef75eef978185b363ff485eed6f9b6868b3f8c4c923cf3eef3d3f",
+        "implementation.result.json": "e3b11c7e0ae408cda795ac73ec672a96c5822871bcd7bcf47f838084b7f8ec4b"
+      },
+      "online_evaluation": "failed"
+    }
+  ],
+  "budget": {
+    "scope": "CommandCode API only",
+    "cap": 50000000,
+    "known_tokens": 3857067,
+    "unknown_reserved_tokens": 808488,
+    "metered_requests": 123,
+    "initial_probes": 1,
+    "active_requests": 0,
+    "outer_codex_tokens": null
+  },
+  "current_followup": {
+    "known_tokens": 258224,
+    "requests": 9,
+    "other_model_providers": 0
+  },
+  "browser": {
+    "candidate_source": true,
+    "source_paging": true,
+    "report_preview": true,
+    "project_completion_poll": true,
+    "viewport_390_no_page_overflow": true
+  },
+  "limitations": [
+    "The Ethernet setup and IO constraint failures remain; no constraint was relaxed.",
+    "SoC DRC remains review_required.",
+    "Both final contracts allow one verification round; they measure complete-flow execution, not repair success.",
+    "Online-agent grading retains both non-accepted tasks as failures; they are not full successes.",
+    "No board test or formal proof."
+  ],
+  "preserved_pre_fix_native_runs": [
+    "native-agent-2026-10-26T12-06-54-338Z-5fe9ce",
+    "native-agent-2026-10-26T12-08-34-127Z-9c4297"
+  ]
+}

@@ -1,0 +1,69 @@
+{
+  "valid": true,
+  "errors": [],
+  "optional_unavailable": [
+    {
+      "id": "ross",
+      "path": "vendor/ross-ai-assistant/manifest.yaml"
+    },
+    {
+      "id": "ross",
+      "path": "vendor/ross-ai-assistant/skills/vivado-timing-methodology-checks/SKILL.md"
+    },
+    {
+      "id": "FPGA-TOOL-002",
+      "path": "vendor/ross-ai-assistant/skills/vivado-timing-methodology-checks/SKILL.md"
+    }
+  ],
+  "counts": {
+    "sources": 21,
+    "rules": 36,
+    "tools": 11,
+    "sops": 6,
+    "skills": 6
+  },
+  "boundary": "Offline structural and cross-reference validation only. Does not verify source truth, remote link reachability, HDL correctness, formal proof, tool installation or hardware behavior.",
+  "checked_at_utc": "2026-10-26T12:39:55.411Z",
+  "files": [
+    {
+      "path": "knowledge/sources.json",
+      "sha256_at_check": "d603e1a7159623164c79059f1c4f15944b2c2312ed6fcdfe768cb0ac23733a3d"
+    },
+    {
+      "path": "knowledge/rules.json",
+      "sha256_at_check": "1e77d3eb0a63ed2323f85f4dbe8408f471eca69fc37947da41c36c5264c196fb"
+    },
+    {
+      "path": "knowledge/tools.json",
+      "sha256_at_check": "12d8ae1e0141eaef8ba79c834a30152b5c5ca3f20688e3ee12c2741db3f3f426"
+    },
+    {
+      "path": "knowledge/sops.json",
+      "sha256_at_check": "7f6cacae88edcc2ba0b095666406215733df7922af7256a771496a794e063bd4"
+    },
+    {
+      "path": ".pi/skills/fpga-cdc-review/SKILL.md",
+      "sha256_at_check": "849f8725fad7f77d8a0caf6e5f15d86cc3543c8ef51afcfb61a71b62eef24259"
+    },
+    {
+      "path": ".pi/skills/fpga-ip-integrate/SKILL.md",
+      "sha256_at_check": "ad1ece2837b3dd31fe1a4cc8e20bcefa4f9ae99f887056a6552a3b5e2757790e"
+    },
+    {
+      "path": ".pi/skills/fpga-plan/SKILL.md",
+      "sha256_at_check": "46526fc1f970b38390e8655f83138326f4bcb41b6748a253bfd38ab3a31c13bf"
+    },
+    {
+      "path": ".pi/skills/fpga-reproduce/SKILL.md",
+      "sha256_at_check": "910c422cc8a9f7bbf270e4e31382dee2acf338602d3e072c6843f89f3cf526f9"
+    },
+    {
+      "path": ".pi/skills/fpga-rtl-verify/SKILL.md",
+      "sha256_at_check": "11432c15fb1fe7764ba24918668698355d2143b9dc2cff4512fe05d3add2a28a"
+    },
+    {
+      "path": ".pi/skills/fpga-timing-triage/SKILL.md",
+      "sha256_at_check": "d45ce3ebc40241ee7604c9e8d2fd246d0551667043206423032ccd2bf89cb469"
+    }
+  ]
+}

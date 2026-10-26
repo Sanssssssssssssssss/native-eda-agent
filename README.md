@@ -87,6 +87,8 @@ node scripts/results.mjs verify hard-projects-3
 
 ## 工程工作区
 
+会话内点击 **查看候选 RTL**，可直接对照原件、候选和固定依赖；工程页也能找到关联 Agent 候选。运行详情的 **综合与实现** 展示资源、时序和原生报告。入口与完整 SoC / Ethernet 规格见 [可见工程交付](docs/workbench-visible-projects.md)。
+
 ```powershell
 npm run workbench
 # http://127.0.0.1:4317

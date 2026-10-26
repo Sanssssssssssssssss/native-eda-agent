@@ -142,3 +142,12 @@ test('current evidence becomes historical after input drift and tampered reports
   assert.equal(p.verification_matrix.functional.run_id, path.basename(run.details.directory));
   assert.equal(p.runs.find(r => r.id === path.basename(older.details.directory)).acceptance.domains.find(d => d.domain === 'functional').status, 'passed');
 });
+
+
+test('a candidate workflow sharing original vectors cannot become original-project evidence', t => {
+  const f=fixture(t), id='2026-10-26T12-00-00-000Z-eda_workflow_run-candidate';
+  f.write(`artifacts/${id}/run.json`,JSON.stringify({tool:'eda_workflow_run',status:'running',arguments:{spec:'artifacts/agent-task-123/candidate-workflow.json'},inputs:[{relative_path:'projects/demo/vectors/check.mem'}]}));
+  const project=getProject(f.root,f.id);
+  assert.equal(project.runs.some(run=>run.id===id),false);
+  assert.equal(project.verification_matrix.functional.run_id,null);
+});

@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "root": "${WORKSPACE}",
+  "scope": "export-manifest",
+  "tracked_check": false,
+  "files_checked": 796,
+  "markdown_files": 78,
+  "local_links": 466,
+  "issues": [],
+  "warnings": [],
+  "passed": true
+}

@@ -46,7 +46,7 @@ const icon = (name) =>
 const statusNames = {
   prepared: "范围已固定",
   invalid: "证据失效",
-  budget_exhausted: "预算用尽",
+  budget_exhausted: "验证轮次或调用达上限",
   passed: "通过",
   pass: "通过",
   completed: "执行完成",
@@ -722,7 +722,7 @@ function renderConversation() {
   syncComposerMode();
 }
 function agentTaskStripHtml(task) {
-  return task ? `<div class="agent-task-strip"><span>${icon("shield")}<strong>${esc(task.goal || "验证任务")}</strong>${badge(task.task_acceptance?.status || "unknown")}</span>${button("agent-task-details","范围与证据","file","","subtle")}</div>` : "";
+  return task ? `<div class="agent-task-strip"><span>${icon("shield")}<strong>${esc(task.goal || "验证任务")}</strong>${badge(task.task_acceptance?.status || "unknown")}</span>${button("task-files","查看候选 RTL","file",`data-id="${esc(basename(task.task))}"`,"subtle")}${button("agent-task-details","范围与证据","file","","subtle")}</div>` : "";
 }
 function updateAgentTaskStrip() {
   const current = document.querySelector('.agent-task-strip'), html = agentTaskStripHtml(state.session?.agent_task_summary);
@@ -863,7 +863,7 @@ async function agentTaskDetails() {
   state.session=await api('session?id='+encodeURIComponent(state.session.id));
   const task=state.session.agent_task_summary;
   const canRun=state.overview.config.model_api_enabled && ['prepared','cancelled'].includes(task.status) && task.recovery?.ready;
-  openDrawer('验证任务与候选 RTL',`<h3>${esc(task.goal||'任务待复核')}</h3><div class="row">${badge(task.status)}${badge(task.task_acceptance?.status||'unknown')}</div><dl class="definition-list"><dt>候选目录</dt><dd><code>${esc(task.candidate)}</code></dd><dt>已验证轮次</dt><dd>${task.rounds||0}</dd><dt>验证调用</dt><dd>${task.calls||0}</dd><dt>恢复条件</dt><dd>${esc(task.recovery?.ready?'已满足':task.recovery?.reason)}</dd></dl><h3>允许修改的 RTL</h3>${(task.editable_sources||[]).map(file=>`<p><code>${esc(file)}</code></p>`).join('')}<h3>独立验收</h3><div class="verifier-domains">${(task.task_acceptance?.domains||[]).filter(d=>!['not_requested','not_evaluated'].includes(d.status)).map(d=>`<span>${esc(domainNames[d.domain]||d.domain)} ${badge(d.status)}</span>`).join('')||'<p class="meta">尚未执行独立验证。</p>'}</div>${task.issues?.length?`<p class="notice">${esc(task.issues.join('; '))}</p>`:''}${task.evidence?button('open-run','查看验证证据','file',`data-id="${esc(basename(task.evidence))}"`):''}<div class="row">${button('agent-task-start',task.status==='cancelled'?'续接修复':'开始修复','play',canRun?'':'disabled','primary')}${button('agent-task-detach','解除会话绑定','close')}</div>${!state.overview.config.model_api_enabled?'<p class="meta">模型 API 当前关闭；候选和验收范围已保存在本机。</p>':''}`);
+  openDrawer('验证任务与候选 RTL',`<h3>${esc(task.goal||'任务待复核')}</h3><div class="row">${badge(task.status)}${badge(task.task_acceptance?.status||'unknown')}</div><dl class="definition-list"><dt>候选目录</dt><dd><code>${esc(task.candidate)}</code></dd><dt>已验证轮次</dt><dd>${task.rounds||0}</dd><dt>验证调用</dt><dd>${task.calls||0}</dd><dt>恢复条件</dt><dd>${esc(task.recovery?.ready?'已满足':task.recovery?.reason)}</dd></dl>${button('task-files','打开候选源码与原件对照','file',`data-id="${esc(basename(task.task))}"`)}<h3>允许修改的 RTL</h3>${(task.editable_sources||[]).map(file=>`<p><code>${esc(file)}</code></p>`).join('')}<h3>独立验收</h3><div class="verifier-domains">${(task.task_acceptance?.domains||[]).filter(d=>!['not_requested','not_evaluated'].includes(d.status)).map(d=>`<span>${esc(domainNames[d.domain]||d.domain)} ${badge(d.status)}</span>`).join('')||'<p class="meta">尚未执行独立验证。</p>'}</div>${task.issues?.length?`<p class="notice">${esc(task.issues.join('; '))}</p>`:''}${task.evidence?button('open-run','查看验证证据','file',`data-id="${esc(basename(task.evidence))}"`):''}<div class="row">${button('agent-task-start',task.status==='cancelled'?'续接修复':'开始修复','play',canRun?'':'disabled','primary')}${button('agent-task-detach','解除会话绑定','close')}</div>${!state.overview.config.model_api_enabled?'<p class="meta">模型 API 当前关闭；候选和验收范围已保存在本机。</p>':''}`);
 }
 async function startAgentTask() {
   const task=state.session?.agent_task_summary;
@@ -1074,7 +1074,7 @@ function domainDetail(d) {
   if (d.domain === "functional" && d.observed?.completion_observed)
     return "固定 checker 标记通过，仿真完整结束。";
   if (d.domain === "constraints" && d.observed?.internal === "pass")
-    return "内部时钟与 IO 约束检查通过。";
+    return d.observed.io === 'pass' ? "内部时钟与 IO 约束检查通过。" : "内部时钟约束通过；IO 约束仍需核对。";
   if (d.domain === "routing" && d.observed === "pass")
     return "布线报告核验通过。";
   return (
@@ -1099,6 +1099,7 @@ function renderRun() {
   $("#content").innerHTML =
     `<div class="page"><div class="run-summary"><span class="summary-symbol">${icon(w ? "flow" : "tool")}</span><div><h2>${esc(runName(r))}</h2><p>${esc(runDescription(r))}</p><div class="run-meta"><span>${date(r.manifest.started_at)}</span><span>${duration(r.manifest.started_at, r.manifest.finished_at)}</span><span>执行：${esc(statusNames[r.manifest.status] || r.manifest.status)}</span></div></div>${badge(a?.status || r.manifest.status)}</div>${w?.valid === false ? '<div class="notice neutral">' + icon("clock") + "<span>当前源码或输入与此运行记录有差异。下方保留当时的验收结果；复用或恢复前需重新核验。</span></div>" : ""}${w?.steps?.length ? `<div class="run-steps">${w.steps.map((s, i) => `<div class="run-step ${(w.completed_steps || []).includes(s.id) ? "done" : ""}"><span class="step-marker">${(w.completed_steps || []).includes(s.id) ? icon("check") : i + 1}</span><strong>${esc(toolNames[s.tool] || s.id)}</strong></div>`).join("")}</div>` : ""}<div class="tabs" role="tablist" aria-label="运行详情">${[
       ["acceptance", "验收结果"],
+      ["engineering", "综合与实现"],
       ["timeline", "执行时间线"],
       ["info", "运行信息"],
     ]
@@ -1112,6 +1113,7 @@ function runPanel() {
   const r = state.run,
     w = r.workflow,
     a = acceptanceFor(w);
+  if (state.runTab === 'engineering') return engineeringPanel(w);
   if (state.runTab === "timeline") {
     const events = (r.events || []).filter(
       (e) =>
@@ -1254,6 +1256,10 @@ function selectedProjectRanges() {
     state.projectSelections.set(state.id, new Map());
   return state.projectSelections.get(state.id);
 }
+function projectAgentTasks() {
+  const tasks=state.project.agent_tasks||[];
+  return `<section class="project-agent-tasks"><h2>Agent 候选</h2>${tasks.length?tasks.map(task=>`<article><strong>${esc(task.goal)}</strong><div>${badge(task.task_acceptance?.status||'unknown')}<small>${task.status==='running'?'正在验证':task.issues?.length?'输入或框架版本已变化':`${task.rounds} 轮 / ${task.calls} 次验证`}</small></div>${button('task-files','查看候选源码','file',`data-id="${esc(task.id)}"`)}${task.evidence?button('open-run','验证与综合结果','runs',`data-id="${esc(basename(task.evidence))}"`):'<small>尚未产生验证报告</small>'}</article>`).join(''):'<p class="meta">此工程尚未绑定 Agent 候选。</p>'}</section>`;
+}
 function projectMatrix() {
   const matrix = state.project.verification_matrix || {};
   const values = ["functional", "synthesis", "setup", "hold", "routing", "drc"];
@@ -1275,6 +1281,31 @@ function projectMatrix() {
     .join(
       "",
     )}</tbody></table><details class="other-domains"><summary>CDC · 形式验证 · 板卡实测</summary>${["cdc", "formal", "hardware"].map((n) => `<div><span>${esc({ cdc: "CDC", formal: "形式验证", hardware: "板卡实测" }[n])}</span>${badge(matrix[n]?.status || "unknown")}</div>`).join("")}</details></section>`;
+}
+
+function engineeringPanel(workflow) {
+  const stages=workflow?.engineering||[];
+  if(!stages.length) return '<p class="notice neutral">此运行尚无通过文件完整性核验的综合或实现结果。先完成工程验证，再查看资源、时序和原生报告。</p>';
+  const stageHtml=s=>{
+    const physical=['synthesized','routed'].includes(s.stage);
+    const title=s.stage==='synthesized'?'综合结果':s.stage==='routed'?'布局布线结果':toolNames[workflow.steps?.find(step=>step.id===s.step)?.tool]||s.step;
+    const domain=acceptanceFor(workflow)?.domains?.find(d=>d.step===s.step);
+    const reports=(s.reports||[]).map(file=>button('artifact-preview',file,'file',`data-run="${esc(s.run_id)}" data-file="${esc(file)}"`)).join('');
+    const metrics=physical?`<div class="engineering-metrics"><table><caption>资源使用</caption><tbody>${Object.entries(s.utilization||{}).map(([name,value])=>`<tr><th>${esc(name)}</th><td>${esc(value)}</td></tr>`).join('')||'<tr><td>未记录</td></tr>'}</tbody></table><table><caption>${s.stage==='synthesized'?'综合估算时序':'实现时序'}</caption><tbody><tr><th>Setup slack</th><td>${esc(s.setup_slack_ns??'—')} ns</td></tr><tr><th>Hold slack</th><td>${esc(s.hold_slack_ns??'—')} ns</td></tr><tr><th>布线</th><td>${badge(s.assessment?.routing||'unknown')}</td></tr><tr><th>时钟与内部约束</th><td>${badge(s.assessment?.clock_and_internal_constraints||'unknown')}</td></tr></tbody></table></div>`:`<p>${badge(domain?.status||'unknown')} ${esc(domain?domainDetail(domain):'查看该步骤的原生报告。')}</p>`;
+    return `<section><div class="section-heading"><h2>${esc(title)}</h2><span>${esc(s.design)} / ${esc(s.part)}</span></div>${physical?`<p class="meta">${(s.clocks||[]).map(c=>`${esc(c.name)} ${esc(c.period_ns)} ns`).join(' · ')} · 黑盒 ${esc(s.black_boxes??'未记录')}</p>`:''}${metrics}<div class="report-shortcuts">${reports}</div></section>`;
+  };
+  return `<div class="engineering-results">${stages.map(stageHtml).join('')}<p class="meta">上述数据绑定各步骤的已保存回执。最终验收仍按功能、时序、约束、DRC 和 CDC 分别判断。</p></div>`;
+}
+
+let taskSourceRequest=0;
+async function openTaskFiles(id, selected, start=1) {
+  const request=++taskSourceRequest;
+  const task=await api('task-files?id='+encodeURIComponent(id));
+  const file=selected||task.files.find(f=>f.editable)?.original||task.files[0]?.original;
+  const preview=file?await api(`task-source?id=${encodeURIComponent(id)}&file=${encodeURIComponent(file)}&start_line=${start}`):null;
+  if(request!==taskSourceRequest)return;
+  const pane=(label,value)=>`<section><h3>${label}<small>${value.total_lines} 行 · SHA ${esc(value.sha256.slice(0,12))}</small></h3><div class="source-lines" role="region" aria-label="${label}" tabindex="0">${value.lines.map(row=>`<div class="source-line"><span class="source-number">${row.number}</span><code>${highlightRtl(row.text)}</code></div>`).join('')}</div></section>`;
+  openDrawer('候选 RTL 与原件对照',`<div class="task-source-heading">${badge(task.delivery.task_acceptance?.status||'unknown')}<span>${task.delivery.rounds} 轮 / ${task.delivery.calls} 次验证</span>${task.delivery.evidence?button('open-run','验证与综合结果','runs',`data-id="${esc(basename(task.delivery.evidence))}"`):''}</div><div class="task-source-workspace"><nav aria-label="候选文件">${task.files.map(f=>`<button class="${f.original===file?'active':''}" data-action="task-source" data-id="${esc(id)}" data-file="${esc(f.original)}" title="${esc(f.original)}"><strong>${esc(basename(f.original))}</strong><small>${f.editable?'允许修改':'固定依赖'}</small></button>`).join('')}</nav><div>${preview?`<p class="source-identity">${esc(file)}<br>${preview.original_matches_frozen?'原件与冻结输入一致':'原件已变化，不能视作冻结基线'} · ${preview.changed?'候选内容有变化':'候选与当前原件一致'}</p><div class="task-source-compare">${pane('当前原件',preview.original)}${pane('候选 RTL',preview.candidate)}</div><div class="row">${start>1?button('task-source','第一页','back',`data-id="${esc(id)}" data-file="${esc(file)}"`):''}${preview.next_line?button('task-source','下一段','right',`data-id="${esc(id)}" data-file="${esc(file)}" data-start="${preview.next_line}"`):''}</div><p class="meta">按行号并排显示；插入或删除行后两侧位置可能不同。源码预览不表示模块单独通过验证。</p>`:'没有可预览的源码。'}</div></div>`,{wide:true});
 }
 function renderProject() {
   const p = state.project,
@@ -1300,7 +1331,7 @@ function renderProject() {
       .map(([key, title]) => `<option value="${key}">${title}</option>`)
       .join(
         "",
-      )}</select><div id="project-file-list"></div></aside><section class="project-code"><div id="project-source"></div></section><aside class="project-inspector">${projectMatrix()}<section class="scope-selection"><div class="panel-heading"><h2>修改范围</h2></div><div id="scope-selection"></div></section><section class="project-history"><div class="panel-heading"><h2>修改草案</h2></div><div id="project-changes">${projectChangesHtml()}</div></section><details class="project-protection"><summary>${icon("shield")} 保护文件与依赖</summary><div class="protected-files">${
+      )}</select><div id="project-file-list"></div></aside><section class="project-code"><div id="project-source"></div></section><aside class="project-inspector">${projectMatrix()}${projectAgentTasks()}<section class="scope-selection"><div class="panel-heading"><h2>修改范围</h2></div><div id="scope-selection"></div></section><section class="project-history"><div class="panel-heading"><h2>修改草案</h2></div><div id="project-changes">${projectChangesHtml()}</div></section><details class="project-protection"><summary>${icon("shield")} 保护文件与依赖</summary><div class="protected-files">${
       p.files
         .filter(
           (f) =>
@@ -2041,7 +2072,24 @@ async function poll() {
           `任务${statusNames[ended[0].status] || "已结束"}，结果与证据已保存。`,
         );
         if (state.view === "evaluations") await loadEvaluations();
-        else if (state.view === "runs" && !state.id) renderRunList();
+        else if (state.view === "runs") {
+          if(!state.id) renderRunList();
+          else {
+            const version=state.routeVersion,run=await api('run?id='+encodeURIComponent(state.id));
+            if(version===state.routeVersion){state.run=run;renderRun();}
+          }
+        } else if(state.view==='projects') {
+          if(!state.id) await loadProjects();
+          else {
+            const version=state.routeVersion,project=await api('project?id='+encodeURIComponent(state.id));
+            if(version===state.routeVersion){
+              state.project=project;
+              const reports=document.querySelector('.project-reports'),tasks=document.querySelector('.project-agent-tasks');
+              if(reports)reports.outerHTML=projectMatrix();
+              if(tasks)tasks.outerHTML=projectAgentTasks();
+            }
+          }
+        }
       }
     }
   } catch {
@@ -2163,6 +2211,8 @@ document.addEventListener(
       templates: templatesDrawer,
       'agent-task':agentTaskDrawer,
       'agent-task-details':agentTaskDetails,
+      'task-files':()=>openTaskFiles(b.dataset.id||basename(state.session?.agent_task_summary?.task)),
+      'task-source':()=>openTaskFiles(b.dataset.id,b.dataset.file,Number(b.dataset.start||1)),
       'agent-task-start':startAgentTask,
       'agent-task-detach':async()=>{await api('agent-task',{action:'detach',session_id:state.session.id});state.session=await api('session?id='+encodeURIComponent(state.session.id));closeDrawer();renderConversation();},
       "close-drawer": closeDrawer,

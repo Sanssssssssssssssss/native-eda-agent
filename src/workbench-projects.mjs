@@ -205,6 +205,9 @@ function linkedRuns(root, project, files, specs) {
   for (const e of candidates) {
     const directory = `artifacts/${e.name}`, m = maybeJson(root, `${directory}/run.json`, 4 * 1024 * 1024);
     if (!m) continue;
+    // Candidate flows may read original vectors or initialization files. Those
+    // shared dependencies do not bind the candidate verdict to the original RTL.
+    if (/(?:^|\/)artifacts\/agent-task-[^/]+\//.test(slash(m.arguments?.spec || ''))) continue;
     const mentionsProject = m.inputs?.some(i => typeof i.relative_path === 'string' && slash(i.relative_path).startsWith(project + '/'));
     if (!specPaths.has(m.arguments?.spec) && !mentionsProject) continue;
     const observed = workflowEvidence(root, directory);

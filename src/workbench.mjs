@@ -14,6 +14,7 @@ import {listProjects, getProject, readProjectSource} from './workbench-projects.
 import {getTestingOverview} from './workbench-testing.mjs';
 import {listChanges, getChange, planChange, previewChange, applyChange, checkChange} from './workbench-changes.mjs';
 import {prepareAgentTask,taskDelivery} from './agent-task.mjs';
+import {taskFiles, readTaskSource, projectTasks} from './workbench-task-files.mjs';
 
 const digest = value => createHash('sha256').update(JSON.stringify(value)).digest('hex');
 // Each preview has its own trace directory; the executable contract excludes only that receipt location.
@@ -289,7 +290,13 @@ export function createWorkbench(root, registry, options = {}) {
       if (req.method === 'GET' && route === '/api/overview') return send(200, {config: {model_api_enabled: readConfig(root).model_api_enabled}, runs: runList(), sessions: sessionList(), jobs: jobsList(), sops: querySop(root).sops, specimens, suites: evaluationSuites,
         history: loadResults(root).records.map(({evidence, ...r}) => ({...r, evidence_count: evidence.length}))});
       if (req.method === 'GET' && route === '/api/projects') return send(200, listProjects(root));
-      if (req.method === 'GET' && route === '/api/project') return send(200, getProject(root, url.searchParams.get('id')));
+      if (req.method === 'GET' && route === '/api/project') {
+        const project=getProject(root,url.searchParams.get('id'));
+        return send(200,{...project,agent_tasks:projectTasks(root,project.publicPath,registry)});
+      }
+      if (req.method === 'GET' && route === '/api/task-files') return send(200, taskFiles(root,url.searchParams.get('id'),registry));
+      if (req.method === 'GET' && route === '/api/task-source') return send(200, readTaskSource(root,url.searchParams.get('id'),url.searchParams.get('file'),registry,{
+        start_line:Number(url.searchParams.get('start_line')||1),line_count:Number(url.searchParams.get('line_count')||160)}));
       if (req.method === 'GET' && route === '/api/project-source') return send(200, readProjectSource(root, url.searchParams.get('id'), url.searchParams.get('path'), {
         ...(url.searchParams.has('start_line') ? {start_line: Number(url.searchParams.get('start_line'))} : {}),
         ...(url.searchParams.has('line_count') ? {line_count: Number(url.searchParams.get('line_count'))} : {}),
@@ -304,6 +311,11 @@ export function createWorkbench(root, registry, options = {}) {
           const outcomeFile = path.join(dir, 'task-outcome.json');
           const recordedIntegrity = Boolean(saved.task_acceptance_hash && fs.existsSync(outcomeFile) && createHash('sha256').update(fs.readFileSync(outcomeFile)).digest('hex') === saved.task_acceptance_hash);
           workflow = {...r, goal: saved.plan.spec.goal, spec: saved.plan.spec, input_hashes: saved.plan.input_hashes,
+            engineering: Object.entries(results).filter(([,result])=>result.fpga).map(([step,result])=>({step,run_id:path.basename(result.directory),
+              stage:result.fpga.stage,design:result.fpga.design,part:result.fpga.part,clocks:result.fpga.clocks,
+              black_boxes:result.fpga.black_boxes,setup_slack_ns:result.fpga.setup_slack_ns,hold_slack_ns:result.fpga.hold_slack_ns,
+              utilization:result.fpga.parsed_reports?.utilization,assessment:result.fpga.assessment,
+              reports:Object.keys(result.fpga.artifacts||{}).filter(name=>/\.rpt$/i.test(name))})),
             steps: saved.plan.spec.steps.map(s => ({id: s.id, tool: s.tool})), guidance: saved.plan.guidance,
             recorded_acceptance: recordedIntegrity ? readJson(outcomeFile) : null, recorded_acceptance_integrity: recordedIntegrity,
             recorded_scope: 'Historical outcome bound to its saved checkpoint. Current source and evidence checks are reported separately in task_acceptance and issues.'};
