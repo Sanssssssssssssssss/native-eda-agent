@@ -13,6 +13,20 @@ async function execute(f,task,name,{resume=false,generate,signal,onState=()=>{}}
   finally{claim.finish();}
 }
 
+test('constraint scripts are copied into candidates and cannot drift after admission',t=>{
+  const f=taskFixture(t),file=path.join(f.root,'spec.json'),spec=JSON.parse(fs.readFileSync(file));
+  fs.writeFileSync(path.join(f.root,'design/upstream-cdc.tcl'),'foreach inst {} { puts $inst }\n');
+  spec.steps[0].args.constraint_scripts=['design/upstream-cdc.tcl'];
+  fs.writeFileSync(file,JSON.stringify(spec));
+  const task=prepareAgentTask(f.root,f.configuration,f.registry);
+  const frozen=JSON.parse(fs.readFileSync(path.join(f.root,task.configuration.spec)));
+  const copied=frozen.steps[0].args.constraint_scripts[0];
+  assert.ok(copied.startsWith(task.candidate+'/'));
+  assert.equal(inspectAgentTask(f.root,task.directory,f.registry).valid,true);
+  fs.appendFileSync(path.join(f.root,copied),'set_false_path -from [all_clocks]\n');
+  assert.equal(inspectAgentTask(f.root,task.directory,f.registry).valid,false);
+});
+
 test('isolation: candidate includes dependencies and leaves original RTL and oracle unchanged',async t=>{
   const f=taskFixture(t),original=fs.readFileSync(path.join(f.root,'design/dut.sv'));
   const task=prepareAgentTask(f.root,f.configuration,f.registry);

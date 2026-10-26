@@ -149,6 +149,13 @@
       "url": "https://github.com/NVlabs/verilog-eval.git",
       "commit": "c498220d0a52248f8e3fdffe279075215bde2da6",
       "bundled": false
+    },
+    {
+      "name": "SynthPilot_Tutorial",
+      "url": "https://github.com/LNC0831/SynthPilot_Tutorial.git",
+      "commit": "c415ec77d296b38c2bb384141eb9952f1eb84344",
+      "bundled": false,
+      "scope": "Optional local FFT magnitude reference; upstream source is not redistributed"
     }
   ]
 }

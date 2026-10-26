@@ -32,10 +32,10 @@ function walk(relative,accept=(next,name)=>permitted(name)){
   }
 }
 for(const name of ['src','scripts','tests','benchmarks','knowledge','examples','prompts','docs','results','web','.github','.pi/extensions','.pi/skills'])walk(name,(relative,filename)=>permitted(filename)||(relative.startsWith('tests/fixtures/')&&filename.endsWith('.log')));
-for(const image of ['workbench.png','workbench-axi.png','workbench-evaluations.png','workbench-project.png','workbench-scope.png','workbench-tests.png','workbench-native-loop.png','workbench-candidate.png','workbench-engineering.png']){
+for(const image of ['workbench.png','workbench-axi.png','workbench-evaluations.png','workbench-project.png','workbench-scope.png','workbench-tests.png','workbench-native-loop.png','workbench-candidate.png','workbench-engineering.png','workbench-a7-eight.png']){
   if(fs.existsSync(path.join(root,'docs/media',image)))copy(`docs/media/${image}`);
 }
-for(const name of ['fft-spectrum','fpga-tool-validation','hard-bench','system-bench','verilogeval-24','verilogeval-mini','native-vivado-workbench'])walk(`projects/${name}`);
+for(const name of ['a7-validation','fft-spectrum','fpga-tool-validation','hard-bench','system-bench','verilogeval-24','verilogeval-mini','native-vivado-workbench'])walk(`projects/${name}`);
 for(const name of ['README.md','AGENTS.md','CONTRIBUTING.md','CHANGELOG.md','LICENSE','THIRD_PARTY_NOTICES.md','.gitignore','.gitattributes','.editorconfig','package.json','package-lock.json','eda.ps1','start-pi.ps1','.eda/config.json','.eda/optimizer-upstreams.json','.pi/APPEND_SYSTEM.md','.pi/settings.json','projects/README.md','vendor/README.md','release/upstreams.json','release/python-requirements.lock','release/README.md'])copy(name);
 // Release summaries are deliberately named and reviewed; raw logs, events,
 // conversations and private artifacts are never copied by this traversal.

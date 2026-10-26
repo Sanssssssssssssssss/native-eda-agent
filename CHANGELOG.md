@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Qualified eight existing FPGA projects on A7-100T with fixed functional checks, synthesis, setup/hold, constraints, routing and zero DRC. Seven use native Pi sessions and host verification; FFT uses the native tool pipeline. Retained failed attempts and cumulative budgets separately from final passes.
+- Fixed Tcl constraint execution, netlist-verified asynchronous reset exceptions, routed-checkpoint report readback and AES compilation ordering. Added explicit native Tcl dependencies and visible I/O/reset evidence. Offline acceptance passes 301 tests; seven final sessions pass independent online evidence assessment. See [results](docs/a7-eight-projects.md).
+
 - Stabilized native Pi sessions against CommandCode and real XSim/Vivado workflows: use upstream Pi 1.4 worker queuing, reject unrecovered output truncation before verification, and preserve native compaction/retry behavior.
 - Replaced incomplete shared JSON Schema validation with pinned TypeBox; fixed confirmed cancellation status and UTF-8 decoding across HTTP and ACE process chunks.
 - Count online evaluations by session/workflow subject and retain failed/unbound history. Added a separately versioned AXI internal protocol checker after a mutation exposed a historical checker gap; prior scores retain their original protocol.

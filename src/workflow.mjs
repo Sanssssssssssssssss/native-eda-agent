@@ -72,7 +72,7 @@ function validateTemplate(value,schema){
   }else validateArguments(value,schema);
 }
 function inputFiles(root,args){
-  const names=[...(Array.isArray(args.sources)?args.sources:[]),...(Array.isArray(args.constraints)?args.constraints:[]),args.checkpoint].filter(v=>typeof v==='string');
+  const names=[...(Array.isArray(args.sources)?args.sources:[]),...(Array.isArray(args.constraints)?args.constraints:[]),...(Array.isArray(args.constraint_scripts)?args.constraint_scripts:[]),args.checkpoint].filter(v=>typeof v==='string');
   // Includes are declared as directories; hash their file contents to detect header drift.
   for(const dir of args.include_dirs||[]){
     if(typeof dir!=='string')throw new Error('include_dirs must be literal directories');

@@ -73,7 +73,7 @@ export function prepareAgentTask(root, configuration, registry) {
   const spec = structuredClone(original.plan.spec);
   spec.inputs = spec.inputs.map(mapFile);
   for (const step of spec.steps) {
-    for (const field of ['sources','constraints']) if (step.args[field]) step.args[field] = step.args[field].map(mapFile);
+    for (const field of ['sources','constraints','constraint_scripts']) if (step.args[field]) step.args[field] = step.args[field].map(mapFile);
     if (step.args.checkpoint) step.args.checkpoint = mapFile(step.args.checkpoint);
     if (step.args.include_dirs) step.args.include_dirs = step.args.include_dirs.map(name => {
       const rel = relative(root, contained(root, name)), target = path.join(candidate, rel);

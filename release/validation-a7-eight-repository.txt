@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "root": "${WORKSPACE}\\artifacts\\eight-projects-20261026\\validation-export",
+  "scope": "export-manifest",
+  "tracked_check": false,
+  "files_checked": 834,
+  "markdown_files": 80,
+  "local_links": 483,
+  "issues": [],
+  "warnings": [],
+  "passed": true
+}

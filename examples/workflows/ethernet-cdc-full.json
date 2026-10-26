@@ -176,8 +176,8 @@
             "pointer": "/fpga/artifacts/synthesized.dcp"
           }
         },
-        "constraints": [
-          "projects/hard-bench/ethernet-cdc/physical-review.xdc"
+        "constraint_scripts": [
+          "projects/hard-bench/ethernet-cdc/physical-review.tcl"
         ]
       },
       "checks": [

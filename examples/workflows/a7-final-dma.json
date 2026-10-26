@@ -1,0 +1,144 @@
+{
+  "schema_version": 1,
+  "id": "a7-final-dma",
+  "goal": "A7-100T dma: fixed functional oracle, 100 MHz implementation, routed interfaces and DRC",
+  "inputs": [
+    "projects/system-bench/dma/dma_top.v"
+  ],
+  "limits": {
+    "max_calls": 4,
+    "wall_seconds": 3600
+  },
+  "steps": [
+    {
+      "id": "simulation",
+      "tool": "eda_xsim",
+      "args": {
+        "sources": [
+          "vendor/verilog-axi/rtl/axi_dma.v",
+          "vendor/verilog-axi/rtl/axi_dma_rd.v",
+          "vendor/verilog-axi/rtl/axi_dma_wr.v",
+          "vendor/verilog-ethernet/lib/axis/rtl/axis_fifo.v",
+          "projects/system-bench/dma/dma_top.v",
+          "projects/system-bench/dma/tb_dma.sv"
+        ],
+        "top": "tb_dma",
+        "capture_top_wave": false,
+        "timeout_seconds": 1200,
+        "pass_marker": "SYSTEM_BENCH_PASS project=dma"
+      },
+      "checks": [
+        {
+          "pointer": "/simulation_acceptance/status",
+          "op": "eq",
+          "value": "pass"
+        }
+      ]
+    },
+    {
+      "id": "synthesis",
+      "tool": "eda_vivado_synthesize",
+      "args": {
+        "sources": [
+          "vendor/verilog-axi/rtl/axi_dma.v",
+          "vendor/verilog-axi/rtl/axi_dma_rd.v",
+          "vendor/verilog-axi/rtl/axi_dma_wr.v",
+          "vendor/verilog-ethernet/lib/axis/rtl/axis_fifo.v",
+          "projects/system-bench/dma/dma_top.v"
+        ],
+        "top": "dma_top",
+        "part": "xc7a100tfgg676-2",
+        "constraints": [
+          "projects/a7-validation/dma-clocks.xdc"
+        ]
+      },
+      "checks": [
+        {
+          "pointer": "/fpga/black_boxes",
+          "op": "eq",
+          "value": 0
+        }
+      ]
+    },
+    {
+      "id": "implementation",
+      "tool": "eda_vivado_implement",
+      "args": {
+        "checkpoint": {
+          "$result": {
+            "step": "synthesis",
+            "pointer": "/fpga/artifacts/synthesized.dcp"
+          }
+        },
+        "constraint_scripts": [
+          "projects/a7-validation/ooc-context.tcl"
+        ]
+      },
+      "checks": [
+        {
+          "pointer": "/fpga/assessment/setup_hold",
+          "op": "eq",
+          "value": "pass"
+        },
+        {
+          "pointer": "/fpga/assessment/routing",
+          "op": "eq",
+          "value": "pass"
+        },
+        {
+          "pointer": "/fpga/assessment/clock_and_internal_constraints",
+          "op": "eq",
+          "value": "pass"
+        },
+        {
+          "pointer": "/fpga/assessment/io_constraints",
+          "op": "eq",
+          "value": "pass"
+        }
+      ]
+    },
+    {
+      "id": "drc",
+      "tool": "eda_vivado_report_drc",
+      "args": {
+        "checkpoint": {
+          "$result": {
+            "step": "implementation",
+            "pointer": "/fpga/artifacts/routed.dcp"
+          }
+        }
+      },
+      "checks": [
+        {
+          "pointer": "/fpga/reports/0/status",
+          "op": "eq",
+          "value": "ok"
+        }
+      ]
+    }
+  ],
+  "guidance": {
+    "sop_ids": [
+      "fpga-rtl-verify",
+      "fpga-timing-triage"
+    ]
+  },
+  "acceptance": {
+    "profile": "fpga_ooc",
+    "bindings": {
+      "functional": "simulation",
+      "synthesis": "synthesis",
+      "setup": "implementation",
+      "hold": "implementation",
+      "constraints": "implementation",
+      "routing": "implementation",
+      "drc": "drc"
+    },
+    "design": {
+      "top": "dma_top",
+      "part": "xc7a100tfgg676-2",
+      "clock": "clk",
+      "period_ns": 10
+    }
+  }
+}

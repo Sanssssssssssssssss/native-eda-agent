@@ -1,0 +1,1565 @@
+{
+  "schema_version": 1,
+  "scope": "Final qualification of seven known-project Pi sessions after Codex framework repairs; no blind generation or first-attempt score.",
+  "passed": 7,
+  "total": 7,
+  "provider_calls_by_evaluator": 0,
+  "cases": [
+    {
+      "name": "ethernet-cdc",
+      "schema_version": 1,
+      "suite": "online-agent",
+      "lane": "online_agent",
+      "category": "agent_end_to_end",
+      "unit": "session_task",
+      "started_at": "2026-10-26T14:49:41.350Z",
+      "status": "passed",
+      "source_hashes": {
+        "src/evaluations.mjs": "f2f06810fc514bb40817f30158b76a912ff50a7ed3e41f893797f534bffb3c87",
+        "src/evaluation-contracts.mjs": "bd3e76e235feb33ba037879287c586aae985d2e1ac3ed5f6190c5750243d9aee",
+        "src/agent-session.mjs": "c3b5c1bbde96dffa8fae82d21de2b5484cc71bc4c5065e6407a29b6d9d0e559c",
+        "src/agent-task.mjs": "fd9fb78748d1936eff0708678966d8f2e6e9051619e3a5074a9750be400c24fe",
+        "src/task-outcome.mjs": "d957a04d2ae4b9e55eef2a5b8e7518fcd5d2507f87235fdcb813032866178e5f",
+        "src/task-context.mjs": "3104ca37f4f6ebaa6e27d44d98b298859b1f94e09caf0a35d308aade35f74d4c",
+        "src/workflow.mjs": "8ab6d30af5b9d45c3195c930e69195dba5d53be2767fe679d4ef82e3aa39cdff",
+        "scripts/evaluate-knowledge.mjs": "95c7e71ef774e98459136df460d14410636dd189957e819226d4ba3be13c4240",
+        "knowledge/retrieval-cases.json": "a0832c30ca7f28b6e22fdf65c90e561c525c39bdbd61e3cd98b241de4f74737f",
+        "src/knowledge.mjs": "5f84ab00272ba98b8297b2d19d6083bec2ec6cf0d7870dd0c7959290fd078351",
+        "scripts/check-knowledge.mjs": "65d9b5fe2acb9f49a3f7ddc06ccc276a11c35b77f294da7911848b46196d403f",
+        "knowledge/rules.json": "1e77d3eb0a63ed2323f85f4dbe8408f471eca69fc37947da41c36c5264c196fb",
+        "knowledge/sources.json": "d603e1a7159623164c79059f1c4f15944b2c2312ed6fcdfe768cb0ac23733a3d",
+        "knowledge/sops.json": "7f6cacae88edcc2ba0b095666406215733df7922af7256a771496a794e063bd4",
+        "knowledge/tools.json": "12d8ae1e0141eaef8ba79c834a30152b5c5ca3f20688e3ee12c2741db3f3f426",
+        ".pi/skills/fpga-plan/SKILL.md": "46526fc1f970b38390e8655f83138326f4bcb41b6748a253bfd38ab3a31c13bf",
+        ".pi/skills/fpga-rtl-verify/SKILL.md": "11432c15fb1fe7764ba24918668698355d2143b9dc2cff4512fe05d3add2a28a",
+        ".pi/skills/fpga-timing-triage/SKILL.md": "d45ce3ebc40241ee7604c9e8d2fd246d0551667043206423032ccd2bf89cb469",
+        ".pi/skills/fpga-reproduce/SKILL.md": "910c422cc8a9f7bbf270e4e31382dee2acf338602d3e072c6843f89f3cf526f9",
+        ".pi/skills/fpga-cdc-review/SKILL.md": "849f8725fad7f77d8a0caf6e5f15d86cc3543c8ef51afcfb61a71b62eef24259",
+        ".pi/skills/fpga-ip-integrate/SKILL.md": "ad1ece2837b3dd31fe1a4cc8e20bcefa4f9ae99f887056a6552a3b5e2757790e"
+      },
+      "provider_calls_by_evaluator": 0,
+      "outer_codex_tokens": null,
+      "session": "artifacts/native-agent-2026-10-26T14-27-11-053Z-b2c01e",
+      "workflow": "artifacts/2026-10-26T14-27-35-519Z-eda_workflow_run-0373f34b",
+      "execution": {
+        "eligible": true,
+        "reason": "builtin_session_with_observed_responses",
+        "successful_assistant_messages": 2,
+        "scope": "Host factory and SDK event provenance; not independent provider billing verification."
+      },
+      "metrics": {
+        "rounds": 1,
+        "verifier_calls": 5,
+        "first_pass": true,
+        "repair_pass": false,
+        "fixed_scope_valid": true,
+        "originals_preserved": true
+      },
+      "task_acceptance": {
+        "profile": "fpga_ooc",
+        "status": "passed",
+        "reason": null,
+        "issues": [],
+        "domains": [
+          {
+            "domain": "functional",
+            "step": "clock_b",
+            "status": "passed",
+            "observed": {
+              "status": "pass",
+              "pass_marker": "HARD_BENCH_PASS project=ethernet-cdc",
+              "marker_matches": 1,
+              "completion_observed": true,
+              "failure_diagnostic": false,
+              "scope": "Explicit testbench marker, completion and diagnostic checks; semantic assertions remain the testbench responsibility."
+            },
+            "pointers": [
+              "/simulation_acceptance"
+            ],
+            "evidence": {
+              "result": "artifacts/2026-10-26T14-27-35-519Z-eda_workflow_run-0373f34b/clock_b.result.json",
+              "sha256": "2649e1a087ba3e76f38c309e1e71996f4c1a0fd652d5e6eb1ee992f3109d95e1",
+              "child_directory": "artifacts/2026-10-26T14-28-13-165Z-eda_xsim-212cb696"
+            }
+          },
+          {
+            "domain": "synthesis",
+            "step": "synthesis",
+            "status": "passed",
+            "observed": 0,
+            "pointers": [
+              "/fpga/black_boxes"
+            ],
+            "evidence": {
+              "result": "artifacts/2026-10-26T14-27-35-519Z-eda_workflow_run-0373f34b/synthesis.result.json",
+              "sha256": "d0eb87c59bbf41d9b500f8a1f9f45d490b8473ec56c6b8a8fe69001df1563b0a",
+              "child_directory": "artifacts/2026-10-26T14-28-51-885Z-eda_vivado_synthesize-8c5f8caf"
+            }
+          },
+          {
+            "domain": "setup",
+            "step": "implementation",
+            "status": "passed",
+            "observed": 2.721,
+            "expected_min": 0,
+            "pointers": [
+              "/fpga/setup_slack_ns"
+            ],
+            "evidence": {
+              "result": "artifacts/2026-10-26T14-27-35-519Z-eda_workflow_run-0373f34b/implementation.result.json",
+              "sha256": "798b9271777efeeedac8a5f37948a13d59fb2418f18c20d2213d31ca9541f7e6",
+              "child_directory": "artifacts/2026-10-26T14-34-00-327Z-eda_vivado_implement-8f73398b"
+            }
+          },
+          {
+            "domain": "hold",
+            "step": "implementation",
+            "status": "passed",
+            "observed": 0.057,
+            "expected_min": 0,
+            "pointers": [
+              "/fpga/hold_slack_ns"
+            ],
+            "evidence": {
+              "result": "artifacts/2026-10-26T14-27-35-519Z-eda_workflow_run-0373f34b/implementation.result.json",
+              "sha256": "798b9271777efeeedac8a5f37948a13d59fb2418f18c20d2213d31ca9541f7e6",
+              "child_directory": "artifacts/2026-10-26T14-34-00-327Z-eda_vivado_implement-8f73398b"
+            }
+          },
+          {
+            "domain": "constraints",
+            "step": "implementation",
+            "status": "passed",
+            "observed": {
+              "internal": "pass",
+              "io": "pass"
+            },
+            "pointers": [
+              "/fpga/assessment/clock_and_internal_constraints",
+              "/fpga/assessment/io_constraints"
+            ],
+            "evidence": {
+              "result": "artifacts/2026-10-26T14-27-35-519Z-eda_workflow_run-0373f34b/implementation.result.json",
+              "sha256": "798b9271777efeeedac8a5f37948a13d59fb2418f18c20d2213d31ca9541f7e6",
+              "child_directory": "artifacts/2026-10-26T14-34-00-327Z-eda_vivado_implement-8f73398b"
+            }
+          },
+          {
+            "domain": "routing",
+            "step": "implementation",
+            "status": "passed",
+            "observed": "pass",
+            "pointers": [
+              "/fpga/parsed_reports/route"
+            ],
+            "evidence": {
+              "result": "artifacts/2026-10-26T14-27-35-519Z-eda_workflow_run-0373f34b/implementation.result.json",
+              "sha256": "798b9271777efeeedac8a5f37948a13d59fb2418f18c20d2213d31ca9541f7e6",
+              "child_directory": "artifacts/2026-10-26T14-34-00-327Z-eda_vivado_implement-8f73398b"
+            }
+          },
+          {
+            "domain": "drc",
+            "step": "drc",
+            "status": "passed",
+            "observed": {
+              "errors": 0,
+              "critical_warnings": 0,
+              "warnings": 0
+            },
+            "pointers": [
+              "/fpga/drc"
+            ],
+            "evidence": {
+              "result": "artifacts/2026-10-26T14-27-35-519Z-eda_workflow_run-0373f34b/drc.result.json",
+              "sha256": "42169ca84d442ccd3d7183431bce697963533b2d46ead65cb8701e0cab47a257",
+              "child_directory": "artifacts/2026-10-26T14-39-41-513Z-eda_vivado_report_drc-6a1baf11"
+            }
+          },
+          {
+            "domain": "cdc",
+            "status": "not_requested"
+          },
+          {
+            "domain": "artifact_integrity",
+            "status": "not_requested"
+          }
+        ],
+        "scope": "Fixed-part OOC implementation; CDC is evaluated only when bound. No formal or hardware signoff.",
+        "formal": "not_evaluated",
+        "hardware": "not_evaluated"
+      },
+      "scope": "Recorded session/task result only; no held-out design or reference independence is inferred.",
+      "finished_at": "2026-10-26T14:49:43.320Z"
+    },
+    {
+      "name": "udp",
+      "schema_version": 1,
+      "suite": "online-agent",
+      "lane": "online_agent",
+      "category": "agent_end_to_end",
+      "unit": "session_task",
+      "started_at": "2026-10-26T14:49:43.577Z",
+      "status": "passed",
+      "source_hashes": {
+        "src/evaluations.mjs": "f2f06810fc514bb40817f30158b76a912ff50a7ed3e41f893797f534bffb3c87",
+        "src/evaluation-contracts.mjs": "bd3e76e235feb33ba037879287c586aae985d2e1ac3ed5f6190c5750243d9aee",
+        "src/agent-session.mjs": "c3b5c1bbde96dffa8fae82d21de2b5484cc71bc4c5065e6407a29b6d9d0e559c",
+        "src/agent-task.mjs": "fd9fb78748d1936eff0708678966d8f2e6e9051619e3a5074a9750be400c24fe",
+        "src/task-outcome.mjs": "d957a04d2ae4b9e55eef2a5b8e7518fcd5d2507f87235fdcb813032866178e5f",
+        "src/task-context.mjs": "3104ca37f4f6ebaa6e27d44d98b298859b1f94e09caf0a35d308aade35f74d4c",
+        "src/workflow.mjs": "8ab6d30af5b9d45c3195c930e69195dba5d53be2767fe679d4ef82e3aa39cdff",
+        "scripts/evaluate-knowledge.mjs": "95c7e71ef774e98459136df460d14410636dd189957e819226d4ba3be13c4240",
+        "knowledge/retrieval-cases.json": "a0832c30ca7f28b6e22fdf65c90e561c525c39bdbd61e3cd98b241de4f74737f",
+        "src/knowledge.mjs": "5f84ab00272ba98b8297b2d19d6083bec2ec6cf0d7870dd0c7959290fd078351",
+        "scripts/check-knowledge.mjs": "65d9b5fe2acb9f49a3f7ddc06ccc276a11c35b77f294da7911848b46196d403f",
+        "knowledge/rules.json": "1e77d3eb0a63ed2323f85f4dbe8408f471eca69fc37947da41c36c5264c196fb",
+        "knowledge/sources.json": "d603e1a7159623164c79059f1c4f15944b2c2312ed6fcdfe768cb0ac23733a3d",
+        "knowledge/sops.json": "7f6cacae88edcc2ba0b095666406215733df7922af7256a771496a794e063bd4",
+        "knowledge/tools.json": "12d8ae1e0141eaef8ba79c834a30152b5c5ca3f20688e3ee12c2741db3f3f426",
+        ".pi/skills/fpga-plan/SKILL.md": "46526fc1f970b38390e8655f83138326f4bcb41b6748a253bfd38ab3a31c13bf",
+        ".pi/skills/fpga-rtl-verify/SKILL.md": "11432c15fb1fe7764ba24918668698355d2143b9dc2cff4512fe05d3add2a28a",
+        ".pi/skills/fpga-timing-triage/SKILL.md": "d45ce3ebc40241ee7604c9e8d2fd246d0551667043206423032ccd2bf89cb469",
+        ".pi/skills/fpga-reproduce/SKILL.md": "910c422cc8a9f7bbf270e4e31382dee2acf338602d3e072c6843f89f3cf526f9",
+        ".pi/skills/fpga-cdc-review/SKILL.md": "849f8725fad7f77d8a0caf6e5f15d86cc3543c8ef51afcfb61a71b62eef24259",
+        ".pi/skills/fpga-ip-integrate/SKILL.md": "ad1ece2837b3dd31fe1a4cc8e20bcefa4f9ae99f887056a6552a3b5e2757790e"
+      },
+      "provider_calls_by_evaluator": 0,
+      "outer_codex_tokens": null,
+      "session": "artifacts/native-agent-2026-10-26T14-27-13-486Z-31604e",
+      "workflow": "artifacts/2026-10-26T14-27-44-157Z-eda_workflow_run-2d4fdea2",
+      "execution": {
+        "eligible": true,
+        "reason": "builtin_session_with_observed_responses",
+        "successful_assistant_messages": 2,
+        "scope": "Host factory and SDK event provenance; not independent provider billing verification."
+      },
+      "metrics": {
+        "rounds": 1,
+        "verifier_calls": 4,
+        "first_pass": true,
+        "repair_pass": false,
+        "fixed_scope_valid": true,
+        "originals_preserved": true
+      },
+      "task_acceptance": {
+        "profile": "fpga_ooc",
+        "status": "passed",
+        "reason": null,
+        "issues": [],
+        "domains": [
+          {
+            "domain": "functional",
+            "step": "simulation",
+            "status": "passed",
+            "observed": {
+              "status": "pass",
+              "pass_marker": "SYSTEM_BENCH_PASS project=udp",
+              "marker_matches": 1,
+              "completion_observed": true,
+              "failure_diagnostic": false,
+              "scope": "Explicit testbench marker, completion and diagnostic checks; semantic assertions remain the testbench responsibility."
+            },
+            "pointers": [
+              "/simulation_acceptance"
+            ],
+            "evidence": {
+              "result": "artifacts/2026-10-26T14-27-44-157Z-eda_workflow_run-2d4fdea2/simulation.result.json",
+              "sha256": "71d65eb204eee0948f5e9543d254abd3ded15afcb3096559ad6502c251b7b170",
+              "child_directory": "artifacts/2026-10-26T14-27-44-479Z-eda_xsim-d3619993"
+            }
+          },
+          {
+            "domain": "synthesis",
+            "step": "synthesis",
+            "status": "passed",
+            "observed": 0,
+            "pointers": [
+              "/fpga/black_boxes"
+            ],
+            "evidence": {
+              "result": "artifacts/2026-10-26T14-27-44-157Z-eda_workflow_run-2d4fdea2/synthesis.result.json",
+              "sha256": "d9bc8e7d45484e1de846f46d3a0ec2b207aee0173494becf05784f17cd5ba5c0",
+              "child_directory": "artifacts/2026-10-26T14-28-01-639Z-eda_vivado_synthesize-6d98470f"
+            }
+          },
+          {
+            "domain": "setup",
+            "step": "implementation",
+            "status": "passed",
+            "observed": 2.422,
+            "expected_min": 0,
+            "pointers": [
+              "/fpga/setup_slack_ns"
+            ],
+            "evidence": {
+              "result": "artifacts/2026-10-26T14-27-44-157Z-eda_workflow_run-2d4fdea2/implementation.result.json",
+              "sha256": "e6e2842da2e883e43ae3cdf260ace3c39d52753c6a262f108f5a1696763c981b",
+              "child_directory": "artifacts/2026-10-26T14-29-18-230Z-eda_vivado_implement-f8ca7792"
+            }
+          },
+          {
+            "domain": "hold",
+            "step": "implementation",
+            "status": "passed",
+            "observed": 0.035,
+            "expected_min": 0,
+            "pointers": [
+              "/fpga/hold_slack_ns"
+            ],
+            "evidence": {
+              "result": "artifacts/2026-10-26T14-27-44-157Z-eda_workflow_run-2d4fdea2/implementation.result.json",
+              "sha256": "e6e2842da2e883e43ae3cdf260ace3c39d52753c6a262f108f5a1696763c981b",
+              "child_directory": "artifacts/2026-10-26T14-29-18-230Z-eda_vivado_implement-f8ca7792"
+            }
+          },
+          {
+            "domain": "constraints",
+            "step": "implementation",
+            "status": "passed",
+            "observed": {
+              "internal": "pass",
+              "io": "pass"
+            },
+            "pointers": [
+              "/fpga/assessment/clock_and_internal_constraints",
+              "/fpga/assessment/io_constraints"
+            ],
+            "evidence": {
+              "result": "artifacts/2026-10-26T14-27-44-157Z-eda_workflow_run-2d4fdea2/implementation.result.json",
+              "sha256": "e6e2842da2e883e43ae3cdf260ace3c39d52753c6a262f108f5a1696763c981b",
+              "child_directory": "artifacts/2026-10-26T14-29-18-230Z-eda_vivado_implement-f8ca7792"
+            }
+          },
+          {
+            "domain": "routing",
+            "step": "implementation",
+            "status": "passed",
+            "observed": "pass",
+            "pointers": [
+              "/fpga/parsed_reports/route"
+            ],
+            "evidence": {
+              "result": "artifacts/2026-10-26T14-27-44-157Z-eda_workflow_run-2d4fdea2/implementation.result.json",
+              "sha256": "e6e2842da2e883e43ae3cdf260ace3c39d52753c6a262f108f5a1696763c981b",
+              "child_directory": "artifacts/2026-10-26T14-29-18-230Z-eda_vivado_implement-f8ca7792"
+            }
+          },
+          {
+            "domain": "drc",
+            "step": "drc",
+            "status": "passed",
+            "observed": {
+              "errors": 0,
+              "critical_warnings": 0,
+              "warnings": 0
+            },
+            "pointers": [
+              "/fpga/drc"
+            ],
+            "evidence": {
+              "result": "artifacts/2026-10-26T14-27-44-157Z-eda_workflow_run-2d4fdea2/drc.result.json",
+              "sha256": "70984a1093d757c0763195bc6c30ae52cb54d78b84b14fc1a9d2e35ee76a1000",
+              "child_directory": "artifacts/2026-10-26T14-35-15-013Z-eda_vivado_report_drc-6de2c139"
+            }
+          },
+          {
+            "domain": "cdc",
+            "status": "not_requested"
+          },
+          {
+            "domain": "artifact_integrity",
+            "status": "not_requested"
+          }
+        ],
+        "scope": "Fixed-part OOC implementation; CDC is evaluated only when bound. No formal or hardware signoff.",
+        "formal": "not_evaluated",
+        "hardware": "not_evaluated"
+      },
+      "scope": "Recorded session/task result only; no held-out design or reference independence is inferred.",
+      "finished_at": "2026-10-26T14:49:45.754Z"
+    },
+    {
+      "name": "crypto-soc",
+      "schema_version": 1,
+      "suite": "online-agent",
+      "lane": "online_agent",
+      "category": "agent_end_to_end",
+      "unit": "session_task",
+      "started_at": "2026-10-26T14:49:45.986Z",
+      "status": "passed",
+      "source_hashes": {
+        "src/evaluations.mjs": "f2f06810fc514bb40817f30158b76a912ff50a7ed3e41f893797f534bffb3c87",
+        "src/evaluation-contracts.mjs": "bd3e76e235feb33ba037879287c586aae985d2e1ac3ed5f6190c5750243d9aee",
+        "src/agent-session.mjs": "c3b5c1bbde96dffa8fae82d21de2b5484cc71bc4c5065e6407a29b6d9d0e559c",
+        "src/agent-task.mjs": "fd9fb78748d1936eff0708678966d8f2e6e9051619e3a5074a9750be400c24fe",
+        "src/task-outcome.mjs": "d957a04d2ae4b9e55eef2a5b8e7518fcd5d2507f87235fdcb813032866178e5f",
+        "src/task-context.mjs": "3104ca37f4f6ebaa6e27d44d98b298859b1f94e09caf0a35d308aade35f74d4c",
+        "src/workflow.mjs": "8ab6d30af5b9d45c3195c930e69195dba5d53be2767fe679d4ef82e3aa39cdff",
+        "scripts/evaluate-knowledge.mjs": "95c7e71ef774e98459136df460d14410636dd189957e819226d4ba3be13c4240",
+        "knowledge/retrieval-cases.json": "a0832c30ca7f28b6e22fdf65c90e561c525c39bdbd61e3cd98b241de4f74737f",
+        "src/knowledge.mjs": "5f84ab00272ba98b8297b2d19d6083bec2ec6cf0d7870dd0c7959290fd078351",
+        "scripts/check-knowledge.mjs": "65d9b5fe2acb9f49a3f7ddc06ccc276a11c35b77f294da7911848b46196d403f",
+        "knowledge/rules.json": "1e77d3eb0a63ed2323f85f4dbe8408f471eca69fc37947da41c36c5264c196fb",
+        "knowledge/sources.json": "d603e1a7159623164c79059f1c4f15944b2c2312ed6fcdfe768cb0ac23733a3d",
+        "knowledge/sops.json": "7f6cacae88edcc2ba0b095666406215733df7922af7256a771496a794e063bd4",
+        "knowledge/tools.json": "12d8ae1e0141eaef8ba79c834a30152b5c5ca3f20688e3ee12c2741db3f3f426",
+        ".pi/skills/fpga-plan/SKILL.md": "46526fc1f970b38390e8655f83138326f4bcb41b6748a253bfd38ab3a31c13bf",
+        ".pi/skills/fpga-rtl-verify/SKILL.md": "11432c15fb1fe7764ba24918668698355d2143b9dc2cff4512fe05d3add2a28a",
+        ".pi/skills/fpga-timing-triage/SKILL.md": "d45ce3ebc40241ee7604c9e8d2fd246d0551667043206423032ccd2bf89cb469",
+        ".pi/skills/fpga-reproduce/SKILL.md": "910c422cc8a9f7bbf270e4e31382dee2acf338602d3e072c6843f89f3cf526f9",
+        ".pi/skills/fpga-cdc-review/SKILL.md": "849f8725fad7f77d8a0caf6e5f15d86cc3543c8ef51afcfb61a71b62eef24259",
+        ".pi/skills/fpga-ip-integrate/SKILL.md": "ad1ece2837b3dd31fe1a4cc8e20bcefa4f9ae99f887056a6552a3b5e2757790e"
+      },
+      "provider_calls_by_evaluator": 0,
+      "outer_codex_tokens": null,
+      "session": "artifacts/native-agent-2026-10-26T14-29-37-009Z-acf282",
+      "workflow": "artifacts/2026-10-26T14-29-53-407Z-eda_workflow_run-e5e0db5b",
+      "execution": {
+        "eligible": true,
+        "reason": "builtin_session_with_observed_responses",
+        "successful_assistant_messages": 2,
+        "scope": "Host factory and SDK event provenance; not independent provider billing verification."
+      },
+      "metrics": {
+        "rounds": 1,
+        "verifier_calls": 4,
+        "first_pass": true,
+        "repair_pass": false,
+        "fixed_scope_valid": true,
+        "originals_preserved": true
+      },
+      "task_acceptance": {
+        "profile": "fpga_ooc",
+        "status": "passed",
+        "reason": null,
+        "issues": [],
+        "domains": [
+          {
+            "domain": "functional",
+            "step": "simulation",
+            "status": "passed",
+            "observed": {
+              "status": "pass",
+              "pass_marker": "HARD_BENCH_PASS project=crypto-soc",
+              "marker_matches": 1,
+              "completion_observed": true,
+              "failure_diagnostic": false,
+              "scope": "Explicit testbench marker, completion and diagnostic checks; semantic assertions remain the testbench responsibility."
+            },
+            "pointers": [
+              "/simulation_acceptance"
+            ],
+            "evidence": {
+              "result": "artifacts/2026-10-26T14-29-53-407Z-eda_workflow_run-e5e0db5b/simulation.result.json",
+              "sha256": "74a3492359481f6997376c48058955bf64eaa7bc2883bf12a6010e0912ff316f",
+              "child_directory": "artifacts/2026-10-26T14-29-53-661Z-eda_xsim-390bf168"
+            }
+          },
+          {
+            "domain": "synthesis",
+            "step": "synthesis",
+            "status": "passed",
+            "observed": 0,
+            "pointers": [
+              "/fpga/black_boxes"
+            ],
+            "evidence": {
+              "result": "artifacts/2026-10-26T14-29-53-407Z-eda_workflow_run-e5e0db5b/synthesis.result.json",
+              "sha256": "4531e809467ee5c0a9add30a045321eb5941684ac00811c1bda341eca0f9350b",
+              "child_directory": "artifacts/2026-10-26T14-33-21-625Z-eda_vivado_synthesize-e42663e9"
+            }
+          },
+          {
+            "domain": "setup",
+            "step": "implementation",
+            "status": "passed",
+            "observed": 0.552,
+            "expected_min": 0,
+            "pointers": [
+              "/fpga/setup_slack_ns"
+            ],
+            "evidence": {
+              "result": "artifacts/2026-10-26T14-29-53-407Z-eda_workflow_run-e5e0db5b/implementation.result.json",
+              "sha256": "53396ef089cc3a86af3eb8d4aba9bce99f4c30b137d0d70e4cec2a3af7289e5a",
+              "child_directory": "artifacts/2026-10-26T14-37-24-571Z-eda_vivado_implement-e1e27088"
+            }
+          },
+          {
+            "domain": "hold",
+            "step": "implementation",
+            "status": "passed",
+            "observed": 0.062,
+            "expected_min": 0,
+            "pointers": [
+              "/fpga/hold_slack_ns"
+            ],
+            "evidence": {
+              "result": "artifacts/2026-10-26T14-29-53-407Z-eda_workflow_run-e5e0db5b/implementation.result.json",
+              "sha256": "53396ef089cc3a86af3eb8d4aba9bce99f4c30b137d0d70e4cec2a3af7289e5a",
+              "child_directory": "artifacts/2026-10-26T14-37-24-571Z-eda_vivado_implement-e1e27088"
+            }
+          },
+          {
+            "domain": "constraints",
+            "step": "implementation",
+            "status": "passed",
+            "observed": {
+              "internal": "pass",
+              "io": "pass"
+            },
+            "pointers": [
+              "/fpga/assessment/clock_and_internal_constraints",
+              "/fpga/assessment/io_constraints"
+            ],
+            "evidence": {
+              "result": "artifacts/2026-10-26T14-29-53-407Z-eda_workflow_run-e5e0db5b/implementation.result.json",
+              "sha256": "53396ef089cc3a86af3eb8d4aba9bce99f4c30b137d0d70e4cec2a3af7289e5a",
+              "child_directory": "artifacts/2026-10-26T14-37-24-571Z-eda_vivado_implement-e1e27088"
+            }
+          },
+          {
+            "domain": "routing",
+            "step": "implementation",
+            "status": "passed",
+            "observed": "pass",
+            "pointers": [
+              "/fpga/parsed_reports/route"
+            ],
+            "evidence": {
+              "result": "artifacts/2026-10-26T14-29-53-407Z-eda_workflow_run-e5e0db5b/implementation.result.json",
+              "sha256": "53396ef089cc3a86af3eb8d4aba9bce99f4c30b137d0d70e4cec2a3af7289e5a",
+              "child_directory": "artifacts/2026-10-26T14-37-24-571Z-eda_vivado_implement-e1e27088"
+            }
+          },
+          {
+            "domain": "drc",
+            "step": "drc",
+            "status": "passed",
+            "observed": {
+              "errors": 0,
+              "critical_warnings": 0,
+              "warnings": 0
+            },
+            "pointers": [
+              "/fpga/drc"
+            ],
+            "evidence": {
+              "result": "artifacts/2026-10-26T14-29-53-407Z-eda_workflow_run-e5e0db5b/drc.result.json",
+              "sha256": "5d6efa11d60038aff0362b510ed2118995dd17110c18be946395343ccf2fc045",
+              "child_directory": "artifacts/2026-10-26T14-44-51-038Z-eda_vivado_report_drc-3d3ebcb0"
+            }
+          },
+          {
+            "domain": "cdc",
+            "status": "not_requested"
+          },
+          {
+            "domain": "artifact_integrity",
+            "status": "not_requested"
+          }
+        ],
+        "scope": "Fixed-part OOC implementation; CDC is evaluated only when bound. No formal or hardware signoff.",
+        "formal": "not_evaluated",
+        "hardware": "not_evaluated"
+      },
+      "scope": "Recorded session/task result only; no held-out design or reference independence is inferred.",
+      "finished_at": "2026-10-26T14:49:47.811Z"
+    },
+    {
+      "name": "dma",
+      "schema_version": 1,
+      "suite": "online-agent",
+      "lane": "online_agent",
+      "category": "agent_end_to_end",
+      "unit": "session_task",
+      "started_at": "2026-10-26T14:49:48.023Z",
+      "status": "passed",
+      "source_hashes": {
+        "src/evaluations.mjs": "f2f06810fc514bb40817f30158b76a912ff50a7ed3e41f893797f534bffb3c87",
+        "src/evaluation-contracts.mjs": "bd3e76e235feb33ba037879287c586aae985d2e1ac3ed5f6190c5750243d9aee",
+        "src/agent-session.mjs": "c3b5c1bbde96dffa8fae82d21de2b5484cc71bc4c5065e6407a29b6d9d0e559c",
+        "src/agent-task.mjs": "fd9fb78748d1936eff0708678966d8f2e6e9051619e3a5074a9750be400c24fe",
+        "src/task-outcome.mjs": "d957a04d2ae4b9e55eef2a5b8e7518fcd5d2507f87235fdcb813032866178e5f",
+        "src/task-context.mjs": "3104ca37f4f6ebaa6e27d44d98b298859b1f94e09caf0a35d308aade35f74d4c",
+        "src/workflow.mjs": "8ab6d30af5b9d45c3195c930e69195dba5d53be2767fe679d4ef82e3aa39cdff",
+        "scripts/evaluate-knowledge.mjs": "95c7e71ef774e98459136df460d14410636dd189957e819226d4ba3be13c4240",
+        "knowledge/retrieval-cases.json": "a0832c30ca7f28b6e22fdf65c90e561c525c39bdbd61e3cd98b241de4f74737f",
+        "src/knowledge.mjs": "5f84ab00272ba98b8297b2d19d6083bec2ec6cf0d7870dd0c7959290fd078351",
+        "scripts/check-knowledge.mjs": "65d9b5fe2acb9f49a3f7ddc06ccc276a11c35b77f294da7911848b46196d403f",
+        "knowledge/rules.json": "1e77d3eb0a63ed2323f85f4dbe8408f471eca69fc37947da41c36c5264c196fb",
+        "knowledge/sources.json": "d603e1a7159623164c79059f1c4f15944b2c2312ed6fcdfe768cb0ac23733a3d",
+        "knowledge/sops.json": "7f6cacae88edcc2ba0b095666406215733df7922af7256a771496a794e063bd4",
+        "knowledge/tools.json": "12d8ae1e0141eaef8ba79c834a30152b5c5ca3f20688e3ee12c2741db3f3f426",
+        ".pi/skills/fpga-plan/SKILL.md": "46526fc1f970b38390e8655f83138326f4bcb41b6748a253bfd38ab3a31c13bf",
+        ".pi/skills/fpga-rtl-verify/SKILL.md": "11432c15fb1fe7764ba24918668698355d2143b9dc2cff4512fe05d3add2a28a",
+        ".pi/skills/fpga-timing-triage/SKILL.md": "d45ce3ebc40241ee7604c9e8d2fd246d0551667043206423032ccd2bf89cb469",
+        ".pi/skills/fpga-reproduce/SKILL.md": "910c422cc8a9f7bbf270e4e31382dee2acf338602d3e072c6843f89f3cf526f9",
+        ".pi/skills/fpga-cdc-review/SKILL.md": "849f8725fad7f77d8a0caf6e5f15d86cc3543c8ef51afcfb61a71b62eef24259",
+        ".pi/skills/fpga-ip-integrate/SKILL.md": "ad1ece2837b3dd31fe1a4cc8e20bcefa4f9ae99f887056a6552a3b5e2757790e"
+      },
+      "provider_calls_by_evaluator": 0,
+      "outer_codex_tokens": null,
+      "session": "artifacts/native-agent-2026-10-26T14-29-39-208Z-e39827",
+      "workflow": "artifacts/2026-10-26T14-30-13-471Z-eda_workflow_run-acfa4fc4",
+      "execution": {
+        "eligible": true,
+        "reason": "builtin_session_with_observed_responses",
+        "successful_assistant_messages": 2,
+        "scope": "Host factory and SDK event provenance; not independent provider billing verification."
+      },
+      "metrics": {
+        "rounds": 1,
+        "verifier_calls": 4,
+        "first_pass": true,
+        "repair_pass": false,
+        "fixed_scope_valid": true,
+        "originals_preserved": true
+      },
+      "task_acceptance": {
+        "profile": "fpga_ooc",
+        "status": "passed",
+        "reason": null,
+        "issues": [],
+        "domains": [
+          {
+            "domain": "functional",
+            "step": "simulation",
+            "status": "passed",
+            "observed": {
+              "status": "pass",
+              "pass_marker": "SYSTEM_BENCH_PASS project=dma",
+              "marker_matches": 1,
+              "completion_observed": true,
+              "failure_diagnostic": false,
+              "scope": "Explicit testbench marker, completion and diagnostic checks; semantic assertions remain the testbench responsibility."
+            },
+            "pointers": [
+              "/simulation_acceptance"
+            ],
+            "evidence": {
+              "result": "artifacts/2026-10-26T14-30-13-471Z-eda_workflow_run-acfa4fc4/simulation.result.json",
+              "sha256": "3cea6fdb80b92c09508e2598f50bcc80ad7bbd5c038c61002b53196450717fcf",
+              "child_directory": "artifacts/2026-10-26T14-30-13-640Z-eda_xsim-8491d709"
+            }
+          },
+          {
+            "domain": "synthesis",
+            "step": "synthesis",
+            "status": "passed",
+            "observed": 0,
+            "pointers": [
+              "/fpga/black_boxes"
+            ],
+            "evidence": {
+              "result": "artifacts/2026-10-26T14-30-13-471Z-eda_workflow_run-acfa4fc4/synthesis.result.json",
+              "sha256": "36b6411e61a5a732ac3080253bd78622420e68370e061edc3daa0e145fccbafa",
+              "child_directory": "artifacts/2026-10-26T14-31-07-337Z-eda_vivado_synthesize-26cd08d0"
+            }
+          },
+          {
+            "domain": "setup",
+            "step": "implementation",
+            "status": "passed",
+            "observed": 1.414,
+            "expected_min": 0,
+            "pointers": [
+              "/fpga/setup_slack_ns"
+            ],
+            "evidence": {
+              "result": "artifacts/2026-10-26T14-30-13-471Z-eda_workflow_run-acfa4fc4/implementation.result.json",
+              "sha256": "0c9c621d89d02b0ef5bcc04ef98b4c7c5b1e192fc4ef73498cf217aadbcdfc35",
+              "child_directory": "artifacts/2026-10-26T14-36-01-942Z-eda_vivado_implement-b5789582"
+            }
+          },
+          {
+            "domain": "hold",
+            "step": "implementation",
+            "status": "passed",
+            "observed": 0.089,
+            "expected_min": 0,
+            "pointers": [
+              "/fpga/hold_slack_ns"
+            ],
+            "evidence": {
+              "result": "artifacts/2026-10-26T14-30-13-471Z-eda_workflow_run-acfa4fc4/implementation.result.json",
+              "sha256": "0c9c621d89d02b0ef5bcc04ef98b4c7c5b1e192fc4ef73498cf217aadbcdfc35",
+              "child_directory": "artifacts/2026-10-26T14-36-01-942Z-eda_vivado_implement-b5789582"
+            }
+          },
+          {
+            "domain": "constraints",
+            "step": "implementation",
+            "status": "passed",
+            "observed": {
+              "internal": "pass",
+              "io": "pass"
+            },
+            "pointers": [
+              "/fpga/assessment/clock_and_internal_constraints",
+              "/fpga/assessment/io_constraints"
+            ],
+            "evidence": {
+              "result": "artifacts/2026-10-26T14-30-13-471Z-eda_workflow_run-acfa4fc4/implementation.result.json",
+              "sha256": "0c9c621d89d02b0ef5bcc04ef98b4c7c5b1e192fc4ef73498cf217aadbcdfc35",
+              "child_directory": "artifacts/2026-10-26T14-36-01-942Z-eda_vivado_implement-b5789582"
+            }
+          },
+          {
+            "domain": "routing",
+            "step": "implementation",
+            "status": "passed",
+            "observed": "pass",
+            "pointers": [
+              "/fpga/parsed_reports/route"
+            ],
+            "evidence": {
+              "result": "artifacts/2026-10-26T14-30-13-471Z-eda_workflow_run-acfa4fc4/implementation.result.json",
+              "sha256": "0c9c621d89d02b0ef5bcc04ef98b4c7c5b1e192fc4ef73498cf217aadbcdfc35",
+              "child_directory": "artifacts/2026-10-26T14-36-01-942Z-eda_vivado_implement-b5789582"
+            }
+          },
+          {
+            "domain": "drc",
+            "step": "drc",
+            "status": "passed",
+            "observed": {
+              "errors": 0,
+              "critical_warnings": 0,
+              "warnings": 0
+            },
+            "pointers": [
+              "/fpga/drc"
+            ],
+            "evidence": {
+              "result": "artifacts/2026-10-26T14-30-13-471Z-eda_workflow_run-acfa4fc4/drc.result.json",
+              "sha256": "d0b7e4ef48e94449995cf06fcc3b883c5f43b986c44e4f27c24b00b74804893c",
+              "child_directory": "artifacts/2026-10-26T14-42-25-924Z-eda_vivado_report_drc-19a8ada9"
+            }
+          },
+          {
+            "domain": "cdc",
+            "status": "not_requested"
+          },
+          {
+            "domain": "artifact_integrity",
+            "status": "not_requested"
+          }
+        ],
+        "scope": "Fixed-part OOC implementation; CDC is evaluated only when bound. No formal or hardware signoff.",
+        "formal": "not_evaluated",
+        "hardware": "not_evaluated"
+      },
+      "scope": "Recorded session/task result only; no held-out design or reference independence is inferred.",
+      "finished_at": "2026-10-26T14:49:49.742Z"
+    },
+    {
+      "name": "soc",
+      "schema_version": 1,
+      "suite": "online-agent",
+      "lane": "online_agent",
+      "category": "agent_end_to_end",
+      "unit": "session_task",
+      "started_at": "2026-10-26T14:51:10.306Z",
+      "status": "passed",
+      "source_hashes": {
+        "src/evaluations.mjs": "f2f06810fc514bb40817f30158b76a912ff50a7ed3e41f893797f534bffb3c87",
+        "src/evaluation-contracts.mjs": "bd3e76e235feb33ba037879287c586aae985d2e1ac3ed5f6190c5750243d9aee",
+        "src/agent-session.mjs": "c3b5c1bbde96dffa8fae82d21de2b5484cc71bc4c5065e6407a29b6d9d0e559c",
+        "src/agent-task.mjs": "fd9fb78748d1936eff0708678966d8f2e6e9051619e3a5074a9750be400c24fe",
+        "src/task-outcome.mjs": "d957a04d2ae4b9e55eef2a5b8e7518fcd5d2507f87235fdcb813032866178e5f",
+        "src/task-context.mjs": "3104ca37f4f6ebaa6e27d44d98b298859b1f94e09caf0a35d308aade35f74d4c",
+        "src/workflow.mjs": "8ab6d30af5b9d45c3195c930e69195dba5d53be2767fe679d4ef82e3aa39cdff",
+        "scripts/evaluate-knowledge.mjs": "95c7e71ef774e98459136df460d14410636dd189957e819226d4ba3be13c4240",
+        "knowledge/retrieval-cases.json": "a0832c30ca7f28b6e22fdf65c90e561c525c39bdbd61e3cd98b241de4f74737f",
+        "src/knowledge.mjs": "5f84ab00272ba98b8297b2d19d6083bec2ec6cf0d7870dd0c7959290fd078351",
+        "scripts/check-knowledge.mjs": "65d9b5fe2acb9f49a3f7ddc06ccc276a11c35b77f294da7911848b46196d403f",
+        "knowledge/rules.json": "1e77d3eb0a63ed2323f85f4dbe8408f471eca69fc37947da41c36c5264c196fb",
+        "knowledge/sources.json": "d603e1a7159623164c79059f1c4f15944b2c2312ed6fcdfe768cb0ac23733a3d",
+        "knowledge/sops.json": "7f6cacae88edcc2ba0b095666406215733df7922af7256a771496a794e063bd4",
+        "knowledge/tools.json": "12d8ae1e0141eaef8ba79c834a30152b5c5ca3f20688e3ee12c2741db3f3f426",
+        ".pi/skills/fpga-plan/SKILL.md": "46526fc1f970b38390e8655f83138326f4bcb41b6748a253bfd38ab3a31c13bf",
+        ".pi/skills/fpga-rtl-verify/SKILL.md": "11432c15fb1fe7764ba24918668698355d2143b9dc2cff4512fe05d3add2a28a",
+        ".pi/skills/fpga-timing-triage/SKILL.md": "d45ce3ebc40241ee7604c9e8d2fd246d0551667043206423032ccd2bf89cb469",
+        ".pi/skills/fpga-reproduce/SKILL.md": "910c422cc8a9f7bbf270e4e31382dee2acf338602d3e072c6843f89f3cf526f9",
+        ".pi/skills/fpga-cdc-review/SKILL.md": "849f8725fad7f77d8a0caf6e5f15d86cc3543c8ef51afcfb61a71b62eef24259",
+        ".pi/skills/fpga-ip-integrate/SKILL.md": "ad1ece2837b3dd31fe1a4cc8e20bcefa4f9ae99f887056a6552a3b5e2757790e"
+      },
+      "provider_calls_by_evaluator": 0,
+      "outer_codex_tokens": null,
+      "session": "artifacts/native-agent-2026-10-26T14-32-01-578Z-4a47d6",
+      "workflow": "artifacts/2026-10-26T14-32-23-259Z-eda_workflow_run-64a59fe1",
+      "execution": {
+        "eligible": true,
+        "reason": "builtin_session_with_observed_responses",
+        "successful_assistant_messages": 2,
+        "scope": "Host factory and SDK event provenance; not independent provider billing verification."
+      },
+      "metrics": {
+        "rounds": 1,
+        "verifier_calls": 4,
+        "first_pass": true,
+        "repair_pass": false,
+        "fixed_scope_valid": true,
+        "originals_preserved": true
+      },
+      "task_acceptance": {
+        "profile": "fpga_ooc",
+        "status": "passed",
+        "reason": null,
+        "issues": [],
+        "domains": [
+          {
+            "domain": "functional",
+            "step": "simulation",
+            "status": "passed",
+            "observed": {
+              "status": "pass",
+              "pass_marker": "SYSTEM_BENCH_PASS project=soc",
+              "marker_matches": 1,
+              "completion_observed": true,
+              "failure_diagnostic": false,
+              "scope": "Explicit testbench marker, completion and diagnostic checks; semantic assertions remain the testbench responsibility."
+            },
+            "pointers": [
+              "/simulation_acceptance"
+            ],
+            "evidence": {
+              "result": "artifacts/2026-10-26T14-32-23-259Z-eda_workflow_run-64a59fe1/simulation.result.json",
+              "sha256": "5462bc70868ebe40633741e1b27c5f107abaa9fc4300974ab2adb773c01ffcb0",
+              "child_directory": "artifacts/2026-10-26T14-32-23-457Z-eda_xsim-65fe4e66"
+            }
+          },
+          {
+            "domain": "synthesis",
+            "step": "synthesis",
+            "status": "passed",
+            "observed": 0,
+            "pointers": [
+              "/fpga/black_boxes"
+            ],
+            "evidence": {
+              "result": "artifacts/2026-10-26T14-32-23-259Z-eda_workflow_run-64a59fe1/synthesis.result.json",
+              "sha256": "f7903341dd7282ed215952cf8caa6b7882968ccf71e8dbfd7dc8ee0a5fcad8b4",
+              "child_directory": "artifacts/2026-10-26T14-37-01-073Z-eda_vivado_synthesize-b24d6505"
+            }
+          },
+          {
+            "domain": "setup",
+            "step": "implementation",
+            "status": "passed",
+            "observed": 2.738,
+            "expected_min": 0,
+            "pointers": [
+              "/fpga/setup_slack_ns"
+            ],
+            "evidence": {
+              "result": "artifacts/2026-10-26T14-32-23-259Z-eda_workflow_run-64a59fe1/implementation.result.json",
+              "sha256": "c2220684d34a66e0d218417296810444c1819e0d6cc09ebe331831e81e8d54cf",
+              "child_directory": "artifacts/2026-10-26T14-43-23-928Z-eda_vivado_implement-72bfcb4c"
+            }
+          },
+          {
+            "domain": "hold",
+            "step": "implementation",
+            "status": "passed",
+            "observed": 0.087,
+            "expected_min": 0,
+            "pointers": [
+              "/fpga/hold_slack_ns"
+            ],
+            "evidence": {
+              "result": "artifacts/2026-10-26T14-32-23-259Z-eda_workflow_run-64a59fe1/implementation.result.json",
+              "sha256": "c2220684d34a66e0d218417296810444c1819e0d6cc09ebe331831e81e8d54cf",
+              "child_directory": "artifacts/2026-10-26T14-43-23-928Z-eda_vivado_implement-72bfcb4c"
+            }
+          },
+          {
+            "domain": "constraints",
+            "step": "implementation",
+            "status": "passed",
+            "observed": {
+              "internal": "pass",
+              "io": "pass"
+            },
+            "pointers": [
+              "/fpga/assessment/clock_and_internal_constraints",
+              "/fpga/assessment/io_constraints"
+            ],
+            "evidence": {
+              "result": "artifacts/2026-10-26T14-32-23-259Z-eda_workflow_run-64a59fe1/implementation.result.json",
+              "sha256": "c2220684d34a66e0d218417296810444c1819e0d6cc09ebe331831e81e8d54cf",
+              "child_directory": "artifacts/2026-10-26T14-43-23-928Z-eda_vivado_implement-72bfcb4c"
+            }
+          },
+          {
+            "domain": "routing",
+            "step": "implementation",
+            "status": "passed",
+            "observed": "pass",
+            "pointers": [
+              "/fpga/parsed_reports/route"
+            ],
+            "evidence": {
+              "result": "artifacts/2026-10-26T14-32-23-259Z-eda_workflow_run-64a59fe1/implementation.result.json",
+              "sha256": "c2220684d34a66e0d218417296810444c1819e0d6cc09ebe331831e81e8d54cf",
+              "child_directory": "artifacts/2026-10-26T14-43-23-928Z-eda_vivado_implement-72bfcb4c"
+            }
+          },
+          {
+            "domain": "drc",
+            "step": "drc",
+            "status": "passed",
+            "observed": {
+              "errors": 0,
+              "critical_warnings": 0,
+              "warnings": 0
+            },
+            "pointers": [
+              "/fpga/drc"
+            ],
+            "evidence": {
+              "result": "artifacts/2026-10-26T14-32-23-259Z-eda_workflow_run-64a59fe1/drc.result.json",
+              "sha256": "ccf1bbfa0ed17f268233c047230c3bae9c3e18d4b1894d1e5bd24bd17e11cc08",
+              "child_directory": "artifacts/2026-10-26T14-49-16-445Z-eda_vivado_report_drc-ff6d1bb5"
+            }
+          },
+          {
+            "domain": "cdc",
+            "status": "not_requested"
+          },
+          {
+            "domain": "artifact_integrity",
+            "status": "not_requested"
+          }
+        ],
+        "scope": "Fixed-part OOC implementation; CDC is evaluated only when bound. No formal or hardware signoff.",
+        "formal": "not_evaluated",
+        "hardware": "not_evaluated"
+      },
+      "scope": "Recorded session/task result only; no held-out design or reference independence is inferred.",
+      "finished_at": "2026-10-26T14:51:11.795Z"
+    },
+    {
+      "name": "aes",
+      "schema_version": 1,
+      "suite": "online-agent",
+      "lane": "online_agent",
+      "category": "agent_end_to_end",
+      "unit": "session_task",
+      "started_at": "2026-10-26T14:51:12.003Z",
+      "status": "passed",
+      "source_hashes": {
+        "src/evaluations.mjs": "f2f06810fc514bb40817f30158b76a912ff50a7ed3e41f893797f534bffb3c87",
+        "src/evaluation-contracts.mjs": "bd3e76e235feb33ba037879287c586aae985d2e1ac3ed5f6190c5750243d9aee",
+        "src/agent-session.mjs": "c3b5c1bbde96dffa8fae82d21de2b5484cc71bc4c5065e6407a29b6d9d0e559c",
+        "src/agent-task.mjs": "fd9fb78748d1936eff0708678966d8f2e6e9051619e3a5074a9750be400c24fe",
+        "src/task-outcome.mjs": "d957a04d2ae4b9e55eef2a5b8e7518fcd5d2507f87235fdcb813032866178e5f",
+        "src/task-context.mjs": "3104ca37f4f6ebaa6e27d44d98b298859b1f94e09caf0a35d308aade35f74d4c",
+        "src/workflow.mjs": "8ab6d30af5b9d45c3195c930e69195dba5d53be2767fe679d4ef82e3aa39cdff",
+        "scripts/evaluate-knowledge.mjs": "95c7e71ef774e98459136df460d14410636dd189957e819226d4ba3be13c4240",
+        "knowledge/retrieval-cases.json": "a0832c30ca7f28b6e22fdf65c90e561c525c39bdbd61e3cd98b241de4f74737f",
+        "src/knowledge.mjs": "5f84ab00272ba98b8297b2d19d6083bec2ec6cf0d7870dd0c7959290fd078351",
+        "scripts/check-knowledge.mjs": "65d9b5fe2acb9f49a3f7ddc06ccc276a11c35b77f294da7911848b46196d403f",
+        "knowledge/rules.json": "1e77d3eb0a63ed2323f85f4dbe8408f471eca69fc37947da41c36c5264c196fb",
+        "knowledge/sources.json": "d603e1a7159623164c79059f1c4f15944b2c2312ed6fcdfe768cb0ac23733a3d",
+        "knowledge/sops.json": "7f6cacae88edcc2ba0b095666406215733df7922af7256a771496a794e063bd4",
+        "knowledge/tools.json": "12d8ae1e0141eaef8ba79c834a30152b5c5ca3f20688e3ee12c2741db3f3f426",
+        ".pi/skills/fpga-plan/SKILL.md": "46526fc1f970b38390e8655f83138326f4bcb41b6748a253bfd38ab3a31c13bf",
+        ".pi/skills/fpga-rtl-verify/SKILL.md": "11432c15fb1fe7764ba24918668698355d2143b9dc2cff4512fe05d3add2a28a",
+        ".pi/skills/fpga-timing-triage/SKILL.md": "d45ce3ebc40241ee7604c9e8d2fd246d0551667043206423032ccd2bf89cb469",
+        ".pi/skills/fpga-reproduce/SKILL.md": "910c422cc8a9f7bbf270e4e31382dee2acf338602d3e072c6843f89f3cf526f9",
+        ".pi/skills/fpga-cdc-review/SKILL.md": "849f8725fad7f77d8a0caf6e5f15d86cc3543c8ef51afcfb61a71b62eef24259",
+        ".pi/skills/fpga-ip-integrate/SKILL.md": "ad1ece2837b3dd31fe1a4cc8e20bcefa4f9ae99f887056a6552a3b5e2757790e"
+      },
+      "provider_calls_by_evaluator": 0,
+      "outer_codex_tokens": null,
+      "session": "artifacts/native-agent-2026-10-26T14-32-03-941Z-ab1958",
+      "workflow": "artifacts/2026-10-26T14-32-27-667Z-eda_workflow_run-3e209d31",
+      "execution": {
+        "eligible": true,
+        "reason": "builtin_session_with_observed_responses",
+        "successful_assistant_messages": 2,
+        "scope": "Host factory and SDK event provenance; not independent provider billing verification."
+      },
+      "metrics": {
+        "rounds": 1,
+        "verifier_calls": 4,
+        "first_pass": true,
+        "repair_pass": false,
+        "fixed_scope_valid": true,
+        "originals_preserved": true
+      },
+      "task_acceptance": {
+        "profile": "fpga_ooc",
+        "status": "passed",
+        "reason": null,
+        "issues": [],
+        "domains": [
+          {
+            "domain": "functional",
+            "step": "simulation",
+            "status": "passed",
+            "observed": {
+              "status": "pass",
+              "pass_marker": "SYSTEM_BENCH_PASS project=aes",
+              "marker_matches": 1,
+              "completion_observed": true,
+              "failure_diagnostic": false,
+              "scope": "Explicit testbench marker, completion and diagnostic checks; semantic assertions remain the testbench responsibility."
+            },
+            "pointers": [
+              "/simulation_acceptance"
+            ],
+            "evidence": {
+              "result": "artifacts/2026-10-26T14-32-27-667Z-eda_workflow_run-3e209d31/simulation.result.json",
+              "sha256": "c3a05bbda88448e4d6e5806c3913d736c8a049caffe0d95a89cb4390bfdc0fa7",
+              "child_directory": "artifacts/2026-10-26T14-32-27-922Z-eda_xsim-645d1200"
+            }
+          },
+          {
+            "domain": "synthesis",
+            "step": "synthesis",
+            "status": "passed",
+            "observed": 0,
+            "pointers": [
+              "/fpga/black_boxes"
+            ],
+            "evidence": {
+              "result": "artifacts/2026-10-26T14-32-27-667Z-eda_workflow_run-3e209d31/synthesis.result.json",
+              "sha256": "6ff37473566342002ec2824f8339a513c3b325bc214922fe942f66dae5c2742f",
+              "child_directory": "artifacts/2026-10-26T14-33-38-989Z-eda_vivado_synthesize-efd369a1"
+            }
+          },
+          {
+            "domain": "setup",
+            "step": "implementation",
+            "status": "passed",
+            "observed": 0.56,
+            "expected_min": 0,
+            "pointers": [
+              "/fpga/setup_slack_ns"
+            ],
+            "evidence": {
+              "result": "artifacts/2026-10-26T14-32-27-667Z-eda_workflow_run-3e209d31/implementation.result.json",
+              "sha256": "4565fb29bf66ceb2334c683c773c6d8346c6fb08ab5e252ea10eabcfaedf51c9",
+              "child_directory": "artifacts/2026-10-26T14-38-37-334Z-eda_vivado_implement-070fa3b9"
+            }
+          },
+          {
+            "domain": "hold",
+            "step": "implementation",
+            "status": "passed",
+            "observed": 0.083,
+            "expected_min": 0,
+            "pointers": [
+              "/fpga/hold_slack_ns"
+            ],
+            "evidence": {
+              "result": "artifacts/2026-10-26T14-32-27-667Z-eda_workflow_run-3e209d31/implementation.result.json",
+              "sha256": "4565fb29bf66ceb2334c683c773c6d8346c6fb08ab5e252ea10eabcfaedf51c9",
+              "child_directory": "artifacts/2026-10-26T14-38-37-334Z-eda_vivado_implement-070fa3b9"
+            }
+          },
+          {
+            "domain": "constraints",
+            "step": "implementation",
+            "status": "passed",
+            "observed": {
+              "internal": "pass",
+              "io": "pass"
+            },
+            "pointers": [
+              "/fpga/assessment/clock_and_internal_constraints",
+              "/fpga/assessment/io_constraints"
+            ],
+            "evidence": {
+              "result": "artifacts/2026-10-26T14-32-27-667Z-eda_workflow_run-3e209d31/implementation.result.json",
+              "sha256": "4565fb29bf66ceb2334c683c773c6d8346c6fb08ab5e252ea10eabcfaedf51c9",
+              "child_directory": "artifacts/2026-10-26T14-38-37-334Z-eda_vivado_implement-070fa3b9"
+            }
+          },
+          {
+            "domain": "routing",
+            "step": "implementation",
+            "status": "passed",
+            "observed": "pass",
+            "pointers": [
+              "/fpga/parsed_reports/route"
+            ],
+            "evidence": {
+              "result": "artifacts/2026-10-26T14-32-27-667Z-eda_workflow_run-3e209d31/implementation.result.json",
+              "sha256": "4565fb29bf66ceb2334c683c773c6d8346c6fb08ab5e252ea10eabcfaedf51c9",
+              "child_directory": "artifacts/2026-10-26T14-38-37-334Z-eda_vivado_implement-070fa3b9"
+            }
+          },
+          {
+            "domain": "drc",
+            "step": "drc",
+            "status": "passed",
+            "observed": {
+              "errors": 0,
+              "critical_warnings": 0,
+              "warnings": 0
+            },
+            "pointers": [
+              "/fpga/drc"
+            ],
+            "evidence": {
+              "result": "artifacts/2026-10-26T14-32-27-667Z-eda_workflow_run-3e209d31/drc.result.json",
+              "sha256": "c7737bf5df01186f451114bf7b39144256f18285b135ad40c79246023cecb3e5",
+              "child_directory": "artifacts/2026-10-26T14-46-06-422Z-eda_vivado_report_drc-4b9f7bc3"
+            }
+          },
+          {
+            "domain": "cdc",
+            "status": "not_requested"
+          },
+          {
+            "domain": "artifact_integrity",
+            "status": "not_requested"
+          }
+        ],
+        "scope": "Fixed-part OOC implementation; CDC is evaluated only when bound. No formal or hardware signoff.",
+        "formal": "not_evaluated",
+        "hardware": "not_evaluated"
+      },
+      "scope": "Recorded session/task result only; no held-out design or reference independence is inferred.",
+      "finished_at": "2026-10-26T14:51:13.656Z"
+    },
+    {
+      "name": "axi-fabric",
+      "schema_version": 1,
+      "suite": "online-agent",
+      "lane": "online_agent",
+      "category": "agent_end_to_end",
+      "unit": "session_task",
+      "started_at": "2026-10-26T14:51:13.852Z",
+      "status": "passed",
+      "source_hashes": {
+        "src/evaluations.mjs": "f2f06810fc514bb40817f30158b76a912ff50a7ed3e41f893797f534bffb3c87",
+        "src/evaluation-contracts.mjs": "bd3e76e235feb33ba037879287c586aae985d2e1ac3ed5f6190c5750243d9aee",
+        "src/agent-session.mjs": "c3b5c1bbde96dffa8fae82d21de2b5484cc71bc4c5065e6407a29b6d9d0e559c",
+        "src/agent-task.mjs": "fd9fb78748d1936eff0708678966d8f2e6e9051619e3a5074a9750be400c24fe",
+        "src/task-outcome.mjs": "d957a04d2ae4b9e55eef2a5b8e7518fcd5d2507f87235fdcb813032866178e5f",
+        "src/task-context.mjs": "3104ca37f4f6ebaa6e27d44d98b298859b1f94e09caf0a35d308aade35f74d4c",
+        "src/workflow.mjs": "8ab6d30af5b9d45c3195c930e69195dba5d53be2767fe679d4ef82e3aa39cdff",
+        "scripts/evaluate-knowledge.mjs": "95c7e71ef774e98459136df460d14410636dd189957e819226d4ba3be13c4240",
+        "knowledge/retrieval-cases.json": "a0832c30ca7f28b6e22fdf65c90e561c525c39bdbd61e3cd98b241de4f74737f",
+        "src/knowledge.mjs": "5f84ab00272ba98b8297b2d19d6083bec2ec6cf0d7870dd0c7959290fd078351",
+        "scripts/check-knowledge.mjs": "65d9b5fe2acb9f49a3f7ddc06ccc276a11c35b77f294da7911848b46196d403f",
+        "knowledge/rules.json": "1e77d3eb0a63ed2323f85f4dbe8408f471eca69fc37947da41c36c5264c196fb",
+        "knowledge/sources.json": "d603e1a7159623164c79059f1c4f15944b2c2312ed6fcdfe768cb0ac23733a3d",
+        "knowledge/sops.json": "7f6cacae88edcc2ba0b095666406215733df7922af7256a771496a794e063bd4",
+        "knowledge/tools.json": "12d8ae1e0141eaef8ba79c834a30152b5c5ca3f20688e3ee12c2741db3f3f426",
+        ".pi/skills/fpga-plan/SKILL.md": "46526fc1f970b38390e8655f83138326f4bcb41b6748a253bfd38ab3a31c13bf",
+        ".pi/skills/fpga-rtl-verify/SKILL.md": "11432c15fb1fe7764ba24918668698355d2143b9dc2cff4512fe05d3add2a28a",
+        ".pi/skills/fpga-timing-triage/SKILL.md": "d45ce3ebc40241ee7604c9e8d2fd246d0551667043206423032ccd2bf89cb469",
+        ".pi/skills/fpga-reproduce/SKILL.md": "910c422cc8a9f7bbf270e4e31382dee2acf338602d3e072c6843f89f3cf526f9",
+        ".pi/skills/fpga-cdc-review/SKILL.md": "849f8725fad7f77d8a0caf6e5f15d86cc3543c8ef51afcfb61a71b62eef24259",
+        ".pi/skills/fpga-ip-integrate/SKILL.md": "ad1ece2837b3dd31fe1a4cc8e20bcefa4f9ae99f887056a6552a3b5e2757790e"
+      },
+      "provider_calls_by_evaluator": 0,
+      "outer_codex_tokens": null,
+      "session": "artifacts/native-agent-2026-10-26T14-34-06-853Z-a8ce6a",
+      "workflow": "artifacts/2026-10-26T14-34-24-129Z-eda_workflow_run-3c302601",
+      "execution": {
+        "eligible": true,
+        "reason": "builtin_session_with_observed_responses",
+        "successful_assistant_messages": 2,
+        "scope": "Host factory and SDK event provenance; not independent provider billing verification."
+      },
+      "metrics": {
+        "rounds": 1,
+        "verifier_calls": 4,
+        "first_pass": true,
+        "repair_pass": false,
+        "fixed_scope_valid": true,
+        "originals_preserved": true
+      },
+      "task_acceptance": {
+        "profile": "fpga_ooc",
+        "status": "passed",
+        "reason": null,
+        "issues": [],
+        "domains": [
+          {
+            "domain": "functional",
+            "step": "simulation",
+            "status": "passed",
+            "observed": {
+              "status": "pass",
+              "pass_marker": "HARD_BENCH_PASS project=axi_fabric_protocol",
+              "marker_matches": 1,
+              "completion_observed": true,
+              "failure_diagnostic": false,
+              "scope": "Explicit testbench marker, completion and diagnostic checks; semantic assertions remain the testbench responsibility."
+            },
+            "pointers": [
+              "/simulation_acceptance"
+            ],
+            "evidence": {
+              "result": "artifacts/2026-10-26T14-34-24-129Z-eda_workflow_run-3c302601/simulation.result.json",
+              "sha256": "2aecf9a07e00065c7d86a410efd3f4ca283ae8648a024581e2a27eb854a4c0af",
+              "child_directory": "artifacts/2026-10-26T14-34-24-345Z-eda_xsim-664237d0"
+            }
+          },
+          {
+            "domain": "synthesis",
+            "step": "synthesis",
+            "status": "passed",
+            "observed": 0,
+            "pointers": [
+              "/fpga/black_boxes"
+            ],
+            "evidence": {
+              "result": "artifacts/2026-10-26T14-34-24-129Z-eda_workflow_run-3c302601/synthesis.result.json",
+              "sha256": "e3e3eeea1107f6f6a3b2c63e382b39a31e88485eec80fa335d9940562c4e9b9c",
+              "child_directory": "artifacts/2026-10-26T14-34-50-872Z-eda_vivado_synthesize-0a2e01cf"
+            }
+          },
+          {
+            "domain": "setup",
+            "step": "implementation",
+            "status": "passed",
+            "observed": 1.698,
+            "expected_min": 0,
+            "pointers": [
+              "/fpga/setup_slack_ns"
+            ],
+            "evidence": {
+              "result": "artifacts/2026-10-26T14-34-24-129Z-eda_workflow_run-3c302601/implementation.result.json",
+              "sha256": "cb49ede46b8c4d34bcc8ca2a9f0a2d6c3c998491e9eceb7e36408d376531dc60",
+              "child_directory": "artifacts/2026-10-26T14-41-05-192Z-eda_vivado_implement-d0eb4456"
+            }
+          },
+          {
+            "domain": "hold",
+            "step": "implementation",
+            "status": "passed",
+            "observed": 0.058,
+            "expected_min": 0,
+            "pointers": [
+              "/fpga/hold_slack_ns"
+            ],
+            "evidence": {
+              "result": "artifacts/2026-10-26T14-34-24-129Z-eda_workflow_run-3c302601/implementation.result.json",
+              "sha256": "cb49ede46b8c4d34bcc8ca2a9f0a2d6c3c998491e9eceb7e36408d376531dc60",
+              "child_directory": "artifacts/2026-10-26T14-41-05-192Z-eda_vivado_implement-d0eb4456"
+            }
+          },
+          {
+            "domain": "constraints",
+            "step": "implementation",
+            "status": "passed",
+            "observed": {
+              "internal": "pass",
+              "io": "pass"
+            },
+            "pointers": [
+              "/fpga/assessment/clock_and_internal_constraints",
+              "/fpga/assessment/io_constraints"
+            ],
+            "evidence": {
+              "result": "artifacts/2026-10-26T14-34-24-129Z-eda_workflow_run-3c302601/implementation.result.json",
+              "sha256": "cb49ede46b8c4d34bcc8ca2a9f0a2d6c3c998491e9eceb7e36408d376531dc60",
+              "child_directory": "artifacts/2026-10-26T14-41-05-192Z-eda_vivado_implement-d0eb4456"
+            }
+          },
+          {
+            "domain": "routing",
+            "step": "implementation",
+            "status": "passed",
+            "observed": "pass",
+            "pointers": [
+              "/fpga/parsed_reports/route"
+            ],
+            "evidence": {
+              "result": "artifacts/2026-10-26T14-34-24-129Z-eda_workflow_run-3c302601/implementation.result.json",
+              "sha256": "cb49ede46b8c4d34bcc8ca2a9f0a2d6c3c998491e9eceb7e36408d376531dc60",
+              "child_directory": "artifacts/2026-10-26T14-41-05-192Z-eda_vivado_implement-d0eb4456"
+            }
+          },
+          {
+            "domain": "drc",
+            "step": "drc-report",
+            "status": "passed",
+            "observed": {
+              "errors": 0,
+              "critical_warnings": 0,
+              "warnings": 0
+            },
+            "pointers": [
+              "/fpga/drc"
+            ],
+            "evidence": {
+              "result": "artifacts/2026-10-26T14-34-24-129Z-eda_workflow_run-3c302601/drc-report.result.json",
+              "sha256": "4a585f1820ccd8357326aa046ee9d47e7ad303d1b8b655a67b871ec1fe0d90f9",
+              "child_directory": "artifacts/2026-10-26T14-47-57-262Z-eda_vivado_report_drc-d06a6557"
+            }
+          },
+          {
+            "domain": "cdc",
+            "status": "not_requested"
+          },
+          {
+            "domain": "artifact_integrity",
+            "status": "not_requested"
+          }
+        ],
+        "scope": "Fixed-part OOC implementation; CDC is evaluated only when bound. No formal or hardware signoff.",
+        "formal": "not_evaluated",
+        "hardware": "not_evaluated"
+      },
+      "scope": "Recorded session/task result only; no held-out design or reference independence is inferred.",
+      "finished_at": "2026-10-26T14:51:15.555Z"
+    }
+  ],
+  "browser": {
+    "viewport": {
+      "width": 1440,
+      "height": 1000
+    },
+    "checks": [
+      "Final Ethernet session opens isolated candidate RTL beside original with matching SHA-256",
+      "Candidate opens its causally linked verification result",
+      "Synthesis and routed resources/timing are displayed separately",
+      "Routed I/O evidence displays the audited reset exception",
+      "Original route report opens and shows 4609 fully routed nets and zero routing errors"
+    ],
+    "screenshot": "docs/media/workbench-a7-eight.png",
+    "screenshot_sha256": "2d823ec47223e4c596f9fba258c49fb02771ad1685f564059e182d1e8cb4b8b3"
+  },
+  "portable_inputs": {
+    "source": "Pinned Git blobs from local upstream checkouts; no network fetch or EDA launched",
+    "files": [
+      {
+        "file": "vendor/verilog-ethernet/lib/axis/rtl/arbiter.v",
+        "commit": "77320a9471d19c7dd383914bc049e02d9f4f1ffb"
+      },
+      {
+        "file": "vendor/verilog-ethernet/lib/axis/rtl/axis_adapter.v",
+        "commit": "77320a9471d19c7dd383914bc049e02d9f4f1ffb"
+      },
+      {
+        "file": "vendor/verilog-ethernet/lib/axis/rtl/axis_async_fifo.v",
+        "commit": "77320a9471d19c7dd383914bc049e02d9f4f1ffb"
+      },
+      {
+        "file": "vendor/verilog-ethernet/lib/axis/rtl/axis_async_fifo_adapter.v",
+        "commit": "77320a9471d19c7dd383914bc049e02d9f4f1ffb"
+      },
+      {
+        "file": "vendor/verilog-ethernet/lib/axis/rtl/axis_fifo.v",
+        "commit": "77320a9471d19c7dd383914bc049e02d9f4f1ffb"
+      },
+      {
+        "file": "vendor/verilog-ethernet/lib/axis/rtl/priority_encoder.v",
+        "commit": "77320a9471d19c7dd383914bc049e02d9f4f1ffb"
+      },
+      {
+        "file": "vendor/verilog-ethernet/lib/axis/rtl/sync_reset.v",
+        "commit": "77320a9471d19c7dd383914bc049e02d9f4f1ffb"
+      },
+      {
+        "file": "vendor/verilog-ethernet/lib/axis/syn/vivado/axis_async_fifo.tcl",
+        "commit": "77320a9471d19c7dd383914bc049e02d9f4f1ffb"
+      },
+      {
+        "file": "vendor/verilog-ethernet/lib/axis/syn/vivado/sync_reset.tcl",
+        "commit": "77320a9471d19c7dd383914bc049e02d9f4f1ffb"
+      },
+      {
+        "file": "vendor/verilog-ethernet/rtl/arp.v",
+        "commit": "77320a9471d19c7dd383914bc049e02d9f4f1ffb"
+      },
+      {
+        "file": "vendor/verilog-ethernet/rtl/arp_cache.v",
+        "commit": "77320a9471d19c7dd383914bc049e02d9f4f1ffb"
+      },
+      {
+        "file": "vendor/verilog-ethernet/rtl/arp_eth_rx.v",
+        "commit": "77320a9471d19c7dd383914bc049e02d9f4f1ffb"
+      },
+      {
+        "file": "vendor/verilog-ethernet/rtl/arp_eth_tx.v",
+        "commit": "77320a9471d19c7dd383914bc049e02d9f4f1ffb"
+      },
+      {
+        "file": "vendor/verilog-ethernet/rtl/axis_gmii_rx.v",
+        "commit": "77320a9471d19c7dd383914bc049e02d9f4f1ffb"
+      },
+      {
+        "file": "vendor/verilog-ethernet/rtl/axis_gmii_tx.v",
+        "commit": "77320a9471d19c7dd383914bc049e02d9f4f1ffb"
+      },
+      {
+        "file": "vendor/verilog-ethernet/rtl/eth_arb_mux.v",
+        "commit": "77320a9471d19c7dd383914bc049e02d9f4f1ffb"
+      },
+      {
+        "file": "vendor/verilog-ethernet/rtl/eth_axis_rx.v",
+        "commit": "77320a9471d19c7dd383914bc049e02d9f4f1ffb"
+      },
+      {
+        "file": "vendor/verilog-ethernet/rtl/eth_axis_tx.v",
+        "commit": "77320a9471d19c7dd383914bc049e02d9f4f1ffb"
+      },
+      {
+        "file": "vendor/verilog-ethernet/rtl/eth_mac_1g.v",
+        "commit": "77320a9471d19c7dd383914bc049e02d9f4f1ffb"
+      },
+      {
+        "file": "vendor/verilog-ethernet/rtl/eth_mac_1g_fifo.v",
+        "commit": "77320a9471d19c7dd383914bc049e02d9f4f1ffb"
+      },
+      {
+        "file": "vendor/verilog-ethernet/rtl/ip.v",
+        "commit": "77320a9471d19c7dd383914bc049e02d9f4f1ffb"
+      },
+      {
+        "file": "vendor/verilog-ethernet/rtl/ip_arb_mux.v",
+        "commit": "77320a9471d19c7dd383914bc049e02d9f4f1ffb"
+      },
+      {
+        "file": "vendor/verilog-ethernet/rtl/ip_complete.v",
+        "commit": "77320a9471d19c7dd383914bc049e02d9f4f1ffb"
+      },
+      {
+        "file": "vendor/verilog-ethernet/rtl/ip_eth_rx.v",
+        "commit": "77320a9471d19c7dd383914bc049e02d9f4f1ffb"
+      },
+      {
+        "file": "vendor/verilog-ethernet/rtl/ip_eth_tx.v",
+        "commit": "77320a9471d19c7dd383914bc049e02d9f4f1ffb"
+      },
+      {
+        "file": "vendor/verilog-ethernet/rtl/lfsr.v",
+        "commit": "77320a9471d19c7dd383914bc049e02d9f4f1ffb"
+      },
+      {
+        "file": "vendor/verilog-ethernet/rtl/udp.v",
+        "commit": "77320a9471d19c7dd383914bc049e02d9f4f1ffb"
+      },
+      {
+        "file": "vendor/verilog-ethernet/rtl/udp_checksum_gen.v",
+        "commit": "77320a9471d19c7dd383914bc049e02d9f4f1ffb"
+      },
+      {
+        "file": "vendor/verilog-ethernet/rtl/udp_complete.v",
+        "commit": "77320a9471d19c7dd383914bc049e02d9f4f1ffb"
+      },
+      {
+        "file": "vendor/verilog-ethernet/rtl/udp_ip_rx.v",
+        "commit": "77320a9471d19c7dd383914bc049e02d9f4f1ffb"
+      },
+      {
+        "file": "vendor/verilog-ethernet/rtl/udp_ip_tx.v",
+        "commit": "77320a9471d19c7dd383914bc049e02d9f4f1ffb"
+      },
+      {
+        "file": "vendor/aes/src/rtl/aes_core.v",
+        "commit": "80dc4718e1dcbbdb4b0dd1bdb393d8f7b98981dc"
+      },
+      {
+        "file": "vendor/aes/src/rtl/aes_decipher_block.v",
+        "commit": "80dc4718e1dcbbdb4b0dd1bdb393d8f7b98981dc"
+      },
+      {
+        "file": "vendor/aes/src/rtl/aes_encipher_block.v",
+        "commit": "80dc4718e1dcbbdb4b0dd1bdb393d8f7b98981dc"
+      },
+      {
+        "file": "vendor/aes/src/rtl/aes_inv_sbox.v",
+        "commit": "80dc4718e1dcbbdb4b0dd1bdb393d8f7b98981dc"
+      },
+      {
+        "file": "vendor/aes/src/rtl/aes_key_mem.v",
+        "commit": "80dc4718e1dcbbdb4b0dd1bdb393d8f7b98981dc"
+      },
+      {
+        "file": "vendor/aes/src/rtl/aes_sbox.v",
+        "commit": "80dc4718e1dcbbdb4b0dd1bdb393d8f7b98981dc"
+      },
+      {
+        "file": "vendor/picorv32/picorv32.v",
+        "commit": "ef203c2b0a3fb793280f5114941416c425c5b461"
+      },
+      {
+        "file": "vendor/verilog-axi/rtl/axi_dma.v",
+        "commit": "516bd5dadc3365b7f9e225d2af8fe0b8d804fe53"
+      },
+      {
+        "file": "vendor/verilog-axi/rtl/axi_dma_rd.v",
+        "commit": "516bd5dadc3365b7f9e225d2af8fe0b8d804fe53"
+      },
+      {
+        "file": "vendor/verilog-axi/rtl/axi_dma_wr.v",
+        "commit": "516bd5dadc3365b7f9e225d2af8fe0b8d804fe53"
+      },
+      {
+        "file": "vendor/verilog-axi/rtl/arbiter.v",
+        "commit": "516bd5dadc3365b7f9e225d2af8fe0b8d804fe53"
+      },
+      {
+        "file": "vendor/verilog-axi/rtl/axi_crossbar.v",
+        "commit": "516bd5dadc3365b7f9e225d2af8fe0b8d804fe53"
+      },
+      {
+        "file": "vendor/verilog-axi/rtl/axi_crossbar_rd.v",
+        "commit": "516bd5dadc3365b7f9e225d2af8fe0b8d804fe53"
+      },
+      {
+        "file": "vendor/verilog-axi/rtl/axi_ram.v",
+        "commit": "516bd5dadc3365b7f9e225d2af8fe0b8d804fe53"
+      },
+      {
+        "file": "vendor/verilog-axi/rtl/axi_register_rd.v",
+        "commit": "516bd5dadc3365b7f9e225d2af8fe0b8d804fe53"
+      },
+      {
+        "file": "vendor/verilog-axi/rtl/axi_register_wr.v",
+        "commit": "516bd5dadc3365b7f9e225d2af8fe0b8d804fe53"
+      },
+      {
+        "file": "vendor/verilog-axi/rtl/priority_encoder.v",
+        "commit": "516bd5dadc3365b7f9e225d2af8fe0b8d804fe53"
+      },
+      {
+        "file": "vendor/SynthPilot_Tutorial/prj/04/rtl/magnitude_calc.v",
+        "commit": "c415ec77d296b38c2bb384141eb9952f1eb84344"
+      }
+    ],
+    "plans": [
+      {
+        "name": "ethernet-cdc",
+        "passed": true
+      },
+      {
+        "name": "udp",
+        "passed": true
+      },
+      {
+        "name": "crypto-soc",
+        "passed": true
+      },
+      {
+        "name": "dma",
+        "passed": true
+      },
+      {
+        "name": "soc",
+        "passed": true
+      },
+      {
+        "name": "aes",
+        "passed": true
+      },
+      {
+        "name": "axi-fabric",
+        "passed": true
+      }
+    ],
+    "passed": true
+  }
+}

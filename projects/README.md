@@ -4,6 +4,7 @@
 
 | 工程 | 主要内容 | 适合验证什么 |
 |---|---|---|
+| [a7-validation](a7-validation/README.md) | 8 项 A7-100T 工程的固定集成环境 | 功能、setup/hold、I/O 约束、交付 DCP 路由、DRC 与完整 Agent 闭环 |
 | [fft-spectrum](fft-spectrum/README.md) | 1024 点 FFT、数值参考与固定刺激 | DSP 数据通路、定点数值、帧与频点检查 |
 | [system-bench](system-bench/README.md) | SoC / DMA / UDP / AES | 外设与存储事务、协议、加密流水线集成 |
 | [hard-bench](hard-bench/README.md) | AXI 3×3 / 三时钟 Ethernet / RV32IM AES DMA | 并发主机、CDC、软核与 DMA 组合工程 |

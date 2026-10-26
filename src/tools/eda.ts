@@ -109,11 +109,13 @@ export default function (pi: ExtensionAPI) {
   }));
   pi.registerTool(defineTool({
     name: 'eda_vivado', label: 'Vivado Tcl build',
-    description: 'Execute an authored Vivado Tcl script in a new output directory. Set EDA_WORKSPACE to the project root for resolving inputs. Supports synthesis and implementation; returns artifacts and logs, not an assumed pass verdict.',
-    parameters: Type.Object({ script: Type.String() }),
+    description: 'Execute an authored Vivado Tcl script in a new output directory. Explicit dependencies freeze dynamic Tcl/IP inputs that automatic discovery cannot resolve. Supports synthesis and implementation; returns evidence, not an assumed pass verdict.',
+    parameters: Type.Object({ script: Type.String(), dependencies: Type.Optional(Type.Array(Type.String(), {maxItems:256})) }),
     execute: tracedExecute('eda_vivado', async (trace, args, signal, onUpdate) => {
       const script = inputFile(args.script);
       const dir = trace.directory;
+      for (const dependency of args.dependencies || []) trace.capture(inputFile(dependency), 'declared_dependency');
+      trace.finalizeDependencies();
       fs.copyFileSync(script, path.join(dir, 'invoked.tcl'));
       await runProcess(trace, path.join(vivadoBin, 'vivado.bat'), ['-mode', 'batch', '-notrace', '-source', script, '-log', 'vivado.log', '-journal', 'vivado.jou'], { signal, update: onUpdate });
       const evidence = path.join(dir, 'build-result.json');

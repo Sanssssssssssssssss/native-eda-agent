@@ -2,19 +2,17 @@
 
 57 native interfaces. 28 are focused contracts over shared executors; 4 expose retained scores. Community MCP separately exposes 45 tools and 11 prompts.
 
-`eda_task_prepare(configuration)` freezes an existing verifier and copies its declared dependencies into an isolated RTL candidate. `eda_task_inspect(directory)` rechecks its original/candidate inputs, current independent verdict, ownership and cumulative recovery budget. Both are static and record native traces; use the returned task directory with the [host session](../agent-lifecycle.md) for generation and verification.
-
 Schemas: [tools.json](tools.json). Real EDA calls write independent artifacts and use shared resource leases.
 
 | Tool | Executor | Runs EDA | Purpose |
 |---|---|---|---|
 | `eda_xsim` | `eda_xsim` | Yes / see schema | Compile Verilog/SystemVerilog and VHDL, elaborate a testbench and run bounded XSim. Supports include directories, defines, top parameters, libraries, plusargs and SV seed. Optional literal pass_marker yields an explicit verdict; fatal/error/timeout overrides it. Without a marker functional acceptance remains unevaluated. |
-| `eda_vivado` | `eda_vivado` | Yes / see schema | Execute an authored Vivado Tcl script in a new output directory. Set EDA_WORKSPACE to the project root for resolving inputs. Supports synthesis and implementation; returns artifacts and logs, not an assumed pass verdict. |
+| `eda_vivado` | `eda_vivado` | Yes / see schema | Execute an authored Vivado Tcl script in a new output directory. Explicit dependencies freeze dynamic Tcl/IP inputs that automatic discovery cannot resolve. Supports synthesis and implementation; returns evidence, not an assumed pass verdict. |
 | `eda_ltspice_batch` | `eda_ltspice_batch` | Yes / see schema | Run a self-contained .cir/.net netlist with the real LTspice batch engine and return its .log measurements. Copies the input into a fresh artifact directory. For external models use absolute .include paths or the official LTspice MCP in the original project directory. |
 | `eda_verify` | `eda_verify` | No | Check the provided counter and RC examples against fixed behavioral and mathematical acceptance criteria. Accepts artifact directory paths and one combined analog log. The result is computed independently of the model. |
 | `eda_vivado_catalog` | `eda_vivado_catalog` | Yes / see schema | Query the installed Vivado version, available commands, parts or IP VLNVs. Bounded results include total match count; availability is not execution proof. |
 | `eda_vivado_synthesize` | `eda_vivado_synthesize` | Yes / see schema | Synthesize explicit RTL/XCI sources and XDC into a fresh checkpoint. Supports include directories, defines and top parameters. Defaults to out-of-context; no implicit clocks or timing relaxation. Produces utilization and black-box evidence. |
-| `eda_vivado_implement` | `eda_vivado_implement` | Yes / see schema | Open a synthesis checkpoint, optionally apply explicit additional XDC, and run opt/place/route in a fresh directory. Returns routed DCP, timing, route and constraint evidence. Tool completion is separate from timing closure or board signoff. |
+| `eda_vivado_implement` | `eda_vivado_implement` | Yes / see schema | Open a synthesis checkpoint, apply explicit XDC and frozen Tcl constraint scripts, and run opt/place/route. Declared asynchronous reset exceptions require a routed netlist audit of every leaf load and at least two release stages per clock. Tool completion is separate from board signoff. |
 | `eda_vivado_reports` | `eda_vivado_reports` | Yes / see schema | Generate selected timing, CDC, DRC, methodology, clock, exception, route and utilization reports from a checkpoint. Unknown report formats remain unknown; CDC warnings and missing IO constraints require review. |
 | `eda_vivado_objects` | `eda_vivado_objects` | Yes / see schema | Inspect bounded matching cells, nets, ports, pins or clocks in a checkpoint. Returns names and selected properties plus total count; query text is passed as data, never evaluated as Tcl. |
 | `eda_vivado_timing_paths` | `eda_vivado_timing_paths` | Yes / see schema | Return setup or hold timing paths with endpoint, slack, requirement and logic depth. Optional from/to clock names must resolve exactly. A bounded path listing does not establish whole-design TNS or signoff. |
@@ -63,3 +61,5 @@ Schemas: [tools.json](tools.json). Real EDA calls write independent artifacts an
 | `eda_workflow_resume_check` | `eda_workflow_resume_check` | No | Read-only check of task ownership, frozen inputs, implementation, completed results and remaining budget. |
 | `eda_workflow_resume` | `eda_workflow_resume` | Yes / see schema | Continue an eligible task in a new trace, reusing verified completed steps. An interrupted uncommitted step is rerun; no exactly-once guarantee. May start EDA. |
 | `eda_task_context` | `eda_task_context` | No | Prepare ranked rules, phase-selected SOPs and their actual tool contracts. Optionally revalidate a workflow and attach domain outcomes, evidence citations and recovery advice. No model or EDA execution. |
+| `eda_task_prepare` | `eda_task_prepare` | No | Freeze an existing independent verification contract and copy declared inputs into an isolated runnable RTL candidate. Static; no model or EDA dispatch. Returns a task directory for the host session. |
+| `eda_task_inspect` | `eda_task_inspect` | No | Recheck candidate, immutable inputs, latest independent verdict, owner and cumulative retry budget. Does not execute EDA or resume a model. |

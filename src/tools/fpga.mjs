@@ -13,7 +13,7 @@ const reportNames = ['timing', 'utilization', 'cdc', 'drc', 'methodology', 'cloc
 const definitions = [
   ['eda_vivado_catalog', 'Vivado device and IP catalog', 'Query the installed Vivado version, available commands, parts or IP VLNVs. Bounded results include total match count; availability is not execution proof.', schema({ kind: choice(['commands','parts','ips']), pattern: str, limit }, ['kind'])],
   ['eda_vivado_synthesize', 'Vivado RTL synthesis', 'Synthesize explicit RTL/XCI sources and XDC into a fresh checkpoint. Supports include directories, defines and top parameters. Defaults to out-of-context; no implicit clocks or timing relaxation. Produces utilization and black-box evidence.', schema({ sources: { ...strings, minItems: 1 }, constraints: strings, top: str, part: str, mode: choice(['out_of_context','default']), include_dirs: strings, defines: strings, generics: strings, vhdl_2008: { type:'boolean' } }, ['sources','top','part'])],
-  ['eda_vivado_implement', 'Vivado checkpoint implementation', 'Open a synthesis checkpoint, optionally apply explicit additional XDC, and run opt/place/route in a fresh directory. Returns routed DCP, timing, route and constraint evidence. Tool completion is separate from timing closure or board signoff.', schema({ checkpoint: str, constraints: strings }, ['checkpoint'])],
+  ['eda_vivado_implement', 'Vivado checkpoint implementation', 'Open a synthesis checkpoint, apply explicit XDC and frozen Tcl constraint scripts, and run opt/place/route. Declared asynchronous reset exceptions require a routed netlist audit of every leaf load and at least two release stages per clock. Tool completion is separate from board signoff.', schema({ checkpoint: str, constraints: strings, constraint_scripts: strings, async_reset_ports: {...strings,maxItems:8,uniqueItems:true} }, ['checkpoint'])],
   ['eda_vivado_reports', 'Vivado design diagnostics', 'Generate selected timing, CDC, DRC, methodology, clock, exception, route and utilization reports from a checkpoint. Unknown report formats remain unknown; CDC warnings and missing IO constraints require review.', schema({ checkpoint: str, reports: { type:'array', items:choice(reportNames), minItems:1, uniqueItems:true } }, ['checkpoint','reports'])],
   ['eda_vivado_objects', 'Vivado netlist objects', 'Inspect bounded matching cells, nets, ports, pins or clocks in a checkpoint. Returns names and selected properties plus total count; query text is passed as data, never evaluated as Tcl.', schema({ checkpoint: str, kind: choice(['cells','nets','ports','pins','clocks']), pattern:str, limit }, ['checkpoint','kind'])],
   ['eda_vivado_timing_paths', 'Vivado critical timing paths', 'Return setup or hold timing paths with endpoint, slack, requirement and logic depth. Optional from/to clock names must resolve exactly. A bounded path listing does not establish whole-design TNS or signoff.', schema({ checkpoint: str, delay_type:choice(['max','min']), from_clock:str, to_clock:str, limit }, ['checkpoint'])],
@@ -58,8 +58,9 @@ export function normalizeFpgaArgs(root,name,args) {
     normalized.checkpoint=inside(root,args.checkpoint);
     if (!/\.dcp$/i.test(normalized.checkpoint)) throw new Error('Expected a .dcp checkpoint');
   }
-  for (const field of ['sources','constraints']) if (args[field]) normalized[field]=args[field].map(f=>inside(root,f));
+  for (const field of ['sources','constraints','constraint_scripts']) if (args[field]) normalized[field]=args[field].map(f=>inside(root,f));
   if (args.constraints?.some(f=>!f.toLowerCase().endsWith('.xdc'))) throw new Error('Constraints must be .xdc files');
+  if (args.constraint_scripts?.some(f=>!f.toLowerCase().endsWith('.tcl'))) throw new Error('Constraint scripts must be .tcl files');
   if (args.sources?.some(f=>! /\.(v|sv|vhd|vhdl|xci)$/i.test(f))) throw new Error('Sources must be Verilog, SystemVerilog, VHDL or XCI');
   if (args.include_dirs) normalized.include_dirs=args.include_dirs.map(f=>inside(root,f,true));
   for (const field of ['defines','generics']) if (args[field]?.some(v=>! /^[A-Za-z_][A-Za-z0-9_$]*(?:=[^\r\n]+)?$/.test(v))) throw new Error(`Invalid ${field}`);
@@ -83,7 +84,14 @@ export function makeFpgaTcl(name,a,helper) {
     lines.push(`open_checkpoint ${q(a.checkpoint)}`);
     if (name==='eda_vivado_implement') {
       for (const xdc of a.constraints||[]) lines.push(`read_xdc ${q(xdc)}`);
-      lines.push('opt_design','place_design','route_design','write_checkpoint -force routed.dcp','write_xdc -force applied-constraints.xdc','eda::reports [list timing utilization route drc] routed');
+      for (const script of a.constraint_scripts||[]) lines.push(`source ${q(script)}`);
+      if (a.async_reset_ports?.length) lines.push(`set ::eda_async_reset_ports ${tclList(a.async_reset_ports)}`);
+      // Score the delivered checkpoint. Vivado 2020.2 can leave a transient
+      // GLOBAL_LOGIC0 pseudo-net flagged as unplaced in the live design; keep
+      // that report, then independently reopen the immutable delivered DCP.
+      lines.push('opt_design','place_design','route_design','report_route_status -file route-in-memory.rpt',
+        'write_checkpoint -force routed.dcp','write_xdc -force applied-constraints.xdc',
+        'close_design','open_checkpoint routed.dcp','eda::reports [list timing utilization route drc] routed');
     } else if (name==='eda_vivado_reports') lines.push(`eda::reports ${tclList(a.reports)} checkpoint_analysis`, 'write_xdc -force applied-constraints.xdc');
     else if (name==='eda_vivado_objects') lines.push(`eda::objects ${q(a.kind)} ${q(a.pattern||'*')} ${a.limit||20}`);
     else lines.push(`eda::paths ${q(a.delay_type||'max')} ${a.limit||20} ${q(a.from_clock||'')} ${q(a.to_clock||'')}`);
@@ -110,7 +118,13 @@ export function parseFpgaReports(texts={}) {
     const m=line.match(/^\s*(?:\|\s*)?(CDC-\d+)\s+(?:\|\s*)?(Critical|Warning|Info)\s+(?:\|\s*)?(\d+)\s*(?:\|\s*)?(.*)/i);
     if (m) cdc.push({rule:m[1],severity:m[2],count:Number(m[3]),description:m[4].trim().replace(/\|\s*$/,'')});
   }
-  return {timing_checks:timingChecks,route,utilization,cdc_rules:cdc,cdc_format_recognized:cdc.length>0};
+  const inputText=texts.check_timing||'';
+  const missing=inputText.match(/There (?:are|is) (\d+) input ports? with no input delay specified\./);
+  const except=inputText.match(/There (?:are|is) (\d+) input ports? with no input delay but user has a false path constraint[^\r\n]*\r?\n(?:[ \t]*\r?\n)*([^\r\n]*(?:\r?\n[^\r\n]+)*)/);
+  const exceptionCount=except?Number(except[1]):null;
+  const exceptionPorts=exceptionCount>0?except[2].trim().split(/\s+/):[];
+  const input_delays={missing:missing?Number(missing[1]):null,false_path_count:exceptionCount,false_path_ports:exceptionPorts};
+  return {timing_checks:timingChecks,input_delays,route,utilization,cdc_rules:cdc,cdc_format_recognized:cdc.length>0};
 }
 export function assessFpga(raw,parsed) {
   const finite=Number.isFinite;
@@ -119,9 +133,23 @@ export function assessFpga(raw,parsed) {
   const ioNames=['no_input_delay','no_output_delay','partial_input_delay','partial_output_delay'];
   const counts=parsed.timing_checks;
   const status=names=>names.some(k=>!Number.isInteger(counts[k]))?'unknown':names.some(k=>counts[k]>0)?'review_required':'pass';
-  return {setup_hold:!finite(setup)||!finite(hold)?'unknown':setup<0||hold<0?'fail':'pass',clock_and_internal_constraints:status(clockNames),io_constraints:status(ioNames),routing:parsed.route.status,
+  const d=parsed.input_delays, audited=raw.async_reset_audit?.status==='verified'?raw.async_reset_audit.ports:[];
+  const verifiedResetExceptions=d?.missing===0 && d.false_path_count>0 && d.false_path_count===counts.no_input_delay &&
+    d.false_path_ports.length===d.false_path_count && new Set(d.false_path_ports).size===d.false_path_count &&
+    d.false_path_ports.every(name=>audited?.some(p=>p.name===name&&p.leaf_loads>=2&&p.release_chains?.length&&p.release_chains.every(c=>c.stages>=2))) &&
+    ioNames.filter(n=>n!=='no_input_delay').every(n=>counts[n]===0);
+  return {setup_hold:!finite(setup)||!finite(hold)?'unknown':setup<0||hold<0?'fail':'pass',clock_and_internal_constraints:status(clockNames),io_constraints:verifiedResetExceptions?'pass':status(ioNames),verified_async_reset_exceptions:verifiedResetExceptions?d.false_path_ports:[],routing:parsed.route.status,
     cdc:!parsed.cdc_format_recognized?'unknown':parsed.cdc_rules.some(x=>x.severity.toLowerCase()==='critical'&&x.count>0)?'fail':parsed.cdc_rules.some(x=>x.severity.toLowerCase()==='warning'&&x.count>0)?'review_required':'no_reported_warning',
     overall_design_acceptance:'not_evaluated',board_signoff:false,scope:'Per-report diagnostics only. Positive setup/hold slack does not validate CDC, IO timing, functional correctness or hardware.'};
+}
+
+// Vivado 2020.2 may exit successfully after skipping unsupported commands in
+// an XDC file. A completed process must not certify an incomplete constraint set.
+export function assertVivadoConstraintExecution(transcript) {
+  const failures=transcript.split(/\r?\n/).filter(line=>
+    /^(?:CRITICAL WARNING|ERROR):/.test(line) &&
+    (/\[Designutils 20-1307\]/.test(line) || /(?:constraint|xdc).*(?:ignored|not supported|failed)|(?:ignored|not supported).*(?:constraint|xdc)/i.test(line)));
+  if (failures.length) throw new Error(`Vivado skipped or rejected constraints: ${failures.slice(0,4).join('\n')}`);
 }
 
 export function createFpgaTools(root,tracedExecute) {
@@ -137,6 +165,7 @@ export function createFpgaTools(root,tracedExecute) {
       const script=path.join(trace.directory,'operation.tcl');
       fs.writeFileSync(script,makeFpgaTcl(base,a,helper));trace.capture(script,'generated_tcl');
       await runProcess(trace,vivado,['-mode','batch','-notrace','-source',script,'-log','vivado.log','-journal','vivado.jou'],{signal,update:onUpdate});
+      assertVivadoConstraintExecution(fs.readFileSync(path.join(trace.directory,'process.log'),'utf8'));
       const result=JSON.parse(fs.readFileSync(path.join(trace.directory,'fpga-result.json'),'utf8'));
       const texts={};
       for (const [key,file] of Object.entries({check_timing:'check-timing.rpt',route:'route.rpt',utilization:'utilization.rpt',cdc:'cdc.rpt'})) if (fs.existsSync(path.join(trace.directory,file))) texts[key]=fs.readFileSync(path.join(trace.directory,file),'utf8');
@@ -146,7 +175,7 @@ export function createFpgaTools(root,tracedExecute) {
       fs.writeFileSync(path.join(trace.directory,'fpga-summary.json'),JSON.stringify(details,null,2)+'\n');
       return {fpga:details};
     },{resource:'vivado',executable:vivado,validate:args=>normalizeFpgaArgs(root,base,{...args,...fixed}),capture:(trace,args)=>{
-      for (const file of ['src/tools/fpga.mjs','src/tools/focused.mjs','src/tools/vivado-common.tcl',...(args.constraints||[]),args.checkpoint].filter(Boolean)) trace.capture(file,'fpga_input');
+      for (const file of ['src/tools/fpga.mjs','src/tools/focused.mjs','src/tools/vivado-common.tcl',...(args.constraints||[]),...(args.constraint_scripts||[]),args.checkpoint].filter(Boolean)) trace.capture(file,'fpga_input');
       // Referenced headers are captured using include_dirs; do not scan entire trees.
       trace.finalizeDependencies();
     }})

@@ -72,12 +72,65 @@ proc eda::paths {delay maximum from to} {
     }
     eda::write [dict create delay_type [eda::str $delay] returned [llength $all] limit $maximum paths [eda::arr $entries] whole_design_tns null]
 }
+proc eda::audit_async_resets {names} {
+    set entries {}
+    foreach name $names {
+        set port {}
+        foreach p [get_ports] {if {$p eq $name} {lappend port $p}}
+        if {[llength $port] != 1 || [get_property DIRECTION $port] ne "IN"} {error "Invalid asynchronous reset port: $name"}
+        set loads [get_pins -leaf -of_objects [get_nets -segments -of_objects $port] -filter {DIRECTION == IN}]
+        if {![llength $loads]} {error "Asynchronous reset has no leaf loads: $name"}
+        set groups [dict create]; set parents [dict create]
+        foreach pin $loads {
+            set cell [get_cells -of_objects $pin]
+            set ref [get_property REF_NAME $cell]
+            if {![get_property IS_PRESET $pin] && ![get_property IS_RESET $pin]} {error "Asynchronous reset drives a data/control pin: $pin"}
+            if {$ref ni {FDPE FDCE} || ![get_property ASYNC_REG $cell]} {error "Reset load is not an asynchronous synchronizer register: $cell"}
+            set clk [get_clocks -of_objects [get_pins -of_objects $cell -filter {REF_PIN_NAME == C}]]
+            if {[llength $clk] != 1} {error "Ambiguous reset-release clock: $cell"}
+            set driver [get_cells -of_objects [get_pins -leaf -of_objects [get_nets -segments -of_objects [get_pins -of_objects $cell -filter {REF_PIN_NAME == D}]] -filter {DIRECTION == OUT}]]
+            if {[llength $driver] != 1} {error "Ambiguous reset-release data driver: $cell"}
+            dict lappend groups $clk $cell
+            dict set parents $cell $driver
+        }
+        set stages {}
+        dict for {clk cells} $groups {
+            set cells [lsort -unique $cells]
+            if {[llength $cells] < 2} {error "Reset release has fewer than two stages: $name/$clk"}
+            set roots {}; set children [dict create]
+            foreach cell $cells {
+                set parent [dict get $parents $cell]
+                if {[lsearch -exact $cells $parent] >= 0} {
+                    if {[dict exists $children $parent]} {error "Reset release chain branches: $parent"}
+                    dict set children $parent $cell
+                } else {
+                    set expected [expr {[get_property REF_NAME $cell] eq "FDPE" ? "GND" : "VCC"}]
+                    if {[get_property REF_NAME $parent] ne $expected} {error "Reset release does not start at its inactive constant: $cell"}
+                    lappend roots $cell
+                }
+            }
+            if {[llength $roots] != 1} {error "Reset release chain has multiple roots: $name/$clk"}
+            set node [lindex $roots 0]; set seen {}
+            while {$node ne "" && [lsearch -exact $seen $node] < 0} {
+                lappend seen $node
+                set node [expr {[dict exists $children $node] ? [dict get $children $node] : ""}]
+            }
+            if {[llength $seen] != [llength $cells]} {error "Reset release chain is disconnected or cyclic: $name/$clk"}
+            lappend stages [eda::obj [dict create clock [eda::str $clk] stages [llength $cells]]]
+        }
+        lappend entries [eda::obj [dict create name [eda::str $name] leaf_loads [llength $loads] release_chains [eda::arr $stages]]]
+    }
+    return [eda::obj [dict create status [eda::str verified] ports [eda::arr $entries]]]
+}
 proc eda::reports {names stage} {
     # The design object is renamed when a DCP is opened; TOP retains the RTL identity.
     set fields [dict create stage [eda::str $stage] design [eda::str [eda::prop [current_design] TOP]] design_object [eda::str [current_design]] part [eda::str [eda::prop [current_design] PART]]]
     set clocks {}; foreach c [get_clocks -quiet] {lappend clocks [eda::obj [dict create name [eda::str $c] period_ns [eda::num [eda::prop $c PERIOD]]]]}
     dict set fields clocks [eda::arr $clocks]
     dict set fields black_boxes [llength [get_cells -hier -quiet -filter {IS_BLACKBOX == 1}]]
+    if {[info exists ::eda_async_reset_ports] && [llength $::eda_async_reset_ports]} {
+        dict set fields async_reset_audit [eda::audit_async_resets $::eda_async_reset_ports]
+    }
     set report_entries {}; set failures 0
     foreach name $names {
         switch $name {

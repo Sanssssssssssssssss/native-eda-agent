@@ -1,0 +1,158 @@
+{
+  "schema_version": 1,
+  "id": "a7-final-crypto-soc",
+  "goal": "A7-100T crypto-soc: complete fixed functional and physical acceptance with explicit OOC integration context",
+  "inputs": [
+    "projects/hard-bench/crypto-soc/firmware.hex",
+    "projects/hard-bench/crypto-soc/expected-bytes.hex",
+    "projects/hard-bench/crypto-soc/expected-crc.hex",
+    "projects/hard-bench/crypto-soc/expected-offsets.hex",
+    "projects/hard-bench/crypto-soc/case-lengths.hex"
+  ],
+  "limits": {
+    "max_calls": 4,
+    "wall_seconds": 3600
+  },
+  "steps": [
+    {
+      "id": "simulation",
+      "tool": "eda_xsim",
+      "args": {
+        "sources": [
+          "vendor/picorv32/picorv32.v",
+          "vendor/aes/src/rtl/aes_core.v",
+          "vendor/aes/src/rtl/aes_encipher_block.v",
+          "vendor/aes/src/rtl/aes_decipher_block.v",
+          "vendor/aes/src/rtl/aes_key_mem.v",
+          "vendor/aes/src/rtl/aes_sbox.v",
+          "vendor/aes/src/rtl/aes_inv_sbox.v",
+          "projects/hard-bench/crypto-soc/shared_ram.sv",
+          "projects/hard-bench/crypto-soc/ctr_dma.sv",
+          "projects/hard-bench/crypto-soc/crypto_soc_top.sv",
+          "projects/hard-bench/crypto-soc/tb_crypto_soc.sv"
+        ],
+        "top": "tb_crypto_soc",
+        "capture_top_wave": false,
+        "pass_marker": "HARD_BENCH_PASS project=crypto-soc",
+        "timeout_seconds": 900
+      },
+      "checks": [
+        {
+          "pointer": "/simulation_acceptance/status",
+          "op": "eq",
+          "value": "pass"
+        }
+      ]
+    },
+    {
+      "id": "synthesis",
+      "tool": "eda_vivado_synthesize",
+      "args": {
+        "sources": [
+          "vendor/picorv32/picorv32.v",
+          "vendor/aes/src/rtl/aes_core.v",
+          "vendor/aes/src/rtl/aes_encipher_block.v",
+          "vendor/aes/src/rtl/aes_decipher_block.v",
+          "vendor/aes/src/rtl/aes_key_mem.v",
+          "vendor/aes/src/rtl/aes_sbox.v",
+          "vendor/aes/src/rtl/aes_inv_sbox.v",
+          "projects/hard-bench/crypto-soc/shared_ram.sv",
+          "projects/hard-bench/crypto-soc/ctr_dma.sv",
+          "projects/hard-bench/crypto-soc/crypto_soc_top.sv"
+        ],
+        "top": "crypto_soc_top",
+        "part": "xc7a100tfgg676-2",
+        "constraints": [
+          "projects/hard-bench/crypto-soc/workflow-clocks.xdc"
+        ]
+      },
+      "checks": [
+        {
+          "pointer": "/fpga/black_boxes",
+          "op": "eq",
+          "value": 0
+        }
+      ]
+    },
+    {
+      "id": "implementation",
+      "tool": "eda_vivado_implement",
+      "args": {
+        "checkpoint": {
+          "$result": {
+            "step": "synthesis",
+            "pointer": "/fpga/artifacts/synthesized.dcp"
+          }
+        },
+        "constraint_scripts": [
+          "projects/a7-validation/ooc-context.tcl"
+        ]
+      },
+      "checks": [
+        {
+          "pointer": "/fpga/assessment/setup_hold",
+          "op": "eq",
+          "value": "pass"
+        },
+        {
+          "pointer": "/fpga/assessment/routing",
+          "op": "eq",
+          "value": "pass"
+        },
+        {
+          "pointer": "/fpga/assessment/clock_and_internal_constraints",
+          "op": "eq",
+          "value": "pass"
+        },
+        {
+          "pointer": "/fpga/assessment/io_constraints",
+          "op": "eq",
+          "value": "pass"
+        }
+      ]
+    },
+    {
+      "id": "drc",
+      "tool": "eda_vivado_report_drc",
+      "args": {
+        "checkpoint": {
+          "$result": {
+            "step": "implementation",
+            "pointer": "/fpga/artifacts/routed.dcp"
+          }
+        }
+      },
+      "checks": [
+        {
+          "pointer": "/fpga/reports/0/status",
+          "op": "eq",
+          "value": "ok"
+        }
+      ]
+    }
+  ],
+  "guidance": {
+    "sop_ids": [
+      "fpga-rtl-verify",
+      "fpga-timing-triage"
+    ]
+  },
+  "acceptance": {
+    "profile": "fpga_ooc",
+    "bindings": {
+      "functional": "simulation",
+      "synthesis": "synthesis",
+      "setup": "implementation",
+      "hold": "implementation",
+      "constraints": "implementation",
+      "routing": "implementation",
+      "drc": "drc"
+    },
+    "design": {
+      "top": "crypto_soc_top",
+      "part": "xc7a100tfgg676-2",
+      "clock": "clk",
+      "period_ns": 10
+    }
+  }
+}

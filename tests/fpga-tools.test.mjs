@@ -3,9 +3,19 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { tclWord, normalizeFpgaArgs, makeFpgaTcl, parseFpgaReports, assessFpga } from '../src/tools/fpga.mjs';
+import { tclWord, normalizeFpgaArgs, makeFpgaTcl, parseFpgaReports, assessFpga, assertVivadoConstraintExecution } from '../src/tools/fpga.mjs';
 import { validateXsimOptions, xsimCommands, simulationAcceptance } from '../src/tools/xsim-options.mjs';
 const root=path.resolve(import.meta.dirname,'..');
+
+test('skipped upstream CDC constraints reject an otherwise completed Vivado run',()=>{
+  const log="CRITICAL WARNING: [Designutils 20-1307] Command 'foreach' is not supported in the xdc constraint file. [physical-review.xdc:25]\nEDA_FPGA_TOOL_COMPLETE";
+  assert.throws(()=>assertVivadoConstraintExecution(log),/skipped or rejected constraints/);
+  assert.doesNotThrow(()=>assertVivadoConstraintExecution('WARNING: [Route 35-198] OOC port has no associated HD.PARTPIN_LOCS.'));
+  const script=makeFpgaTcl('eda_vivado_implement',{checkpoint:'a.dcp',constraints:['clocks.xdc'],constraint_scripts:['upstream-cdc.tcl']},'helper.tcl');
+  assert.ok(script.indexOf('source "upstream-cdc.tcl"')>script.indexOf('open_checkpoint'));
+  assert.ok(script.indexOf('source "upstream-cdc.tcl"')<script.indexOf('opt_design'));
+  assert.ok(!script.includes('read_xdc "upstream-cdc.tcl"'));
+});
 
 test('FPGA input validation rejects workspace escapes, unsupported source types, hidden fields and excessive query sizes',()=>{
   assert.throws(()=>normalizeFpgaArgs(root,'eda_vivado_reports',{checkpoint:'../SynopsysAgent/README.md',reports:['timing']}),/inside/);
@@ -39,6 +49,25 @@ test('real retained Ethernet reports preserve CDC warnings, unconstrained reset 
   assert.equal(assessment.io_constraints,'review_required');
   assert.equal(assessment.cdc,'review_required');
   assert.equal(assessment.overall_design_acceptance,'not_evaluated');
+});
+
+test('only named asynchronous reset exceptions with verified release chains satisfy IO coverage',()=>{
+  const base=fs.readFileSync(path.join(root,'tests/fixtures/fpga-ethernet/check-timing.rpt'),'utf8');
+  const text=base.replace('There is 1 input port with no input delay specified. (HIGH)','There are 0 input ports with no input delay specified.')
+    .replace(/\r?\nreset\r?\n/,'\n')
+    .replace('There are 0 input ports with no input delay but user has a false path constraint.','There is 1 input port with no input delay but user has a false path constraint. (MEDIUM)\n\nreset\n');
+  const parsed=parseFpgaReports({check_timing:text});
+  const raw={async_reset_audit:{status:'verified',ports:[{name:'reset',leaf_loads:9,release_chains:[{clock:'logic_clk',stages:3},{clock:'rx_clk',stages:3},{clock:'tx_clk',stages:3}]}]}};
+  assert.equal(assessFpga({},parsed).io_constraints,'review_required');
+  assert.equal(assessFpga(raw,parsed).io_constraints,'pass');
+  assert.deepEqual(assessFpga(raw,parsed).verified_async_reset_exceptions,['reset']);
+  assert.equal(parsed.timing_checks.no_input_delay,1); // Raw warning is preserved.
+  for(const change of [r=>r.async_reset_audit.ports[0].name='data',r=>r.async_reset_audit.ports[0].release_chains[0].stages=1,r=>r.async_reset_audit.status='unknown']){
+    const changed=structuredClone(raw);change(changed);
+    assert.equal(assessFpga(changed,parsed).io_constraints,'review_required');
+  }
+  assert.equal(assessFpga(raw,{...parsed,input_delays:{...parsed.input_delays,missing:1}}).io_constraints,'review_required');
+  assert.equal(assessFpga(raw,{...parsed,input_delays:{...parsed.input_delays,false_path_ports:['reset','data']}}).io_constraints,'review_required');
 });
 
 test('missing, malformed and negative report evidence cannot become a clean design result',()=>{

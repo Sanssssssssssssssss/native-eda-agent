@@ -2,6 +2,8 @@
 
 Start with the [project README](../README.md), [workflow guide](../docs/workflows.md) and [repository comparison](../docs/history/repository-comparison-2026-10-25.md).
 
+The [A7-100T qualification](../docs/a7-eight-projects.md) passes eight existing projects after framework and integration repairs. [Case receipts](summary-a7-eight.json) preserve final outcomes, earlier failures, protocol hashes and cumulative usage. [Sanitized reports](summary-a7-eight-evidence.json), [seven Pi session assessments](evaluation-a7-eight.json) and [301 offline tests](validation-a7-eight.json) provide separate evidence. The cases establish OOC engineering acceptance; they do not establish blind RTL generation, complete CDC signoff or hardware operation.
+
 `source-manifest.json` records the exact exported source bytes before local setup. `upstreams.json` and `python-requirements.lock` pin optional source dependencies and the tested Python environment. `local-evidence-links.json` lists local evidence omitted from the public package.
 
 The published checkout adds `validation.json` and `validation-*.txt` from its own offline acceptance, with machine paths removed. `knowledge-evaluation.json` records the visible retrieval regression and exact query/corpus hashes. These checks are independent of the 11 historical FPGA/tool scorecards. GitHub Actions provides fresh logs for each commit.

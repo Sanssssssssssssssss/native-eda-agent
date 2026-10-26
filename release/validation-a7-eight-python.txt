@@ -1,0 +1,16 @@
+{"stage": "candidate", "index": 1, "play": "route_explore"}
+{"stage": "candidate", "index": 2, "play": "route_aggressive"}
+{"stage": "candidate", "index": 1, "play": "route_explore"}
+{"stage": "candidate", "index": 1, "play": "route_explore"}
+{"stage": "candidate", "index": 2, "play": "route_aggressive"}
+{"stage": "candidate", "index": 1, "play": "route_explore"}
+{"stage": "candidate", "index": 1, "play": "route_explore"}
+{"stage": "candidate", "index": 1, "play": "route_explore"}
+{"stage": "candidate", "index": 2, "play": "route_aggressive"}
+{"stage": "candidate", "index": 1, "play": "route_explore"}
+..........Executing <Task finished name='Task-2' coro=<BackendTraceTests.test_cleanup_error_does_not_replace_original_error() done, defined at ${WORKSPACE}\artifacts\eight-projects-20261026\validation-export\tests\test_fpga_optimizer.py:222> result=None created at ${USERPROFILE}\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py:100> took 0.736 seconds
+...........
+----------------------------------------------------------------------
+Ran 21 tests in 2.069s
+
+OK

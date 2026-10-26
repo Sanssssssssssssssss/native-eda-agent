@@ -1,0 +1,2532 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-26",
+  "scope": "Known-project A7-100T OOC integration qualification after framework repairs; not held-out RTL generation or board signoff",
+  "part": "xc7a100tfgg676-2",
+  "expected_cases": 8,
+  "finished_cases": 8,
+  "passed": 8,
+  "cases": [
+    {
+      "name": "ethernet-cdc",
+      "status": "passed",
+      "execution": "pi_sdk_host_verifier",
+      "original_rtl_unchanged": true,
+      "task": "artifacts/agent-task-31b0f675-e6bb-44b7-8748-5c9918397e81",
+      "session": "artifacts/native-agent-2026-10-26T14-27-11-053Z-b2c01e",
+      "workflow": "artifacts/2026-10-26T14-27-35-519Z-eda_workflow_run-0373f34b",
+      "protocol": "examples/workflows/a7-final-ethernet-cdc.json",
+      "protocol_sha256": "9789d64a9a2059b353f6c4633277c9fa0fae6c276fd2d8de6644e36a870d4eec",
+      "contract_sha256": "292817a7e7859debfcfd404466f5388432fdc923824dd9fed619cc16b1f6d552",
+      "functional": [
+        {
+          "step": "clock_a",
+          "acceptance": {
+            "status": "pass",
+            "pass_marker": "HARD_BENCH_PASS project=ethernet-cdc",
+            "marker_matches": 1,
+            "completion_observed": true,
+            "failure_diagnostic": false,
+            "scope": "Explicit testbench marker, completion and diagnostic checks; semantic assertions remain the testbench responsibility."
+          },
+          "markers": [
+            "HARD_BENCH_PASS project=ethernet-cdc ratio=a valid_echoes=281 output_frames=283 checked_wire_bytes=201023 negative_classes=6 negative_inputs=24 bad_fcs=8 bad_frame=12 length_rejected=8 ip_checksum_rejected=4 pause_cycles=79240 rx_stall_cycles=2071 echo_stall_cycles=48 rx_app_stall_cycles=0 mac_tx_stall_cycles=0 cycles=490318"
+          ],
+          "child_directory": "artifacts/2026-10-26T14-27-35-934Z-eda_xsim-ee477384",
+          "result_sha256": "30b91fd2b3838200410f87eff5bc704f829d254f8de29dae220e5df3274c6aec",
+          "log_sha256": "0b419711df41fec898e8d0fada9d23266392f53dd8e3afcbe17e0a5343586691"
+        },
+        {
+          "step": "clock_b",
+          "acceptance": {
+            "status": "pass",
+            "pass_marker": "HARD_BENCH_PASS project=ethernet-cdc",
+            "marker_matches": 1,
+            "completion_observed": true,
+            "failure_diagnostic": false,
+            "scope": "Explicit testbench marker, completion and diagnostic checks; semantic assertions remain the testbench responsibility."
+          },
+          "markers": [
+            "HARD_BENCH_PASS project=ethernet-cdc ratio=b valid_echoes=281 output_frames=283 checked_wire_bytes=201023 negative_classes=6 negative_inputs=24 bad_fcs=8 bad_frame=12 length_rejected=8 ip_checksum_rejected=4 pause_cycles=99700 rx_stall_cycles=3841 echo_stall_cycles=48 rx_app_stall_cycles=0 mac_tx_stall_cycles=0 cycles=601150"
+          ],
+          "child_directory": "artifacts/2026-10-26T14-28-13-165Z-eda_xsim-212cb696",
+          "result_sha256": "2649e1a087ba3e76f38c309e1e71996f4c1a0fd652d5e6eb1ee992f3109d95e1",
+          "log_sha256": "012733ea7c20e4f3033fff520cca6d3c3321d76c8c20b15f73618825e3389e8d"
+        }
+      ],
+      "physical": {
+        "part": "xc7a100tfgg676-2",
+        "version": "2020.2",
+        "clocks": [
+          {
+            "name": "logic_clk",
+            "period_ns": 10
+          },
+          {
+            "name": "rx_clk",
+            "period_ns": 8
+          },
+          {
+            "name": "tx_clk",
+            "period_ns": 8
+          }
+        ],
+        "black_boxes": 0,
+        "setup_slack_ns": 2.721,
+        "hold_slack_ns": 0.057,
+        "drc": {
+          "errors": 0,
+          "critical_warnings": 0,
+          "warnings": 0
+        },
+        "assessment": {
+          "setup_hold": "pass",
+          "clock_and_internal_constraints": "pass",
+          "io_constraints": "pass",
+          "verified_async_reset_exceptions": [
+            "reset"
+          ],
+          "routing": "pass",
+          "cdc": "unknown",
+          "overall_design_acceptance": "not_evaluated",
+          "board_signoff": false,
+          "scope": "Per-report diagnostics only. Positive setup/hold slack does not validate CDC, IO timing, functional correctness or hardware."
+        },
+        "parsed_reports": {
+          "timing_checks": {
+            "no_clock": 0,
+            "constant_clock": 0,
+            "pulse_width_clock": 0,
+            "unconstrained_internal_endpoints": 0,
+            "no_input_delay": 1,
+            "no_output_delay": 0,
+            "multiple_clock": 0,
+            "generated_clocks": 0,
+            "loops": 0,
+            "partial_input_delay": 0,
+            "partial_output_delay": 0,
+            "latch_loops": 0
+          },
+          "input_delays": {
+            "missing": 0,
+            "false_path_count": 1,
+            "false_path_ports": [
+              "reset"
+            ]
+          },
+          "route": {
+            "routable": 4609,
+            "fully_routed": 4609,
+            "errors": 0,
+            "status": "pass"
+          },
+          "utilization": {
+            "Slice LUTs": 1897,
+            "Slice Registers": 2964,
+            "Block RAM Tile": 8,
+            "RAMB36/FIFO*": 7,
+            "RAMB18": 2,
+            "DSPs": 0
+          },
+          "cdc_rules": [],
+          "cdc_format_recognized": false
+        },
+        "async_reset_audit": {
+          "status": "verified",
+          "ports": [
+            {
+              "name": "reset",
+              "leaf_loads": 9,
+              "release_chains": [
+                {
+                  "clock": "logic_clk",
+                  "stages": 3
+                },
+                {
+                  "clock": "rx_clk",
+                  "stages": 3
+                },
+                {
+                  "clock": "tx_clk",
+                  "stages": 3
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "domains": [
+        {
+          "domain": "functional",
+          "status": "passed"
+        },
+        {
+          "domain": "synthesis",
+          "status": "passed"
+        },
+        {
+          "domain": "setup",
+          "status": "passed"
+        },
+        {
+          "domain": "hold",
+          "status": "passed"
+        },
+        {
+          "domain": "constraints",
+          "status": "passed"
+        },
+        {
+          "domain": "routing",
+          "status": "passed"
+        },
+        {
+          "domain": "drc",
+          "status": "passed"
+        },
+        {
+          "domain": "cdc",
+          "status": "not_requested"
+        },
+        {
+          "domain": "artifact_integrity",
+          "status": "not_requested"
+        }
+      ],
+      "evidence": [
+        {
+          "id": "clock_a",
+          "result_path": "artifacts/2026-10-26T14-27-35-519Z-eda_workflow_run-0373f34b/clock_a.result.json",
+          "result_sha256": "30b91fd2b3838200410f87eff5bc704f829d254f8de29dae220e5df3274c6aec",
+          "child_directory": "artifacts/2026-10-26T14-27-35-934Z-eda_xsim-ee477384",
+          "artifact_hashes": {}
+        },
+        {
+          "id": "clock_b",
+          "result_path": "artifacts/2026-10-26T14-27-35-519Z-eda_workflow_run-0373f34b/clock_b.result.json",
+          "result_sha256": "2649e1a087ba3e76f38c309e1e71996f4c1a0fd652d5e6eb1ee992f3109d95e1",
+          "child_directory": "artifacts/2026-10-26T14-28-13-165Z-eda_xsim-212cb696",
+          "artifact_hashes": {}
+        },
+        {
+          "id": "synthesis",
+          "result_path": "artifacts/2026-10-26T14-27-35-519Z-eda_workflow_run-0373f34b/synthesis.result.json",
+          "result_sha256": "d0eb87c59bbf41d9b500f8a1f9f45d490b8473ec56c6b8a8fe69001df1563b0a",
+          "child_directory": "artifacts/2026-10-26T14-28-51-885Z-eda_vivado_synthesize-8c5f8caf",
+          "artifact_hashes": {
+            "artifacts/2026-10-26T14-28-51-885Z-eda_vivado_synthesize-8c5f8caf/applied-constraints.xdc": "2142986439abac0063208e5ef23b5220dfc44b5e50d7b713a5036bcb72536b8c",
+            "artifacts/2026-10-26T14-28-51-885Z-eda_vivado_synthesize-8c5f8caf/check-timing.rpt": "49f7278376f981dce3e300cefe00c7c8cf04e3d9ca1d504e2b0ee6d1b0823754",
+            "artifacts/2026-10-26T14-28-51-885Z-eda_vivado_synthesize-8c5f8caf/synthesized.dcp": "92cf224a66f808ff461ef43805988dcae1cfedff995bd137542da5ff4510f4ea",
+            "artifacts/2026-10-26T14-28-51-885Z-eda_vivado_synthesize-8c5f8caf/timing.rpt": "84f41ef92a8766be1c99c80bff41082a9dc0ee843ae5f05d21f5c3ca0c8fbc22",
+            "artifacts/2026-10-26T14-28-51-885Z-eda_vivado_synthesize-8c5f8caf/utilization.rpt": "737c6a2d030d82914dc97a262b072eb5f5dff11338f413341b84c38bb074d271"
+          }
+        },
+        {
+          "id": "implementation",
+          "result_path": "artifacts/2026-10-26T14-27-35-519Z-eda_workflow_run-0373f34b/implementation.result.json",
+          "result_sha256": "798b9271777efeeedac8a5f37948a13d59fb2418f18c20d2213d31ca9541f7e6",
+          "child_directory": "artifacts/2026-10-26T14-34-00-327Z-eda_vivado_implement-8f73398b",
+          "artifact_hashes": {
+            "artifacts/2026-10-26T14-34-00-327Z-eda_vivado_implement-8f73398b/applied-constraints.xdc": "efe3cd89b786c12156d5833159e798c26b9302a69c165f18e99226abe229e965",
+            "artifacts/2026-10-26T14-34-00-327Z-eda_vivado_implement-8f73398b/check-timing.rpt": "638a2b7187694c12fa7b735ccf2efe06f924efbaeca8a65ae76729e78708d801",
+            "artifacts/2026-10-26T14-34-00-327Z-eda_vivado_implement-8f73398b/drc.rpt": "a6d6136220652c852f2864f576b7930afba1ef72446161968ff1232eee733536",
+            "artifacts/2026-10-26T14-34-00-327Z-eda_vivado_implement-8f73398b/route-in-memory.rpt": "8dd29fa7e20071265893be84954dcb2275dcb721fb7085d5a87187435f6406de",
+            "artifacts/2026-10-26T14-34-00-327Z-eda_vivado_implement-8f73398b/route.rpt": "8dd29fa7e20071265893be84954dcb2275dcb721fb7085d5a87187435f6406de",
+            "artifacts/2026-10-26T14-34-00-327Z-eda_vivado_implement-8f73398b/routed.dcp": "3ea47a28a93265894add177e38489f28f02996e1a2e225e95a80677402bdf700",
+            "artifacts/2026-10-26T14-34-00-327Z-eda_vivado_implement-8f73398b/timing.rpt": "34eb1e0b4e4c06c4143efae8bc2faa7ada3ee9752c9c0c8f361743b6235f2627",
+            "artifacts/2026-10-26T14-34-00-327Z-eda_vivado_implement-8f73398b/utilization.rpt": "f3607274a1bb286110998e61d09139fd92cebf752fb426d9c03d40542d43514c"
+          }
+        },
+        {
+          "id": "drc",
+          "result_path": "artifacts/2026-10-26T14-27-35-519Z-eda_workflow_run-0373f34b/drc.result.json",
+          "result_sha256": "42169ca84d442ccd3d7183431bce697963533b2d46ead65cb8701e0cab47a257",
+          "child_directory": "artifacts/2026-10-26T14-39-41-513Z-eda_vivado_report_drc-6a1baf11",
+          "artifact_hashes": {
+            "artifacts/2026-10-26T14-39-41-513Z-eda_vivado_report_drc-6a1baf11/applied-constraints.xdc": "efe3cd89b786c12156d5833159e798c26b9302a69c165f18e99226abe229e965",
+            "artifacts/2026-10-26T14-39-41-513Z-eda_vivado_report_drc-6a1baf11/drc.rpt": "ab6952ff37c762b57b2af93a37a204f34b1d7eb066314cc580d6c6e280a59783"
+          }
+        }
+      ],
+      "source_hashes": {
+        ".eda/config.json": "9ef065695a9024e8bed151281d83d2632f4d3056faa72099742e94c391396054",
+        "package-lock.json": "953ac596f048705eec519d56309661f24c11fe7638896d448988b2521a3db59b",
+        "package.json": "ba2832b6dc9c1c2128dca10b9cd65c0e709a7aa9b01c025cb9dd52b85ded6b1c",
+        "scripts/ace-rtl-feedback.py": "fd7d3a0836ad8af19b36d0d043012905b2caa888c8884b15927537987d18f814",
+        "scripts/trace-inspect.mjs": "78915b0c6b8a56cace96eee095d295ba33a9e01ea7d454a95204d75662e08443",
+        "src/agent-resources.mjs": "a1ea2332be295fa3b4460ac11caf99b77d9947365f7c0b4c84a8483b014ea7ed",
+        "src/agent-session.mjs": "c3b5c1bbde96dffa8fae82d21de2b5484cc71bc4c5065e6407a29b6d9d0e559c",
+        "src/agent-task.mjs": "fd9fb78748d1936eff0708678966d8f2e6e9051619e3a5074a9750be400c24fe",
+        "src/agent.mjs": "5b803886cdba9445ab6cf5068bbe56a29b6f56d1d204a3e8030e3619bda3c962",
+        "src/bench/acceptance.mjs": "218bd9ffa673c594ce619264ad60faf74309fa594923501146df91882213cadd",
+        "src/bench/audit.mjs": "0f610432d26d43be6182bfd4d943d321dbb2710e7436ef4b949c19afcad0beff",
+        "src/bench/catalog.mjs": "1d4a5bb89607c38d2bbae702e43cb8af5704fb4a80ce11020fba2997201060d1",
+        "src/bench/compare.mjs": "74cf0ee8cf419296bb875c6e7f9b00e32fbd3b89c07b02c0d2c15573d805de9a",
+        "src/bench/generators.mjs": "cee856d60d4b56197f36acc3f1c237e4aedc0095a6edc5e8434a840d6b5d4487",
+        "src/bench/index.mjs": "2ab26124cb7fca4fe5f629a43fa2ab3090d5a77940229a89f0f63aa230272fef",
+        "src/bench/prepare.mjs": "4cbbd53bb1bb657546d2216ed19c98dbed690d5db6ab68d62fdd6d524f789a18",
+        "src/bench/runner.mjs": "1d1f504c0ec0f0acf9f4085b08eeea2cc210ad45e89483a5dcb5b17f5fd111b6",
+        "src/eda-coordinator.mjs": "97b79a484ecb94c7240870584cbd8bbd5f0887546f658f18178be48937e62fad",
+        "src/evaluation-contracts.mjs": "bd3e76e235feb33ba037879287c586aae985d2e1ac3ed5f6190c5750243d9aee",
+        "src/evaluations.mjs": "f2f06810fc514bb40817f30158b76a912ff50a7ed3e41f893797f534bffb3c87",
+        "src/extension.ts": "342920e5d4e5b9a30998fe7d5eff6a293a7e04de21a01b980e38fb956cab0001",
+        "src/fpga_optimizer/__init__.py": "b2b9ee9a55ab921199a3dac78bb047b3b581e821a674544a6c0aec06eac96d3c",
+        "src/fpga_optimizer/backend.py": "8b44aa7993533cc7f18551a53dc4ebc82d7d6b45635b58c5641e0efafd379cab",
+        "src/fpga_optimizer/core.py": "bd743634eb1550e489c0fa8d1937f3d018dfd2c3cfe4ec2dfb82a809878a0a28",
+        "src/fpga_optimizer/recovery.py": "0c8080d1934ab38c63ff0c9c93be985fc05b958163ec0c185989ff6dc8e584f7",
+        "src/fpga_optimizer/runner.py": "c4be5e1e151f8eaa09c8e795c25145335def1718b7e4fe03fa1a42f90f5d65e5",
+        "src/fpga_optimizer/trace.py": "92b691d99ec71749b494d80142385d2e5d292e7b0cfd0ddb3a481bc3a95a7a24",
+        "src/knowledge.mjs": "5f84ab00272ba98b8297b2d19d6083bec2ec6cf0d7870dd0c7959290fd078351",
+        "src/mcp-server.mjs": "480e885c06cec91c411664b99e134980e398f1e462e1e590e09194b4c9ee484a",
+        "src/optimizer-inspection.mjs": "07bfddb9b9389e9b7fae40bd62d1cff9a67b30c5e3e9a5a3d237021ccc2c1968",
+        "src/optimizer-recovery.mjs": "f559594764ba1e1a0a1a3f279b5a69e38408f7041a4d2988c8f7a7ac19c97638",
+        "src/otlp-upload.mjs": "6cc581585d7086e2a629fd8b756abbb6d6364f3d475cd4e8375e0f6354de706b",
+        "src/platform.mjs": "e587c484eb1ebe5014c636bae2b615deaf928496bb552da4ac9b2e57313d72c7",
+        "src/results.mjs": "ae909044f5ef3fb96ac317f78fea96d65b114bb5ff969b43d038cc98128c7925",
+        "src/runtime.mjs": "b506190fd0e09a119261efe4673554af24e4e4dc95d893b00d53855c6b8e0854",
+        "src/task-context.mjs": "3104ca37f4f6ebaa6e27d44d98b298859b1f94e09caf0a35d308aade35f74d4c",
+        "src/task-outcome.mjs": "d957a04d2ae4b9e55eef2a5b8e7518fcd5d2507f87235fdcb813032866178e5f",
+        "src/tool-contracts.mjs": "a38e099920afa2765dd3e64f5559634280c1bde0520726bc202ceba7cca15ed5",
+        "src/tools/eda.ts": "62854d4d5f9f572bbb905fefa09bc0a8dd9c3a750a2b6b7465da88317e7a0283",
+        "src/tools/focused.mjs": "7b720ef6e13ba6abcbcb586d810206e576a0bd9a5e01213c17537674c8b63a95",
+        "src/tools/fpga.mjs": "0316c006e254cf81fbea320cc16deb5a06a894b0233bda83fe2e46729d255ec1",
+        "src/tools/optimizer.mjs": "d03b62b10329486696fda3124647c964efffe5b8a6af01a1731308637f6c65ee",
+        "src/tools/vivado-common.tcl": "fcd58200b7eab6be6a5ebcaf4383ba73399723f5a59aa5bcc765463b97701051",
+        "src/tools/xsim-options.mjs": "be6e1a6f7809d809c93327c6f96facf1775f4bf4ba2a4910f107ffe32ec53554",
+        "src/trace-export.mjs": "b6044ca7fdd89a10a2b213080f3f56103cf9363393062fd32a6a807007a89573",
+        "src/trace.mjs": "196fd77d341886c090b5a32eb53a089c680fd752d982a20d31ff1ca97b8fc38b",
+        "src/traced-mcp-proxy.mjs": "0a61ac8fa8427bd70579579873d9ec130fa2ccd33e2d6ab1d935655a644e48fb",
+        "src/verifier-loop.mjs": "06932c24215961035bac46e9b77c75d6daec3044c1383ab2f67314bd6ada6059",
+        "src/vivado_workbench.py": "516f3f19895b6094828b01f6a3dcd047f3eef9c4a75868e87f48337b3aeb3f49",
+        "src/workbench-artifacts.mjs": "b009790b14d99427a8c991264a558a7d45f8e92f14c9ea8e364c73198e67f967",
+        "src/workbench-changes.mjs": "7741ebfef375b850d4a42de81e0dd9e1d4d58259a42718b4e38cdff9989ac1be",
+        "src/workbench-projects.mjs": "f219f20add9eb864b52ce9c8ca210b38d707e72000b9e99209d5eeb26d0c2262",
+        "src/workbench-state.mjs": "82425676546711c7d99345efaa3569a65b1745909413491ca228582893508dfd",
+        "src/workbench-task-files.mjs": "8f7ef3c700237e34bcce1550456eda57c83ced932bf6ff12407791b6bb216bd9",
+        "src/workbench-testing.mjs": "2ce2a7db39d7689e949e8947777555dd6ba446bb193a3aa220230608a95fbd1b",
+        "src/workbench.mjs": "21f3e580a9c7161572b7553ce80f71f91f47bf55de37a2705ca39451c69daa96",
+        "src/workflow.mjs": "8ab6d30af5b9d45c3195c930e69195dba5d53be2767fe679d4ef82e3aa39cdff",
+        "vendor/ace-rtl/skills/ace-rtl/scripts/ace_rtl_agent/context_builder.py": "adccaac792d115b689ae8ddd436639a0288b9da03d800d0d09934875c80e3cd9",
+        "vendor/ace-rtl/skills/ace-rtl/scripts/ace_rtl_agent/fresh_start_coordinator.py": "af329f2a1398ee485e5816f8cf21a7e0218a285aac5bfe9a5bd8a95cdd28c951"
+      },
+      "input_hashes": {
+        ".pi/skills/fpga-plan/SKILL.md": "46526fc1f970b38390e8655f83138326f4bcb41b6748a253bfd38ab3a31c13bf",
+        ".pi/skills/fpga-rtl-verify/SKILL.md": "11432c15fb1fe7764ba24918668698355d2143b9dc2cff4512fe05d3add2a28a",
+        ".pi/skills/fpga-timing-triage/SKILL.md": "d45ce3ebc40241ee7604c9e8d2fd246d0551667043206423032ccd2bf89cb469",
+        "examples/workflows/a7-final-ethernet-cdc.json": "9789d64a9a2059b353f6c4633277c9fa0fae6c276fd2d8de6644e36a870d4eec",
+        "knowledge/rules.json": "1e77d3eb0a63ed2323f85f4dbe8408f471eca69fc37947da41c36c5264c196fb",
+        "knowledge/sops.json": "7f6cacae88edcc2ba0b095666406215733df7922af7256a771496a794e063bd4",
+        "knowledge/sources.json": "d603e1a7159623164c79059f1c4f15944b2c2312ed6fcdfe768cb0ac23733a3d",
+        "knowledge/tools.json": "12d8ae1e0141eaef8ba79c834a30152b5c5ca3f20688e3ee12c2741db3f3f426",
+        "projects/a7-validation/ethernet-cdc-constraints.tcl": "1bdd9c991e1cc212f248287182ef118cb7898253a191ee3fbe24a50e8cac448a",
+        "projects/a7-validation/ooc-context.tcl": "87bad1c69d5944782eb71f58a4c2ee18a21d3a4bc0b0ec0c1204803c16381c13",
+        "projects/hard-bench/ethernet-cdc/arp.hex": "1e6440d1e8b395dc5226ba291c1e4cc2a0fbb9d49d72649736d30375c92f7be4",
+        "projects/hard-bench/ethernet-cdc/constraints.tcl": "03256824007342659ed3d74b795bf3ed754371f8d45801b96725f666c40cdacc",
+        "projects/hard-bench/ethernet-cdc/ethernet_cdc_top.v": "9070aa29a6ee091c6e13725be1f40c57a58e58ae1730d2813748dcd9c5c76997",
+        "projects/hard-bench/ethernet-cdc/expected.hex": "61e56fa156c89d65435fc8fe3775e6accca2b4e84cabca7109eacd63abd5f82a",
+        "projects/hard-bench/ethernet-cdc/negative.hex": "be8caa0c326c7b61662fd433a8fc5ae52e1db48fa48cb6c5cbe8773cd68fb875",
+        "projects/hard-bench/ethernet-cdc/tb_a.sv": "50fe3a54c2a3c4fb22976ea3f23b49d5756ae912a52a583b840f2d61ef019a8e",
+        "projects/hard-bench/ethernet-cdc/tb_b.sv": "f29bf903cc55ef265229e0a25f2e75ce5c16e40aee1222404dc8c3f48b4a2724",
+        "projects/hard-bench/ethernet-cdc/valid.hex": "f11797a3b55cbb12b9100fdc0dc9d97f81d6db7757659cf77bb4e84d5e349134",
+        "projects/hard-bench/ethernet-cdc/workflow-clocks.xdc": "b247f8188c89eaa567bb4bb0dcdc4b6ebb9e8d4629fbe4d81b85d76934218b7a",
+        "scripts/check-knowledge.mjs": "65d9b5fe2acb9f49a3f7ddc06ccc276a11c35b77f294da7911848b46196d403f",
+        "src/knowledge.mjs": "5f84ab00272ba98b8297b2d19d6083bec2ec6cf0d7870dd0c7959290fd078351",
+        "vendor/verilog-ethernet/lib/axis/rtl/arbiter.v": "4b4291e2afc5cdb93e261d43c439ea3c9bedce3d628d3db9c6e2ed8f4c27c3f1",
+        "vendor/verilog-ethernet/lib/axis/rtl/axis_adapter.v": "94eb7348f2b833126c1b519f28da72fcf3abcc4a6766b3759bce0d828db3bfe1",
+        "vendor/verilog-ethernet/lib/axis/rtl/axis_async_fifo.v": "65f3c86ee1fcb1470fd43291fa80598117e3d7a694e52695c80cb31682113cb2",
+        "vendor/verilog-ethernet/lib/axis/rtl/axis_async_fifo_adapter.v": "3472e2624af75bbc978c15603b78afc9e08a0d61dc9471cbfb4ba4579df5c4d3",
+        "vendor/verilog-ethernet/lib/axis/rtl/axis_fifo.v": "8ee436631ece272f478a4396c3819f62e5cd4f9a492b80502562aeb73c9e6294",
+        "vendor/verilog-ethernet/lib/axis/rtl/priority_encoder.v": "07c610b8dda24daf67dec36c743f79fca30f9d01d5469e1e7f795a16f4c7aa97",
+        "vendor/verilog-ethernet/lib/axis/rtl/sync_reset.v": "3c333fc4596a932c3ec3a1541e3d8ceec91ed1d5119b64724cad9b5fae4b7322",
+        "vendor/verilog-ethernet/lib/axis/syn/vivado/axis_async_fifo.tcl": "dac186d4035022b61f942f1fe8d6149f69f504482376bcee6ce440ba7a341dc3",
+        "vendor/verilog-ethernet/lib/axis/syn/vivado/sync_reset.tcl": "5b377bc4470e4d4af0c1bbf352f0f7be48a91e26fe15df4cde1436f6a197f8f3",
+        "vendor/verilog-ethernet/rtl/arp.v": "46d339fe7b4de1ff5c6c881c53f9c0c718ec8eb776673bc4d5916ea230512512",
+        "vendor/verilog-ethernet/rtl/arp_cache.v": "e7eb3f5fc90c6e5cc9f1f9f3d59afefcfc87fd667a1893de8ddad3aa94309529",
+        "vendor/verilog-ethernet/rtl/arp_eth_rx.v": "6a49bd6f7c2311baffe1b3985d7eee0b9adee54f7d05ffa4316cf201adb526ee",
+        "vendor/verilog-ethernet/rtl/arp_eth_tx.v": "8125cf542196132b388c30f4ac3005a0153082c7cd9f87916680c6767db72dfb",
+        "vendor/verilog-ethernet/rtl/axis_gmii_rx.v": "9fc42a832d36ab6e2f43fb69dcf897a3b38db7a072bdc26ff2e6f8a2fd19aae8",
+        "vendor/verilog-ethernet/rtl/axis_gmii_tx.v": "0afecab08286491137c605b306b034232eb136aa3ba5aec2885027ab3fb02668",
+        "vendor/verilog-ethernet/rtl/eth_arb_mux.v": "ce578195dc565962e3515d5444d13d6a47c42ee82bd2109d31dd62a7ed0775ea",
+        "vendor/verilog-ethernet/rtl/eth_axis_rx.v": "394d811d97bb10e865fde1e4820af594313296cf36fb8d1316defca8ba222bb7",
+        "vendor/verilog-ethernet/rtl/eth_axis_tx.v": "633d15019041a2ab8144d0b5d5c76122f2829f6f23d1b45d82ddf1cc00476653",
+        "vendor/verilog-ethernet/rtl/eth_mac_1g.v": "5e53e066ac7b7d5c7699fb4fa97e633766133e499f22c4addb9b3e2d8dd97900",
+        "vendor/verilog-ethernet/rtl/eth_mac_1g_fifo.v": "65d6217f3b0ae020b02acb1d9e45c58a32d871bdef160c5b545c0b6c1887b355",
+        "vendor/verilog-ethernet/rtl/ip.v": "0fa6834e1d4eade6641ea6c0dc918bc3fb8d758dd8e0a38c7853d7c10f7853a3",
+        "vendor/verilog-ethernet/rtl/ip_arb_mux.v": "429fce396c6d5e311497b419f6d0c930e4e17eea5637efb4f7a4df1299cfea6e",
+        "vendor/verilog-ethernet/rtl/ip_complete.v": "c0f5981200d90312065eece7117dd22733d224169af1865760522e38122df120",
+        "vendor/verilog-ethernet/rtl/ip_eth_rx.v": "ad9c44691fe27d76373e64d3aadf8e076d819030266d4569e683030cc67a05bc",
+        "vendor/verilog-ethernet/rtl/ip_eth_tx.v": "a9d5bdbea9ccecedf7ff513dfe3e34cbfbc505bfc3877d1430a3416b8689fd1c",
+        "vendor/verilog-ethernet/rtl/lfsr.v": "86362b06f992221f26c8e81ed82bbeb26eeb94edc381fd87d35bf0cca3b23c95",
+        "vendor/verilog-ethernet/rtl/udp.v": "a11fcaaf918868706c2a3ea97ecb5842813b6a21a4bd9d35ad38906be81a4c7f",
+        "vendor/verilog-ethernet/rtl/udp_checksum_gen.v": "1a5656276e8481fc0f82c128da36bc2a748844ad20651fdc35e7afda6de17f2d",
+        "vendor/verilog-ethernet/rtl/udp_complete.v": "94c2f9a93a07256493c2f87e77444cc14cec686247f653d5a769264a43a9faee",
+        "vendor/verilog-ethernet/rtl/udp_ip_rx.v": "a3d11dac41e6349e52c9fbe531b9e3345d5688b062157b8c6a85f4b40cc41050",
+        "vendor/verilog-ethernet/rtl/udp_ip_tx.v": "4df5a48a8eded39d4503923e14aa3f66824bbc830008e2c37b3e767ca345f60a"
+      },
+      "verification": {
+        "final_rounds": 1,
+        "final_calls": 5,
+        "cumulative_rounds": 2,
+        "cumulative_calls": 9,
+        "original_allowance": {
+          "max_rounds": 4,
+          "max_calls": 24
+        }
+      },
+      "online_evaluation": {
+        "status": "passed",
+        "directory": "artifacts/evaluation-2026-10-26T14-49-41-348Z-2a41e5"
+      }
+    },
+    {
+      "name": "udp",
+      "status": "passed",
+      "execution": "pi_sdk_host_verifier",
+      "original_rtl_unchanged": true,
+      "task": "artifacts/agent-task-d8c563a5-a684-4abf-bccd-fbb32b5f0f0a",
+      "session": "artifacts/native-agent-2026-10-26T14-27-13-486Z-31604e",
+      "workflow": "artifacts/2026-10-26T14-27-44-157Z-eda_workflow_run-2d4fdea2",
+      "protocol": "examples/workflows/a7-final-udp.json",
+      "protocol_sha256": "7e3144505ef6f607f5197ab942e68700dd8bb4169be427b2bcced4758aafca53",
+      "contract_sha256": "c410e182dba0efc355da999dd153209770ce815d04d47fe02ef404927e15fef0",
+      "functional": [
+        {
+          "step": "simulation",
+          "acceptance": {
+            "status": "pass",
+            "pass_marker": "SYSTEM_BENCH_PASS project=udp",
+            "marker_matches": 1,
+            "completion_observed": true,
+            "failure_diagnostic": false,
+            "scope": "Explicit testbench marker, completion and diagnostic checks; semantic assertions remain the testbench responsibility."
+          },
+          "markers": [
+            "SYSTEM_BENCH_PASS project=udp tx_packets=65 rx_packets=65 payload_bytes=62272 invalid_checksum=8 truncated_header=8 arp_frames=7 arp_failures=1 cycles=94883"
+          ],
+          "child_directory": "artifacts/2026-10-26T14-27-44-479Z-eda_xsim-d3619993",
+          "result_sha256": "71d65eb204eee0948f5e9543d254abd3ded15afcb3096559ad6502c251b7b170",
+          "log_sha256": "0ebbfee9ff755ad11c19983f7f1738a5568e3d8d11f49f31d1a9e479a05069a8"
+        }
+      ],
+      "physical": {
+        "part": "xc7a100tfgg676-2",
+        "version": "2020.2",
+        "clocks": [
+          {
+            "name": "clk",
+            "period_ns": 10
+          }
+        ],
+        "black_boxes": 0,
+        "setup_slack_ns": 2.422,
+        "hold_slack_ns": 0.035,
+        "drc": {
+          "errors": 0,
+          "critical_warnings": 0,
+          "warnings": 0
+        },
+        "assessment": {
+          "setup_hold": "pass",
+          "clock_and_internal_constraints": "pass",
+          "io_constraints": "pass",
+          "verified_async_reset_exceptions": [],
+          "routing": "pass",
+          "cdc": "unknown",
+          "overall_design_acceptance": "not_evaluated",
+          "board_signoff": false,
+          "scope": "Per-report diagnostics only. Positive setup/hold slack does not validate CDC, IO timing, functional correctness or hardware."
+        },
+        "parsed_reports": {
+          "timing_checks": {
+            "no_clock": 0,
+            "constant_clock": 0,
+            "pulse_width_clock": 0,
+            "unconstrained_internal_endpoints": 0,
+            "no_input_delay": 0,
+            "no_output_delay": 0,
+            "multiple_clock": 0,
+            "generated_clocks": 0,
+            "loops": 0,
+            "partial_input_delay": 0,
+            "partial_output_delay": 0,
+            "latch_loops": 0
+          },
+          "input_delays": {
+            "missing": 0,
+            "false_path_count": 0,
+            "false_path_ports": []
+          },
+          "route": {
+            "routable": 4729,
+            "fully_routed": 4729,
+            "errors": 0,
+            "status": "pass"
+          },
+          "utilization": {
+            "Slice LUTs": 1598,
+            "Slice Registers": 2924,
+            "Block RAM Tile": 1,
+            "RAMB36/FIFO*": 1,
+            "RAMB18": 0,
+            "DSPs": 0
+          },
+          "cdc_rules": [],
+          "cdc_format_recognized": false
+        }
+      },
+      "domains": [
+        {
+          "domain": "functional",
+          "status": "passed"
+        },
+        {
+          "domain": "synthesis",
+          "status": "passed"
+        },
+        {
+          "domain": "setup",
+          "status": "passed"
+        },
+        {
+          "domain": "hold",
+          "status": "passed"
+        },
+        {
+          "domain": "constraints",
+          "status": "passed"
+        },
+        {
+          "domain": "routing",
+          "status": "passed"
+        },
+        {
+          "domain": "drc",
+          "status": "passed"
+        },
+        {
+          "domain": "cdc",
+          "status": "not_requested"
+        },
+        {
+          "domain": "artifact_integrity",
+          "status": "not_requested"
+        }
+      ],
+      "evidence": [
+        {
+          "id": "simulation",
+          "result_path": "artifacts/2026-10-26T14-27-44-157Z-eda_workflow_run-2d4fdea2/simulation.result.json",
+          "result_sha256": "71d65eb204eee0948f5e9543d254abd3ded15afcb3096559ad6502c251b7b170",
+          "child_directory": "artifacts/2026-10-26T14-27-44-479Z-eda_xsim-d3619993",
+          "artifact_hashes": {}
+        },
+        {
+          "id": "synthesis",
+          "result_path": "artifacts/2026-10-26T14-27-44-157Z-eda_workflow_run-2d4fdea2/synthesis.result.json",
+          "result_sha256": "d9bc8e7d45484e1de846f46d3a0ec2b207aee0173494becf05784f17cd5ba5c0",
+          "child_directory": "artifacts/2026-10-26T14-28-01-639Z-eda_vivado_synthesize-6d98470f",
+          "artifact_hashes": {
+            "artifacts/2026-10-26T14-28-01-639Z-eda_vivado_synthesize-6d98470f/applied-constraints.xdc": "0a77d5c223be37a5b347f5c78f1f117ba62fca59b47c3fe5e9a6b307082f2027",
+            "artifacts/2026-10-26T14-28-01-639Z-eda_vivado_synthesize-6d98470f/check-timing.rpt": "4eb5f08aab0a71cf49dc393ea99a62a011c3a0d501c3ff48d7ee2610b0fa227e",
+            "artifacts/2026-10-26T14-28-01-639Z-eda_vivado_synthesize-6d98470f/synthesized.dcp": "f187a5c984e0ac62e600c29c975f6ef885326927cb6b2262215de16f86ad5ccf",
+            "artifacts/2026-10-26T14-28-01-639Z-eda_vivado_synthesize-6d98470f/timing.rpt": "52b307960d4ed7de1a445d3cc6b7d0f9c793a46c4172409572669fbd67c28723",
+            "artifacts/2026-10-26T14-28-01-639Z-eda_vivado_synthesize-6d98470f/utilization.rpt": "41944592d862bcea33fa4b456727a7cc3379d945fcf519aa3a2e7877c86915d0"
+          }
+        },
+        {
+          "id": "implementation",
+          "result_path": "artifacts/2026-10-26T14-27-44-157Z-eda_workflow_run-2d4fdea2/implementation.result.json",
+          "result_sha256": "e6e2842da2e883e43ae3cdf260ace3c39d52753c6a262f108f5a1696763c981b",
+          "child_directory": "artifacts/2026-10-26T14-29-18-230Z-eda_vivado_implement-f8ca7792",
+          "artifact_hashes": {
+            "artifacts/2026-10-26T14-29-18-230Z-eda_vivado_implement-f8ca7792/applied-constraints.xdc": "72ec1d52e230c5dfbce71bc12193f8b01554b1c1d89e2dbea9d884b677f55212",
+            "artifacts/2026-10-26T14-29-18-230Z-eda_vivado_implement-f8ca7792/check-timing.rpt": "3dde32e9e9737b5dd52f08dfd173783f40590fe6bb247193afb4d0e403c6b832",
+            "artifacts/2026-10-26T14-29-18-230Z-eda_vivado_implement-f8ca7792/drc.rpt": "8b39cd5517c43adeb03d18017796d385c5b8f6e05de1a4a6b7eefea8721ca77b",
+            "artifacts/2026-10-26T14-29-18-230Z-eda_vivado_implement-f8ca7792/route-in-memory.rpt": "6776995fbea03f57fa7f035cc1eeed01d628c89e4813810b7b699d181433686d",
+            "artifacts/2026-10-26T14-29-18-230Z-eda_vivado_implement-f8ca7792/route.rpt": "bd7be46cffb51e732990d05eeead19ce6bb3e5b708aa8d572caf1167a053da5a",
+            "artifacts/2026-10-26T14-29-18-230Z-eda_vivado_implement-f8ca7792/routed.dcp": "284221eea101b79449d37c6ca3f8bd4fe4466796dcf9bd1802facb4ec96495a5",
+            "artifacts/2026-10-26T14-29-18-230Z-eda_vivado_implement-f8ca7792/timing.rpt": "efa3fc57643c2e1b95bf9a1ebdb958aa5acc937ae15a46a9e7ba486c08e106b7",
+            "artifacts/2026-10-26T14-29-18-230Z-eda_vivado_implement-f8ca7792/utilization.rpt": "08e946473905f80549e3b653632d0540dd74de438374d081fe755c022a2ca53c"
+          }
+        },
+        {
+          "id": "drc",
+          "result_path": "artifacts/2026-10-26T14-27-44-157Z-eda_workflow_run-2d4fdea2/drc.result.json",
+          "result_sha256": "70984a1093d757c0763195bc6c30ae52cb54d78b84b14fc1a9d2e35ee76a1000",
+          "child_directory": "artifacts/2026-10-26T14-35-15-013Z-eda_vivado_report_drc-6de2c139",
+          "artifact_hashes": {
+            "artifacts/2026-10-26T14-35-15-013Z-eda_vivado_report_drc-6de2c139/applied-constraints.xdc": "72ec1d52e230c5dfbce71bc12193f8b01554b1c1d89e2dbea9d884b677f55212",
+            "artifacts/2026-10-26T14-35-15-013Z-eda_vivado_report_drc-6de2c139/drc.rpt": "0e82fc94f948d4f1bd47a6f0edd1e424e07b247805b2fa43aa775724f26f4609"
+          }
+        }
+      ],
+      "source_hashes": {
+        ".eda/config.json": "9ef065695a9024e8bed151281d83d2632f4d3056faa72099742e94c391396054",
+        "package-lock.json": "953ac596f048705eec519d56309661f24c11fe7638896d448988b2521a3db59b",
+        "package.json": "ba2832b6dc9c1c2128dca10b9cd65c0e709a7aa9b01c025cb9dd52b85ded6b1c",
+        "scripts/ace-rtl-feedback.py": "fd7d3a0836ad8af19b36d0d043012905b2caa888c8884b15927537987d18f814",
+        "scripts/trace-inspect.mjs": "78915b0c6b8a56cace96eee095d295ba33a9e01ea7d454a95204d75662e08443",
+        "src/agent-resources.mjs": "a1ea2332be295fa3b4460ac11caf99b77d9947365f7c0b4c84a8483b014ea7ed",
+        "src/agent-session.mjs": "c3b5c1bbde96dffa8fae82d21de2b5484cc71bc4c5065e6407a29b6d9d0e559c",
+        "src/agent-task.mjs": "fd9fb78748d1936eff0708678966d8f2e6e9051619e3a5074a9750be400c24fe",
+        "src/agent.mjs": "5b803886cdba9445ab6cf5068bbe56a29b6f56d1d204a3e8030e3619bda3c962",
+        "src/bench/acceptance.mjs": "218bd9ffa673c594ce619264ad60faf74309fa594923501146df91882213cadd",
+        "src/bench/audit.mjs": "0f610432d26d43be6182bfd4d943d321dbb2710e7436ef4b949c19afcad0beff",
+        "src/bench/catalog.mjs": "1d4a5bb89607c38d2bbae702e43cb8af5704fb4a80ce11020fba2997201060d1",
+        "src/bench/compare.mjs": "74cf0ee8cf419296bb875c6e7f9b00e32fbd3b89c07b02c0d2c15573d805de9a",
+        "src/bench/generators.mjs": "cee856d60d4b56197f36acc3f1c237e4aedc0095a6edc5e8434a840d6b5d4487",
+        "src/bench/index.mjs": "2ab26124cb7fca4fe5f629a43fa2ab3090d5a77940229a89f0f63aa230272fef",
+        "src/bench/prepare.mjs": "4cbbd53bb1bb657546d2216ed19c98dbed690d5db6ab68d62fdd6d524f789a18",
+        "src/bench/runner.mjs": "1d1f504c0ec0f0acf9f4085b08eeea2cc210ad45e89483a5dcb5b17f5fd111b6",
+        "src/eda-coordinator.mjs": "97b79a484ecb94c7240870584cbd8bbd5f0887546f658f18178be48937e62fad",
+        "src/evaluation-contracts.mjs": "bd3e76e235feb33ba037879287c586aae985d2e1ac3ed5f6190c5750243d9aee",
+        "src/evaluations.mjs": "f2f06810fc514bb40817f30158b76a912ff50a7ed3e41f893797f534bffb3c87",
+        "src/extension.ts": "342920e5d4e5b9a30998fe7d5eff6a293a7e04de21a01b980e38fb956cab0001",
+        "src/fpga_optimizer/__init__.py": "b2b9ee9a55ab921199a3dac78bb047b3b581e821a674544a6c0aec06eac96d3c",
+        "src/fpga_optimizer/backend.py": "8b44aa7993533cc7f18551a53dc4ebc82d7d6b45635b58c5641e0efafd379cab",
+        "src/fpga_optimizer/core.py": "bd743634eb1550e489c0fa8d1937f3d018dfd2c3cfe4ec2dfb82a809878a0a28",
+        "src/fpga_optimizer/recovery.py": "0c8080d1934ab38c63ff0c9c93be985fc05b958163ec0c185989ff6dc8e584f7",
+        "src/fpga_optimizer/runner.py": "c4be5e1e151f8eaa09c8e795c25145335def1718b7e4fe03fa1a42f90f5d65e5",
+        "src/fpga_optimizer/trace.py": "92b691d99ec71749b494d80142385d2e5d292e7b0cfd0ddb3a481bc3a95a7a24",
+        "src/knowledge.mjs": "5f84ab00272ba98b8297b2d19d6083bec2ec6cf0d7870dd0c7959290fd078351",
+        "src/mcp-server.mjs": "480e885c06cec91c411664b99e134980e398f1e462e1e590e09194b4c9ee484a",
+        "src/optimizer-inspection.mjs": "07bfddb9b9389e9b7fae40bd62d1cff9a67b30c5e3e9a5a3d237021ccc2c1968",
+        "src/optimizer-recovery.mjs": "f559594764ba1e1a0a1a3f279b5a69e38408f7041a4d2988c8f7a7ac19c97638",
+        "src/otlp-upload.mjs": "6cc581585d7086e2a629fd8b756abbb6d6364f3d475cd4e8375e0f6354de706b",
+        "src/platform.mjs": "e587c484eb1ebe5014c636bae2b615deaf928496bb552da4ac9b2e57313d72c7",
+        "src/results.mjs": "ae909044f5ef3fb96ac317f78fea96d65b114bb5ff969b43d038cc98128c7925",
+        "src/runtime.mjs": "b506190fd0e09a119261efe4673554af24e4e4dc95d893b00d53855c6b8e0854",
+        "src/task-context.mjs": "3104ca37f4f6ebaa6e27d44d98b298859b1f94e09caf0a35d308aade35f74d4c",
+        "src/task-outcome.mjs": "d957a04d2ae4b9e55eef2a5b8e7518fcd5d2507f87235fdcb813032866178e5f",
+        "src/tool-contracts.mjs": "a38e099920afa2765dd3e64f5559634280c1bde0520726bc202ceba7cca15ed5",
+        "src/tools/eda.ts": "62854d4d5f9f572bbb905fefa09bc0a8dd9c3a750a2b6b7465da88317e7a0283",
+        "src/tools/focused.mjs": "7b720ef6e13ba6abcbcb586d810206e576a0bd9a5e01213c17537674c8b63a95",
+        "src/tools/fpga.mjs": "0316c006e254cf81fbea320cc16deb5a06a894b0233bda83fe2e46729d255ec1",
+        "src/tools/optimizer.mjs": "d03b62b10329486696fda3124647c964efffe5b8a6af01a1731308637f6c65ee",
+        "src/tools/vivado-common.tcl": "fcd58200b7eab6be6a5ebcaf4383ba73399723f5a59aa5bcc765463b97701051",
+        "src/tools/xsim-options.mjs": "be6e1a6f7809d809c93327c6f96facf1775f4bf4ba2a4910f107ffe32ec53554",
+        "src/trace-export.mjs": "b6044ca7fdd89a10a2b213080f3f56103cf9363393062fd32a6a807007a89573",
+        "src/trace.mjs": "196fd77d341886c090b5a32eb53a089c680fd752d982a20d31ff1ca97b8fc38b",
+        "src/traced-mcp-proxy.mjs": "0a61ac8fa8427bd70579579873d9ec130fa2ccd33e2d6ab1d935655a644e48fb",
+        "src/verifier-loop.mjs": "06932c24215961035bac46e9b77c75d6daec3044c1383ab2f67314bd6ada6059",
+        "src/vivado_workbench.py": "516f3f19895b6094828b01f6a3dcd047f3eef9c4a75868e87f48337b3aeb3f49",
+        "src/workbench-artifacts.mjs": "b009790b14d99427a8c991264a558a7d45f8e92f14c9ea8e364c73198e67f967",
+        "src/workbench-changes.mjs": "7741ebfef375b850d4a42de81e0dd9e1d4d58259a42718b4e38cdff9989ac1be",
+        "src/workbench-projects.mjs": "f219f20add9eb864b52ce9c8ca210b38d707e72000b9e99209d5eeb26d0c2262",
+        "src/workbench-state.mjs": "82425676546711c7d99345efaa3569a65b1745909413491ca228582893508dfd",
+        "src/workbench-task-files.mjs": "8f7ef3c700237e34bcce1550456eda57c83ced932bf6ff12407791b6bb216bd9",
+        "src/workbench-testing.mjs": "2ce2a7db39d7689e949e8947777555dd6ba446bb193a3aa220230608a95fbd1b",
+        "src/workbench.mjs": "21f3e580a9c7161572b7553ce80f71f91f47bf55de37a2705ca39451c69daa96",
+        "src/workflow.mjs": "8ab6d30af5b9d45c3195c930e69195dba5d53be2767fe679d4ef82e3aa39cdff",
+        "vendor/ace-rtl/skills/ace-rtl/scripts/ace_rtl_agent/context_builder.py": "adccaac792d115b689ae8ddd436639a0288b9da03d800d0d09934875c80e3cd9",
+        "vendor/ace-rtl/skills/ace-rtl/scripts/ace_rtl_agent/fresh_start_coordinator.py": "af329f2a1398ee485e5816f8cf21a7e0218a285aac5bfe9a5bd8a95cdd28c951"
+      },
+      "input_hashes": {
+        ".pi/skills/fpga-plan/SKILL.md": "46526fc1f970b38390e8655f83138326f4bcb41b6748a253bfd38ab3a31c13bf",
+        ".pi/skills/fpga-rtl-verify/SKILL.md": "11432c15fb1fe7764ba24918668698355d2143b9dc2cff4512fe05d3add2a28a",
+        ".pi/skills/fpga-timing-triage/SKILL.md": "d45ce3ebc40241ee7604c9e8d2fd246d0551667043206423032ccd2bf89cb469",
+        "examples/workflows/a7-final-udp.json": "7e3144505ef6f607f5197ab942e68700dd8bb4169be427b2bcced4758aafca53",
+        "knowledge/rules.json": "1e77d3eb0a63ed2323f85f4dbe8408f471eca69fc37947da41c36c5264c196fb",
+        "knowledge/sops.json": "7f6cacae88edcc2ba0b095666406215733df7922af7256a771496a794e063bd4",
+        "knowledge/sources.json": "d603e1a7159623164c79059f1c4f15944b2c2312ed6fcdfe768cb0ac23733a3d",
+        "knowledge/tools.json": "12d8ae1e0141eaef8ba79c834a30152b5c5ca3f20688e3ee12c2741db3f3f426",
+        "projects/a7-validation/ooc-context.tcl": "87bad1c69d5944782eb71f58a4c2ee18a21d3a4bc0b0ec0c1204803c16381c13",
+        "projects/a7-validation/udp-clocks.xdc": "8339da623c9a854d0424f3b23bbf6ce42bd84ecd35e3783a79e30481a9c7982a",
+        "projects/system-bench/udp/arp.hex": "2e22c2b30d5d9c393661820e805446d73ee3989e1f3e2373d440263e01feaca4",
+        "projects/system-bench/udp/bad.hex": "30f43582ed90f058e09fdad2d776a096f86c6d5f0ac439428d28c7877dfe0b2b",
+        "projects/system-bench/udp/payload.hex": "ccef54f998e46b314a4db1b51bf2da1001388a24685875e94df0af2ed99e419b",
+        "projects/system-bench/udp/rx.hex": "5036e0ef530d0b078d87722de1c8b60ee5f19ad9983f34708709d4838ea3ddf5",
+        "projects/system-bench/udp/tb_udp.sv": "7f5699d907d5a4df1cb6933ca3b5830f7ce251815f333bfd34a95eb60e4e6f1d",
+        "projects/system-bench/udp/tx-corrupt.hex": "5912d4dc42d735f4c7598f31bbfc284bd0fb08a6f35d58f2f376286d7fb7c73d",
+        "projects/system-bench/udp/tx.hex": "b7f6ef86d101e08324005818dc5b8d8e7bc84c03f483ae87a88b0d20cdeaf184",
+        "projects/system-bench/udp/udp_top.v": "004f42a3996cc56eace8b7982a49eb70f1300dbc2b23871ba199c26f2b0d9cce",
+        "scripts/check-knowledge.mjs": "65d9b5fe2acb9f49a3f7ddc06ccc276a11c35b77f294da7911848b46196d403f",
+        "src/knowledge.mjs": "5f84ab00272ba98b8297b2d19d6083bec2ec6cf0d7870dd0c7959290fd078351",
+        "vendor/verilog-ethernet/lib/axis/rtl/arbiter.v": "4b4291e2afc5cdb93e261d43c439ea3c9bedce3d628d3db9c6e2ed8f4c27c3f1",
+        "vendor/verilog-ethernet/lib/axis/rtl/axis_fifo.v": "8ee436631ece272f478a4396c3819f62e5cd4f9a492b80502562aeb73c9e6294",
+        "vendor/verilog-ethernet/lib/axis/rtl/priority_encoder.v": "07c610b8dda24daf67dec36c743f79fca30f9d01d5469e1e7f795a16f4c7aa97",
+        "vendor/verilog-ethernet/rtl/arp.v": "46d339fe7b4de1ff5c6c881c53f9c0c718ec8eb776673bc4d5916ea230512512",
+        "vendor/verilog-ethernet/rtl/arp_cache.v": "e7eb3f5fc90c6e5cc9f1f9f3d59afefcfc87fd667a1893de8ddad3aa94309529",
+        "vendor/verilog-ethernet/rtl/arp_eth_rx.v": "6a49bd6f7c2311baffe1b3985d7eee0b9adee54f7d05ffa4316cf201adb526ee",
+        "vendor/verilog-ethernet/rtl/arp_eth_tx.v": "8125cf542196132b388c30f4ac3005a0153082c7cd9f87916680c6767db72dfb",
+        "vendor/verilog-ethernet/rtl/eth_arb_mux.v": "ce578195dc565962e3515d5444d13d6a47c42ee82bd2109d31dd62a7ed0775ea",
+        "vendor/verilog-ethernet/rtl/ip.v": "0fa6834e1d4eade6641ea6c0dc918bc3fb8d758dd8e0a38c7853d7c10f7853a3",
+        "vendor/verilog-ethernet/rtl/ip_arb_mux.v": "429fce396c6d5e311497b419f6d0c930e4e17eea5637efb4f7a4df1299cfea6e",
+        "vendor/verilog-ethernet/rtl/ip_complete.v": "c0f5981200d90312065eece7117dd22733d224169af1865760522e38122df120",
+        "vendor/verilog-ethernet/rtl/ip_eth_rx.v": "ad9c44691fe27d76373e64d3aadf8e076d819030266d4569e683030cc67a05bc",
+        "vendor/verilog-ethernet/rtl/ip_eth_tx.v": "a9d5bdbea9ccecedf7ff513dfe3e34cbfbc505bfc3877d1430a3416b8689fd1c",
+        "vendor/verilog-ethernet/rtl/lfsr.v": "86362b06f992221f26c8e81ed82bbeb26eeb94edc381fd87d35bf0cca3b23c95",
+        "vendor/verilog-ethernet/rtl/udp.v": "a11fcaaf918868706c2a3ea97ecb5842813b6a21a4bd9d35ad38906be81a4c7f",
+        "vendor/verilog-ethernet/rtl/udp_checksum_gen.v": "1a5656276e8481fc0f82c128da36bc2a748844ad20651fdc35e7afda6de17f2d",
+        "vendor/verilog-ethernet/rtl/udp_complete.v": "94c2f9a93a07256493c2f87e77444cc14cec686247f653d5a769264a43a9faee",
+        "vendor/verilog-ethernet/rtl/udp_ip_rx.v": "a3d11dac41e6349e52c9fbe531b9e3345d5688b062157b8c6a85f4b40cc41050",
+        "vendor/verilog-ethernet/rtl/udp_ip_tx.v": "4df5a48a8eded39d4503923e14aa3f66824bbc830008e2c37b3e767ca345f60a"
+      },
+      "verification": {
+        "final_rounds": 1,
+        "final_calls": 4,
+        "cumulative_rounds": 2,
+        "cumulative_calls": 7,
+        "original_allowance": {
+          "max_rounds": 4,
+          "max_calls": 24
+        }
+      },
+      "online_evaluation": {
+        "status": "passed",
+        "directory": "artifacts/evaluation-2026-10-26T14-49-43-574Z-e23bac"
+      }
+    },
+    {
+      "name": "crypto-soc",
+      "status": "passed",
+      "execution": "pi_sdk_host_verifier",
+      "original_rtl_unchanged": true,
+      "task": "artifacts/agent-task-6eb04dc9-f485-4846-8a44-fde02cf976d5",
+      "session": "artifacts/native-agent-2026-10-26T14-29-37-009Z-acf282",
+      "workflow": "artifacts/2026-10-26T14-29-53-407Z-eda_workflow_run-e5e0db5b",
+      "protocol": "examples/workflows/a7-final-crypto-soc.json",
+      "protocol_sha256": "f783a068ebe268bea1bf2317e12e9d6062b9c48122e77cc566724b85f649e0cb",
+      "contract_sha256": "83219396d6f6eea480dc1af1d479217adf9e23bb594f6fa5deb3bf893e72f2d5",
+      "functional": [
+        {
+          "step": "simulation",
+          "acceptance": {
+            "status": "pass",
+            "pass_marker": "HARD_BENCH_PASS project=crypto-soc",
+            "marker_matches": 1,
+            "completion_observed": true,
+            "failure_diagnostic": false,
+            "scope": "Explicit testbench marker, completion and diagnostic checks; semantic assertions remain the testbench responsibility."
+          },
+          "markers": [
+            "HARD_BENCH_PASS project=crypto-soc seeds=3 descriptors=42 ciphertext_bytes=26592 error_recoveries=21 reset_probes=1 ram_preserved_reset=0 cycles=11919085 both_pending=161407 owner_switches=28058 firmware_work=355"
+          ],
+          "child_directory": "artifacts/2026-10-26T14-29-53-661Z-eda_xsim-390bf168",
+          "result_sha256": "74a3492359481f6997376c48058955bf64eaa7bc2883bf12a6010e0912ff316f",
+          "log_sha256": "3e4c982c31a9dcd0cf6061b3a5467ab538f6bf2ecf1f50e8fdff6de9a36be048"
+        }
+      ],
+      "physical": {
+        "part": "xc7a100tfgg676-2",
+        "version": "2020.2",
+        "clocks": [
+          {
+            "name": "clk",
+            "period_ns": 10
+          }
+        ],
+        "black_boxes": 0,
+        "setup_slack_ns": 0.552,
+        "hold_slack_ns": 0.062,
+        "drc": {
+          "errors": 0,
+          "critical_warnings": 0,
+          "warnings": 0
+        },
+        "assessment": {
+          "setup_hold": "pass",
+          "clock_and_internal_constraints": "pass",
+          "io_constraints": "pass",
+          "verified_async_reset_exceptions": [],
+          "routing": "pass",
+          "cdc": "unknown",
+          "overall_design_acceptance": "not_evaluated",
+          "board_signoff": false,
+          "scope": "Per-report diagnostics only. Positive setup/hold slack does not validate CDC, IO timing, functional correctness or hardware."
+        },
+        "parsed_reports": {
+          "timing_checks": {
+            "no_clock": 0,
+            "constant_clock": 0,
+            "pulse_width_clock": 0,
+            "unconstrained_internal_endpoints": 0,
+            "no_input_delay": 0,
+            "no_output_delay": 0,
+            "multiple_clock": 0,
+            "generated_clocks": 0,
+            "loops": 0,
+            "partial_input_delay": 0,
+            "partial_output_delay": 0,
+            "latch_loops": 0
+          },
+          "input_delays": {
+            "missing": 0,
+            "false_path_count": 0,
+            "false_path_ports": []
+          },
+          "route": {
+            "routable": 9215,
+            "fully_routed": 9215,
+            "errors": 0,
+            "status": "pass"
+          },
+          "utilization": {
+            "Slice LUTs": 5111,
+            "Slice Registers": 4854,
+            "Block RAM Tile": 16,
+            "RAMB36/FIFO*": 16,
+            "RAMB18": 0,
+            "DSPs": 0
+          },
+          "cdc_rules": [],
+          "cdc_format_recognized": false
+        }
+      },
+      "domains": [
+        {
+          "domain": "functional",
+          "status": "passed"
+        },
+        {
+          "domain": "synthesis",
+          "status": "passed"
+        },
+        {
+          "domain": "setup",
+          "status": "passed"
+        },
+        {
+          "domain": "hold",
+          "status": "passed"
+        },
+        {
+          "domain": "constraints",
+          "status": "passed"
+        },
+        {
+          "domain": "routing",
+          "status": "passed"
+        },
+        {
+          "domain": "drc",
+          "status": "passed"
+        },
+        {
+          "domain": "cdc",
+          "status": "not_requested"
+        },
+        {
+          "domain": "artifact_integrity",
+          "status": "not_requested"
+        }
+      ],
+      "evidence": [
+        {
+          "id": "simulation",
+          "result_path": "artifacts/2026-10-26T14-29-53-407Z-eda_workflow_run-e5e0db5b/simulation.result.json",
+          "result_sha256": "74a3492359481f6997376c48058955bf64eaa7bc2883bf12a6010e0912ff316f",
+          "child_directory": "artifacts/2026-10-26T14-29-53-661Z-eda_xsim-390bf168",
+          "artifact_hashes": {}
+        },
+        {
+          "id": "synthesis",
+          "result_path": "artifacts/2026-10-26T14-29-53-407Z-eda_workflow_run-e5e0db5b/synthesis.result.json",
+          "result_sha256": "4531e809467ee5c0a9add30a045321eb5941684ac00811c1bda341eca0f9350b",
+          "child_directory": "artifacts/2026-10-26T14-33-21-625Z-eda_vivado_synthesize-e42663e9",
+          "artifact_hashes": {
+            "artifacts/2026-10-26T14-33-21-625Z-eda_vivado_synthesize-e42663e9/applied-constraints.xdc": "5f20c1f25014abbd34d3f44db7d47508a54444a985daaeb112adcef2313b8344",
+            "artifacts/2026-10-26T14-33-21-625Z-eda_vivado_synthesize-e42663e9/check-timing.rpt": "4030b9a68139053b0ef17c6af5534ed589a9d14b39b869382fb1a20d2f3c57f7",
+            "artifacts/2026-10-26T14-33-21-625Z-eda_vivado_synthesize-e42663e9/synthesized.dcp": "52bd4adb2ea04d96e846e4bf68789f7b7c4f6c31ca8b41b39fc537d7284043e5",
+            "artifacts/2026-10-26T14-33-21-625Z-eda_vivado_synthesize-e42663e9/timing.rpt": "e5a75a20809f8c351f42e920ef0809f751b3a9d2089466c332fc31d70f8f2de2",
+            "artifacts/2026-10-26T14-33-21-625Z-eda_vivado_synthesize-e42663e9/utilization.rpt": "a5b50da537c0d36a92009a24e7ff6532ac2f1098bdca7501bbb596e105958b37"
+          }
+        },
+        {
+          "id": "implementation",
+          "result_path": "artifacts/2026-10-26T14-29-53-407Z-eda_workflow_run-e5e0db5b/implementation.result.json",
+          "result_sha256": "53396ef089cc3a86af3eb8d4aba9bce99f4c30b137d0d70e4cec2a3af7289e5a",
+          "child_directory": "artifacts/2026-10-26T14-37-24-571Z-eda_vivado_implement-e1e27088",
+          "artifact_hashes": {
+            "artifacts/2026-10-26T14-37-24-571Z-eda_vivado_implement-e1e27088/applied-constraints.xdc": "3ec1b39bec43cc2d338c67cf666c9046a60dd258ae98ddc038a2345989fca07b",
+            "artifacts/2026-10-26T14-37-24-571Z-eda_vivado_implement-e1e27088/check-timing.rpt": "98999e727a2763a4abab739996543c969a7c1726a51f25b5841e1d51b2c27e1c",
+            "artifacts/2026-10-26T14-37-24-571Z-eda_vivado_implement-e1e27088/drc.rpt": "c262c5a7e5611397d68df177225288a65d7015821a479fa57837148ab6b3164f",
+            "artifacts/2026-10-26T14-37-24-571Z-eda_vivado_implement-e1e27088/route-in-memory.rpt": "3d8107196fa1c23176755f879efcc2af591b3e45a68f9829428d94020960203a",
+            "artifacts/2026-10-26T14-37-24-571Z-eda_vivado_implement-e1e27088/route.rpt": "3d8107196fa1c23176755f879efcc2af591b3e45a68f9829428d94020960203a",
+            "artifacts/2026-10-26T14-37-24-571Z-eda_vivado_implement-e1e27088/routed.dcp": "0cd06b7859fd476bdd05c997cc8aa7a25a7381348e6cb804e741d86968f3b13e",
+            "artifacts/2026-10-26T14-37-24-571Z-eda_vivado_implement-e1e27088/timing.rpt": "b7db1222d74d43f81e07675107863fa4bc3ebaee937404da4cd480e5af29539c",
+            "artifacts/2026-10-26T14-37-24-571Z-eda_vivado_implement-e1e27088/utilization.rpt": "ead4dbde5dc542f02d25ecf730182288153c496b100a56faa8bad528b5da5874"
+          }
+        },
+        {
+          "id": "drc",
+          "result_path": "artifacts/2026-10-26T14-29-53-407Z-eda_workflow_run-e5e0db5b/drc.result.json",
+          "result_sha256": "5d6efa11d60038aff0362b510ed2118995dd17110c18be946395343ccf2fc045",
+          "child_directory": "artifacts/2026-10-26T14-44-51-038Z-eda_vivado_report_drc-3d3ebcb0",
+          "artifact_hashes": {
+            "artifacts/2026-10-26T14-44-51-038Z-eda_vivado_report_drc-3d3ebcb0/applied-constraints.xdc": "3ec1b39bec43cc2d338c67cf666c9046a60dd258ae98ddc038a2345989fca07b",
+            "artifacts/2026-10-26T14-44-51-038Z-eda_vivado_report_drc-3d3ebcb0/drc.rpt": "98fb8e84b64cbed1ea6a84a96236e00f7740afc944ba9cfefe2d0b2cd837fb7e"
+          }
+        }
+      ],
+      "source_hashes": {
+        ".eda/config.json": "9ef065695a9024e8bed151281d83d2632f4d3056faa72099742e94c391396054",
+        "package-lock.json": "953ac596f048705eec519d56309661f24c11fe7638896d448988b2521a3db59b",
+        "package.json": "ba2832b6dc9c1c2128dca10b9cd65c0e709a7aa9b01c025cb9dd52b85ded6b1c",
+        "scripts/ace-rtl-feedback.py": "fd7d3a0836ad8af19b36d0d043012905b2caa888c8884b15927537987d18f814",
+        "scripts/trace-inspect.mjs": "78915b0c6b8a56cace96eee095d295ba33a9e01ea7d454a95204d75662e08443",
+        "src/agent-resources.mjs": "a1ea2332be295fa3b4460ac11caf99b77d9947365f7c0b4c84a8483b014ea7ed",
+        "src/agent-session.mjs": "c3b5c1bbde96dffa8fae82d21de2b5484cc71bc4c5065e6407a29b6d9d0e559c",
+        "src/agent-task.mjs": "fd9fb78748d1936eff0708678966d8f2e6e9051619e3a5074a9750be400c24fe",
+        "src/agent.mjs": "5b803886cdba9445ab6cf5068bbe56a29b6f56d1d204a3e8030e3619bda3c962",
+        "src/bench/acceptance.mjs": "218bd9ffa673c594ce619264ad60faf74309fa594923501146df91882213cadd",
+        "src/bench/audit.mjs": "0f610432d26d43be6182bfd4d943d321dbb2710e7436ef4b949c19afcad0beff",
+        "src/bench/catalog.mjs": "1d4a5bb89607c38d2bbae702e43cb8af5704fb4a80ce11020fba2997201060d1",
+        "src/bench/compare.mjs": "74cf0ee8cf419296bb875c6e7f9b00e32fbd3b89c07b02c0d2c15573d805de9a",
+        "src/bench/generators.mjs": "cee856d60d4b56197f36acc3f1c237e4aedc0095a6edc5e8434a840d6b5d4487",
+        "src/bench/index.mjs": "2ab26124cb7fca4fe5f629a43fa2ab3090d5a77940229a89f0f63aa230272fef",
+        "src/bench/prepare.mjs": "4cbbd53bb1bb657546d2216ed19c98dbed690d5db6ab68d62fdd6d524f789a18",
+        "src/bench/runner.mjs": "1d1f504c0ec0f0acf9f4085b08eeea2cc210ad45e89483a5dcb5b17f5fd111b6",
+        "src/eda-coordinator.mjs": "97b79a484ecb94c7240870584cbd8bbd5f0887546f658f18178be48937e62fad",
+        "src/evaluation-contracts.mjs": "bd3e76e235feb33ba037879287c586aae985d2e1ac3ed5f6190c5750243d9aee",
+        "src/evaluations.mjs": "f2f06810fc514bb40817f30158b76a912ff50a7ed3e41f893797f534bffb3c87",
+        "src/extension.ts": "342920e5d4e5b9a30998fe7d5eff6a293a7e04de21a01b980e38fb956cab0001",
+        "src/fpga_optimizer/__init__.py": "b2b9ee9a55ab921199a3dac78bb047b3b581e821a674544a6c0aec06eac96d3c",
+        "src/fpga_optimizer/backend.py": "8b44aa7993533cc7f18551a53dc4ebc82d7d6b45635b58c5641e0efafd379cab",
+        "src/fpga_optimizer/core.py": "bd743634eb1550e489c0fa8d1937f3d018dfd2c3cfe4ec2dfb82a809878a0a28",
+        "src/fpga_optimizer/recovery.py": "0c8080d1934ab38c63ff0c9c93be985fc05b958163ec0c185989ff6dc8e584f7",
+        "src/fpga_optimizer/runner.py": "c4be5e1e151f8eaa09c8e795c25145335def1718b7e4fe03fa1a42f90f5d65e5",
+        "src/fpga_optimizer/trace.py": "92b691d99ec71749b494d80142385d2e5d292e7b0cfd0ddb3a481bc3a95a7a24",
+        "src/knowledge.mjs": "5f84ab00272ba98b8297b2d19d6083bec2ec6cf0d7870dd0c7959290fd078351",
+        "src/mcp-server.mjs": "480e885c06cec91c411664b99e134980e398f1e462e1e590e09194b4c9ee484a",
+        "src/optimizer-inspection.mjs": "07bfddb9b9389e9b7fae40bd62d1cff9a67b30c5e3e9a5a3d237021ccc2c1968",
+        "src/optimizer-recovery.mjs": "f559594764ba1e1a0a1a3f279b5a69e38408f7041a4d2988c8f7a7ac19c97638",
+        "src/otlp-upload.mjs": "6cc581585d7086e2a629fd8b756abbb6d6364f3d475cd4e8375e0f6354de706b",
+        "src/platform.mjs": "e587c484eb1ebe5014c636bae2b615deaf928496bb552da4ac9b2e57313d72c7",
+        "src/results.mjs": "ae909044f5ef3fb96ac317f78fea96d65b114bb5ff969b43d038cc98128c7925",
+        "src/runtime.mjs": "b506190fd0e09a119261efe4673554af24e4e4dc95d893b00d53855c6b8e0854",
+        "src/task-context.mjs": "3104ca37f4f6ebaa6e27d44d98b298859b1f94e09caf0a35d308aade35f74d4c",
+        "src/task-outcome.mjs": "d957a04d2ae4b9e55eef2a5b8e7518fcd5d2507f87235fdcb813032866178e5f",
+        "src/tool-contracts.mjs": "a38e099920afa2765dd3e64f5559634280c1bde0520726bc202ceba7cca15ed5",
+        "src/tools/eda.ts": "62854d4d5f9f572bbb905fefa09bc0a8dd9c3a750a2b6b7465da88317e7a0283",
+        "src/tools/focused.mjs": "7b720ef6e13ba6abcbcb586d810206e576a0bd9a5e01213c17537674c8b63a95",
+        "src/tools/fpga.mjs": "0316c006e254cf81fbea320cc16deb5a06a894b0233bda83fe2e46729d255ec1",
+        "src/tools/optimizer.mjs": "d03b62b10329486696fda3124647c964efffe5b8a6af01a1731308637f6c65ee",
+        "src/tools/vivado-common.tcl": "fcd58200b7eab6be6a5ebcaf4383ba73399723f5a59aa5bcc765463b97701051",
+        "src/tools/xsim-options.mjs": "be6e1a6f7809d809c93327c6f96facf1775f4bf4ba2a4910f107ffe32ec53554",
+        "src/trace-export.mjs": "b6044ca7fdd89a10a2b213080f3f56103cf9363393062fd32a6a807007a89573",
+        "src/trace.mjs": "196fd77d341886c090b5a32eb53a089c680fd752d982a20d31ff1ca97b8fc38b",
+        "src/traced-mcp-proxy.mjs": "0a61ac8fa8427bd70579579873d9ec130fa2ccd33e2d6ab1d935655a644e48fb",
+        "src/verifier-loop.mjs": "06932c24215961035bac46e9b77c75d6daec3044c1383ab2f67314bd6ada6059",
+        "src/vivado_workbench.py": "516f3f19895b6094828b01f6a3dcd047f3eef9c4a75868e87f48337b3aeb3f49",
+        "src/workbench-artifacts.mjs": "b009790b14d99427a8c991264a558a7d45f8e92f14c9ea8e364c73198e67f967",
+        "src/workbench-changes.mjs": "7741ebfef375b850d4a42de81e0dd9e1d4d58259a42718b4e38cdff9989ac1be",
+        "src/workbench-projects.mjs": "f219f20add9eb864b52ce9c8ca210b38d707e72000b9e99209d5eeb26d0c2262",
+        "src/workbench-state.mjs": "82425676546711c7d99345efaa3569a65b1745909413491ca228582893508dfd",
+        "src/workbench-task-files.mjs": "8f7ef3c700237e34bcce1550456eda57c83ced932bf6ff12407791b6bb216bd9",
+        "src/workbench-testing.mjs": "2ce2a7db39d7689e949e8947777555dd6ba446bb193a3aa220230608a95fbd1b",
+        "src/workbench.mjs": "21f3e580a9c7161572b7553ce80f71f91f47bf55de37a2705ca39451c69daa96",
+        "src/workflow.mjs": "8ab6d30af5b9d45c3195c930e69195dba5d53be2767fe679d4ef82e3aa39cdff",
+        "vendor/ace-rtl/skills/ace-rtl/scripts/ace_rtl_agent/context_builder.py": "adccaac792d115b689ae8ddd436639a0288b9da03d800d0d09934875c80e3cd9",
+        "vendor/ace-rtl/skills/ace-rtl/scripts/ace_rtl_agent/fresh_start_coordinator.py": "af329f2a1398ee485e5816f8cf21a7e0218a285aac5bfe9a5bd8a95cdd28c951"
+      },
+      "input_hashes": {
+        ".pi/skills/fpga-plan/SKILL.md": "46526fc1f970b38390e8655f83138326f4bcb41b6748a253bfd38ab3a31c13bf",
+        ".pi/skills/fpga-rtl-verify/SKILL.md": "11432c15fb1fe7764ba24918668698355d2143b9dc2cff4512fe05d3add2a28a",
+        ".pi/skills/fpga-timing-triage/SKILL.md": "d45ce3ebc40241ee7604c9e8d2fd246d0551667043206423032ccd2bf89cb469",
+        "examples/workflows/a7-final-crypto-soc.json": "f783a068ebe268bea1bf2317e12e9d6062b9c48122e77cc566724b85f649e0cb",
+        "knowledge/rules.json": "1e77d3eb0a63ed2323f85f4dbe8408f471eca69fc37947da41c36c5264c196fb",
+        "knowledge/sops.json": "7f6cacae88edcc2ba0b095666406215733df7922af7256a771496a794e063bd4",
+        "knowledge/sources.json": "d603e1a7159623164c79059f1c4f15944b2c2312ed6fcdfe768cb0ac23733a3d",
+        "knowledge/tools.json": "12d8ae1e0141eaef8ba79c834a30152b5c5ca3f20688e3ee12c2741db3f3f426",
+        "projects/a7-validation/ooc-context.tcl": "87bad1c69d5944782eb71f58a4c2ee18a21d3a4bc0b0ec0c1204803c16381c13",
+        "projects/hard-bench/crypto-soc/case-lengths.hex": "dd130081e4a6e3dd2f301876aaf5a933396caa08700122cd0bbe24d341eb86a7",
+        "projects/hard-bench/crypto-soc/crypto_soc_top.sv": "183a92675d528ab2a8956069836ef53742fcdb7489a119c87560e83985620664",
+        "projects/hard-bench/crypto-soc/ctr_dma.sv": "9c44b83c76326e6aed7335cc07f34de12114e7dbec0e03087155ef2ccd79124f",
+        "projects/hard-bench/crypto-soc/expected-bytes.hex": "9579a194939a381eab98a07be684aa118c57b1ee40c5f109b487a66dbc339b74",
+        "projects/hard-bench/crypto-soc/expected-crc.hex": "796af181c577431a290ad0243bcb2aa35937f929f5ca9865cee81a6ec2cc2d56",
+        "projects/hard-bench/crypto-soc/expected-offsets.hex": "8596183b1d2caa716ffef059a61850eddcb80b2f5e701f3cb195f3a12b3afa32",
+        "projects/hard-bench/crypto-soc/firmware.hex": "f3b50590bd0c7db3ee82d018553117f68fdc8b74ea50894c135e09746e38aca5",
+        "projects/hard-bench/crypto-soc/shared_ram.sv": "ea1d8f50e2b79c5b3667b282d8e32ce7ffbcbd1ec972cced18b12bd8a7dc9a15",
+        "projects/hard-bench/crypto-soc/tb_crypto_soc.sv": "d544cdb71a0ed49c2b87f53046f32f751f808accc9dd65eb0ace41a7b89dce41",
+        "projects/hard-bench/crypto-soc/workflow-clocks.xdc": "8339da623c9a854d0424f3b23bbf6ce42bd84ecd35e3783a79e30481a9c7982a",
+        "scripts/check-knowledge.mjs": "65d9b5fe2acb9f49a3f7ddc06ccc276a11c35b77f294da7911848b46196d403f",
+        "src/knowledge.mjs": "5f84ab00272ba98b8297b2d19d6083bec2ec6cf0d7870dd0c7959290fd078351",
+        "vendor/aes/src/rtl/aes_core.v": "320e1137ac9d8812134a8313d23072e95da7c2dc0316fb24006f4b23132636d9",
+        "vendor/aes/src/rtl/aes_decipher_block.v": "ec2879babd84ae5458282c9f5e28db89e71cac18d9a343e1b2e7399062976ff5",
+        "vendor/aes/src/rtl/aes_encipher_block.v": "827b10ca76f99bb1dd99147e414930e12b7d6a1b3269063b909f9d382126e737",
+        "vendor/aes/src/rtl/aes_inv_sbox.v": "2fa81ebc3e5ed760288b7144748e037aa9442e88d2111280c6e11eb752b1f946",
+        "vendor/aes/src/rtl/aes_key_mem.v": "033fa100410c2e0600251c2787d4496dcb8829c8508fa99a5288f7b26079367b",
+        "vendor/aes/src/rtl/aes_sbox.v": "12727f8eabfdcdd079088451358ca4ff60a7ebe7fabaea58604e61a1efee8b84",
+        "vendor/picorv32/picorv32.v": "fd142889e8178ef67f1cff17cb2d18b3adae56fcae2badf7cbcc4c4f5ac7960e"
+      },
+      "verification": {
+        "final_rounds": 1,
+        "final_calls": 4,
+        "cumulative_rounds": 2,
+        "cumulative_calls": 8,
+        "original_allowance": {
+          "max_rounds": 4,
+          "max_calls": 24
+        }
+      },
+      "online_evaluation": {
+        "status": "passed",
+        "directory": "artifacts/evaluation-2026-10-26T14-49-45-980Z-c9d5db"
+      }
+    },
+    {
+      "name": "dma",
+      "status": "passed",
+      "execution": "pi_sdk_host_verifier",
+      "original_rtl_unchanged": true,
+      "task": "artifacts/agent-task-fd22719f-50a3-410c-8159-24c592b1df31",
+      "session": "artifacts/native-agent-2026-10-26T14-29-39-208Z-e39827",
+      "workflow": "artifacts/2026-10-26T14-30-13-471Z-eda_workflow_run-acfa4fc4",
+      "protocol": "examples/workflows/a7-final-dma.json",
+      "protocol_sha256": "485457b68a2f72c3a26ec34688b4c8fc22cb8dc1a7f0b110e8b23724e682faa8",
+      "contract_sha256": "66523799a44b0ce2846108ab719a2a93523f5845afa0daef0c731cc2752ba160",
+      "functional": [
+        {
+          "step": "simulation",
+          "acceptance": {
+            "status": "pass",
+            "pass_marker": "SYSTEM_BENCH_PASS project=dma",
+            "marker_matches": 1,
+            "completion_observed": true,
+            "failure_diagnostic": false,
+            "scope": "Explicit testbench marker, completion and diagnostic checks; semantic assertions remain the testbench responsibility."
+          },
+          "markers": [
+            "SYSTEM_BENCH_PASS project=dma scenarios=717 seeds=4 reset_aborts=12 byte_checks=3064242 read_bursts=48608 write_bursts=48512 read_beats=767824 write_beats=766631 protocol_checks=10568464 ar_stalls=5851220 aw_stalls=921936 w_stalls=3794826 r_stalls=28 axis_stalls=454 cycles=5993220"
+          ],
+          "child_directory": "artifacts/2026-10-26T14-30-13-640Z-eda_xsim-8491d709",
+          "result_sha256": "3cea6fdb80b92c09508e2598f50bcc80ad7bbd5c038c61002b53196450717fcf",
+          "log_sha256": "58dd1aad77089e129cd5080959fdeea05f7fae229dcce459951fee076e93e464"
+        }
+      ],
+      "physical": {
+        "part": "xc7a100tfgg676-2",
+        "version": "2020.2",
+        "clocks": [
+          {
+            "name": "clk",
+            "period_ns": 10
+          }
+        ],
+        "black_boxes": 0,
+        "setup_slack_ns": 1.414,
+        "hold_slack_ns": 0.089,
+        "drc": {
+          "errors": 0,
+          "critical_warnings": 0,
+          "warnings": 0
+        },
+        "assessment": {
+          "setup_hold": "pass",
+          "clock_and_internal_constraints": "pass",
+          "io_constraints": "pass",
+          "verified_async_reset_exceptions": [],
+          "routing": "pass",
+          "cdc": "unknown",
+          "overall_design_acceptance": "not_evaluated",
+          "board_signoff": false,
+          "scope": "Per-report diagnostics only. Positive setup/hold slack does not validate CDC, IO timing, functional correctness or hardware."
+        },
+        "parsed_reports": {
+          "timing_checks": {
+            "no_clock": 0,
+            "constant_clock": 0,
+            "pulse_width_clock": 0,
+            "unconstrained_internal_endpoints": 0,
+            "no_input_delay": 0,
+            "no_output_delay": 0,
+            "multiple_clock": 0,
+            "generated_clocks": 0,
+            "loops": 0,
+            "partial_input_delay": 0,
+            "partial_output_delay": 0,
+            "latch_loops": 0
+          },
+          "input_delays": {
+            "missing": 0,
+            "false_path_count": 0,
+            "false_path_ports": []
+          },
+          "route": {
+            "routable": 1414,
+            "fully_routed": 1414,
+            "errors": 0,
+            "status": "pass"
+          },
+          "utilization": {
+            "Slice LUTs": 910,
+            "Slice Registers": 584,
+            "Block RAM Tile": 1,
+            "RAMB36/FIFO*": 1,
+            "RAMB18": 0,
+            "DSPs": 0
+          },
+          "cdc_rules": [],
+          "cdc_format_recognized": false
+        }
+      },
+      "domains": [
+        {
+          "domain": "functional",
+          "status": "passed"
+        },
+        {
+          "domain": "synthesis",
+          "status": "passed"
+        },
+        {
+          "domain": "setup",
+          "status": "passed"
+        },
+        {
+          "domain": "hold",
+          "status": "passed"
+        },
+        {
+          "domain": "constraints",
+          "status": "passed"
+        },
+        {
+          "domain": "routing",
+          "status": "passed"
+        },
+        {
+          "domain": "drc",
+          "status": "passed"
+        },
+        {
+          "domain": "cdc",
+          "status": "not_requested"
+        },
+        {
+          "domain": "artifact_integrity",
+          "status": "not_requested"
+        }
+      ],
+      "evidence": [
+        {
+          "id": "simulation",
+          "result_path": "artifacts/2026-10-26T14-30-13-471Z-eda_workflow_run-acfa4fc4/simulation.result.json",
+          "result_sha256": "3cea6fdb80b92c09508e2598f50bcc80ad7bbd5c038c61002b53196450717fcf",
+          "child_directory": "artifacts/2026-10-26T14-30-13-640Z-eda_xsim-8491d709",
+          "artifact_hashes": {}
+        },
+        {
+          "id": "synthesis",
+          "result_path": "artifacts/2026-10-26T14-30-13-471Z-eda_workflow_run-acfa4fc4/synthesis.result.json",
+          "result_sha256": "36b6411e61a5a732ac3080253bd78622420e68370e061edc3daa0e145fccbafa",
+          "child_directory": "artifacts/2026-10-26T14-31-07-337Z-eda_vivado_synthesize-26cd08d0",
+          "artifact_hashes": {
+            "artifacts/2026-10-26T14-31-07-337Z-eda_vivado_synthesize-26cd08d0/applied-constraints.xdc": "43b9cb525f8b0c869f399df249b693e0bef9aeccb07a3f0c22ff40844e15605a",
+            "artifacts/2026-10-26T14-31-07-337Z-eda_vivado_synthesize-26cd08d0/check-timing.rpt": "07f6b75f94aa73458421365fc23e1b62ef3f73937cb2715e3d07077bd8b06121",
+            "artifacts/2026-10-26T14-31-07-337Z-eda_vivado_synthesize-26cd08d0/synthesized.dcp": "e2f8061234307c223c2ae0eae438861978e8b4b62eb88e50d851c0a91c769ca0",
+            "artifacts/2026-10-26T14-31-07-337Z-eda_vivado_synthesize-26cd08d0/timing.rpt": "acebd4187d5d27cbe52d4f3af45f953e4fd138120418539fe4389c4c104d7524",
+            "artifacts/2026-10-26T14-31-07-337Z-eda_vivado_synthesize-26cd08d0/utilization.rpt": "be089ca94802d4b34bd8448733c49cdefb15bcd610120b243836937e2bd44b49"
+          }
+        },
+        {
+          "id": "implementation",
+          "result_path": "artifacts/2026-10-26T14-30-13-471Z-eda_workflow_run-acfa4fc4/implementation.result.json",
+          "result_sha256": "0c9c621d89d02b0ef5bcc04ef98b4c7c5b1e192fc4ef73498cf217aadbcdfc35",
+          "child_directory": "artifacts/2026-10-26T14-36-01-942Z-eda_vivado_implement-b5789582",
+          "artifact_hashes": {
+            "artifacts/2026-10-26T14-36-01-942Z-eda_vivado_implement-b5789582/applied-constraints.xdc": "a57e22dafee351fd0ecefde70c50a7c75549018153b1550ea8744e0c30ddbfe4",
+            "artifacts/2026-10-26T14-36-01-942Z-eda_vivado_implement-b5789582/check-timing.rpt": "d3e99fd8916865a2134bbbf3fc259a5eb6edf3a971c870121a3e0eda91bf4b9a",
+            "artifacts/2026-10-26T14-36-01-942Z-eda_vivado_implement-b5789582/drc.rpt": "9f733ef18f72bae3c5c4023baee1be369563f5777502a7f7cdf4d72ae3b55b96",
+            "artifacts/2026-10-26T14-36-01-942Z-eda_vivado_implement-b5789582/route-in-memory.rpt": "f4b0331c7053b7cfaf5d2ac2373f85a76527a76b1e1737ff56bfb48cd4085488",
+            "artifacts/2026-10-26T14-36-01-942Z-eda_vivado_implement-b5789582/route.rpt": "f4b0331c7053b7cfaf5d2ac2373f85a76527a76b1e1737ff56bfb48cd4085488",
+            "artifacts/2026-10-26T14-36-01-942Z-eda_vivado_implement-b5789582/routed.dcp": "6504dcd240484aef90711123c629a380fd98a69047929d693f82c58e35e52ea4",
+            "artifacts/2026-10-26T14-36-01-942Z-eda_vivado_implement-b5789582/timing.rpt": "6cf5aff8d852f9915c868b91bf0dd97c927d236bf65a8fb45bdc73062ce5aec2",
+            "artifacts/2026-10-26T14-36-01-942Z-eda_vivado_implement-b5789582/utilization.rpt": "ff3dfcb85e110e5d72589030538fb0ec0e5f92d632c584030a4ee76b41fdfa7c"
+          }
+        },
+        {
+          "id": "drc",
+          "result_path": "artifacts/2026-10-26T14-30-13-471Z-eda_workflow_run-acfa4fc4/drc.result.json",
+          "result_sha256": "d0b7e4ef48e94449995cf06fcc3b883c5f43b986c44e4f27c24b00b74804893c",
+          "child_directory": "artifacts/2026-10-26T14-42-25-924Z-eda_vivado_report_drc-19a8ada9",
+          "artifact_hashes": {
+            "artifacts/2026-10-26T14-42-25-924Z-eda_vivado_report_drc-19a8ada9/applied-constraints.xdc": "a57e22dafee351fd0ecefde70c50a7c75549018153b1550ea8744e0c30ddbfe4",
+            "artifacts/2026-10-26T14-42-25-924Z-eda_vivado_report_drc-19a8ada9/drc.rpt": "82916a35b539c7f9e7ce2f9341d991e6c94d1673e88d2d7d6108ea9c3d24bb87"
+          }
+        }
+      ],
+      "source_hashes": {
+        ".eda/config.json": "9ef065695a9024e8bed151281d83d2632f4d3056faa72099742e94c391396054",
+        "package-lock.json": "953ac596f048705eec519d56309661f24c11fe7638896d448988b2521a3db59b",
+        "package.json": "ba2832b6dc9c1c2128dca10b9cd65c0e709a7aa9b01c025cb9dd52b85ded6b1c",
+        "scripts/ace-rtl-feedback.py": "fd7d3a0836ad8af19b36d0d043012905b2caa888c8884b15927537987d18f814",
+        "scripts/trace-inspect.mjs": "78915b0c6b8a56cace96eee095d295ba33a9e01ea7d454a95204d75662e08443",
+        "src/agent-resources.mjs": "a1ea2332be295fa3b4460ac11caf99b77d9947365f7c0b4c84a8483b014ea7ed",
+        "src/agent-session.mjs": "c3b5c1bbde96dffa8fae82d21de2b5484cc71bc4c5065e6407a29b6d9d0e559c",
+        "src/agent-task.mjs": "fd9fb78748d1936eff0708678966d8f2e6e9051619e3a5074a9750be400c24fe",
+        "src/agent.mjs": "5b803886cdba9445ab6cf5068bbe56a29b6f56d1d204a3e8030e3619bda3c962",
+        "src/bench/acceptance.mjs": "218bd9ffa673c594ce619264ad60faf74309fa594923501146df91882213cadd",
+        "src/bench/audit.mjs": "0f610432d26d43be6182bfd4d943d321dbb2710e7436ef4b949c19afcad0beff",
+        "src/bench/catalog.mjs": "1d4a5bb89607c38d2bbae702e43cb8af5704fb4a80ce11020fba2997201060d1",
+        "src/bench/compare.mjs": "74cf0ee8cf419296bb875c6e7f9b00e32fbd3b89c07b02c0d2c15573d805de9a",
+        "src/bench/generators.mjs": "cee856d60d4b56197f36acc3f1c237e4aedc0095a6edc5e8434a840d6b5d4487",
+        "src/bench/index.mjs": "2ab26124cb7fca4fe5f629a43fa2ab3090d5a77940229a89f0f63aa230272fef",
+        "src/bench/prepare.mjs": "4cbbd53bb1bb657546d2216ed19c98dbed690d5db6ab68d62fdd6d524f789a18",
+        "src/bench/runner.mjs": "1d1f504c0ec0f0acf9f4085b08eeea2cc210ad45e89483a5dcb5b17f5fd111b6",
+        "src/eda-coordinator.mjs": "97b79a484ecb94c7240870584cbd8bbd5f0887546f658f18178be48937e62fad",
+        "src/evaluation-contracts.mjs": "bd3e76e235feb33ba037879287c586aae985d2e1ac3ed5f6190c5750243d9aee",
+        "src/evaluations.mjs": "f2f06810fc514bb40817f30158b76a912ff50a7ed3e41f893797f534bffb3c87",
+        "src/extension.ts": "342920e5d4e5b9a30998fe7d5eff6a293a7e04de21a01b980e38fb956cab0001",
+        "src/fpga_optimizer/__init__.py": "b2b9ee9a55ab921199a3dac78bb047b3b581e821a674544a6c0aec06eac96d3c",
+        "src/fpga_optimizer/backend.py": "8b44aa7993533cc7f18551a53dc4ebc82d7d6b45635b58c5641e0efafd379cab",
+        "src/fpga_optimizer/core.py": "bd743634eb1550e489c0fa8d1937f3d018dfd2c3cfe4ec2dfb82a809878a0a28",
+        "src/fpga_optimizer/recovery.py": "0c8080d1934ab38c63ff0c9c93be985fc05b958163ec0c185989ff6dc8e584f7",
+        "src/fpga_optimizer/runner.py": "c4be5e1e151f8eaa09c8e795c25145335def1718b7e4fe03fa1a42f90f5d65e5",
+        "src/fpga_optimizer/trace.py": "92b691d99ec71749b494d80142385d2e5d292e7b0cfd0ddb3a481bc3a95a7a24",
+        "src/knowledge.mjs": "5f84ab00272ba98b8297b2d19d6083bec2ec6cf0d7870dd0c7959290fd078351",
+        "src/mcp-server.mjs": "480e885c06cec91c411664b99e134980e398f1e462e1e590e09194b4c9ee484a",
+        "src/optimizer-inspection.mjs": "07bfddb9b9389e9b7fae40bd62d1cff9a67b30c5e3e9a5a3d237021ccc2c1968",
+        "src/optimizer-recovery.mjs": "f559594764ba1e1a0a1a3f279b5a69e38408f7041a4d2988c8f7a7ac19c97638",
+        "src/otlp-upload.mjs": "6cc581585d7086e2a629fd8b756abbb6d6364f3d475cd4e8375e0f6354de706b",
+        "src/platform.mjs": "e587c484eb1ebe5014c636bae2b615deaf928496bb552da4ac9b2e57313d72c7",
+        "src/results.mjs": "ae909044f5ef3fb96ac317f78fea96d65b114bb5ff969b43d038cc98128c7925",
+        "src/runtime.mjs": "b506190fd0e09a119261efe4673554af24e4e4dc95d893b00d53855c6b8e0854",
+        "src/task-context.mjs": "3104ca37f4f6ebaa6e27d44d98b298859b1f94e09caf0a35d308aade35f74d4c",
+        "src/task-outcome.mjs": "d957a04d2ae4b9e55eef2a5b8e7518fcd5d2507f87235fdcb813032866178e5f",
+        "src/tool-contracts.mjs": "a38e099920afa2765dd3e64f5559634280c1bde0520726bc202ceba7cca15ed5",
+        "src/tools/eda.ts": "62854d4d5f9f572bbb905fefa09bc0a8dd9c3a750a2b6b7465da88317e7a0283",
+        "src/tools/focused.mjs": "7b720ef6e13ba6abcbcb586d810206e576a0bd9a5e01213c17537674c8b63a95",
+        "src/tools/fpga.mjs": "0316c006e254cf81fbea320cc16deb5a06a894b0233bda83fe2e46729d255ec1",
+        "src/tools/optimizer.mjs": "d03b62b10329486696fda3124647c964efffe5b8a6af01a1731308637f6c65ee",
+        "src/tools/vivado-common.tcl": "fcd58200b7eab6be6a5ebcaf4383ba73399723f5a59aa5bcc765463b97701051",
+        "src/tools/xsim-options.mjs": "be6e1a6f7809d809c93327c6f96facf1775f4bf4ba2a4910f107ffe32ec53554",
+        "src/trace-export.mjs": "b6044ca7fdd89a10a2b213080f3f56103cf9363393062fd32a6a807007a89573",
+        "src/trace.mjs": "196fd77d341886c090b5a32eb53a089c680fd752d982a20d31ff1ca97b8fc38b",
+        "src/traced-mcp-proxy.mjs": "0a61ac8fa8427bd70579579873d9ec130fa2ccd33e2d6ab1d935655a644e48fb",
+        "src/verifier-loop.mjs": "06932c24215961035bac46e9b77c75d6daec3044c1383ab2f67314bd6ada6059",
+        "src/vivado_workbench.py": "516f3f19895b6094828b01f6a3dcd047f3eef9c4a75868e87f48337b3aeb3f49",
+        "src/workbench-artifacts.mjs": "b009790b14d99427a8c991264a558a7d45f8e92f14c9ea8e364c73198e67f967",
+        "src/workbench-changes.mjs": "7741ebfef375b850d4a42de81e0dd9e1d4d58259a42718b4e38cdff9989ac1be",
+        "src/workbench-projects.mjs": "f219f20add9eb864b52ce9c8ca210b38d707e72000b9e99209d5eeb26d0c2262",
+        "src/workbench-state.mjs": "82425676546711c7d99345efaa3569a65b1745909413491ca228582893508dfd",
+        "src/workbench-task-files.mjs": "8f7ef3c700237e34bcce1550456eda57c83ced932bf6ff12407791b6bb216bd9",
+        "src/workbench-testing.mjs": "2ce2a7db39d7689e949e8947777555dd6ba446bb193a3aa220230608a95fbd1b",
+        "src/workbench.mjs": "21f3e580a9c7161572b7553ce80f71f91f47bf55de37a2705ca39451c69daa96",
+        "src/workflow.mjs": "8ab6d30af5b9d45c3195c930e69195dba5d53be2767fe679d4ef82e3aa39cdff",
+        "vendor/ace-rtl/skills/ace-rtl/scripts/ace_rtl_agent/context_builder.py": "adccaac792d115b689ae8ddd436639a0288b9da03d800d0d09934875c80e3cd9",
+        "vendor/ace-rtl/skills/ace-rtl/scripts/ace_rtl_agent/fresh_start_coordinator.py": "af329f2a1398ee485e5816f8cf21a7e0218a285aac5bfe9a5bd8a95cdd28c951"
+      },
+      "input_hashes": {
+        ".pi/skills/fpga-plan/SKILL.md": "46526fc1f970b38390e8655f83138326f4bcb41b6748a253bfd38ab3a31c13bf",
+        ".pi/skills/fpga-rtl-verify/SKILL.md": "11432c15fb1fe7764ba24918668698355d2143b9dc2cff4512fe05d3add2a28a",
+        ".pi/skills/fpga-timing-triage/SKILL.md": "d45ce3ebc40241ee7604c9e8d2fd246d0551667043206423032ccd2bf89cb469",
+        "examples/workflows/a7-final-dma.json": "485457b68a2f72c3a26ec34688b4c8fc22cb8dc1a7f0b110e8b23724e682faa8",
+        "knowledge/rules.json": "1e77d3eb0a63ed2323f85f4dbe8408f471eca69fc37947da41c36c5264c196fb",
+        "knowledge/sops.json": "7f6cacae88edcc2ba0b095666406215733df7922af7256a771496a794e063bd4",
+        "knowledge/sources.json": "d603e1a7159623164c79059f1c4f15944b2c2312ed6fcdfe768cb0ac23733a3d",
+        "knowledge/tools.json": "12d8ae1e0141eaef8ba79c834a30152b5c5ca3f20688e3ee12c2741db3f3f426",
+        "projects/a7-validation/dma-clocks.xdc": "8339da623c9a854d0424f3b23bbf6ce42bd84ecd35e3783a79e30481a9c7982a",
+        "projects/a7-validation/ooc-context.tcl": "87bad1c69d5944782eb71f58a4c2ee18a21d3a4bc0b0ec0c1204803c16381c13",
+        "projects/system-bench/dma/dma_top.v": "d7814e0ceb4ac048765b98ed4e66172319ecf85b109afb51ac8d0794cd74aa14",
+        "projects/system-bench/dma/tb_dma.sv": "802288cd1fdae9ebbdfcd58a9fc4665c77ccdaa13b08fc4e535e422d6d07a47b",
+        "scripts/check-knowledge.mjs": "65d9b5fe2acb9f49a3f7ddc06ccc276a11c35b77f294da7911848b46196d403f",
+        "src/knowledge.mjs": "5f84ab00272ba98b8297b2d19d6083bec2ec6cf0d7870dd0c7959290fd078351",
+        "vendor/verilog-axi/rtl/axi_dma.v": "95fce64412c272d949dca41e7d677fb9ae72f15bd1137a65c39eea2f5f50d57f",
+        "vendor/verilog-axi/rtl/axi_dma_rd.v": "9c733ba0cc5e48f15a91ddf4b5bd569954bbed3c9745b1973920921296c7b6f4",
+        "vendor/verilog-axi/rtl/axi_dma_wr.v": "161ecaf8ee934a55114b676f52b45bcedad9e5c488f9f3874175ef50457a6e4d",
+        "vendor/verilog-ethernet/lib/axis/rtl/axis_fifo.v": "8ee436631ece272f478a4396c3819f62e5cd4f9a492b80502562aeb73c9e6294"
+      },
+      "verification": {
+        "final_rounds": 1,
+        "final_calls": 4,
+        "cumulative_rounds": 2,
+        "cumulative_calls": 8,
+        "original_allowance": {
+          "max_rounds": 4,
+          "max_calls": 24
+        }
+      },
+      "online_evaluation": {
+        "status": "passed",
+        "directory": "artifacts/evaluation-2026-10-26T14-49-48-021Z-1f455c"
+      }
+    },
+    {
+      "name": "soc",
+      "status": "passed",
+      "execution": "pi_sdk_host_verifier",
+      "original_rtl_unchanged": true,
+      "task": "artifacts/agent-task-9f665a92-1bb7-40b1-9cc7-cd450cddfbd3",
+      "session": "artifacts/native-agent-2026-10-26T14-32-01-578Z-4a47d6",
+      "workflow": "artifacts/2026-10-26T14-32-23-259Z-eda_workflow_run-64a59fe1",
+      "protocol": "examples/workflows/a7-final-soc.json",
+      "protocol_sha256": "5a12a650695467b17d7de524583bac02424c0932c2f89e0ffc33ca143274b619",
+      "contract_sha256": "7220eb04c3b09cae25a14e175e4a0dc8c616a7827b86c821e777265bab603664",
+      "functional": [
+        {
+          "step": "simulation",
+          "acceptance": {
+            "status": "pass",
+            "pass_marker": "SYSTEM_BENCH_PASS project=soc",
+            "marker_matches": 1,
+            "completion_observed": true,
+            "failure_diagnostic": false,
+            "scope": "Explicit testbench marker, completion and diagnostic checks; semantic assertions remain the testbench responsibility."
+          },
+          "markers": [
+            "SYSTEM_BENCH_PASS project=soc scenarios=8 algorithm_checks=40 irq_checks=8 cycles=23129899 bus_transactions=2603603"
+          ],
+          "child_directory": "artifacts/2026-10-26T14-32-23-457Z-eda_xsim-65fe4e66",
+          "result_sha256": "5462bc70868ebe40633741e1b27c5f107abaa9fc4300974ab2adb773c01ffcb0",
+          "log_sha256": "5adc36a6c5a92e7b92befa8f55cf5ea49f45f227d7902922d09d150b1ec09b21"
+        }
+      ],
+      "physical": {
+        "part": "xc7a100tfgg676-2",
+        "version": "2020.2",
+        "clocks": [
+          {
+            "name": "clk",
+            "period_ns": 10
+          }
+        ],
+        "black_boxes": 0,
+        "setup_slack_ns": 2.738,
+        "hold_slack_ns": 0.087,
+        "drc": {
+          "errors": 0,
+          "critical_warnings": 0,
+          "warnings": 0
+        },
+        "assessment": {
+          "setup_hold": "pass",
+          "clock_and_internal_constraints": "pass",
+          "io_constraints": "pass",
+          "verified_async_reset_exceptions": [],
+          "routing": "pass",
+          "cdc": "unknown",
+          "overall_design_acceptance": "not_evaluated",
+          "board_signoff": false,
+          "scope": "Per-report diagnostics only. Positive setup/hold slack does not validate CDC, IO timing, functional correctness or hardware."
+        },
+        "parsed_reports": {
+          "timing_checks": {
+            "no_clock": 0,
+            "constant_clock": 0,
+            "pulse_width_clock": 0,
+            "unconstrained_internal_endpoints": 0,
+            "no_input_delay": 0,
+            "no_output_delay": 0,
+            "multiple_clock": 0,
+            "generated_clocks": 0,
+            "loops": 0,
+            "partial_input_delay": 0,
+            "partial_output_delay": 0,
+            "latch_loops": 0
+          },
+          "input_delays": {
+            "missing": 0,
+            "false_path_count": 0,
+            "false_path_ports": []
+          },
+          "route": {
+            "routable": 2748,
+            "fully_routed": 2748,
+            "errors": 0,
+            "status": "pass"
+          },
+          "utilization": {
+            "Slice LUTs": 1873,
+            "Slice Registers": 1254,
+            "Block RAM Tile": 16,
+            "RAMB36/FIFO*": 16,
+            "RAMB18": 0,
+            "DSPs": 0
+          },
+          "cdc_rules": [],
+          "cdc_format_recognized": false
+        }
+      },
+      "domains": [
+        {
+          "domain": "functional",
+          "status": "passed"
+        },
+        {
+          "domain": "synthesis",
+          "status": "passed"
+        },
+        {
+          "domain": "setup",
+          "status": "passed"
+        },
+        {
+          "domain": "hold",
+          "status": "passed"
+        },
+        {
+          "domain": "constraints",
+          "status": "passed"
+        },
+        {
+          "domain": "routing",
+          "status": "passed"
+        },
+        {
+          "domain": "drc",
+          "status": "passed"
+        },
+        {
+          "domain": "cdc",
+          "status": "not_requested"
+        },
+        {
+          "domain": "artifact_integrity",
+          "status": "not_requested"
+        }
+      ],
+      "evidence": [
+        {
+          "id": "simulation",
+          "result_path": "artifacts/2026-10-26T14-32-23-259Z-eda_workflow_run-64a59fe1/simulation.result.json",
+          "result_sha256": "5462bc70868ebe40633741e1b27c5f107abaa9fc4300974ab2adb773c01ffcb0",
+          "child_directory": "artifacts/2026-10-26T14-32-23-457Z-eda_xsim-65fe4e66",
+          "artifact_hashes": {}
+        },
+        {
+          "id": "synthesis",
+          "result_path": "artifacts/2026-10-26T14-32-23-259Z-eda_workflow_run-64a59fe1/synthesis.result.json",
+          "result_sha256": "f7903341dd7282ed215952cf8caa6b7882968ccf71e8dbfd7dc8ee0a5fcad8b4",
+          "child_directory": "artifacts/2026-10-26T14-37-01-073Z-eda_vivado_synthesize-b24d6505",
+          "artifact_hashes": {
+            "artifacts/2026-10-26T14-37-01-073Z-eda_vivado_synthesize-b24d6505/applied-constraints.xdc": "5bfae00e12369762cb6ef202f270911a7da9e330da7ce16b49b2c078a84a087e",
+            "artifacts/2026-10-26T14-37-01-073Z-eda_vivado_synthesize-b24d6505/check-timing.rpt": "639b3b65c19ac361a45699e25512c4d9558ba82c0a5569b3a504316ad7c62441",
+            "artifacts/2026-10-26T14-37-01-073Z-eda_vivado_synthesize-b24d6505/synthesized.dcp": "2e4608893b649bae4d4ae3f1b36b3bd1c160287e77c2710875c3410fd54e7836",
+            "artifacts/2026-10-26T14-37-01-073Z-eda_vivado_synthesize-b24d6505/timing.rpt": "00d60d0534908aac58720395fcd7d5f2016a6694f0b8c2ce889b821fea1ef1d7",
+            "artifacts/2026-10-26T14-37-01-073Z-eda_vivado_synthesize-b24d6505/utilization.rpt": "175781f8c9018afe2a6a2ddc63bad8add07be0f7f3a6e09dbbeb5c29c395c7b6"
+          }
+        },
+        {
+          "id": "implementation",
+          "result_path": "artifacts/2026-10-26T14-32-23-259Z-eda_workflow_run-64a59fe1/implementation.result.json",
+          "result_sha256": "c2220684d34a66e0d218417296810444c1819e0d6cc09ebe331831e81e8d54cf",
+          "child_directory": "artifacts/2026-10-26T14-43-23-928Z-eda_vivado_implement-72bfcb4c",
+          "artifact_hashes": {
+            "artifacts/2026-10-26T14-43-23-928Z-eda_vivado_implement-72bfcb4c/applied-constraints.xdc": "06d999fcb1ff763f81021e15d725d06c2316cf72860e5af3f2424a1b38d8fdac",
+            "artifacts/2026-10-26T14-43-23-928Z-eda_vivado_implement-72bfcb4c/check-timing.rpt": "fb0a88334f555c93229c707cfd09f92abec3cc0cdd6d7eeb0d3f17b899aabd1d",
+            "artifacts/2026-10-26T14-43-23-928Z-eda_vivado_implement-72bfcb4c/drc.rpt": "73476656e6f87453c7402a25e3832d77575a54db28b23a6b282b839fb1d0826f",
+            "artifacts/2026-10-26T14-43-23-928Z-eda_vivado_implement-72bfcb4c/route-in-memory.rpt": "4e41b327d566f192dd0ebd1364403346231fa3d640eb39cc147ee697371af416",
+            "artifacts/2026-10-26T14-43-23-928Z-eda_vivado_implement-72bfcb4c/route.rpt": "4e41b327d566f192dd0ebd1364403346231fa3d640eb39cc147ee697371af416",
+            "artifacts/2026-10-26T14-43-23-928Z-eda_vivado_implement-72bfcb4c/routed.dcp": "7a0c7c641ad032d9f5d4c99dac247af19e65bf26acdac1d5b7ccbfea9a8b7493",
+            "artifacts/2026-10-26T14-43-23-928Z-eda_vivado_implement-72bfcb4c/timing.rpt": "727d8ebb949df362240eb0e0c77b858d87137d7409d6d08ca1f1ef0b33daf0c5",
+            "artifacts/2026-10-26T14-43-23-928Z-eda_vivado_implement-72bfcb4c/utilization.rpt": "db30c03647f810ed1251f795edd2732369d58685ec2998e4fc7c71ae584b964d"
+          }
+        },
+        {
+          "id": "drc",
+          "result_path": "artifacts/2026-10-26T14-32-23-259Z-eda_workflow_run-64a59fe1/drc.result.json",
+          "result_sha256": "ccf1bbfa0ed17f268233c047230c3bae9c3e18d4b1894d1e5bd24bd17e11cc08",
+          "child_directory": "artifacts/2026-10-26T14-49-16-445Z-eda_vivado_report_drc-ff6d1bb5",
+          "artifact_hashes": {
+            "artifacts/2026-10-26T14-49-16-445Z-eda_vivado_report_drc-ff6d1bb5/applied-constraints.xdc": "06d999fcb1ff763f81021e15d725d06c2316cf72860e5af3f2424a1b38d8fdac",
+            "artifacts/2026-10-26T14-49-16-445Z-eda_vivado_report_drc-ff6d1bb5/drc.rpt": "fb8f95a2dc3b39ea37dc4142e18762cdbe2cfa3a910e6aa5214e6b38c788db19"
+          }
+        }
+      ],
+      "source_hashes": {
+        ".eda/config.json": "9ef065695a9024e8bed151281d83d2632f4d3056faa72099742e94c391396054",
+        "package-lock.json": "953ac596f048705eec519d56309661f24c11fe7638896d448988b2521a3db59b",
+        "package.json": "ba2832b6dc9c1c2128dca10b9cd65c0e709a7aa9b01c025cb9dd52b85ded6b1c",
+        "scripts/ace-rtl-feedback.py": "fd7d3a0836ad8af19b36d0d043012905b2caa888c8884b15927537987d18f814",
+        "scripts/trace-inspect.mjs": "78915b0c6b8a56cace96eee095d295ba33a9e01ea7d454a95204d75662e08443",
+        "src/agent-resources.mjs": "a1ea2332be295fa3b4460ac11caf99b77d9947365f7c0b4c84a8483b014ea7ed",
+        "src/agent-session.mjs": "c3b5c1bbde96dffa8fae82d21de2b5484cc71bc4c5065e6407a29b6d9d0e559c",
+        "src/agent-task.mjs": "fd9fb78748d1936eff0708678966d8f2e6e9051619e3a5074a9750be400c24fe",
+        "src/agent.mjs": "5b803886cdba9445ab6cf5068bbe56a29b6f56d1d204a3e8030e3619bda3c962",
+        "src/bench/acceptance.mjs": "218bd9ffa673c594ce619264ad60faf74309fa594923501146df91882213cadd",
+        "src/bench/audit.mjs": "0f610432d26d43be6182bfd4d943d321dbb2710e7436ef4b949c19afcad0beff",
+        "src/bench/catalog.mjs": "1d4a5bb89607c38d2bbae702e43cb8af5704fb4a80ce11020fba2997201060d1",
+        "src/bench/compare.mjs": "74cf0ee8cf419296bb875c6e7f9b00e32fbd3b89c07b02c0d2c15573d805de9a",
+        "src/bench/generators.mjs": "cee856d60d4b56197f36acc3f1c237e4aedc0095a6edc5e8434a840d6b5d4487",
+        "src/bench/index.mjs": "2ab26124cb7fca4fe5f629a43fa2ab3090d5a77940229a89f0f63aa230272fef",
+        "src/bench/prepare.mjs": "4cbbd53bb1bb657546d2216ed19c98dbed690d5db6ab68d62fdd6d524f789a18",
+        "src/bench/runner.mjs": "1d1f504c0ec0f0acf9f4085b08eeea2cc210ad45e89483a5dcb5b17f5fd111b6",
+        "src/eda-coordinator.mjs": "97b79a484ecb94c7240870584cbd8bbd5f0887546f658f18178be48937e62fad",
+        "src/evaluation-contracts.mjs": "bd3e76e235feb33ba037879287c586aae985d2e1ac3ed5f6190c5750243d9aee",
+        "src/evaluations.mjs": "f2f06810fc514bb40817f30158b76a912ff50a7ed3e41f893797f534bffb3c87",
+        "src/extension.ts": "342920e5d4e5b9a30998fe7d5eff6a293a7e04de21a01b980e38fb956cab0001",
+        "src/fpga_optimizer/__init__.py": "b2b9ee9a55ab921199a3dac78bb047b3b581e821a674544a6c0aec06eac96d3c",
+        "src/fpga_optimizer/backend.py": "8b44aa7993533cc7f18551a53dc4ebc82d7d6b45635b58c5641e0efafd379cab",
+        "src/fpga_optimizer/core.py": "bd743634eb1550e489c0fa8d1937f3d018dfd2c3cfe4ec2dfb82a809878a0a28",
+        "src/fpga_optimizer/recovery.py": "0c8080d1934ab38c63ff0c9c93be985fc05b958163ec0c185989ff6dc8e584f7",
+        "src/fpga_optimizer/runner.py": "c4be5e1e151f8eaa09c8e795c25145335def1718b7e4fe03fa1a42f90f5d65e5",
+        "src/fpga_optimizer/trace.py": "92b691d99ec71749b494d80142385d2e5d292e7b0cfd0ddb3a481bc3a95a7a24",
+        "src/knowledge.mjs": "5f84ab00272ba98b8297b2d19d6083bec2ec6cf0d7870dd0c7959290fd078351",
+        "src/mcp-server.mjs": "480e885c06cec91c411664b99e134980e398f1e462e1e590e09194b4c9ee484a",
+        "src/optimizer-inspection.mjs": "07bfddb9b9389e9b7fae40bd62d1cff9a67b30c5e3e9a5a3d237021ccc2c1968",
+        "src/optimizer-recovery.mjs": "f559594764ba1e1a0a1a3f279b5a69e38408f7041a4d2988c8f7a7ac19c97638",
+        "src/otlp-upload.mjs": "6cc581585d7086e2a629fd8b756abbb6d6364f3d475cd4e8375e0f6354de706b",
+        "src/platform.mjs": "e587c484eb1ebe5014c636bae2b615deaf928496bb552da4ac9b2e57313d72c7",
+        "src/results.mjs": "ae909044f5ef3fb96ac317f78fea96d65b114bb5ff969b43d038cc98128c7925",
+        "src/runtime.mjs": "b506190fd0e09a119261efe4673554af24e4e4dc95d893b00d53855c6b8e0854",
+        "src/task-context.mjs": "3104ca37f4f6ebaa6e27d44d98b298859b1f94e09caf0a35d308aade35f74d4c",
+        "src/task-outcome.mjs": "d957a04d2ae4b9e55eef2a5b8e7518fcd5d2507f87235fdcb813032866178e5f",
+        "src/tool-contracts.mjs": "a38e099920afa2765dd3e64f5559634280c1bde0520726bc202ceba7cca15ed5",
+        "src/tools/eda.ts": "62854d4d5f9f572bbb905fefa09bc0a8dd9c3a750a2b6b7465da88317e7a0283",
+        "src/tools/focused.mjs": "7b720ef6e13ba6abcbcb586d810206e576a0bd9a5e01213c17537674c8b63a95",
+        "src/tools/fpga.mjs": "0316c006e254cf81fbea320cc16deb5a06a894b0233bda83fe2e46729d255ec1",
+        "src/tools/optimizer.mjs": "d03b62b10329486696fda3124647c964efffe5b8a6af01a1731308637f6c65ee",
+        "src/tools/vivado-common.tcl": "fcd58200b7eab6be6a5ebcaf4383ba73399723f5a59aa5bcc765463b97701051",
+        "src/tools/xsim-options.mjs": "be6e1a6f7809d809c93327c6f96facf1775f4bf4ba2a4910f107ffe32ec53554",
+        "src/trace-export.mjs": "b6044ca7fdd89a10a2b213080f3f56103cf9363393062fd32a6a807007a89573",
+        "src/trace.mjs": "196fd77d341886c090b5a32eb53a089c680fd752d982a20d31ff1ca97b8fc38b",
+        "src/traced-mcp-proxy.mjs": "0a61ac8fa8427bd70579579873d9ec130fa2ccd33e2d6ab1d935655a644e48fb",
+        "src/verifier-loop.mjs": "06932c24215961035bac46e9b77c75d6daec3044c1383ab2f67314bd6ada6059",
+        "src/vivado_workbench.py": "516f3f19895b6094828b01f6a3dcd047f3eef9c4a75868e87f48337b3aeb3f49",
+        "src/workbench-artifacts.mjs": "b009790b14d99427a8c991264a558a7d45f8e92f14c9ea8e364c73198e67f967",
+        "src/workbench-changes.mjs": "7741ebfef375b850d4a42de81e0dd9e1d4d58259a42718b4e38cdff9989ac1be",
+        "src/workbench-projects.mjs": "f219f20add9eb864b52ce9c8ca210b38d707e72000b9e99209d5eeb26d0c2262",
+        "src/workbench-state.mjs": "82425676546711c7d99345efaa3569a65b1745909413491ca228582893508dfd",
+        "src/workbench-task-files.mjs": "8f7ef3c700237e34bcce1550456eda57c83ced932bf6ff12407791b6bb216bd9",
+        "src/workbench-testing.mjs": "2ce2a7db39d7689e949e8947777555dd6ba446bb193a3aa220230608a95fbd1b",
+        "src/workbench.mjs": "21f3e580a9c7161572b7553ce80f71f91f47bf55de37a2705ca39451c69daa96",
+        "src/workflow.mjs": "8ab6d30af5b9d45c3195c930e69195dba5d53be2767fe679d4ef82e3aa39cdff",
+        "vendor/ace-rtl/skills/ace-rtl/scripts/ace_rtl_agent/context_builder.py": "adccaac792d115b689ae8ddd436639a0288b9da03d800d0d09934875c80e3cd9",
+        "vendor/ace-rtl/skills/ace-rtl/scripts/ace_rtl_agent/fresh_start_coordinator.py": "af329f2a1398ee485e5816f8cf21a7e0218a285aac5bfe9a5bd8a95cdd28c951"
+      },
+      "input_hashes": {
+        ".pi/skills/fpga-plan/SKILL.md": "46526fc1f970b38390e8655f83138326f4bcb41b6748a253bfd38ab3a31c13bf",
+        ".pi/skills/fpga-rtl-verify/SKILL.md": "11432c15fb1fe7764ba24918668698355d2143b9dc2cff4512fe05d3add2a28a",
+        ".pi/skills/fpga-timing-triage/SKILL.md": "d45ce3ebc40241ee7604c9e8d2fd246d0551667043206423032ccd2bf89cb469",
+        "examples/workflows/a7-final-soc.json": "5a12a650695467b17d7de524583bac02424c0932c2f89e0ffc33ca143274b619",
+        "knowledge/rules.json": "1e77d3eb0a63ed2323f85f4dbe8408f471eca69fc37947da41c36c5264c196fb",
+        "knowledge/sops.json": "7f6cacae88edcc2ba0b095666406215733df7922af7256a771496a794e063bd4",
+        "knowledge/sources.json": "d603e1a7159623164c79059f1c4f15944b2c2312ed6fcdfe768cb0ac23733a3d",
+        "knowledge/tools.json": "12d8ae1e0141eaef8ba79c834a30152b5c5ca3f20688e3ee12c2741db3f3f426",
+        "projects/a7-validation/ooc-context.tcl": "87bad1c69d5944782eb71f58a4c2ee18a21d3a4bc0b0ec0c1204803c16381c13",
+        "projects/a7-validation/soc-clocks.xdc": "8339da623c9a854d0424f3b23bbf6ce42bd84ecd35e3783a79e30481a9c7982a",
+        "projects/system-bench/soc/expected.hex": "ad63212701ef0a164ec74d8184f8c6932630d2c9a266f534ea4126f7dea25b16",
+        "projects/system-bench/soc/firmware.hex": "7bc582865136311a6227136a01ca2b92180723f242d3f2ef19dc9dc51e7f4677",
+        "projects/system-bench/soc/soc_top.v": "bcb80001e90a9cd69b9e683172ced025e8ba38ebddd82249496ac42c7e070ae0",
+        "projects/system-bench/soc/tb_soc.sv": "02a7859bdfc370a3e9d1fbc16035d38853aba13392ca2fc301ddf3000578e8a9",
+        "scripts/check-knowledge.mjs": "65d9b5fe2acb9f49a3f7ddc06ccc276a11c35b77f294da7911848b46196d403f",
+        "src/knowledge.mjs": "5f84ab00272ba98b8297b2d19d6083bec2ec6cf0d7870dd0c7959290fd078351",
+        "vendor/picorv32/picorv32.v": "fd142889e8178ef67f1cff17cb2d18b3adae56fcae2badf7cbcc4c4f5ac7960e"
+      },
+      "verification": {
+        "final_rounds": 1,
+        "final_calls": 4,
+        "cumulative_rounds": 2,
+        "cumulative_calls": 8,
+        "original_allowance": {
+          "max_rounds": 4,
+          "max_calls": 24
+        }
+      },
+      "online_evaluation": {
+        "status": "passed",
+        "directory": "artifacts/evaluation-2026-10-26T14-51-10-304Z-f54eb8"
+      }
+    },
+    {
+      "name": "aes",
+      "status": "passed",
+      "execution": "pi_sdk_host_verifier",
+      "original_rtl_unchanged": true,
+      "task": "artifacts/agent-task-15205e65-349e-4c07-9212-e6a6416d3027",
+      "session": "artifacts/native-agent-2026-10-26T14-32-03-941Z-ab1958",
+      "workflow": "artifacts/2026-10-26T14-32-27-667Z-eda_workflow_run-3e209d31",
+      "protocol": "examples/workflows/a7-final-aes.json",
+      "protocol_sha256": "97e5fa9fd022c9d758b11ac972a66888be8acc27b101316dfee66de824361d3a",
+      "contract_sha256": "3d8d52cf9111c31eb188f6ed3ead226163e11eec29330206986338acab7d5a8f",
+      "functional": [
+        {
+          "step": "simulation",
+          "acceptance": {
+            "status": "pass",
+            "pass_marker": "SYSTEM_BENCH_PASS project=aes",
+            "marker_matches": 1,
+            "completion_observed": true,
+            "failure_diagnostic": false,
+            "scope": "Explicit testbench marker, completion and diagnostic checks; semantic assertions remain the testbench responsibility."
+          },
+          "markers": [
+            "SYSTEM_BENCH_PASS project=aes blocks=532 encrypt=266 decrypt=266 key_groups=20 reset_scenarios=4"
+          ],
+          "child_directory": "artifacts/2026-10-26T14-32-27-922Z-eda_xsim-645d1200",
+          "result_sha256": "c3a05bbda88448e4d6e5806c3913d736c8a049caffe0d95a89cb4390bfdc0fa7",
+          "log_sha256": "9caa3b0f3fbc3d703ef167dd0c5e587948e37d0fa351624a2b8c79e52b95f7f4"
+        }
+      ],
+      "physical": {
+        "part": "xc7a100tfgg676-2",
+        "version": "2020.2",
+        "clocks": [
+          {
+            "name": "clk",
+            "period_ns": 10
+          }
+        ],
+        "black_boxes": 0,
+        "setup_slack_ns": 0.56,
+        "hold_slack_ns": 0.083,
+        "drc": {
+          "errors": 0,
+          "critical_warnings": 0,
+          "warnings": 0
+        },
+        "assessment": {
+          "setup_hold": "pass",
+          "clock_and_internal_constraints": "pass",
+          "io_constraints": "pass",
+          "verified_async_reset_exceptions": [],
+          "routing": "pass",
+          "cdc": "unknown",
+          "overall_design_acceptance": "not_evaluated",
+          "board_signoff": false,
+          "scope": "Per-report diagnostics only. Positive setup/hold slack does not validate CDC, IO timing, functional correctness or hardware."
+        },
+        "parsed_reports": {
+          "timing_checks": {
+            "no_clock": 0,
+            "constant_clock": 0,
+            "pulse_width_clock": 0,
+            "unconstrained_internal_endpoints": 0,
+            "no_input_delay": 0,
+            "no_output_delay": 0,
+            "multiple_clock": 0,
+            "generated_clocks": 0,
+            "loops": 0,
+            "partial_input_delay": 0,
+            "partial_output_delay": 0,
+            "latch_loops": 0
+          },
+          "input_delays": {
+            "missing": 0,
+            "false_path_count": 0,
+            "false_path_ports": []
+          },
+          "route": {
+            "routable": 6194,
+            "fully_routed": 6194,
+            "errors": 0,
+            "status": "pass"
+          },
+          "utilization": {
+            "Slice LUTs": 3199,
+            "Slice Registers": 2903,
+            "Block RAM Tile": 0,
+            "RAMB36/FIFO*": 0,
+            "RAMB18": 0,
+            "DSPs": 0
+          },
+          "cdc_rules": [],
+          "cdc_format_recognized": false
+        }
+      },
+      "domains": [
+        {
+          "domain": "functional",
+          "status": "passed"
+        },
+        {
+          "domain": "synthesis",
+          "status": "passed"
+        },
+        {
+          "domain": "setup",
+          "status": "passed"
+        },
+        {
+          "domain": "hold",
+          "status": "passed"
+        },
+        {
+          "domain": "constraints",
+          "status": "passed"
+        },
+        {
+          "domain": "routing",
+          "status": "passed"
+        },
+        {
+          "domain": "drc",
+          "status": "passed"
+        },
+        {
+          "domain": "cdc",
+          "status": "not_requested"
+        },
+        {
+          "domain": "artifact_integrity",
+          "status": "not_requested"
+        }
+      ],
+      "evidence": [
+        {
+          "id": "simulation",
+          "result_path": "artifacts/2026-10-26T14-32-27-667Z-eda_workflow_run-3e209d31/simulation.result.json",
+          "result_sha256": "c3a05bbda88448e4d6e5806c3913d736c8a049caffe0d95a89cb4390bfdc0fa7",
+          "child_directory": "artifacts/2026-10-26T14-32-27-922Z-eda_xsim-645d1200",
+          "artifact_hashes": {}
+        },
+        {
+          "id": "synthesis",
+          "result_path": "artifacts/2026-10-26T14-32-27-667Z-eda_workflow_run-3e209d31/synthesis.result.json",
+          "result_sha256": "6ff37473566342002ec2824f8339a513c3b325bc214922fe942f66dae5c2742f",
+          "child_directory": "artifacts/2026-10-26T14-33-38-989Z-eda_vivado_synthesize-efd369a1",
+          "artifact_hashes": {
+            "artifacts/2026-10-26T14-33-38-989Z-eda_vivado_synthesize-efd369a1/applied-constraints.xdc": "fb1e37e93f88318c4353cddf2258aa1f9c40d24110171ad68232055009a3af56",
+            "artifacts/2026-10-26T14-33-38-989Z-eda_vivado_synthesize-efd369a1/check-timing.rpt": "f7f326b60e8a7def1a1222c706327bc460c6ea4aefacc4166676d8fd0f17e60e",
+            "artifacts/2026-10-26T14-33-38-989Z-eda_vivado_synthesize-efd369a1/synthesized.dcp": "1b1e54f745db8687655a7bbb0bc8179fcb129dd972b2502fced678982eea34db",
+            "artifacts/2026-10-26T14-33-38-989Z-eda_vivado_synthesize-efd369a1/timing.rpt": "40f040ef3ce3aefecb62441af654b52a4bcf7c92cd8196f40ac8b931eacb683b",
+            "artifacts/2026-10-26T14-33-38-989Z-eda_vivado_synthesize-efd369a1/utilization.rpt": "056e2a033e063d375304d549af1fa547d7e8db8368462a901937f36bb76f2a1e"
+          }
+        },
+        {
+          "id": "implementation",
+          "result_path": "artifacts/2026-10-26T14-32-27-667Z-eda_workflow_run-3e209d31/implementation.result.json",
+          "result_sha256": "4565fb29bf66ceb2334c683c773c6d8346c6fb08ab5e252ea10eabcfaedf51c9",
+          "child_directory": "artifacts/2026-10-26T14-38-37-334Z-eda_vivado_implement-070fa3b9",
+          "artifact_hashes": {
+            "artifacts/2026-10-26T14-38-37-334Z-eda_vivado_implement-070fa3b9/applied-constraints.xdc": "e60b99c1e0b649221ff03616806681be3374c62118f761a471083cf499ac1d9b",
+            "artifacts/2026-10-26T14-38-37-334Z-eda_vivado_implement-070fa3b9/check-timing.rpt": "ce4efe21fd07d417984f8a6afae1e07e35ec9fb94cb0fbc70a3d764d4dcbfbca",
+            "artifacts/2026-10-26T14-38-37-334Z-eda_vivado_implement-070fa3b9/drc.rpt": "f64f8355dfc0840049c2daa0192cd4d6d4ce470ec6ef6510191f9098e98142af",
+            "artifacts/2026-10-26T14-38-37-334Z-eda_vivado_implement-070fa3b9/route-in-memory.rpt": "12019306e879777ebd47af468ed2ac81693adc2a3938f9d53ec069cc0edc23ae",
+            "artifacts/2026-10-26T14-38-37-334Z-eda_vivado_implement-070fa3b9/route.rpt": "12019306e879777ebd47af468ed2ac81693adc2a3938f9d53ec069cc0edc23ae",
+            "artifacts/2026-10-26T14-38-37-334Z-eda_vivado_implement-070fa3b9/routed.dcp": "ef78253519a64fe50c2e67276d7e929002fe733894adcfc52a6169784db7ad44",
+            "artifacts/2026-10-26T14-38-37-334Z-eda_vivado_implement-070fa3b9/timing.rpt": "9576d1402aca7ebecebba84f93a18133ad82f9ab6fa955d0a7f3df16c7562ca8",
+            "artifacts/2026-10-26T14-38-37-334Z-eda_vivado_implement-070fa3b9/utilization.rpt": "58da4f90ac0fa0c3668118d566727d983da065b2f5fc27eca3c07241a78b4ce7"
+          }
+        },
+        {
+          "id": "drc",
+          "result_path": "artifacts/2026-10-26T14-32-27-667Z-eda_workflow_run-3e209d31/drc.result.json",
+          "result_sha256": "c7737bf5df01186f451114bf7b39144256f18285b135ad40c79246023cecb3e5",
+          "child_directory": "artifacts/2026-10-26T14-46-06-422Z-eda_vivado_report_drc-4b9f7bc3",
+          "artifact_hashes": {
+            "artifacts/2026-10-26T14-46-06-422Z-eda_vivado_report_drc-4b9f7bc3/applied-constraints.xdc": "e60b99c1e0b649221ff03616806681be3374c62118f761a471083cf499ac1d9b",
+            "artifacts/2026-10-26T14-46-06-422Z-eda_vivado_report_drc-4b9f7bc3/drc.rpt": "3f5454e21400b24afa98cf4622af8489967828ccf798c12238edbb5334f1be97"
+          }
+        }
+      ],
+      "source_hashes": {
+        ".eda/config.json": "9ef065695a9024e8bed151281d83d2632f4d3056faa72099742e94c391396054",
+        "package-lock.json": "953ac596f048705eec519d56309661f24c11fe7638896d448988b2521a3db59b",
+        "package.json": "ba2832b6dc9c1c2128dca10b9cd65c0e709a7aa9b01c025cb9dd52b85ded6b1c",
+        "scripts/ace-rtl-feedback.py": "fd7d3a0836ad8af19b36d0d043012905b2caa888c8884b15927537987d18f814",
+        "scripts/trace-inspect.mjs": "78915b0c6b8a56cace96eee095d295ba33a9e01ea7d454a95204d75662e08443",
+        "src/agent-resources.mjs": "a1ea2332be295fa3b4460ac11caf99b77d9947365f7c0b4c84a8483b014ea7ed",
+        "src/agent-session.mjs": "c3b5c1bbde96dffa8fae82d21de2b5484cc71bc4c5065e6407a29b6d9d0e559c",
+        "src/agent-task.mjs": "fd9fb78748d1936eff0708678966d8f2e6e9051619e3a5074a9750be400c24fe",
+        "src/agent.mjs": "5b803886cdba9445ab6cf5068bbe56a29b6f56d1d204a3e8030e3619bda3c962",
+        "src/bench/acceptance.mjs": "218bd9ffa673c594ce619264ad60faf74309fa594923501146df91882213cadd",
+        "src/bench/audit.mjs": "0f610432d26d43be6182bfd4d943d321dbb2710e7436ef4b949c19afcad0beff",
+        "src/bench/catalog.mjs": "1d4a5bb89607c38d2bbae702e43cb8af5704fb4a80ce11020fba2997201060d1",
+        "src/bench/compare.mjs": "74cf0ee8cf419296bb875c6e7f9b00e32fbd3b89c07b02c0d2c15573d805de9a",
+        "src/bench/generators.mjs": "cee856d60d4b56197f36acc3f1c237e4aedc0095a6edc5e8434a840d6b5d4487",
+        "src/bench/index.mjs": "2ab26124cb7fca4fe5f629a43fa2ab3090d5a77940229a89f0f63aa230272fef",
+        "src/bench/prepare.mjs": "4cbbd53bb1bb657546d2216ed19c98dbed690d5db6ab68d62fdd6d524f789a18",
+        "src/bench/runner.mjs": "1d1f504c0ec0f0acf9f4085b08eeea2cc210ad45e89483a5dcb5b17f5fd111b6",
+        "src/eda-coordinator.mjs": "97b79a484ecb94c7240870584cbd8bbd5f0887546f658f18178be48937e62fad",
+        "src/evaluation-contracts.mjs": "bd3e76e235feb33ba037879287c586aae985d2e1ac3ed5f6190c5750243d9aee",
+        "src/evaluations.mjs": "f2f06810fc514bb40817f30158b76a912ff50a7ed3e41f893797f534bffb3c87",
+        "src/extension.ts": "342920e5d4e5b9a30998fe7d5eff6a293a7e04de21a01b980e38fb956cab0001",
+        "src/fpga_optimizer/__init__.py": "b2b9ee9a55ab921199a3dac78bb047b3b581e821a674544a6c0aec06eac96d3c",
+        "src/fpga_optimizer/backend.py": "8b44aa7993533cc7f18551a53dc4ebc82d7d6b45635b58c5641e0efafd379cab",
+        "src/fpga_optimizer/core.py": "bd743634eb1550e489c0fa8d1937f3d018dfd2c3cfe4ec2dfb82a809878a0a28",
+        "src/fpga_optimizer/recovery.py": "0c8080d1934ab38c63ff0c9c93be985fc05b958163ec0c185989ff6dc8e584f7",
+        "src/fpga_optimizer/runner.py": "c4be5e1e151f8eaa09c8e795c25145335def1718b7e4fe03fa1a42f90f5d65e5",
+        "src/fpga_optimizer/trace.py": "92b691d99ec71749b494d80142385d2e5d292e7b0cfd0ddb3a481bc3a95a7a24",
+        "src/knowledge.mjs": "5f84ab00272ba98b8297b2d19d6083bec2ec6cf0d7870dd0c7959290fd078351",
+        "src/mcp-server.mjs": "480e885c06cec91c411664b99e134980e398f1e462e1e590e09194b4c9ee484a",
+        "src/optimizer-inspection.mjs": "07bfddb9b9389e9b7fae40bd62d1cff9a67b30c5e3e9a5a3d237021ccc2c1968",
+        "src/optimizer-recovery.mjs": "f559594764ba1e1a0a1a3f279b5a69e38408f7041a4d2988c8f7a7ac19c97638",
+        "src/otlp-upload.mjs": "6cc581585d7086e2a629fd8b756abbb6d6364f3d475cd4e8375e0f6354de706b",
+        "src/platform.mjs": "e587c484eb1ebe5014c636bae2b615deaf928496bb552da4ac9b2e57313d72c7",
+        "src/results.mjs": "ae909044f5ef3fb96ac317f78fea96d65b114bb5ff969b43d038cc98128c7925",
+        "src/runtime.mjs": "b506190fd0e09a119261efe4673554af24e4e4dc95d893b00d53855c6b8e0854",
+        "src/task-context.mjs": "3104ca37f4f6ebaa6e27d44d98b298859b1f94e09caf0a35d308aade35f74d4c",
+        "src/task-outcome.mjs": "d957a04d2ae4b9e55eef2a5b8e7518fcd5d2507f87235fdcb813032866178e5f",
+        "src/tool-contracts.mjs": "a38e099920afa2765dd3e64f5559634280c1bde0520726bc202ceba7cca15ed5",
+        "src/tools/eda.ts": "62854d4d5f9f572bbb905fefa09bc0a8dd9c3a750a2b6b7465da88317e7a0283",
+        "src/tools/focused.mjs": "7b720ef6e13ba6abcbcb586d810206e576a0bd9a5e01213c17537674c8b63a95",
+        "src/tools/fpga.mjs": "0316c006e254cf81fbea320cc16deb5a06a894b0233bda83fe2e46729d255ec1",
+        "src/tools/optimizer.mjs": "d03b62b10329486696fda3124647c964efffe5b8a6af01a1731308637f6c65ee",
+        "src/tools/vivado-common.tcl": "fcd58200b7eab6be6a5ebcaf4383ba73399723f5a59aa5bcc765463b97701051",
+        "src/tools/xsim-options.mjs": "be6e1a6f7809d809c93327c6f96facf1775f4bf4ba2a4910f107ffe32ec53554",
+        "src/trace-export.mjs": "b6044ca7fdd89a10a2b213080f3f56103cf9363393062fd32a6a807007a89573",
+        "src/trace.mjs": "196fd77d341886c090b5a32eb53a089c680fd752d982a20d31ff1ca97b8fc38b",
+        "src/traced-mcp-proxy.mjs": "0a61ac8fa8427bd70579579873d9ec130fa2ccd33e2d6ab1d935655a644e48fb",
+        "src/verifier-loop.mjs": "06932c24215961035bac46e9b77c75d6daec3044c1383ab2f67314bd6ada6059",
+        "src/vivado_workbench.py": "516f3f19895b6094828b01f6a3dcd047f3eef9c4a75868e87f48337b3aeb3f49",
+        "src/workbench-artifacts.mjs": "b009790b14d99427a8c991264a558a7d45f8e92f14c9ea8e364c73198e67f967",
+        "src/workbench-changes.mjs": "7741ebfef375b850d4a42de81e0dd9e1d4d58259a42718b4e38cdff9989ac1be",
+        "src/workbench-projects.mjs": "f219f20add9eb864b52ce9c8ca210b38d707e72000b9e99209d5eeb26d0c2262",
+        "src/workbench-state.mjs": "82425676546711c7d99345efaa3569a65b1745909413491ca228582893508dfd",
+        "src/workbench-task-files.mjs": "8f7ef3c700237e34bcce1550456eda57c83ced932bf6ff12407791b6bb216bd9",
+        "src/workbench-testing.mjs": "2ce2a7db39d7689e949e8947777555dd6ba446bb193a3aa220230608a95fbd1b",
+        "src/workbench.mjs": "21f3e580a9c7161572b7553ce80f71f91f47bf55de37a2705ca39451c69daa96",
+        "src/workflow.mjs": "8ab6d30af5b9d45c3195c930e69195dba5d53be2767fe679d4ef82e3aa39cdff",
+        "vendor/ace-rtl/skills/ace-rtl/scripts/ace_rtl_agent/context_builder.py": "adccaac792d115b689ae8ddd436639a0288b9da03d800d0d09934875c80e3cd9",
+        "vendor/ace-rtl/skills/ace-rtl/scripts/ace_rtl_agent/fresh_start_coordinator.py": "af329f2a1398ee485e5816f8cf21a7e0218a285aac5bfe9a5bd8a95cdd28c951"
+      },
+      "input_hashes": {
+        ".pi/skills/fpga-plan/SKILL.md": "46526fc1f970b38390e8655f83138326f4bcb41b6748a253bfd38ab3a31c13bf",
+        ".pi/skills/fpga-rtl-verify/SKILL.md": "11432c15fb1fe7764ba24918668698355d2143b9dc2cff4512fe05d3add2a28a",
+        ".pi/skills/fpga-timing-triage/SKILL.md": "d45ce3ebc40241ee7604c9e8d2fd246d0551667043206423032ccd2bf89cb469",
+        "examples/workflows/a7-final-aes.json": "97e5fa9fd022c9d758b11ac972a66888be8acc27b101316dfee66de824361d3a",
+        "knowledge/rules.json": "1e77d3eb0a63ed2323f85f4dbe8408f471eca69fc37947da41c36c5264c196fb",
+        "knowledge/sops.json": "7f6cacae88edcc2ba0b095666406215733df7922af7256a771496a794e063bd4",
+        "knowledge/sources.json": "d603e1a7159623164c79059f1c4f15944b2c2312ed6fcdfe768cb0ac23733a3d",
+        "knowledge/tools.json": "12d8ae1e0141eaef8ba79c834a30152b5c5ca3f20688e3ee12c2741db3f3f426",
+        "projects/a7-validation/aes-clocks.xdc": "8339da623c9a854d0424f3b23bbf6ce42bd84ecd35e3783a79e30481a9c7982a",
+        "projects/a7-validation/ooc-context.tcl": "87bad1c69d5944782eb71f58a4c2ee18a21d3a4bc0b0ec0c1204803c16381c13",
+        "projects/system-bench/aes/aes_stream_top.sv": "fa2ddbaae874f4e32f457df304c01b785d950af693313ff1745af35a71a62868",
+        "projects/system-bench/aes/tb_aes.sv": "a483913debded17b0ddb31ed3546a4bfa4087a00d9377944c15073ee8cb67e9e",
+        "projects/system-bench/aes/vector-config.svh": "90fbc211316051566c654e1a00d3141aa66c817a5fefc650c9d1ed30427ce769",
+        "projects/system-bench/aes/vectors.txt": "532ce7a1d2a1665119f07eecf3c23b5bcf31f1676ed195bdac97fd0ccb5f6e51",
+        "scripts/check-knowledge.mjs": "65d9b5fe2acb9f49a3f7ddc06ccc276a11c35b77f294da7911848b46196d403f",
+        "src/knowledge.mjs": "5f84ab00272ba98b8297b2d19d6083bec2ec6cf0d7870dd0c7959290fd078351",
+        "vendor/aes/src/rtl/aes_core.v": "320e1137ac9d8812134a8313d23072e95da7c2dc0316fb24006f4b23132636d9",
+        "vendor/aes/src/rtl/aes_decipher_block.v": "ec2879babd84ae5458282c9f5e28db89e71cac18d9a343e1b2e7399062976ff5",
+        "vendor/aes/src/rtl/aes_encipher_block.v": "827b10ca76f99bb1dd99147e414930e12b7d6a1b3269063b909f9d382126e737",
+        "vendor/aes/src/rtl/aes_inv_sbox.v": "2fa81ebc3e5ed760288b7144748e037aa9442e88d2111280c6e11eb752b1f946",
+        "vendor/aes/src/rtl/aes_key_mem.v": "033fa100410c2e0600251c2787d4496dcb8829c8508fa99a5288f7b26079367b",
+        "vendor/aes/src/rtl/aes_sbox.v": "12727f8eabfdcdd079088451358ca4ff60a7ebe7fabaea58604e61a1efee8b84"
+      },
+      "verification": {
+        "final_rounds": 1,
+        "final_calls": 4,
+        "cumulative_rounds": 3,
+        "cumulative_calls": 9,
+        "original_allowance": {
+          "max_rounds": 4,
+          "max_calls": 24
+        }
+      },
+      "online_evaluation": {
+        "status": "passed",
+        "directory": "artifacts/evaluation-2026-10-26T14-51-12-001Z-fa0ebd"
+      }
+    },
+    {
+      "name": "axi-fabric",
+      "status": "passed",
+      "execution": "pi_sdk_host_verifier",
+      "original_rtl_unchanged": true,
+      "task": "artifacts/agent-task-dd9d2a79-8977-432a-a42c-a03f24867222",
+      "session": "artifacts/native-agent-2026-10-26T14-34-06-853Z-a8ce6a",
+      "workflow": "artifacts/2026-10-26T14-34-24-129Z-eda_workflow_run-3c302601",
+      "protocol": "examples/workflows/a7-final-axi-fabric.json",
+      "protocol_sha256": "d494082483c10d1a9970e49a07d5dd47f7efc32b859baa7f0aee54c50b87966c",
+      "contract_sha256": "84cb24eb36e1ae275910f9e816c7d1499444fe631a56c7b7caa17438bced91a1",
+      "functional": [
+        {
+          "step": "simulation",
+          "acceptance": {
+            "status": "pass",
+            "pass_marker": "HARD_BENCH_PASS project=axi_fabric_protocol",
+            "marker_matches": 1,
+            "completion_observed": true,
+            "failure_diagnostic": false,
+            "scope": "Explicit testbench marker, completion and diagnostic checks; semantic assertions remain the testbench responsibility."
+          },
+          "markers": [
+            "HARD_BENCH_PASS project=axi_fabric_protocol seeds=4 write_bursts=2328 read_bursts=2328 write_beats=37824 read_beats=37824 bytes_written=77501 bytes_read_checked=100992 slverr_writes=384 decerr_writes=384 slverr_reads=384 decerr_reads=384 max_total_outstanding=18 same_write_id_depth=2 same_read_id_depth=2 simultaneous_master_cycles=15607 all_three_active_cycles=3846 simultaneous_rw_cycles=11806 shared_read_bursts=24 boundary_bursts=339 protocol_checks=658158 aw_stalls=231460 w_stalls=161916 b_stalls=795 ar_stalls=225781 r_stalls=38206 cycles=130917"
+          ],
+          "child_directory": "artifacts/2026-10-26T14-34-24-345Z-eda_xsim-664237d0",
+          "result_sha256": "2aecf9a07e00065c7d86a410efd3f4ca283ae8648a024581e2a27eb854a4c0af",
+          "log_sha256": "51224a629018942fcc008d94366790cac05322d434ec0513ebc00448c11b2eea"
+        }
+      ],
+      "physical": {
+        "part": "xc7a100tfgg676-2",
+        "version": "2020.2",
+        "clocks": [
+          {
+            "name": "clk",
+            "period_ns": 10
+          }
+        ],
+        "black_boxes": 0,
+        "setup_slack_ns": 1.698,
+        "hold_slack_ns": 0.058,
+        "drc": {
+          "errors": 0,
+          "critical_warnings": 0,
+          "warnings": 0
+        },
+        "assessment": {
+          "setup_hold": "pass",
+          "clock_and_internal_constraints": "pass",
+          "io_constraints": "pass",
+          "verified_async_reset_exceptions": [],
+          "routing": "pass",
+          "cdc": "unknown",
+          "overall_design_acceptance": "not_evaluated",
+          "board_signoff": false,
+          "scope": "Per-report diagnostics only. Positive setup/hold slack does not validate CDC, IO timing, functional correctness or hardware."
+        },
+        "parsed_reports": {
+          "timing_checks": {
+            "no_clock": 0,
+            "constant_clock": 0,
+            "pulse_width_clock": 0,
+            "unconstrained_internal_endpoints": 0,
+            "no_input_delay": 0,
+            "no_output_delay": 0,
+            "multiple_clock": 0,
+            "generated_clocks": 0,
+            "loops": 0,
+            "partial_input_delay": 0,
+            "partial_output_delay": 0,
+            "latch_loops": 0
+          },
+          "input_delays": {
+            "missing": 0,
+            "false_path_count": 0,
+            "false_path_ports": []
+          },
+          "route": {
+            "routable": 3628,
+            "fully_routed": 3628,
+            "errors": 0,
+            "status": "pass"
+          },
+          "utilization": {
+            "Slice LUTs": 2011,
+            "Slice Registers": 2014,
+            "Block RAM Tile": 8,
+            "RAMB36/FIFO*": 8,
+            "RAMB18": 0,
+            "DSPs": 0
+          },
+          "cdc_rules": [],
+          "cdc_format_recognized": false
+        }
+      },
+      "domains": [
+        {
+          "domain": "functional",
+          "status": "passed"
+        },
+        {
+          "domain": "synthesis",
+          "status": "passed"
+        },
+        {
+          "domain": "setup",
+          "status": "passed"
+        },
+        {
+          "domain": "hold",
+          "status": "passed"
+        },
+        {
+          "domain": "constraints",
+          "status": "passed"
+        },
+        {
+          "domain": "routing",
+          "status": "passed"
+        },
+        {
+          "domain": "drc",
+          "status": "passed"
+        },
+        {
+          "domain": "cdc",
+          "status": "not_requested"
+        },
+        {
+          "domain": "artifact_integrity",
+          "status": "not_requested"
+        }
+      ],
+      "evidence": [
+        {
+          "id": "simulation",
+          "result_path": "artifacts/2026-10-26T14-34-24-129Z-eda_workflow_run-3c302601/simulation.result.json",
+          "result_sha256": "2aecf9a07e00065c7d86a410efd3f4ca283ae8648a024581e2a27eb854a4c0af",
+          "child_directory": "artifacts/2026-10-26T14-34-24-345Z-eda_xsim-664237d0",
+          "artifact_hashes": {}
+        },
+        {
+          "id": "synthesis",
+          "result_path": "artifacts/2026-10-26T14-34-24-129Z-eda_workflow_run-3c302601/synthesis.result.json",
+          "result_sha256": "e3e3eeea1107f6f6a3b2c63e382b39a31e88485eec80fa335d9940562c4e9b9c",
+          "child_directory": "artifacts/2026-10-26T14-34-50-872Z-eda_vivado_synthesize-0a2e01cf",
+          "artifact_hashes": {
+            "artifacts/2026-10-26T14-34-50-872Z-eda_vivado_synthesize-0a2e01cf/applied-constraints.xdc": "77ef918284c0deb5d20dcc41d1935188d241091f599409fdc016dc6120323036",
+            "artifacts/2026-10-26T14-34-50-872Z-eda_vivado_synthesize-0a2e01cf/check-timing.rpt": "6ec70e37f6a3252192f183123078283968b386e4d2fe0241e2c77a972ac68936",
+            "artifacts/2026-10-26T14-34-50-872Z-eda_vivado_synthesize-0a2e01cf/synthesized.dcp": "e9432e4071dbd3107b98a58cac87c7e408e08d69fc3ed49f453328097ca16fde",
+            "artifacts/2026-10-26T14-34-50-872Z-eda_vivado_synthesize-0a2e01cf/timing.rpt": "565b8cf5f8f05b767c946391d74643fa72ecb202ecf8e62d8b37a346a3ba9f0f",
+            "artifacts/2026-10-26T14-34-50-872Z-eda_vivado_synthesize-0a2e01cf/utilization.rpt": "2297cd547c105fef447ca75552c64c109686ba9785c6e0b6751b4695fa1102c7"
+          }
+        },
+        {
+          "id": "implementation",
+          "result_path": "artifacts/2026-10-26T14-34-24-129Z-eda_workflow_run-3c302601/implementation.result.json",
+          "result_sha256": "cb49ede46b8c4d34bcc8ca2a9f0a2d6c3c998491e9eceb7e36408d376531dc60",
+          "child_directory": "artifacts/2026-10-26T14-41-05-192Z-eda_vivado_implement-d0eb4456",
+          "artifact_hashes": {
+            "artifacts/2026-10-26T14-41-05-192Z-eda_vivado_implement-d0eb4456/applied-constraints.xdc": "6442b13aa304dec5487654c5f2310d7dfd33865987c82b4d428a72aac6446535",
+            "artifacts/2026-10-26T14-41-05-192Z-eda_vivado_implement-d0eb4456/check-timing.rpt": "a039817f60ba9e601aec61c339616838b8431b74539d488f40d107ba8c5e2419",
+            "artifacts/2026-10-26T14-41-05-192Z-eda_vivado_implement-d0eb4456/drc.rpt": "b4f214d233cb0ff24ffa5fa3f837d8ed9fc42359d5c54ed55002c01040f25a23",
+            "artifacts/2026-10-26T14-41-05-192Z-eda_vivado_implement-d0eb4456/route-in-memory.rpt": "00d76176113bc1ea7d097cba1dcba6cb4dcec7b79c8f44aeb2a003cc515a3389",
+            "artifacts/2026-10-26T14-41-05-192Z-eda_vivado_implement-d0eb4456/route.rpt": "449279a4962bedde68497ba2d899ba1434c220be8cba88de010655c89aec49bb",
+            "artifacts/2026-10-26T14-41-05-192Z-eda_vivado_implement-d0eb4456/routed.dcp": "42fca7f6a53329d9b1f4655fafd911d41481a4ad100906803af2aed44fe2c6c7",
+            "artifacts/2026-10-26T14-41-05-192Z-eda_vivado_implement-d0eb4456/timing.rpt": "c3a38fb85a2ae72a08ed859a296b69866f48d8cf74e086f1b9ee86d9f84221b4",
+            "artifacts/2026-10-26T14-41-05-192Z-eda_vivado_implement-d0eb4456/utilization.rpt": "6fcc6347402b458ee8581ebc97c1995a73a139ab92c951b7606d81cba12e0267"
+          }
+        },
+        {
+          "id": "drc-report",
+          "result_path": "artifacts/2026-10-26T14-34-24-129Z-eda_workflow_run-3c302601/drc-report.result.json",
+          "result_sha256": "4a585f1820ccd8357326aa046ee9d47e7ad303d1b8b655a67b871ec1fe0d90f9",
+          "child_directory": "artifacts/2026-10-26T14-47-57-262Z-eda_vivado_report_drc-d06a6557",
+          "artifact_hashes": {
+            "artifacts/2026-10-26T14-47-57-262Z-eda_vivado_report_drc-d06a6557/applied-constraints.xdc": "6442b13aa304dec5487654c5f2310d7dfd33865987c82b4d428a72aac6446535",
+            "artifacts/2026-10-26T14-47-57-262Z-eda_vivado_report_drc-d06a6557/drc.rpt": "0879084b21dba474c12846bd96538208e1f724f0514d644149a002c875be7b64"
+          }
+        }
+      ],
+      "source_hashes": {
+        ".eda/config.json": "9ef065695a9024e8bed151281d83d2632f4d3056faa72099742e94c391396054",
+        "package-lock.json": "953ac596f048705eec519d56309661f24c11fe7638896d448988b2521a3db59b",
+        "package.json": "ba2832b6dc9c1c2128dca10b9cd65c0e709a7aa9b01c025cb9dd52b85ded6b1c",
+        "scripts/ace-rtl-feedback.py": "fd7d3a0836ad8af19b36d0d043012905b2caa888c8884b15927537987d18f814",
+        "scripts/trace-inspect.mjs": "78915b0c6b8a56cace96eee095d295ba33a9e01ea7d454a95204d75662e08443",
+        "src/agent-resources.mjs": "a1ea2332be295fa3b4460ac11caf99b77d9947365f7c0b4c84a8483b014ea7ed",
+        "src/agent-session.mjs": "c3b5c1bbde96dffa8fae82d21de2b5484cc71bc4c5065e6407a29b6d9d0e559c",
+        "src/agent-task.mjs": "fd9fb78748d1936eff0708678966d8f2e6e9051619e3a5074a9750be400c24fe",
+        "src/agent.mjs": "5b803886cdba9445ab6cf5068bbe56a29b6f56d1d204a3e8030e3619bda3c962",
+        "src/bench/acceptance.mjs": "218bd9ffa673c594ce619264ad60faf74309fa594923501146df91882213cadd",
+        "src/bench/audit.mjs": "0f610432d26d43be6182bfd4d943d321dbb2710e7436ef4b949c19afcad0beff",
+        "src/bench/catalog.mjs": "1d4a5bb89607c38d2bbae702e43cb8af5704fb4a80ce11020fba2997201060d1",
+        "src/bench/compare.mjs": "74cf0ee8cf419296bb875c6e7f9b00e32fbd3b89c07b02c0d2c15573d805de9a",
+        "src/bench/generators.mjs": "cee856d60d4b56197f36acc3f1c237e4aedc0095a6edc5e8434a840d6b5d4487",
+        "src/bench/index.mjs": "2ab26124cb7fca4fe5f629a43fa2ab3090d5a77940229a89f0f63aa230272fef",
+        "src/bench/prepare.mjs": "4cbbd53bb1bb657546d2216ed19c98dbed690d5db6ab68d62fdd6d524f789a18",
+        "src/bench/runner.mjs": "1d1f504c0ec0f0acf9f4085b08eeea2cc210ad45e89483a5dcb5b17f5fd111b6",
+        "src/eda-coordinator.mjs": "97b79a484ecb94c7240870584cbd8bbd5f0887546f658f18178be48937e62fad",
+        "src/evaluation-contracts.mjs": "bd3e76e235feb33ba037879287c586aae985d2e1ac3ed5f6190c5750243d9aee",
+        "src/evaluations.mjs": "f2f06810fc514bb40817f30158b76a912ff50a7ed3e41f893797f534bffb3c87",
+        "src/extension.ts": "342920e5d4e5b9a30998fe7d5eff6a293a7e04de21a01b980e38fb956cab0001",
+        "src/fpga_optimizer/__init__.py": "b2b9ee9a55ab921199a3dac78bb047b3b581e821a674544a6c0aec06eac96d3c",
+        "src/fpga_optimizer/backend.py": "8b44aa7993533cc7f18551a53dc4ebc82d7d6b45635b58c5641e0efafd379cab",
+        "src/fpga_optimizer/core.py": "bd743634eb1550e489c0fa8d1937f3d018dfd2c3cfe4ec2dfb82a809878a0a28",
+        "src/fpga_optimizer/recovery.py": "0c8080d1934ab38c63ff0c9c93be985fc05b958163ec0c185989ff6dc8e584f7",
+        "src/fpga_optimizer/runner.py": "c4be5e1e151f8eaa09c8e795c25145335def1718b7e4fe03fa1a42f90f5d65e5",
+        "src/fpga_optimizer/trace.py": "92b691d99ec71749b494d80142385d2e5d292e7b0cfd0ddb3a481bc3a95a7a24",
+        "src/knowledge.mjs": "5f84ab00272ba98b8297b2d19d6083bec2ec6cf0d7870dd0c7959290fd078351",
+        "src/mcp-server.mjs": "480e885c06cec91c411664b99e134980e398f1e462e1e590e09194b4c9ee484a",
+        "src/optimizer-inspection.mjs": "07bfddb9b9389e9b7fae40bd62d1cff9a67b30c5e3e9a5a3d237021ccc2c1968",
+        "src/optimizer-recovery.mjs": "f559594764ba1e1a0a1a3f279b5a69e38408f7041a4d2988c8f7a7ac19c97638",
+        "src/otlp-upload.mjs": "6cc581585d7086e2a629fd8b756abbb6d6364f3d475cd4e8375e0f6354de706b",
+        "src/platform.mjs": "e587c484eb1ebe5014c636bae2b615deaf928496bb552da4ac9b2e57313d72c7",
+        "src/results.mjs": "ae909044f5ef3fb96ac317f78fea96d65b114bb5ff969b43d038cc98128c7925",
+        "src/runtime.mjs": "b506190fd0e09a119261efe4673554af24e4e4dc95d893b00d53855c6b8e0854",
+        "src/task-context.mjs": "3104ca37f4f6ebaa6e27d44d98b298859b1f94e09caf0a35d308aade35f74d4c",
+        "src/task-outcome.mjs": "d957a04d2ae4b9e55eef2a5b8e7518fcd5d2507f87235fdcb813032866178e5f",
+        "src/tool-contracts.mjs": "a38e099920afa2765dd3e64f5559634280c1bde0520726bc202ceba7cca15ed5",
+        "src/tools/eda.ts": "62854d4d5f9f572bbb905fefa09bc0a8dd9c3a750a2b6b7465da88317e7a0283",
+        "src/tools/focused.mjs": "7b720ef6e13ba6abcbcb586d810206e576a0bd9a5e01213c17537674c8b63a95",
+        "src/tools/fpga.mjs": "0316c006e254cf81fbea320cc16deb5a06a894b0233bda83fe2e46729d255ec1",
+        "src/tools/optimizer.mjs": "d03b62b10329486696fda3124647c964efffe5b8a6af01a1731308637f6c65ee",
+        "src/tools/vivado-common.tcl": "fcd58200b7eab6be6a5ebcaf4383ba73399723f5a59aa5bcc765463b97701051",
+        "src/tools/xsim-options.mjs": "be6e1a6f7809d809c93327c6f96facf1775f4bf4ba2a4910f107ffe32ec53554",
+        "src/trace-export.mjs": "b6044ca7fdd89a10a2b213080f3f56103cf9363393062fd32a6a807007a89573",
+        "src/trace.mjs": "196fd77d341886c090b5a32eb53a089c680fd752d982a20d31ff1ca97b8fc38b",
+        "src/traced-mcp-proxy.mjs": "0a61ac8fa8427bd70579579873d9ec130fa2ccd33e2d6ab1d935655a644e48fb",
+        "src/verifier-loop.mjs": "06932c24215961035bac46e9b77c75d6daec3044c1383ab2f67314bd6ada6059",
+        "src/vivado_workbench.py": "516f3f19895b6094828b01f6a3dcd047f3eef9c4a75868e87f48337b3aeb3f49",
+        "src/workbench-artifacts.mjs": "b009790b14d99427a8c991264a558a7d45f8e92f14c9ea8e364c73198e67f967",
+        "src/workbench-changes.mjs": "7741ebfef375b850d4a42de81e0dd9e1d4d58259a42718b4e38cdff9989ac1be",
+        "src/workbench-projects.mjs": "f219f20add9eb864b52ce9c8ca210b38d707e72000b9e99209d5eeb26d0c2262",
+        "src/workbench-state.mjs": "82425676546711c7d99345efaa3569a65b1745909413491ca228582893508dfd",
+        "src/workbench-task-files.mjs": "8f7ef3c700237e34bcce1550456eda57c83ced932bf6ff12407791b6bb216bd9",
+        "src/workbench-testing.mjs": "2ce2a7db39d7689e949e8947777555dd6ba446bb193a3aa220230608a95fbd1b",
+        "src/workbench.mjs": "21f3e580a9c7161572b7553ce80f71f91f47bf55de37a2705ca39451c69daa96",
+        "src/workflow.mjs": "8ab6d30af5b9d45c3195c930e69195dba5d53be2767fe679d4ef82e3aa39cdff",
+        "vendor/ace-rtl/skills/ace-rtl/scripts/ace_rtl_agent/context_builder.py": "adccaac792d115b689ae8ddd436639a0288b9da03d800d0d09934875c80e3cd9",
+        "vendor/ace-rtl/skills/ace-rtl/scripts/ace_rtl_agent/fresh_start_coordinator.py": "af329f2a1398ee485e5816f8cf21a7e0218a285aac5bfe9a5bd8a95cdd28c951"
+      },
+      "input_hashes": {
+        ".pi/skills/fpga-plan/SKILL.md": "46526fc1f970b38390e8655f83138326f4bcb41b6748a253bfd38ab3a31c13bf",
+        ".pi/skills/fpga-rtl-verify/SKILL.md": "11432c15fb1fe7764ba24918668698355d2143b9dc2cff4512fe05d3add2a28a",
+        ".pi/skills/fpga-timing-triage/SKILL.md": "d45ce3ebc40241ee7604c9e8d2fd246d0551667043206423032ccd2bf89cb469",
+        "examples/workflows/a7-final-axi-fabric.json": "d494082483c10d1a9970e49a07d5dd47f7efc32b859baa7f0aee54c50b87966c",
+        "knowledge/rules.json": "1e77d3eb0a63ed2323f85f4dbe8408f471eca69fc37947da41c36c5264c196fb",
+        "knowledge/sops.json": "7f6cacae88edcc2ba0b095666406215733df7922af7256a771496a794e063bd4",
+        "knowledge/sources.json": "d603e1a7159623164c79059f1c4f15944b2c2312ed6fcdfe768cb0ac23733a3d",
+        "knowledge/tools.json": "12d8ae1e0141eaef8ba79c834a30152b5c5ca3f20688e3ee12c2741db3f3f426",
+        "projects/a7-validation/ooc-context.tcl": "87bad1c69d5944782eb71f58a4c2ee18a21d3a4bc0b0ec0c1204803c16381c13",
+        "projects/fpga-tool-validation/axi.xdc": "27abd27e1c810b0253cb9eae0feda4321e29465eea7b94eae71620ed40d1b14d",
+        "projects/hard-bench/axi-fabric/axi_crossbar_addr_guarded.v": "6834506eed90ffbf4a44c13e68f6c7dbc6ac0fe3d061490bfb79cdd66374d94f",
+        "projects/hard-bench/axi-fabric/axi_crossbar_wr_guarded.v": "695ad0578882354e644de52296a2a25589f172cc19cc892e28cc0683bedcc28c",
+        "projects/hard-bench/axi-fabric/axi_error_target.sv": "570e6f8986d91f03f53ce4fef434679c334edf4938f26b64c303b981a506badc",
+        "projects/hard-bench/axi-fabric/axi_fabric_top.sv": "876c4bbdbd2662756e4ce29a72e6c127bec76b788706bd16e617366a42bf3b80",
+        "projects/hard-bench/axi-fabric/axi_write_completion_guard.sv": "f02ed9bec4f45fdd2fb6fffc68bc11af37d086f472df00d4e6b5e4d7573a902e",
+        "projects/hard-bench/axi-fabric/manifest.json": "e512befe7261e5bee16a0750ef152eb95d31f339de8c1240bc4cbc56df95bf0b",
+        "projects/hard-bench/axi-fabric/rv_delay.sv": "43e5ae09a63e584f22ec0ecb40f7a0096cb18f31e5839a50c874fe624ac44661",
+        "projects/hard-bench/axi-fabric/tb_axi_fabric_protocol.sv": "5383621fe7348127c14742b4cdacb9cbd21043fdad4e844af8f85838c9b0fa54",
+        "scripts/check-knowledge.mjs": "65d9b5fe2acb9f49a3f7ddc06ccc276a11c35b77f294da7911848b46196d403f",
+        "src/knowledge.mjs": "5f84ab00272ba98b8297b2d19d6083bec2ec6cf0d7870dd0c7959290fd078351",
+        "vendor/verilog-axi/rtl/arbiter.v": "db0ba9a08a7e8eab28b838318139abbcac2dc179032119c04006e0a2dd2a9efe",
+        "vendor/verilog-axi/rtl/axi_crossbar.v": "b251ddc6e47ce66cd1c5d8e09539bafae307effc6f73f176d349df9757271c89",
+        "vendor/verilog-axi/rtl/axi_crossbar_rd.v": "715be9547f9ac6b4a35be065382aa209c3c85455c412bfa4e107d7203487be41",
+        "vendor/verilog-axi/rtl/axi_ram.v": "1488318fd46a28f018817dfc61731075721581d9109efa07048a3ff5aff6eb46",
+        "vendor/verilog-axi/rtl/axi_register_rd.v": "f07a5f71a625de6b924c82214e1ff356254d542089792f67057a15deffdda32f",
+        "vendor/verilog-axi/rtl/axi_register_wr.v": "6bef07487a7d0c03eafde4a755389418a4e71e70dcdb2e60ae697370484fb5d5",
+        "vendor/verilog-axi/rtl/priority_encoder.v": "07c610b8dda24daf67dec36c743f79fca30f9d01d5469e1e7f795a16f4c7aa97"
+      },
+      "verification": {
+        "final_rounds": 1,
+        "final_calls": 4,
+        "cumulative_rounds": 2,
+        "cumulative_calls": 7,
+        "original_allowance": {
+          "max_rounds": 4,
+          "max_calls": 24
+        }
+      },
+      "online_evaluation": {
+        "status": "passed",
+        "directory": "artifacts/evaluation-2026-10-26T14-51-13-851Z-60fba7"
+      }
+    },
+    {
+      "name": "fft-1024",
+      "status": "passed",
+      "execution": "codex_native_tool_pipeline",
+      "original_rtl_unchanged": true,
+      "receipt": "artifacts/a7-fft-2026-10-26T14-26-33-706Z-45f490/result.json",
+      "receipt_sha256": "b25d5e7ab95e30131d154b87f35f8002a2a8eac911199df2a4ab367fd6048412",
+      "functional": {
+        "frames": 16,
+        "bins": 16384,
+        "max_complex_error_lsb": 1.0535414076719007,
+        "max_magnitude_error_lsb": 1.7988425483039236,
+        "negative_controls": {
+          "rejected": 4,
+          "total": 4,
+          "checks": [
+            {
+              "case": "all_zero_outputs",
+              "rejected": true,
+              "reason": "FFT mismatch impulse: 15.99951171875, 0.0"
+            },
+            {
+              "case": "wrong_scaling",
+              "rejected": true,
+              "reason": "FFT mismatch impulse: 16.00048828125, 0.0"
+            },
+            {
+              "case": "missing_tlast",
+              "rejected": true,
+              "reason": "Wrong TLAST zero_first_frame"
+            },
+            {
+              "case": "missing_sample",
+              "rejected": true,
+              "reason": "Missing/extra outputs: (16383, 7)"
+            }
+          ]
+        }
+      },
+      "physical": {
+        "stage": "routed",
+        "version": "2020.2",
+        "part": "xc7a100tfgg676-2",
+        "clock_period_ns": 10,
+        "io_delay_ns": 2,
+        "setup_slack_ns": 1.691519856452942,
+        "hold_slack_ns": 0.04143590852618217,
+        "flip_flops": 4472,
+        "lut_cells": 2481,
+        "dsp48": 12,
+        "ramb18": 6,
+        "ramb36": 0,
+        "implementation_mode": "out_of_context",
+        "black_boxes": 0,
+        "board_io_validated": false,
+        "bitstream_generated": false,
+        "hardware_tested": false,
+        "model_api_calls": 0,
+        "drc_zero": true,
+        "assessment": {
+          "setup_hold": "pass",
+          "clock_and_internal_constraints": "pass",
+          "io_constraints": "pass",
+          "verified_async_reset_exceptions": [],
+          "routing": "pass",
+          "cdc": "unknown",
+          "overall_design_acceptance": "not_evaluated",
+          "board_signoff": false,
+          "scope": "Per-report diagnostics only. Positive setup/hold slack does not validate CDC, IO timing, functional correctness or hardware."
+        },
+        "parsed_reports": {
+          "timing_checks": {
+            "no_clock": 0,
+            "constant_clock": 0,
+            "pulse_width_clock": 0,
+            "unconstrained_internal_endpoints": 0,
+            "no_input_delay": 0,
+            "no_output_delay": 0,
+            "multiple_clock": 0,
+            "generated_clocks": 0,
+            "loops": 0,
+            "partial_input_delay": 0,
+            "partial_output_delay": 0,
+            "latch_loops": 0
+          },
+          "input_delays": {
+            "missing": 0,
+            "false_path_count": 0,
+            "false_path_ports": []
+          },
+          "route": {
+            "routable": 5513,
+            "fully_routed": 5513,
+            "errors": 0,
+            "status": "pass"
+          },
+          "utilization": {
+            "Slice LUTs": 2704,
+            "Slice Registers": 4472,
+            "Block RAM Tile": 3,
+            "RAMB36/FIFO*": 0,
+            "RAMB18": 6,
+            "DSPs": 12
+          },
+          "cdc_rules": [],
+          "cdc_format_recognized": false
+        }
+      },
+      "runs": {
+        "simulate": "artifacts/2026-10-26T14-26-34-249Z-eda_vivado-9ea701e1",
+        "implement": "artifacts/2026-10-26T14-28-12-525Z-eda_vivado-398f704c"
+      },
+      "input_hashes": {
+        "artifacts/a7-fft-2026-10-26T14-26-33-706Z-45f490/candidate/rtl/spectrum_core.v": "b8a37b7cd2b0851f4af6e0bcff0d0c1ec74a6a09385607195ebac3b8f9a59346",
+        "artifacts/a7-fft-2026-10-26T14-26-33-706Z-45f490/candidate/tb_spectrum.sv": "3bc1927e91b521202675f04b503437664fa5de10de3752dc8f3714660b813114",
+        "artifacts/a7-fft-2026-10-26T14-26-33-706Z-45f490/candidate/oracle.py": "010201f4a0806213700b053302ea53e6093f54255aa3565d6b69435fe351db2f",
+        "artifacts/a7-fft-2026-10-26T14-26-33-706Z-45f490/candidate/create-ip.tcl": "539d61263c9c12e8d23b34c181241a824b9ece22feb3b534b5ef234b76759eba",
+        "artifacts/a7-fft-2026-10-26T14-26-33-706Z-45f490/candidate/vectors/input.hex": "f8a3aa4f4edb5f80ec5993fe97082c2c36b2afd339c5de9eef66649c8607e1bb",
+        "artifacts/a7-fft-2026-10-26T14-26-33-706Z-45f490/candidate/check-negative-controls.py": "8689259f487bee182967cc71655ff34dc9264be043913e659140b2be837d7011",
+        "vendor/SynthPilot_Tutorial/prj/04/rtl/magnitude_calc.v": "376d2d6ea68cfe7575975330bd247ddcda5fd1b55dc118084505a9dfadbb3039",
+        "projects/a7-validation/ooc-context.tcl": "87bad1c69d5944782eb71f58a4c2ee18a21d3a4bc0b0ec0c1204803c16381c13"
+      },
+      "runner_sha256": "278fbbafd97fad83734879aa811d4f9fb380886340613d7f786ca1449c801652"
+    }
+  ],
+  "history": [
+    {
+      "name": "crypto-soc",
+      "task": "artifacts/agent-task-cbc11766-4517-438b-8243-84807ef73f0d",
+      "session": "artifacts/native-agent-2026-10-26T13-45-55-641Z-ed60ec",
+      "status": "passed",
+      "workflow": "artifacts/2026-10-26T13-47-10-349Z-eda_workflow_run-4ab0ef39",
+      "rounds": 1,
+      "calls": 4
+    },
+    {
+      "name": "ethernet-cdc",
+      "task": "artifacts/agent-task-8eb40fa0-2d7b-421d-9942-8915d1784678",
+      "session": "artifacts/native-agent-2026-10-26T13-45-57-784Z-c723bc",
+      "status": "invalid",
+      "reason": "terminated",
+      "workflow": null,
+      "rounds": 0,
+      "calls": 0
+    },
+    {
+      "name": "soc",
+      "task": "artifacts/agent-task-93485c2d-a6fb-4c43-8c44-50d708b02487",
+      "session": "artifacts/native-agent-2026-10-26T13-46-41-917Z-42a51f",
+      "status": "invalid",
+      "reason": "terminated",
+      "workflow": null,
+      "rounds": 0,
+      "calls": 0
+    },
+    {
+      "name": "dma",
+      "task": "artifacts/agent-task-4cc75c1c-afbd-4fdf-9ff4-cce6d86b5f17",
+      "session": "artifacts/native-agent-2026-10-26T13-46-43-921Z-4db632",
+      "status": "passed",
+      "workflow": "artifacts/2026-10-26T13-49-35-622Z-eda_workflow_run-b4dd7110",
+      "rounds": 1,
+      "calls": 4
+    },
+    {
+      "name": "ethernet-cdc",
+      "task": "artifacts/agent-task-8b7fc0df-30cc-4efe-b3c2-ab698c093175",
+      "session": "artifacts/native-agent-2026-10-26T13-51-30-343Z-f618d6",
+      "status": "invalid",
+      "reason": "Connection error.",
+      "workflow": "artifacts/2026-10-26T13-51-49-774Z-eda_workflow_run-74fc9e95",
+      "rounds": 1,
+      "calls": 4
+    },
+    {
+      "name": "soc",
+      "task": "artifacts/agent-task-b4bc9998-1ce7-4a70-bd0f-d69a30adcbd1",
+      "session": "artifacts/native-agent-2026-10-26T13-51-32-028Z-ec5f9f",
+      "status": "passed",
+      "workflow": "artifacts/2026-10-26T13-52-01-063Z-eda_workflow_run-f0d197ee",
+      "rounds": 1,
+      "calls": 4
+    },
+    {
+      "name": "udp",
+      "task": "artifacts/agent-task-481c061d-6e64-48fc-a990-214b15e90dd3",
+      "session": "artifacts/native-agent-2026-10-26T13-52-36-108Z-c576e8",
+      "status": "invalid",
+      "reason": "terminated",
+      "workflow": "artifacts/2026-10-26T13-52-59-125Z-eda_workflow_run-886298cd",
+      "rounds": 1,
+      "calls": 3
+    },
+    {
+      "name": "aes",
+      "task": "artifacts/agent-task-a0f7da7f-77d9-4d9f-9e8a-8a53926b9e46",
+      "session": "artifacts/native-agent-2026-10-26T13-52-38-181Z-713183",
+      "status": "invalid",
+      "reason": "terminated",
+      "workflow": "artifacts/2026-10-26T13-52-56-875Z-eda_workflow_run-289ec7a7",
+      "rounds": 1,
+      "calls": 1
+    },
+    {
+      "name": "axi-fabric",
+      "task": "artifacts/agent-task-db620ec0-1282-4670-a21e-ecebdb3d28c2",
+      "session": "artifacts/native-agent-2026-10-26T13-54-11-826Z-b752d6",
+      "status": "invalid",
+      "reason": "Connection error.",
+      "workflow": "artifacts/2026-10-26T13-54-42-372Z-eda_workflow_run-204fb981",
+      "rounds": 1,
+      "calls": 3
+    },
+    {
+      "name": "aes",
+      "task": "artifacts/agent-task-2ae83ff3-d70e-4c17-8b21-6552510ecedb",
+      "session": "artifacts/native-agent-2026-10-26T14-03-45-095Z-ed476b",
+      "status": "passed",
+      "workflow": "artifacts/2026-10-26T14-04-02-870Z-eda_workflow_run-d3cd7e5e",
+      "rounds": 1,
+      "calls": 4
+    }
+  ],
+  "cdc": {
+    "scope": "Separate structural diagnostic on the same frozen Ethernet sources and constraints; not complete CDC signoff",
+    "diagnostic": "artifacts/2026-10-26T14-15-40-007Z-eda_vivado-6b79df45/cdc.rpt",
+    "sha256": "b88ea3da81b43fb06b1cefdf3cf43494760ec99dc9b657ab701c477f7576ca6f",
+    "warnings": {
+      "CDC-6": 3,
+      "CDC-15": 28,
+      "CDC-26": 3
+    },
+    "info": {
+      "CDC-3": 10
+    }
+  },
+  "usage": {
+    "provider": "CommandCode",
+    "requested_model": "deepseek/deepseek-v4-flash",
+    "reported_model": "deepseek/deepseek-v4.1-flash",
+    "campaign": {
+      "requests": 248,
+      "known_tokens": 11342150,
+      "unknown_reserved_tokens": 3498428,
+      "cap": 50000000
+    },
+    "probe_tokens": 72,
+    "waves": {
+      "native-smoke": {
+        "requests": 2,
+        "known_tokens": 29492,
+        "unknown_reserved_tokens": 0,
+        "statuses": {
+          "cancelled": 2
+        }
+      },
+      "counter-loop": {
+        "requests": 5,
+        "known_tokens": 93874,
+        "unknown_reserved_tokens": 0,
+        "statuses": {
+          "completed": 5
+        }
+      },
+      "workbench-cancel-baseline": {
+        "requests": 1,
+        "known_tokens": 0,
+        "unknown_reserved_tokens": 134456,
+        "statuses": {
+          "transport_error": 1
+        }
+      },
+      "workbench-cancel-fixed": {
+        "requests": 1,
+        "known_tokens": 0,
+        "unknown_reserved_tokens": 134456,
+        "statuses": {
+          "transport_error": 1
+        }
+      },
+      "axi-compact-loop": {
+        "requests": 7,
+        "known_tokens": 133505,
+        "unknown_reserved_tokens": 0,
+        "statuses": {
+          "completed": 7
+        }
+      },
+      "truncated-fixed": {
+        "requests": 1,
+        "known_tokens": 14831,
+        "unknown_reserved_tokens": 0,
+        "statuses": {
+          "completed": 1
+        }
+      },
+      "axi-protocol-fixed": {
+        "requests": 2,
+        "known_tokens": 16142,
+        "unknown_reserved_tokens": 240168,
+        "statuses": {
+          "completed": 2
+        }
+      },
+      "axi-protocol-retry-1": {
+        "requests": 5,
+        "known_tokens": 101635,
+        "unknown_reserved_tokens": 0,
+        "statuses": {
+          "completed": 5
+        }
+      },
+      "boundary-resume-cancel": {
+        "requests": 2,
+        "known_tokens": 31420,
+        "unknown_reserved_tokens": 0,
+        "statuses": {
+          "completed": 2
+        }
+      },
+      "boundary-resume-continue": {
+        "requests": 2,
+        "known_tokens": 40860,
+        "unknown_reserved_tokens": 0,
+        "statuses": {
+          "completed": 2
+        }
+      },
+      "concurrent-three": {
+        "requests": 9,
+        "known_tokens": 214444,
+        "unknown_reserved_tokens": 0,
+        "statuses": {
+          "completed": 9
+        }
+      },
+      "axi-full-loop": {
+        "requests": 8,
+        "known_tokens": 170098,
+        "unknown_reserved_tokens": 0,
+        "statuses": {
+          "completed": 8
+        }
+      },
+      "dma-compile-retry": {
+        "requests": 10,
+        "known_tokens": 273422,
+        "unknown_reserved_tokens": 0,
+        "statuses": {
+          "completed": 10
+        }
+      },
+      "native-mcp-discovery": {
+        "requests": 5,
+        "known_tokens": 101592,
+        "unknown_reserved_tokens": 0,
+        "statuses": {
+          "completed": 5
+        }
+      },
+      "active-eda-cancel": {
+        "requests": 1,
+        "known_tokens": 16980,
+        "unknown_reserved_tokens": 0,
+        "statuses": {
+          "completed": 1
+        }
+      },
+      "crypto-firmware-loop": {
+        "requests": 8,
+        "known_tokens": 214735,
+        "unknown_reserved_tokens": 0,
+        "statuses": {
+          "completed": 8
+        }
+      },
+      "browser-native-task": {
+        "requests": 14,
+        "known_tokens": 488132,
+        "unknown_reserved_tokens": 0,
+        "statuses": {
+          "completed": 14
+        }
+      },
+      "ethernet-two-clocks": {
+        "requests": 12,
+        "known_tokens": 670268,
+        "unknown_reserved_tokens": 0,
+        "statuses": {
+          "completed": 12
+        }
+      },
+      "ethernet-diagnostic-fixed": {
+        "requests": 12,
+        "known_tokens": 810846,
+        "unknown_reserved_tokens": 0,
+        "statuses": {
+          "completed": 12
+        }
+      },
+      "browser-cancel-resume": {
+        "requests": 7,
+        "known_tokens": 176495,
+        "unknown_reserved_tokens": 299408,
+        "statuses": {
+          "completed": 6,
+          "stream_error": 1
+        }
+      },
+      "visible-large-projects": {
+        "requests": 9,
+        "known_tokens": 258224,
+        "unknown_reserved_tokens": 0,
+        "statuses": {
+          "completed": 9
+        }
+      },
+      "eight-a7-project-repair": {
+        "requests": 111,
+        "known_tokens": 7097847,
+        "unknown_reserved_tokens": 2689940,
+        "statuses": {
+          "completed": 107,
+          "stream_error": 4
+        }
+      },
+      "eight-a7-final-qualification": {
+        "requests": 14,
+        "known_tokens": 387236,
+        "unknown_reserved_tokens": 0,
+        "statuses": {
+          "completed": 14
+        }
+      }
+    },
+    "other_model_api_calls": 0,
+    "outer_codex_tokens": null,
+    "unknown_usage_note": "Reserved estimates for requests without returned usage; not observed token consumption."
+  },
+  "updated_at": "2026-10-26T14:53:33.831Z"
+}
