@@ -1,0 +1,136 @@
+{
+  "schema_version": 1,
+  "id": "from-zero-packet-switch-submitted",
+  "goal": "Recheck preserved Pi submission. From-zero packet-switch: 4x4 packet switch designed from an interface-only stub: queued packet routing, packet arbitration, backpressure, counters and reset; A7-100T 100 MHz OOC acceptance",
+  "inputs": [
+    "projects/rtl-from-zero/packet-switch/SPEC.md"
+  ],
+  "limits": {
+    "max_calls": 4,
+    "wall_seconds": 3600
+  },
+  "steps": [
+    {
+      "id": "simulation",
+      "tool": "eda_xsim",
+      "args": {
+        "sources": [
+          "projects/rtl-from-zero/packet-switch/tb_z_packet_switch.sv",
+          "projects/rtl-from-zero/submitted/packet-switch/z_packet_switch.sv"
+        ],
+        "top": "tb_z_packet_switch",
+        "capture_top_wave": false,
+        "timeout_seconds": 600,
+        "pass_marker": "FROM_ZERO_PASS project=packet-switch"
+      },
+      "checks": [
+        {
+          "pointer": "/simulation_acceptance/status",
+          "op": "eq",
+          "value": "pass"
+        }
+      ]
+    },
+    {
+      "id": "synthesis",
+      "tool": "eda_vivado_synthesize",
+      "args": {
+        "sources": [
+          "projects/rtl-from-zero/submitted/packet-switch/z_packet_switch.sv"
+        ],
+        "top": "z_packet_switch",
+        "part": "xc7a100tfgg676-2",
+        "constraints": [
+          "projects/rtl-from-zero/packet-switch/clocks.xdc"
+        ]
+      },
+      "checks": [
+        {
+          "pointer": "/fpga/black_boxes",
+          "op": "eq",
+          "value": 0
+        }
+      ]
+    },
+    {
+      "id": "implementation",
+      "tool": "eda_vivado_implement",
+      "args": {
+        "checkpoint": {
+          "$result": {
+            "step": "synthesis",
+            "pointer": "/fpga/artifacts/synthesized.dcp"
+          }
+        },
+        "constraint_scripts": [
+          "projects/a7-validation/ooc-context.tcl"
+        ]
+      },
+      "checks": [
+        {
+          "pointer": "/fpga/assessment/setup_hold",
+          "op": "eq",
+          "value": "pass"
+        },
+        {
+          "pointer": "/fpga/assessment/routing",
+          "op": "eq",
+          "value": "pass"
+        },
+        {
+          "pointer": "/fpga/assessment/clock_and_internal_constraints",
+          "op": "eq",
+          "value": "pass"
+        },
+        {
+          "pointer": "/fpga/assessment/io_constraints",
+          "op": "eq",
+          "value": "pass"
+        }
+      ]
+    },
+    {
+      "id": "drc",
+      "tool": "eda_vivado_report_drc",
+      "args": {
+        "checkpoint": {
+          "$result": {
+            "step": "implementation",
+            "pointer": "/fpga/artifacts/routed.dcp"
+          }
+        }
+      },
+      "checks": [
+        {
+          "pointer": "/fpga/reports/0/status",
+          "op": "eq",
+          "value": "ok"
+        }
+      ]
+    }
+  ],
+  "guidance": {
+    "sop_ids": [
+      "fpga-rtl-verify",
+      "fpga-timing-triage"
+    ]
+  },
+  "acceptance": {
+    "profile": "fpga_ooc",
+    "bindings": {
+      "functional": "simulation",
+      "synthesis": "synthesis",
+      "setup": "implementation",
+      "hold": "implementation",
+      "constraints": "implementation",
+      "routing": "implementation",
+      "drc": "drc"
+    },
+    "design": {
+      "top": "z_packet_switch",
+      "part": "xc7a100tfgg676-2",
+      "clock": "clk",
+      "period_ns": 10
+    }
+  }
+}

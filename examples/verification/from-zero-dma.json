@@ -1,0 +1,8 @@
+{
+  "spec": "examples/workflows/from-zero-dma.json",
+  "editable_sources": [
+    "projects/rtl-from-zero/dma/z_dma.sv"
+  ],
+  "max_rounds": 6,
+  "max_calls": 24
+}

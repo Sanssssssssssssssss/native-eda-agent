@@ -4,6 +4,8 @@
 
 [A7-100T 的 8 项完整工程验收](docs/a7-eight-projects.md) **8/8 通过**：SoC、DMA、UDP、AES、AXI 3×3、三时钟 Ethernet、AES DMA SoC 和 FFT；[复跑入口与器件级边界](projects/a7-validation/README.md)。7/7 Pi 会话通过在线证据复核；301 项离线软件测试通过。
 
+[两项从零 RTL 实测](docs/from-zero-rtl-2026-10-27.md)：Pi 从端口空壳生成 DMA 和 4×4 包交换机，固定 verifier **工程通过 1/2，自主闭环 0/2**。DMA 最终由 Codex 补触发验收通过；交换机功能失败。提供原始空壳、最终 RTL、固定测试和全部失败摘要；trace 故障修复后离线测试为 **305 项通过**。
+
 当前重点是 **可追溯的知识指导、固定验收、可靠执行和结果复核**。模型提供商 API 默认关闭；下列本地工具和离线检查不需要模型 API key。
 
 [任务闭环](docs/agent-lifecycle.md) · [稳定性实测](docs/stability-2026-10-26.md) · [NVIDIA 反馈接入](docs/ace-rtl-adaptation.md) · [工程工作台](docs/workbench-v08.md) · [分类评测](docs/evaluation.md) · [核心机制](docs/mechanisms.md) · [RAG 与 SOP](docs/knowledge-and-sops.md) · [功能成绩](docs/results.md) · [仓库结构](docs/repository-layout.md) · [全部文档](docs/README.md)
@@ -27,13 +29,14 @@
 | 功能 | 已有能力与证据 | 验收范围 |
 |---|---|---|
 | RTL 功能验证 | XSim 固定 checker、参数/种子/背压/复位；24 题原协议 20/24，延长 watchdog 的同一批 RTL 为 23/24 | 可见测试；两种协议分开，非盲测 pass@1 |
+| 从零 RTL 生成 | Pi 并行生成 DMA / 包交换机；工程验收 1/2，自主闭环 0/2 | 独立固定 checker 可见；最终 DMA 为 host-only 验收；[完整记录](docs/from-zero-rtl-2026-10-27.md) |
 | 系统工程集成 | FFT 1024 点、16 帧；SoC/DMA/UDP/AES 4/4；AXI 3×3、三时钟 Ethernet、RV32IM AES DMA 3/3 | 功能与 OOC 实现；Ethernet 保留 34 条 CDC warning |
 | 综合、实现与诊断 | 显式 RTL/XDC/DCP 输入，setup/hold、约束、routing、CDC、网表对象查询；原生集成检查 12/12 | 报告诊断；缺失字段保留 unknown；无板级签核 |
 | 工程、IP、Block Design | 社区 Workbench 13 类操作，33/33 工具检查 | 工具集成检查，非 33 个新 FPGA 项目 |
 | 物理优化 | 7 个本地策略、准入与复测；历史 AXI 运行 2 个候选，实测 WNS 收益 0 ns | 仅其中 2 类 reroute 有实跑；未复现竞赛排名 |
 | 模拟电路 | LTspice RC AC/瞬态、独立解析解校验；历史四项测量误差均低于固定 0.2% 阈值 | RC 基础案例；新代理版本未重跑商业工具 |
 | 知识与 SOP | 36 规则 / 21 来源 / 6 SOP；24 条可见检索回归 Hit@5 为 24/24 | 检索相关性；不是回答正确率或设计通过率 |
-| Agent 工程机制 | 输入/知识冻结、预算、恢复、MCP、资源并发、trace、真实 Pi 资源加载等 301 项离线检查 | 假 EDA、本机进程与协议验收；当前回执见 release/validation-a7-eight.json 和 CI |
+| Agent 工程机制 | 输入/知识冻结、预算、恢复、MCP、资源并发、trace、真实 Pi 资源加载等 305 项离线检查 | 假 EDA、本机进程与协议验收；当前回执见 release/validation-from-zero-rtl.json 和 CI |
 | 独立 verifier 闭环 | 原生 Pi / CommandCode 与宿主 verifier；7/7 最终会话通过在线证据复核 | 已知工程集成与框架修复，保留此前失败；[A7 最终验收](docs/a7-eight-projects.md)与[前期定向修复](docs/stability-2026-10-26.md)分别记分 |
 
 详细协议、失败、资源和证据索引见 [功能成绩](docs/results.md)。历史 11 组成绩保持原协议；Counter、真实 DRC 查询和完整 AXI 结果单列于功能成绩。接口数量单列在 [工具合同](docs/reference/tools.md)：57 个原生入口，其中 28 个为共享执行器的细粒度合同；可选社区后端另有 45 个工具与 11 个 prompts。

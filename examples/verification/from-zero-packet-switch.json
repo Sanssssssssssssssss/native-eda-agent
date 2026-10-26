@@ -1,0 +1,8 @@
+{
+  "spec": "examples/workflows/from-zero-packet-switch.json",
+  "editable_sources": [
+    "projects/rtl-from-zero/packet-switch/z_packet_switch.sv"
+  ],
+  "max_rounds": 6,
+  "max_calls": 24
+}

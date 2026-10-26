@@ -1,0 +1,522 @@
+{
+  "schema_version": 1,
+  "checked_at": "2026-10-26T18:50:55.979Z",
+  "scope": "Two from-zero interface-only RTL tasks; CommandCode Pi generation; frozen independent functional and A7-100T 100MHz OOC verifier",
+  "scores": {
+    "engineering_acceptance": {
+      "passed": 1,
+      "total": 2
+    },
+    "native_autonomous_completion": {
+      "passed": 0,
+      "total": 2
+    },
+    "first_completed_verifier": {
+      "passed": 0,
+      "total": 2
+    }
+  },
+  "environment": {
+    "pi": "1.4.0",
+    "vivado": "2020.2",
+    "part": "xc7a100tfgg676-2",
+    "clock_period_ns": 10,
+    "implementation": "OOC",
+    "formal": "not_evaluated",
+    "hardware": "not_evaluated",
+    "cdc": "not_requested_single_clock"
+  },
+  "projects": [
+    {
+      "name": "dma",
+      "origin": {
+        "kind": "interface_only_stub",
+        "original": "projects/rtl-from-zero/dma/z_dma.sv",
+        "original_sha256": "94662d5460165d9c2e1e74a28ec296033dea6b13e2ca4af04f0b95fa07905689",
+        "originals_preserved": true
+      },
+      "submission": {
+        "path": "projects/rtl-from-zero/submitted/dma/z_dma.sv",
+        "sha256": "1f3375a94da0567eb988e32f51c468b0819a1a676936d0a1416f936fc0b4d238",
+        "lines": 325,
+        "bytes": 13254,
+        "author": "native Pi session via CommandCode",
+        "manual_functional_rtl_edits": 0
+      },
+      "native_session": {
+        "run_id": "native-agent-2026-10-26T18-31-45-867Z-a0bf19",
+        "status": "failed",
+        "phase": "generating",
+        "online_evaluation": "failed",
+        "execution": {
+          "eligible": true,
+          "reason": "builtin_session_with_observed_responses",
+          "successful_assistant_messages": 23,
+          "scope": "Host factory and SDK event provenance; not independent provider billing verification."
+        }
+      },
+      "engineering": {
+        "status": "passed",
+        "run_id": "2026-10-26T18-43-31-953Z-eda_workflow_run-a02d53a6",
+        "final_verifier_trigger": "Codex host-only verifier after native session failure",
+        "setup_slack_ns": 0.313,
+        "hold_slack_ns": 0.135,
+        "utilization": {
+          "Slice LUTs": 331,
+          "Slice Registers": 214,
+          "Block RAM Tile": 0,
+          "RAMB36/FIFO*": 0,
+          "RAMB18": 0,
+          "DSPs": 0
+        },
+        "route": {
+          "routable": 655,
+          "fully_routed": 655,
+          "errors": 0,
+          "status": "pass"
+        },
+        "drc": {
+          "errors": 0,
+          "critical_warnings": 0,
+          "warnings": 0
+        },
+        "coverage": {
+          "descriptors": 128,
+          "checked_bytes": 84491,
+          "protocol_checks": 130590,
+          "read_error_descriptors": 24,
+          "write_error_descriptors": 16,
+          "reset_abort_epochs": 2,
+          "queue_highwater": 9,
+          "boundary_descriptors": 81
+        }
+      },
+      "verifier_budget": {
+        "max_rounds": 6,
+        "max_calls": 24,
+        "round_slots_debited": 6,
+        "completed_tool_calls": 13,
+        "interrupted_call_reservation": 4,
+        "total_calls_debited": 17,
+        "note": "Interrupted generation slots and interrupted verifier reservations remain charged; final DMA manual verifier uses the last original round slot."
+      },
+      "completed_native_rounds": [
+        {
+          "run_id": "2026-10-26T18-18-27-323Z-eda_workflow_run-f55a5a79",
+          "outcome": "tool_error",
+          "acceptance": "unknown",
+          "calls": 1,
+          "candidate_hashes": {
+            "artifacts/agent-task-ae6a3f4b-958b-42aa-87e5-c9b3bafa3600/candidate/projects/rtl-from-zero/dma/z_dma.sv": "79185e1867610900be86c0ee8f804c43f26dc45e3c91bd5e6bf1f4cc22268483"
+          },
+          "error_report": "{\"status\":\"failed\",\"outcome\":\"tool_error\",\"issues\":[],\"domains\":[{\"domain\":\"functional\",\"status\":\"unknown\",\"reason\":\"verified_step_evidence_missing\"},{\"domain\":\"synthesis\",\"status\":\"unknown\",\"reason\":\"verified_step_evidence_missing\"},{\"domain\":\"setup\",\"status\":\"unknown\",\"reason\":\"verified_step_evidence_missing\"},{\"domain\":\"hold\",\"status\":\"unknown\",\"reason\":\"verified_step_evidence_missing\"},{\"domain\":\"constraints\",\"status\":\"unknown\",\"reason\":\"verified_step_evidence_missing\"},{\"domain\":\"routing\",\"status\":\"unknown\",\"reason\":\"verified_step_evidence_missing\"},{\"domain\":\"drc\",\"status\":\"unknown\",\"reason\":\"verified_step_evidence_missing\"},{\"domain\":\"cdc\",\"status\":\"not_requested\"},{\"domain\":\"artifact_integrity\",\"status\":\"not_requested\"}],\"failure\":\"simulation\",\"checks\":[],\"error\":\"Error: Error: Process exit_nonzero (exit 1); inspect E:\\\\GPTProject2\\\\EDAAgent\\\\artifacts\\\\2026-10-26T18-18-27-509Z-eda_xsim-0d1862de\\\\process.log; evidence: E:\\\\GPTProject2\\\\EDAAgent\\\\artifacts\\\\2026-10-26T18-18-27-509Z-eda_xsim-0d1862de\",\"diagnostic\":\"\\n[2026-10-26T18:18:27.546Z] [\\\"E:\\\\\\\\Xilinx\\\\\\\\Vivado\\\\\\\\2020.2\\\\\\\\bin\\\\\\\\xvlog.bat\\\",\\\"--sv\\\",\\\"E:\\\\\\\\GPTProject2\\\\\\\\EDAAgent\\\\\\\\artifacts\\\\\\\\agent-task-ae6a3f4b-958b-42aa-87e5-c9b3bafa3600\\\\\\\\candidate\\\\\\\\projects\\\\\\\\rtl-from-zero\\\\\\\\dma\\\\\\\\tb_z_dma.sv\\\",\\\"E:\\\\\\\\GPTProject2\\\\\\\\EDAAgent\\\\\\\\artifacts\\\\\\\\agent-task-ae6a3f4b-958b-42aa-87e5-c9b3bafa3600\\\\\\\\candidate\\\\\\\\projects\\\\\\\\rtl-from-zero\\\\\\\\dma\\\\\\\\z_dma.sv\\\"]\\nINFO: [VRFC 10-2263] Analyzing SystemVerilog file \\\"${WORKSPACE}/artifacts/agent-task-ae6a3f4b-958b-42aa-87e5-c9b3bafa3600/candidate/projects/rtl-from-zero/dma/tb_z_dma.sv\\\" into library work\\r\\nINFO: [VRFC 10-311] analyzing module tb_z_dma\\r\\nINFO: [VRFC 10-2263] Analyzing SystemVerilog file \\\"${WORKSPACE}/artifacts/agent-task-ae6a3f4b-958b-42aa-87e5-c9b3bafa3600/candidate/projects/rtl-from-zero/dma/z_dma.sv\\\" into library work\\r\\nINFO: [VRFC 10-311] analyzing module z_dma\\r\\nERROR: [VRFC 10-3380] identifier 'state' is used before its declaration [${WORKSPACE}/artifacts/agent-task-ae6a3f4b-958b-42aa-87e5-c9b3bafa3600/candidate/projects/rtl-from-zero/dma/z_dma.sv:88]\\r\\nERROR: [VRFC 10-2865] module 'z_dma' ignored due to previous errors [${WORKSPACE}/artifacts/agent-task-ae6a3f4b-958b-42aa-87e5-c9b3bafa3600/candidate/projects/rtl-from-zero/dma/z_dma.sv:25]\\r\\n\\n[2026-10-26T18:18:28.736Z] TRACE_FAILURE Error: Process exit_nonzero (exit 1); inspect E:\\\\GPTProject2\\\\EDAAgent\\\\artifacts\\\\2026-10-26T18-18-27-509Z-eda_xsim-0d1862de\\\\process.log\\n\",\"evidence\":{\"workflow\":\"E:\\\\GPTProject2\\\\EDAAgent\\\\artifacts\\\\2026-10-26T18-18-27-323Z-eda_workflow_run-f55a5a79\",\"failed_result\":null,\"failed_result_sha256\":null,\"failed_tool\":\"artifacts/2026-10-26T18-18-27-509Z-eda_xsim-0d1862de\"}}"
+        },
+        {
+          "run_id": "2026-10-26T18-18-46-727Z-eda_workflow_run-7198f458",
+          "outcome": "checks_failed",
+          "acceptance": "failed",
+          "calls": 3,
+          "candidate_hashes": {
+            "artifacts/agent-task-ae6a3f4b-958b-42aa-87e5-c9b3bafa3600/candidate/projects/rtl-from-zero/dma/z_dma.sv": "342db85b893c132de3c890f61c7df384a8daef872d4438cd051e0585a213a2b5"
+          },
+          "error_report": "{\"status\":\"failed\",\"outcome\":\"checks_failed\",\"issues\":[],\"domains\":[{\"domain\":\"functional\",\"status\":\"passed\",\"observed\":{\"status\":\"pass\",\"marker_matches\":1,\"completion_observed\":true,\"failure_diagnostic\":false}},{\"domain\":\"synthesis\",\"status\":\"passed\",\"observed\":0},{\"domain\":\"setup\",\"status\":\"failed\",\"observed\":-0.599,\"expected_min\":0},{\"domain\":\"hold\",\"status\":\"passed\",\"observed\":0.092,\"expected_min\":0},{\"domain\":\"constraints\",\"status\":\"passed\",\"observed\":{\"internal\":\"pass\",\"io\":\"pass\"}},{\"domain\":\"routing\",\"status\":\"passed\",\"observed\":\"pass\"},{\"domain\":\"drc\",\"status\":\"unknown\",\"reason\":\"verified_step_evidence_missing\"},{\"domain\":\"cdc\",\"status\":\"not_requested\"},{\"domain\":\"artifact_integrity\",\"status\":\"not_requested\"}],\"failure\":\"implementation\",\"checks\":[{\"pointer\":\"/fpga/assessment/setup_hold\",\"op\":\"eq\",\"expected\":\"pass\",\"actual\":\"fail\",\"passed\":false}],\"error\":\"Error: Acceptance failed: implementation\",\"diagnostic\":\"\",\"evidence\":{\"workflow\":\"E:\\\\GPTProject2\\\\EDAAgent\\\\artifacts\\\\2026-10-26T18-18-46-727Z-eda_workflow_run-7198f458\",\"failed_result\":\"artifacts/2026-10-26T18-18-46-727Z-eda_workflow_run-7198f458/implementation.result.json\",\"failed_result_sha256\":\"2097eb0210a74525867f2a028f40237fbcba770b555e7bfd60c0abce000bfb5f\",\"failed_tool\":null}}"
+        },
+        {
+          "run_id": "2026-10-26T18-34-06-153Z-eda_workflow_run-17758746",
+          "outcome": "tool_error",
+          "acceptance": "unknown",
+          "calls": 2,
+          "candidate_hashes": {
+            "artifacts/agent-task-51c5694d-02aa-4299-8d5f-83b96bfad855/candidate/projects/rtl-from-zero/dma/z_dma.sv": "e6d869e741a9cf87981f2114fbe84033f5d9bafb8fd5dd65ed613eea8123b1a8"
+          },
+          "error_report": {
+            "status": "failed",
+            "outcome": "tool_error",
+            "issues": [],
+            "domains": [
+              {
+                "domain": "functional",
+                "status": "passed",
+                "observed": {
+                  "status": "pass",
+                  "marker_matches": 1,
+                  "completion_observed": true,
+                  "failure_diagnostic": false
+                }
+              },
+              {
+                "domain": "synthesis",
+                "status": "unknown",
+                "reason": "verified_step_evidence_missing"
+              },
+              {
+                "domain": "setup",
+                "status": "unknown",
+                "reason": "verified_step_evidence_missing"
+              },
+              {
+                "domain": "hold",
+                "status": "unknown",
+                "reason": "verified_step_evidence_missing"
+              },
+              {
+                "domain": "constraints",
+                "status": "unknown",
+                "reason": "verified_step_evidence_missing"
+              },
+              {
+                "domain": "routing",
+                "status": "unknown",
+                "reason": "verified_step_evidence_missing"
+              },
+              {
+                "domain": "drc",
+                "status": "unknown",
+                "reason": "verified_step_evidence_missing"
+              },
+              {
+                "domain": "cdc",
+                "status": "not_requested"
+              },
+              {
+                "domain": "artifact_integrity",
+                "status": "not_requested"
+              }
+            ],
+            "failure": "synthesis",
+            "checks": [],
+            "error": "Error: Error: Process exit_nonzero (exit 1); inspect ${WORKSPACE}\\artifacts\\2026-10-26T18-34-22-039Z-eda_vivado_synthesize-a011d8a3\\process.log; evidence: ${WORKSPACE}\\artifacts\\2026-10-26T18-34-22-039Z-eda_vivado_synthesize-a011d8a3",
+            "diagnostic": "\n[2026-10-26T18:34:22.104Z] [\"E:\\\\Xilinx\\\\Vivado\\\\2020.2\\\\bin\\\\vivado.bat\",\"-mode\",\"batch\",\"-notrace\",\"-source\",\"E:\\\\GPTProject2\\\\EDAAgent\\\\artifacts\\\\2026-10-26T18-34-22-039Z-eda_vivado_synthesize-a011d8a3\\\\operation.tcl\",\"-log\",\"vivado.log\",\"-journal\",\"vivado.jou\"]\n\r\n****** Vivado v2020.2 (64-bit)\r\n  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020\r\n  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020\r\n    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.\r\n\r\nsource {${WORKSPACE}\\artifacts\\2026-10-26T18-34-22-039Z-eda_vivado_synthesize-a011d8a3\\operation.tcl} -notrace\r\nCommand: synth_design -top z_dma -part xc7a100tfgg676-2 -mode out_of_context\r\nStarting synth_design\r\nAttempting to get a license for feature 'Synthesis' and/or device 'xc7a100t'\r\nINFO: [Common 17-349] Got license for feature 'Synthesis' and/or device 'xc7a100t'\r\nINFO: [Device 21-403] Loading part xc7a100tfgg676-2\r\nINFO: [Synth 8-7079] Multithreading enabled for synth_design using a maximum of 1 processes.\r\nINFO: [Synth 8-7078] Launching helper process for spawning children vivado processes\r\nINFO: [Synth 8-7075] Helper process launched with PID 2412\r\ncouldn't read file \"E:/Xilinx/Vivado/2020.2/scripts/rt/data/unimacro/unimacro_vhdl.tcl\": No error\r\nINFO: [Common 17-83] Releasing license: Synthesis\r\n6 Infos, 0 Warnings, 0 Critical Warnings and 1 Errors encountered.\r\nsynth_design failed\r\nERROR: [Common 17-69] Command failed: Synthesis failed - please see the console or run log file for details\r\nINFO: [Common 17-206] Exiting Vivado at Tue Oct 27 02:34:38 2026...\r\n\n[2026-10-26T18:34:39.012Z] TRACE_FAILURE Error: Process exit_nonzero (exit 1); inspect ${WORKSPACE}\\artifacts\\2026-10-26T18-34-22-039Z-eda_vivado_synthesize-a011d8a3\\process.log\n",
+            "evidence": {
+              "workflow": "${WORKSPACE}\\artifacts\\2026-10-26T18-34-06-153Z-eda_workflow_run-17758746",
+              "failed_result": null,
+              "failed_result_sha256": null,
+              "failed_tool": "artifacts/2026-10-26T18-34-22-039Z-eda_vivado_synthesize-a011d8a3"
+            }
+          }
+        },
+        {
+          "run_id": "2026-10-26T18-36-40-160Z-eda_workflow_run-0b94e48e",
+          "outcome": "checks_failed",
+          "acceptance": "failed",
+          "calls": 3,
+          "candidate_hashes": {
+            "artifacts/agent-task-51c5694d-02aa-4299-8d5f-83b96bfad855/candidate/projects/rtl-from-zero/dma/z_dma.sv": "e6d869e741a9cf87981f2114fbe84033f5d9bafb8fd5dd65ed613eea8123b1a8"
+          },
+          "error_report": {
+            "status": "failed",
+            "outcome": "checks_failed",
+            "issues": [],
+            "domains": [
+              {
+                "domain": "functional",
+                "status": "passed",
+                "observed": {
+                  "status": "pass",
+                  "marker_matches": 1,
+                  "completion_observed": true,
+                  "failure_diagnostic": false
+                }
+              },
+              {
+                "domain": "synthesis",
+                "status": "passed",
+                "observed": 0
+              },
+              {
+                "domain": "setup",
+                "status": "failed",
+                "observed": -0.529,
+                "expected_min": 0
+              },
+              {
+                "domain": "hold",
+                "status": "passed",
+                "observed": 0.144,
+                "expected_min": 0
+              },
+              {
+                "domain": "constraints",
+                "status": "passed",
+                "observed": {
+                  "internal": "pass",
+                  "io": "pass"
+                }
+              },
+              {
+                "domain": "routing",
+                "status": "passed",
+                "observed": "pass"
+              },
+              {
+                "domain": "drc",
+                "status": "unknown",
+                "reason": "verified_step_evidence_missing"
+              },
+              {
+                "domain": "cdc",
+                "status": "not_requested"
+              },
+              {
+                "domain": "artifact_integrity",
+                "status": "not_requested"
+              }
+            ],
+            "failure": "implementation",
+            "checks": [
+              {
+                "pointer": "/fpga/assessment/setup_hold",
+                "op": "eq",
+                "expected": "pass",
+                "actual": "fail",
+                "passed": false
+              }
+            ],
+            "error": "Error: Acceptance failed: implementation",
+            "diagnostic": "",
+            "evidence": {
+              "workflow": "${WORKSPACE}\\artifacts\\2026-10-26T18-36-40-160Z-eda_workflow_run-0b94e48e",
+              "failed_result": "artifacts/2026-10-26T18-36-40-160Z-eda_workflow_run-0b94e48e/implementation.result.json",
+              "failed_result_sha256": "c26aabe822e19320245a062df4cc202694894cce5ef6669281cdd634b47b0dbd",
+              "failed_tool": null
+            }
+          }
+        }
+      ],
+      "generation_failures": [
+        {
+          "run_id": "native-agent-2026-10-26T18-11-28-831Z-124ad9",
+          "reason": "Model response was truncated by its output limit; generation is incomplete.",
+          "provider_tokens": 64727
+        }
+      ],
+      "negative_control": {
+        "status": "fail",
+        "run_id": "2026-10-26T18-07-00-931Z-eda_xsim-fcdb8e5e",
+        "input_drift": false
+      },
+      "origin_audit": {
+        "observed_known_existing_rtl_reads": 0,
+        "scope": "Audit observed model tool calls. Read scope is policy-based, not an OS read sandbox; RAG/SOP and supplied testbench may be read."
+      },
+      "frozen_input_hashes": {
+        "projects/rtl-from-zero/dma/SPEC.md": "9a6ac7ed3d25f1e207e6f1e7c88ddd258ae101bbd04e6f629a65288b86041eeb",
+        "projects/rtl-from-zero/dma/z_dma.sv": "94662d5460165d9c2e1e74a28ec296033dea6b13e2ca4af04f0b95fa07905689",
+        "projects/rtl-from-zero/dma/tb_z_dma.sv": "0a391e0dc33efb54ffa99603a594503a7ff8e4f30a6c25c6b67944fb5c3ef9da",
+        "projects/rtl-from-zero/dma/clocks.xdc": "27abd27e1c810b0253cb9eae0feda4321e29465eea7b94eae71620ed40d1b14d",
+        "examples/workflows/from-zero-dma.json": "6ab51002e9a9b742f1f1cc9d2e8d8030d56c82c4cc5098497760fe27b158546d",
+        "projects/a7-validation/ooc-context.tcl": "87bad1c69d5944782eb71f58a4c2ee18a21d3a4bc0b0ec0c1204803c16381c13"
+      }
+    },
+    {
+      "name": "packet-switch",
+      "origin": {
+        "kind": "interface_only_stub",
+        "original": "projects/rtl-from-zero/packet-switch/z_packet_switch.sv",
+        "original_sha256": "2e54cb3a83165686960b42834558c225532e983df8bb157b655444a5e99bea21",
+        "originals_preserved": true
+      },
+      "submission": {
+        "path": "projects/rtl-from-zero/submitted/packet-switch/z_packet_switch.sv",
+        "sha256": "f9780421aa68ed4a1dcc59300f4a5f55cc70d4fd590d8306dbf4f8eff6dc90a0",
+        "lines": 307,
+        "bytes": 11362,
+        "author": "native Pi session via CommandCode",
+        "manual_functional_rtl_edits": 0
+      },
+      "native_session": {
+        "run_id": "native-agent-2026-10-26T18-31-48-036Z-a31a39",
+        "status": "failed",
+        "phase": "generating",
+        "online_evaluation": "failed",
+        "execution": {
+          "eligible": true,
+          "reason": "builtin_session_with_observed_responses",
+          "successful_assistant_messages": 6,
+          "scope": "Host factory and SDK event provenance; not independent provider billing verification."
+        }
+      },
+      "engineering": {
+        "status": "failed",
+        "run_id": "2026-10-26T18-35-29-755Z-eda_workflow_run-b5916565",
+        "final_verifier_trigger": "native Pi verifier loop",
+        "failure": "cycle=40014 phase=1 phase_cycle=39999: phase watchdog: input deadlock, missing output, or incomplete drain",
+        "physical": "not_reached",
+        "planned_complete_packets": 1860,
+        "planned_coverage_achieved": false
+      },
+      "verifier_budget": {
+        "max_rounds": 6,
+        "max_calls": 24,
+        "round_slots_debited": 4,
+        "completed_tool_calls": 2,
+        "interrupted_call_reservation": 0,
+        "total_calls_debited": 2,
+        "note": "Interrupted generation slots and interrupted verifier reservations remain charged; final DMA manual verifier uses the last original round slot."
+      },
+      "completed_native_rounds": [
+        {
+          "run_id": "2026-10-26T18-18-41-908Z-eda_workflow_run-2e306b90",
+          "outcome": "checks_failed",
+          "acceptance": "failed",
+          "calls": 1,
+          "candidate_hashes": {
+            "artifacts/agent-task-41a7c13a-95dc-421b-8bf8-c92b75fc6daf/candidate/projects/rtl-from-zero/packet-switch/z_packet_switch.sv": "f9780421aa68ed4a1dcc59300f4a5f55cc70d4fd590d8306dbf4f8eff6dc90a0"
+          },
+          "error_report": "{\"status\":\"failed\",\"outcome\":\"checks_failed\",\"issues\":[],\"domains\":[{\"domain\":\"functional\",\"status\":\"failed\",\"observed\":{\"status\":\"fail\",\"marker_matches\":0,\"completion_observed\":true,\"failure_diagnostic\":true}},{\"domain\":\"synthesis\",\"status\":\"unknown\",\"reason\":\"verified_step_evidence_missing\"},{\"domain\":\"setup\",\"status\":\"unknown\",\"reason\":\"verified_step_evidence_missing\"},{\"domain\":\"hold\",\"status\":\"unknown\",\"reason\":\"verified_step_evidence_missing\"},{\"domain\":\"constraints\",\"status\":\"unknown\",\"reason\":\"verified_step_evidence_missing\"},{\"domain\":\"routing\",\"status\":\"unknown\",\"reason\":\"verified_step_evidence_missing\"},{\"domain\":\"drc\",\"status\":\"unknown\",\"reason\":\"verified_step_evidence_missing\"},{\"domain\":\"cdc\",\"status\":\"not_requested\"},{\"domain\":\"artifact_integrity\",\"status\":\"not_requested\"}],\"failure\":\"simulation\",\"checks\":[{\"pointer\":\"/simulation_acceptance/status\",\"op\":\"eq\",\"expected\":\"pass\",\"actual\":\"fail\",\"passed\":false}],\"error\":\"Error: Acceptance failed: simulation\",\"diagnostic\":\"\\n[2026-10-26T18:18:42.188Z] [\\\"E:\\\\\\\\Xilinx\\\\\\\\Vivado\\\\\\\\2020.2\\\\\\\\bin\\\\\\\\xvlog.bat\\\",\\\"--sv\\\",\\\"E:\\\\\\\\GPTProject2\\\\\\\\EDAAgent\\\\\\\\artifacts\\\\\\\\agent-task-41a7c13a-95dc-421b-8bf8-c92b75fc6daf\\\\\\\\candidate\\\\\\\\projects\\\\\\\\rtl-from-zero\\\\\\\\packet-switch\\\\\\\\tb_z_packet_switch.sv\\\",\\\"E:\\\\\\\\GPTProject2\\\\\\\\EDAAgent\\\\\\\\artifacts\\\\\\\\agent-task-41a7c13a-95dc-421b-8bf8-c92b75fc6daf\\\\\\\\candidate\\\\\\\\projects\\\\\\\\rtl-from-zero\\\\\\\\packet-switch\\\\\\\\z_packet_switch.sv\\\"]\\nINFO: [VRFC 10-2263] Analyzing SystemVerilog file \\\"${WORKSPACE}/artifacts/agent-task-41a7c13a-95dc-421b-8bf8-c92b75fc6daf/candidate/projects/rtl-from-zero/packet-switch/tb_z_packet_switch.sv\\\" into library work\\r\\nINFO: [VRFC 10-311] analyzing module tb_z_packet_switch\\r\\nINFO: [VRFC 10-2263] Analyzing SystemVerilog file \\\"${WORKSPACE}/artifacts/agent-task-41a7c13a-95dc-421b-8bf8-c92b75fc6daf/candidate/projects/rtl-from-zero/packet-switch/z_packet_switch.sv\\\" into library work\\r\\nINFO: [VRFC 10-311] analyzing module z_packet_switch\\r\\nINFO: [VRFC 10-311] analyzing module zeda_packet_fifo16\\r\\n\\n[2026-10-26T18:18:43.995Z] [\\\"E:\\\\\\\\Xilinx\\\\\\\\Vivado\\\\\\\\2020.2\\\\\\\\bin\\\\\\\\xelab.bat\\\",\\\"tb_z_packet_switch\\\",\\\"-s\\\",\\\"eda_snapshot\\\",\\\"-debug\\\",\\\"typical\\\",\\\"-mt\\\",\\\"2\\\"]\\nVivado Simulator 2020.2\\r\\nCopyright 1986-1999, 2001-2020 Xilinx, Inc. All Rights Reserved.\\r\\nRunning: E:/Xilinx/Vivado/2020.2/bin/unwrapped/win64.o/xelab.exe tb_z_packet_switch -s eda_snapshot -debug typical -mt 2 \\r\\nUsing 2 slave threads.\\r\\nStarting static elaboration\\r\\nPass Through NonSizing Optimizer\\r\\nCompleted static elaboration\\r\\nStarting simulation data flow analysis\\r\\nCompleted simulation data flow analysis\\r\\nTime Resolution for simulation is 1ps\\r\\nCompiling module work.zeda_packet_fifo16\\r\\nCompiling module work.z_packet_switch_default\\r\\nCompiling module work.tb_z_packet_switch\\r\\nBuilt simulation snapshot eda_snapshot\\r\\n\\r\\n****** Webtalk v2020.2 (64-bit)\\r\\n  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020\\r\\n  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020\\r\\n    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.\\r\\n\\r\\nsource ${WORKSPACE}/artifacts/2026-10-26T18-18-42-152Z-eda_xsim-4de48d79/xsim.dir/eda_snapshot/webtalk/xsim_webtalk.tcl -notrace\\r\\nINFO: [Common 17-206] Exiting Webtalk at Tue Oct 27 02:18:49 2026...\\r\\n\\n[2026-10-26T18:18:49.547Z] [\\\"E:\\\\\\\\Xilinx\\\\\\\\Vivado\\\\\\\\2020.2\\\\\\\\bin\\\\\\\\xsim.bat\\\",\\\"eda_snapshot\\\",\\\"-runall\\\"]\\n\\r\\n****** xsim v2020.2 (64-bit)\\r\\n  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020\\r\\n  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020\\r\\n    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.\\r\\n\\r\\nsource xsim.dir/eda_snapshot/xsim_script.tcl\\r\\n# xsim {eda_snapshot} -autoloadwcfg -runall\\r\\nVivado Simulator 2020.2\\r\\nTime resolution is 1 ps\\r\\nrun -all\\r\\nFatal: cycle=40014 phase=1 phase_cycle=39999: phase watchdog: input deadlock, missing output, or incomplete drain\\r\\nTime: 400140 ns  Iteration: 0  Process: /tb_z_packet_switch/check_true  Scope: tb_z_packet_switch.check_true  File: ${WORKSPACE}/artifacts/agent-task-41a7c13a-95dc-421b-8bf8-c92b75fc6daf/candidate/projects/rtl-from-zero/packet-switch/tb_z_packet_switch.sv Line: 93\\r\\n$finish called at time : 400140 ns : File \\\"${WORKSPACE}/artifacts/agent-task-41a7c13a-95dc-421b-8bf8-c92b75fc6daf/candidate/projects/rtl-from-zero/packet-switch/tb_z_packet_switch.sv\\\" Line 93\\r\\nexit\\r\\nINFO: [Common 17-206] Exiting xsim at Tue Oct 27 02:18:56 2026...\\r\\n\",\"evidence\":{\"workflow\":\"E:\\\\GPTProject2\\\\EDAAgent\\\\artifacts\\\\2026-10-26T18-18-41-908Z-eda_workflow_run-2e306b90\",\"failed_result\":\"artifacts/2026-10-26T18-18-41-908Z-eda_workflow_run-2e306b90/simulation.result.json\",\"failed_result_sha256\":\"ced8abf327f7b582b3d8154058315b84edeb7ba31901e5a037b5d19db0487860\",\"failed_tool\":null}}"
+        },
+        {
+          "run_id": "2026-10-26T18-35-29-755Z-eda_workflow_run-b5916565",
+          "outcome": "checks_failed",
+          "acceptance": "failed",
+          "calls": 1,
+          "candidate_hashes": {
+            "artifacts/agent-task-7aa08a9b-d262-4fe3-825b-9e977ccab875/candidate/projects/rtl-from-zero/packet-switch/z_packet_switch.sv": "f9780421aa68ed4a1dcc59300f4a5f55cc70d4fd590d8306dbf4f8eff6dc90a0"
+          },
+          "error_report": {
+            "status": "failed",
+            "outcome": "checks_failed",
+            "issues": [],
+            "domains": [
+              {
+                "domain": "functional",
+                "status": "failed",
+                "observed": {
+                  "status": "fail",
+                  "marker_matches": 0,
+                  "completion_observed": true,
+                  "failure_diagnostic": true
+                }
+              },
+              {
+                "domain": "synthesis",
+                "status": "unknown",
+                "reason": "verified_step_evidence_missing"
+              },
+              {
+                "domain": "setup",
+                "status": "unknown",
+                "reason": "verified_step_evidence_missing"
+              },
+              {
+                "domain": "hold",
+                "status": "unknown",
+                "reason": "verified_step_evidence_missing"
+              },
+              {
+                "domain": "constraints",
+                "status": "unknown",
+                "reason": "verified_step_evidence_missing"
+              },
+              {
+                "domain": "routing",
+                "status": "unknown",
+                "reason": "verified_step_evidence_missing"
+              },
+              {
+                "domain": "drc",
+                "status": "unknown",
+                "reason": "verified_step_evidence_missing"
+              },
+              {
+                "domain": "cdc",
+                "status": "not_requested"
+              },
+              {
+                "domain": "artifact_integrity",
+                "status": "not_requested"
+              }
+            ],
+            "failure": "simulation",
+            "checks": [
+              {
+                "pointer": "/simulation_acceptance/status",
+                "op": "eq",
+                "expected": "pass",
+                "actual": "fail",
+                "passed": false
+              }
+            ],
+            "error": "Error: Acceptance failed: simulation",
+            "diagnostic": "\n[2026-10-26T18:35:29.983Z] [\"E:\\\\Xilinx\\\\Vivado\\\\2020.2\\\\bin\\\\xvlog.bat\",\"--sv\",\"E:\\\\GPTProject2\\\\EDAAgent\\\\artifacts\\\\agent-task-7aa08a9b-d262-4fe3-825b-9e977ccab875\\\\candidate\\\\projects\\\\rtl-from-zero\\\\packet-switch\\\\tb_z_packet_switch.sv\",\"E:\\\\GPTProject2\\\\EDAAgent\\\\artifacts\\\\agent-task-7aa08a9b-d262-4fe3-825b-9e977ccab875\\\\candidate\\\\projects\\\\rtl-from-zero\\\\packet-switch\\\\z_packet_switch.sv\"]\nINFO: [VRFC 10-2263] Analyzing SystemVerilog file \"${WORKSPACE}/artifacts/agent-task-7aa08a9b-d262-4fe3-825b-9e977ccab875/candidate/projects/rtl-from-zero/packet-switch/tb_z_packet_switch.sv\" into library work\r\nINFO: [VRFC 10-311] analyzing module tb_z_packet_switch\r\nINFO: [VRFC 10-2263] Analyzing SystemVerilog file \"${WORKSPACE}/artifacts/agent-task-7aa08a9b-d262-4fe3-825b-9e977ccab875/candidate/projects/rtl-from-zero/packet-switch/z_packet_switch.sv\" into library work\r\nINFO: [VRFC 10-311] analyzing module z_packet_switch\r\nINFO: [VRFC 10-311] analyzing module zeda_packet_fifo16\r\n\n[2026-10-26T18:35:31.601Z] [\"E:\\\\Xilinx\\\\Vivado\\\\2020.2\\\\bin\\\\xelab.bat\",\"tb_z_packet_switch\",\"-s\",\"eda_snapshot\",\"-debug\",\"typical\",\"-mt\",\"2\"]\nVivado Simulator 2020.2\r\nCopyright 1986-1999, 2001-2020 Xilinx, Inc. All Rights Reserved.\r\nRunning: E:/Xilinx/Vivado/2020.2/bin/unwrapped/win64.o/xelab.exe tb_z_packet_switch -s eda_snapshot -debug typical -mt 2 \r\nUsing 2 slave threads.\r\nStarting static elaboration\r\nPass Through NonSizing Optimizer\r\nCompleted static elaboration\r\nStarting simulation data flow analysis\r\nCompleted simulation data flow analysis\r\nTime Resolution for simulation is 1ps\r\nCompiling module work.zeda_packet_fifo16\r\nCompiling module work.z_packet_switch_default\r\nCompiling module work.tb_z_packet_switch\r\nBuilt simulation snapshot eda_snapshot\r\n\r\n****** Webtalk v2020.2 (64-bit)\r\n  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020\r\n  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020\r\n    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.\r\n\r\nsource ${WORKSPACE}/artifacts/2026-10-26T18-35-29-943Z-eda_xsim-7650f7b3/xsim.dir/eda_snapshot/webtalk/xsim_webtalk.tcl -notrace\r\nINFO: [Common 17-206] Exiting Webtalk at Tue Oct 27 02:35:35 2026...\r\n\n[2026-10-26T18:35:36.086Z] [\"E:\\\\Xilinx\\\\Vivado\\\\2020.2\\\\bin\\\\xsim.bat\",\"eda_snapshot\",\"-runall\"]\n\r\n****** xsim v2020.2 (64-bit)\r\n  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020\r\n  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020\r\n    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.\r\n\r\nsource xsim.dir/eda_snapshot/xsim_script.tcl\r\n# xsim {eda_snapshot} -autoloadwcfg -runall\r\nVivado Simulator 2020.2\r\nTime resolution is 1 ps\r\nrun -all\r\nFatal: cycle=40014 phase=1 phase_cycle=39999: phase watchdog: input deadlock, missing output, or incomplete drain\r\nTime: 400140 ns  Iteration: 0  Process: /tb_z_packet_switch/check_true  Scope: tb_z_packet_switch.check_true  File: ${WORKSPACE}/artifacts/agent-task-7aa08a9b-d262-4fe3-825b-9e977ccab875/candidate/projects/rtl-from-zero/packet-switch/tb_z_packet_switch.sv Line: 93\r\n$finish called at time : 400140 ns : File \"${WORKSPACE}/artifacts/agent-task-7aa08a9b-d262-4fe3-825b-9e977ccab875/candidate/projects/rtl-from-zero/packet-switch/tb_z_packet_switch.sv\" Line 93\r\nexit\r\nINFO: [Common 17-206] Exiting xsim at Tue Oct 27 02:35:42 2026...\r\n",
+            "evidence": {
+              "workflow": "${WORKSPACE}\\artifacts\\2026-10-26T18-35-29-755Z-eda_workflow_run-b5916565",
+              "failed_result": "artifacts/2026-10-26T18-35-29-755Z-eda_workflow_run-b5916565/simulation.result.json",
+              "failed_result_sha256": "772dfcad609b77ecbd183e2bd5b9505cf70b7a31360c20dc5f48a31550ce3d20",
+              "failed_tool": null
+            }
+          }
+        }
+      ],
+      "generation_failures": [],
+      "negative_control": {
+        "status": "fail",
+        "run_id": "2026-10-26T18-12-39-241Z-eda_xsim-dfa03ed3",
+        "input_drift": false
+      },
+      "origin_audit": {
+        "observed_known_existing_rtl_reads": 0,
+        "scope": "Audit observed model tool calls. Read scope is policy-based, not an OS read sandbox; RAG/SOP and supplied testbench may be read."
+      },
+      "frozen_input_hashes": {
+        "projects/rtl-from-zero/packet-switch/SPEC.md": "8127fb3f808ce993dc3ce6c4c4d506536d4ad06bb254b79a38271202e1ff9e23",
+        "projects/rtl-from-zero/packet-switch/z_packet_switch.sv": "2e54cb3a83165686960b42834558c225532e983df8bb157b655444a5e99bea21",
+        "projects/rtl-from-zero/packet-switch/tb_z_packet_switch.sv": "0a8eb56f3fad95741a6c9c16a75b7a213a070b3c1a216d4d693721072af759cd",
+        "projects/rtl-from-zero/packet-switch/clocks.xdc": "54dd0212fd59b151722995cd24e689e32ebfc609e3cf1da1b57e8c3638c159e3",
+        "examples/workflows/from-zero-packet-switch.json": "757f014675a09e10d76fe9832a4b409d4b4474b6625f6b293213efb7591704b4",
+        "projects/a7-validation/ooc-context.tcl": "87bad1c69d5944782eb71f58a4c2ee18a21d3a4bc0b0ec0c1204803c16381c13"
+      }
+    }
+  ],
+  "usage": {
+    "requests": 53,
+    "known_tokens": 4028246,
+    "unknown_reserved_tokens": 885626,
+    "cap": 6000000,
+    "known_plus_unknown_reservation": 4913872,
+    "other_provider_api_calls": 0,
+    "external_codex_tokens": null
+  },
+  "provider": {
+    "endpoint": "CommandCode",
+    "requested_model": "deepseek/deepseek-v4-flash",
+    "observed_models": [
+      "deepseek/deepseek-v4-flash",
+      "deepseek/deepseek-v4.1-flash"
+    ],
+    "requests_by_status": {
+      "completed": 52,
+      "owner_interrupted": 1
+    }
+  },
+  "framework_fix": {
+    "files": [
+      "src/trace.mjs",
+      "tests/trace.test.mjs"
+    ],
+    "problem": "Windows transient rename EPERM escaped child process callback and interrupted the shared host",
+    "change": "Exclusive fsynced temporary write, bounded transient rename retry, and promise rejection on callback persistence failures",
+    "source_sha256": "fe8d5643b0e866809ee35738f403cc84c9812a4c656d76ddc39a586636ebcd47",
+    "offline_validation": "release/validation-from-zero-rtl.json",
+    "offline_tests": 305,
+    "offline_passed": true
+  },
+  "final_host_verifier": {
+    "run_id": "2026-10-26T18-43-31-953Z-eda_workflow_run-a02d53a6",
+    "status": "completed",
+    "acceptance": "passed",
+    "model_api_calls": 0,
+    "original_manifest_sha256": "7d7d05d39440f95daffadb74cac28cc40d55e6172d26d4704ba83a685d6d7e24",
+    "original_acceptance_sha256": "3748b3218f1c6b5e90843c682ecec9d4c0b8367b1ce9359b3ddbf5077b164ca2",
+    "source_snapshot_inputs": 73,
+    "input_drift": false,
+    "snapshot_integrity": true
+  },
+  "limitations": [
+    "Visible local testbenches; not a blind or standard external benchmark",
+    "Finite functional checks do not constitute formal proof or hardware validation",
+    "Provider output truncation and generic terminal Connection error remain visible; no extra provider call was made for final DMA verification",
+    "Policy-based read scope and observed tool-call audit, not OS-enforced source isolation",
+    "Host crash recovery used fresh tasks with explicit debits; interrupted historical traces retain their original nonterminal status"
+  ]
+}

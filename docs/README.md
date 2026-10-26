@@ -8,6 +8,7 @@
 |---|---|
 | 项目能做什么、怎样启动 | [项目 README](../README.md) |
 | 8 个 A7-100T 工程的完整验收、失败修复和用量 | [工程实测](a7-eight-projects.md) · [复跑流程](../projects/a7-validation/README.md) |
+| 两项从零 RTL 的生成、固定 verifier、失败与用量 | [从零实测](from-zero-rtl-2026-10-27.md) · [空壳与最终提交](../projects/rtl-from-zero/README.md) |
 | 原生 Pi 与真实提供商的稳定性修复和实测 | [2026-10-26 稳定性记录](stability-2026-10-26.md) |
 | EDA Agent 的关键机制是否实际接入 | [机制与源码落点](mechanisms.md) |
 | 本地会话界面、任务可视化和 ERP 对照 | [v0.7 工作台验收](workbench-v07-acceptance.md) · [机制比较](erp-parity-and-workbench.md) |

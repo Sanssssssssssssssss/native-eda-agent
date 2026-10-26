@@ -44,6 +44,98 @@ test('success preserves ordered events, actual process metadata, stdout/stderr a
   assert.match(fs.readFileSync(receipt.process_log, 'utf8'), /stdout-evidence[\s\S]*stderr-evidence/);
 });
 
+test('transient replacement locks retain the old JSON until atomic publication succeeds', t => {
+  const { trace } = setup('transient-publish-lock');
+  const target = path.join(trace.directory, 'run.json');
+  const original = fs.readFileSync(target, 'utf8');
+  const rename = fs.renameSync;
+  const failures = ['EPERM', 'EACCES', 'EBUSY'];
+  let attempts = 0;
+  const temporaryFiles = new Set();
+  t.mock.method(fs, 'renameSync', (source, destination) => {
+    if (destination === target) {
+      attempts++;
+      temporaryFiles.add(source);
+      assert.equal(fs.readFileSync(target, 'utf8'), original);
+      assert.equal(JSON.parse(fs.readFileSync(source, 'utf8')).publication_probe, 'complete replacement');
+      if (failures.length) throw Object.assign(new Error('injected transient replacement lock'), { code: failures.shift() });
+    }
+    return rename(source, destination);
+  });
+  trace.manifest.publication_probe = 'complete replacement';
+  trace.persist();
+  assert.equal(attempts, 4);
+  assert.equal(temporaryFiles.size, 1);
+  assert.equal(readRun(trace).publication_probe, 'complete replacement');
+  assert.ok([...temporaryFiles].every(file => !fs.existsSync(file)));
+});
+
+test('non-lock publication errors fail immediately and retain both old and pending evidence', t => {
+  const { trace } = setup('publish-io-error');
+  const target = path.join(trace.directory, 'run.json');
+  const original = fs.readFileSync(target, 'utf8');
+  const rename = fs.renameSync;
+  const failure = Object.assign(new Error('injected storage I/O failure'), { code: 'EIO' });
+  let attempts = 0, temporary;
+  t.mock.method(fs, 'renameSync', (source, destination) => {
+    if (destination !== target) return rename(source, destination);
+    attempts++;
+    temporary = source;
+    throw failure;
+  });
+  trace.manifest.publication_probe = 'pending replacement';
+  assert.throws(() => trace.persist(), error => error === failure);
+  assert.equal(attempts, 1);
+  assert.equal(fs.readFileSync(target, 'utf8'), original);
+  assert.equal(JSON.parse(fs.readFileSync(temporary, 'utf8')).publication_probe, 'pending replacement');
+});
+
+test('persistent close-time publication failure rejects the process task without crashing the host', { timeout: 10000 }, async t => {
+  const { trace } = setup('close-publish-lock');
+  const target = path.join(trace.directory, 'run.json');
+  const rename = fs.renameSync;
+  const failure = Object.assign(new Error('injected persistent replacement lock'), { code: 'EPERM' });
+  let attempts = 0, previous, temporary;
+  const mock = t.mock.method(fs, 'renameSync', (source, destination) => {
+    if (destination !== target || !trace.manifest.processes[0]?.ended_at) return rename(source, destination);
+    attempts++;
+    previous ??= fs.readFileSync(target, 'utf8');
+    assert.equal(fs.readFileSync(target, 'utf8'), previous);
+    temporary = source;
+    throw failure;
+  });
+  await assert.rejects(runProcess(trace, process.execPath, ['-e', 'console.log("child finished before publication failed")']), error => error === failure);
+  assert.ok(attempts > 1 && attempts <= 10, `replacement retries must be finite: ${attempts}`);
+  assert.equal(fs.readFileSync(target, 'utf8'), previous);
+  assert.equal(readRun(trace).processes[0].ended_at, null);
+  const pending = JSON.parse(fs.readFileSync(temporary, 'utf8'));
+  assert.equal(pending.processes[0].exit_code, 0);
+  assert.ok(pending.processes[0].ended_at);
+  const events = fs.readFileSync(path.join(trace.directory, 'events.jsonl'), 'utf8').trim().split('\n').map(JSON.parse);
+  assert.equal(events.filter(event => event.type === 'process_end').length, 1);
+  assert.match(fs.readFileSync(path.join(trace.directory, 'process.log'), 'utf8'), /child finished before publication failed/);
+  mock.mock.restore();
+  assert.equal(trace.finish('failed', failure).status, 'failed');
+  assert.ok(fs.existsSync(temporary), 'failed temporary evidence must remain available after finalization');
+  const next = setup('host-survives-publish-failure').trace;
+  await runProcess(next, process.execPath, ['-e', '']);
+  assert.equal(next.finish('completed').status, 'completed');
+});
+
+test('process-end event write failure also rejects from the child callback', { timeout: 10000 }, async t => {
+  const { trace } = setup('close-event-error');
+  const event = trace.event;
+  const failure = Object.assign(new Error('injected process-end event write failure'), { code: 'EIO' });
+  const mock = t.mock.method(trace, 'event', (type, details) => {
+    if (type === 'process_end') throw failure;
+    return event(type, details);
+  });
+  await assert.rejects(runProcess(trace, process.execPath, ['-e', '']), error => error === failure);
+  assert.equal(trace.manifest.processes[0].exit_code, 0);
+  mock.mock.restore();
+  assert.equal(trace.finish('failed', failure).status, 'failed');
+});
+
 test('nonzero exit and spawn failure retain their distinct causes and failure directory', async () => {
   for (const [name, exe, args, reason, code] of [
     ['nonzero', process.execPath, ['-e', 'console.error("known failure");process.exit(7)'], 'exit_nonzero', 7],

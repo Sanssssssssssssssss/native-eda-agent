@@ -6,10 +6,22 @@ import spawn from 'cross-spawn';
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const now = () => new Date().toISOString();
+const renameDelays = [10, 20, 40, 80, 160, 320];
+const renameWait = new Int32Array(new SharedArrayBuffer(4));
 const save = (file, value) => {
   const temporary = `${file}.${process.pid}.${randomUUID()}.tmp`;
-  fs.writeFileSync(temporary, JSON.stringify(value, null, 2) + '\n');
-  fs.renameSync(temporary, file);
+  const fd = fs.openSync(temporary, 'wx');
+  try { fs.writeFileSync(fd, JSON.stringify(value, null, 2) + '\n'); fs.fsyncSync(fd); }
+  finally { fs.closeSync(fd); }
+  // Windows readers/scanners can briefly deny replacement. Keep the old file
+  // intact until rename succeeds, and retain the temporary evidence on failure.
+  for (let attempt = 0; ; attempt++) {
+    try { fs.renameSync(temporary, file); return; }
+    catch (error) {
+      if (!['EPERM', 'EACCES', 'EBUSY'].includes(error.code) || attempt >= renameDelays.length) throw error;
+      Atomics.wait(renameWait, 0, 0, renameDelays[attempt]);
+    }
+  }
 };
 const forbidden = /(?:^|[\\/])(?:\.pi-state|\.git|node_modules)(?:[\\/]|$)|(?:^|[\\/])(?:auth\.json|credentials[^\\/]*|\.env(?:\.[^\\/]*)?)(?:$|[\\/])/i;
 const digestPattern = /^[a-f0-9]{64}$/;
@@ -370,10 +382,17 @@ export function runProcess(trace, exe, args, { signal, update, timeoutMs = 60000
       settled = true;
       clearTimeout(timeout); clearInterval(progress);
       signal?.removeEventListener('abort', abort);
-      fs.closeSync(fd);
-      Object.assign(record, { ended_at: now(), duration_ms: Math.round(performance.now() - started), exit_code: code, signal: exitSignal,
-        termination_reason: record.termination_reason || (error ? 'spawn_error' : code === 0 ? 'completed' : 'exit_nonzero'), error: error ? String(error) : null });
-      trace.event('process_end', record); trace.persist();
+      try {
+        fs.closeSync(fd);
+        Object.assign(record, { ended_at: now(), duration_ms: Math.round(performance.now() - started), exit_code: code, signal: exitSignal,
+          termination_reason: record.termination_reason || (error ? 'spawn_error' : code === 0 ? 'completed' : 'exit_nonzero'), error: error ? String(error) : null });
+        trace.event('process_end', record); trace.persist();
+      } catch (failure) {
+        // EventEmitter callbacks run after the Promise executor: throwing here
+        // would crash the host instead of rejecting this owned process task.
+        reject(failure);
+        return;
+      }
       if (error || code !== 0 || record.termination_reason !== 'completed') reject(new Error(`Process ${record.termination_reason} (exit ${code}); inspect ${logPath}${error ? `; ${error}` : ''}`));
       else resolve(record);
     };

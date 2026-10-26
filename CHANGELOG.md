@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Ran two native Pi designs from interface-only RTL with frozen independent checkers: DMA passes final host-triggered OOC verification, packet switch fails functional drain checks; engineering 1/2, autonomous session completion 0/2. Publish both submissions, original stubs, checks, failure history and provider usage in the [report](docs/from-zero-rtl-2026-10-27.md).
+- Fixed transient Windows trace replacement failures with bounded retries and propagated child-callback persistence errors without crashing the shared host. Added four fault regressions; 305 offline tests pass.
+
 - Qualified eight existing FPGA projects on A7-100T with fixed functional checks, synthesis, setup/hold, constraints, routing and zero DRC. Seven use native Pi sessions and host verification; FFT uses the native tool pipeline. Retained failed attempts and cumulative budgets separately from final passes.
 - Fixed Tcl constraint execution, netlist-verified asynchronous reset exceptions, routed-checkpoint report readback and AES compilation ordering. Added explicit native Tcl dependencies and visible I/O/reset evidence. Offline acceptance passes 301 tests; seven final sessions pass independent online evidence assessment. See [results](docs/a7-eight-projects.md).
 
