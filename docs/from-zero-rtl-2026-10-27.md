@@ -29,6 +29,8 @@ DMA 为 64 位数据、单 outstanding 的 AXI4 INCR master，支持排队描述
 
 宿主修复涉及 [trace 持久化](../src/trace.mjs) 和 [故障回归](../tests/trace.test.mjs)：独占临时文件、fsync、对 Windows 短暂锁占用做有界重试，并将进程回调中的持久化异常传给调用者。保留修复前副本和全部失败产物，**305 项离线测试通过**，其中新增 4 项持久化故障检查。[离线回执](../release/validation-from-zero-rtl.json) 不消耗模型 API、不启动 Vivado。
 
+截图复核还发现工作台将“仿真已结束”错误解释为“checker 通过”。已修正该说明：必须同时满足通过状态、通过标记、完整结束且无失败诊断；本次真实失败与通过记录分别做浏览器复核。底层工程判定保持原始结果。
+
 每项原定 6 轮 / 24 次 verifier 调用。中断后新建任务复制原候选，并扣除已用轮次和中断预留。DMA 最终共扣 6 轮、17 次调用额度（13 次完成调用 + 4 次中断预留）；交换机扣 4 轮、2 次调用，轮次包含中断/失败生成。DMA 最终 host-only 验收使用最后一轮额度。
 
 两条最终 Pi 会话均为失败终态，独立 online-agent 评测拒收其不完整交付：[DMA](../release/evaluation-from-zero-dma.json)、[交换机](../release/evaluation-from-zero-packet-switch.json)。DMA 的额外 verifier 没有改写 Pi 的失败记录。最终工作流 trace 核验通过，73 项输入快照完整、无输入漂移。

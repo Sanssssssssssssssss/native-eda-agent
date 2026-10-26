@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "scope": "Browser explanations for two existing real EDA receipts; no new EDA or model execution",
+  "checked_at": "2026-10-26T18:58:45.321Z",
+  "app_sha256": "d6640096b60f1486c75f0027999d4c0fd4a445fdc76f9f04c9957777661def78",
+  "checks": [
+    {
+      "run_id": "2026-10-26T18-35-29-755Z-eda_workflow_run-b5916565",
+      "expected": "Functional failure with failure diagnostic and no pass marker; no success explanation",
+      "passed": true,
+      "screenshot_sha256": "d204422306585fd076622525a5909362f238c7f6c568167015ab88fc741bd9eb"
+    },
+    {
+      "run_id": "2026-10-26T18-43-31-953Z-eda_workflow_run-a02d53a6",
+      "expected": "Passed DMA retains the complete successful checker explanation",
+      "passed": true,
+      "screenshot_sha256": "8787c60a8445f83a5e0f43b350b9f8b5dbb9f89a42a2a5de4bf33d04e3626076"
+    }
+  ],
+  "provider_calls": 0,
+  "eda_runs": 0
+}

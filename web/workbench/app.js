@@ -1071,14 +1071,23 @@ function domainDetail(d) {
     return `${d.observed.errors ?? "—"} 个错误，${d.observed.critical_warnings ?? "—"} 个严重警告，${d.observed.warnings ?? "—"} 个警告`;
   if (d.domain === "synthesis" && typeof d.observed === "number")
     return `${d.observed} 个未解析黑盒`;
-  if (d.domain === "functional" && d.observed?.completion_observed)
-    return "固定 checker 标记通过，仿真完整结束。";
+  if (d.domain === "functional" && d.observed) {
+    const observed = d.observed;
+    if (d.status === "passed" && observed.status === "pass" &&
+        observed.completion_observed && observed.marker_matches > 0 && !observed.failure_diagnostic)
+      return "固定 checker 标记通过，仿真完整结束。";
+    if (observed.failure_diagnostic)
+      return `仿真报告包含失败诊断；${observed.marker_matches > 0 ? "通过标记不能覆盖该失败。" : "未检出通过标记。"}`;
+    if (!observed.completion_observed) return "未取得完整仿真结果。";
+    if (!observed.marker_matches) return "仿真已结束，未检出固定 checker 的通过标记。";
+    return "已记录仿真结果，功能验收仍需核对。";
+  }
   if (d.domain === "constraints" && d.observed?.internal === "pass")
     return d.observed.io === 'pass' ? "内部时钟与 IO 约束检查通过。" : "内部时钟约束通过；IO 约束仍需核对。";
   if (d.domain === "routing" && d.observed === "pass")
     return "布线报告核验通过。";
   return (
-    d.reason ||
+    (d.reason === "verified_step_evidence_missing" ? "尚无可核验的步骤结果。" : d.reason) ||
     (d.status === "not_requested"
       ? "此任务未要求该领域验收。"
       : "见独立工具报告。")

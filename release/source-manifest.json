@@ -211,7 +211,7 @@
     "docs/evaluation.md": "fb80deed3965a28666ac1c1cc87b9ddfe7905dde39c9660dc27aa7a01c9ab8b6",
     "docs/fpga-knowledge-and-tools.md": "1beb9d1134a6c505b5c878918908755f4c9c4925b3f5bc12c93ad6224b56402d",
     "docs/fpga-native-tools-2026-10-24.md": "173e225c9ade4be65907ebf5a6d502e9387d8de3d80d3518475bf1da7dc822d9",
-    "docs/from-zero-rtl-2026-10-27.md": "e443312dd332d58953f54de8bac1711eb999b133acb114af7d1a707bcaf2e095",
+    "docs/from-zero-rtl-2026-10-27.md": "5edea4fe7882aee6a4405372dbc7997d14872158928244be53c0fd39f535b4cb",
     "docs/history/agent-foundation-validation-2026-10-23.md": "615121272eccf11ffa05b9cc28c1d0bcb061b3bfc6b2d08ec961a5c6e2355022",
     "docs/history/agent-static-audit-2026-10-24.md": "e0704e0d9776152185c5b7c72be293ae2ed486660c3b9c67b47c6fd5a3433880",
     "docs/history/codex-verilogeval-24-2026-10-23.md": "8b4901091bb650c144ef8e07355f1b8f1a1ec06575c10317be5caaca4c81c665",
@@ -263,7 +263,7 @@
     "results/evidence/c5bbe4ae2d5b-summary.json": "6bee98cbcad3057b3f233c87d14798bca06f5cd2e9f51d6a7dfb2c24011e9aa6",
     "results/evidence/c8f809c8c811-results.json": "698971c03597d3259843bf645f19ffee64ec2f9911dc6a3300a12af585f40d5d",
     "results/evidence/f5871e526baa-result.json": "b8bb457cebe01fc073003c19feaab4db2ba53ad45c55101000d98c4304996fde",
-    "web/workbench/app.js": "62a9a8997bb6057a2820c7e5700705e8efdff895940f754bad9916653e8ad32e",
+    "web/workbench/app.js": "d6640096b60f1486c75f0027999d4c0fd4a445fdc76f9f04c9957777661def78",
     "web/workbench/index.html": "ab3852d427c5603ff0910a955ad113ff359187b75ec7b791f04abd1643960c29",
     "web/workbench/style.css": "b2c60a3da175eae1f522bd4c270c596ebf9611468a4ba0c2613dd3400a255a05",
     ".github/ISSUE_TEMPLATE/bug_report.yml": "c04d6810dbbbd3173d1db8a4eacc2953df525bcb0445c6688ad7da487768922f",
@@ -539,7 +539,7 @@
     "README.md": "50c0256204821a9a803b4f76658514bea9afbbf7c4110755aed4fdfdcd273708",
     "AGENTS.md": "2cebd0191d64a557bb3c6773c54609a05949734b8d8b04f251c54ef2e83b346a",
     "CONTRIBUTING.md": "edc3402ecca70597044253ce132546878c709aa8ade7136adc5f4cce50d541cc",
-    "CHANGELOG.md": "f1dad2d9d88b5140939adf5416a8e02ff2c55438cfdd84dbcbbdee71f595a788",
+    "CHANGELOG.md": "930d2f8f3dbf927029698795cc889f5ac1a90d0b6e0c7f58bba84ee3c605abcc",
     "LICENSE": "b9c40cb8471d9dbdcb11b728d1c2a588d89a8aaf15a69bcc6c8c6991b9091f97",
     "THIRD_PARTY_NOTICES.md": "830b75d52ee197d05ed0c1f048c254a2e083388abf6a75512c51cb1ff9c0a4a2",
     ".gitignore": "0f928278848a3919a76cfc4e664ee65ad62fafeba9b2b7ca33141bfbf0865eaa",
@@ -870,6 +870,7 @@
     "vendor/ace-rtl/skills/ace-rtl/scripts/llm_call.py": "c7d510e1efcea5cacf50ad494d66d1539021633945b4416bbe004eea1767859e",
     "vendor/ace-rtl/skills/ace-rtl/scripts/setup_cvdp_native_env.sh": "b4d30181414f195c1e209d3928be31ed2432fbd9551533d6aafccb9885c8c170",
     "vendor/ace-rtl/skills/eda_tool_setup/SKILL.md": "dc8092b0110706e5b0c2d615656091d4f4f8ad51ea1af9fb6bfdd7caf5be5211",
-    "vendor/ace-rtl/skills/eda_tool_setup/scripts/setup_eda_env.example.sh": "ed3ca2b8963a97badf8739762133391004128d16261e901d4688027ba3de9bd1"
+    "vendor/ace-rtl/skills/eda_tool_setup/scripts/setup_eda_env.example.sh": "ed3ca2b8963a97badf8739762133391004128d16261e901d4688027ba3de9bd1",
+    "release/evaluation-from-zero-ui.json": "5319b2993bf33e83b7ed0d2843f709862366ac9cd9292b42aaed33cb185529ea"
   }
 }
