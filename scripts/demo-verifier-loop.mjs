@@ -50,7 +50,7 @@ const sessionResult=await runAgentSession({root,verification:configuration,promp
   limits:{maxTurns:4,timeoutSeconds:60},sessionFactory:async()=>({registry,session:{
     model:{provider:'offline-fixture',id:'no-model'},sessionId:'offline-demo',
     getSessionStats:()=>({sessionId:'offline-demo',tokens:{input:0,output:0,total:0},cost:0}),
-    subscribe:fn=>{listener=fn;return ()=>{};},bindExtensions:async()=>{},abort(){},dispose(){},
+    subscribe:fn=>{listener=fn;return ()=>{};},bindExtensions:async()=>{},setActiveToolsByName(){},abort(){},dispose(){},
     prompt:async prompt=>{
       generations++;listener({type:'turn_start'});
       if(generations===1)candidate=JSON.parse(prompt.split('[Host verification contract]\n')[1].split('\n')[0]).editable_sources[0];

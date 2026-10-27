@@ -8,6 +8,8 @@ import {prepareAgentTask,claimAgentTask,taskDelivery,guardTaskTool,activeTaskCon
 const save = (file, data) => fs.writeFileSync(file, JSON.stringify(data, null, 2) + '\n');
 const hash = value => createHash('sha256').update(value).digest('hex');
 const unknownAcceptance = reason => ({ status: 'unknown', reason, domains: [] });
+const verifiedTaskTools = ['read', 'write', 'edit', 'grep', 'find', 'ls',
+  'eda_task_context', 'eda_task_inspect', 'eda_knowledge', 'eda_sop', 'eda_preflight', 'eda_runs'];
 function sessionStats(session) {
   try { const stats = session?.getSessionStats(); return stats ? structuredClone(stats) : null; }
   catch { return null; } // Missing provider receipts must not become zero usage.
@@ -242,6 +244,8 @@ export async function runAgentSession({ root, prompt, limits = { maxTurns: 24, t
           ownedTask = claimAgentTask(root,task,registry,directory,{resume:resumeTask});
           verification = ownedTask.configuration;
           run.task = task;
+          // Narrow Pi's model declarations after binding; the host verifier keeps its full registry.
+          session.setActiveToolsByName(verifiedTaskTools);
           const { runVerifiedLoop } = await import('./verifier-loop.mjs');
           run.verification = await runVerifiedLoop({root, configuration: verification, registry: created.registry, prompt,
             signal: executionController.signal, directory,

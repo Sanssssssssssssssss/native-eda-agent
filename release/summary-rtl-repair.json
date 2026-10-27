@@ -1,0 +1,486 @@
+{
+  "schema_version": 1,
+  "checked_at": "2026-10-27T07:57:31.669Z",
+  "scope": "Continued repair of the same two frozen from-zero tasks; assisted diagnosis followed by native Pi repair and host verifier",
+  "scores": {
+    "latest_native_delivery": {
+      "passed": 2,
+      "total": 2
+    },
+    "original_first_verifier": {
+      "passed": 0,
+      "total": 2
+    },
+    "historical_report": "release/summary-from-zero-rtl.json"
+  },
+  "projects": [
+    {
+      "name": "dma",
+      "session": "cc0d20e9-1311-42fe-b5e5-0069d780f741",
+      "task": "artifacts/agent-task-4509e46b-b333-4505-8418-8fe128ffbfe5",
+      "native_run": "artifacts/native-agent-2026-10-27T07-26-26-927Z-b73bb7",
+      "native_status": "completed",
+      "provider": "commandcode",
+      "model": "z-ai/glm-5.3-flash",
+      "delivery": "passed",
+      "online_evaluation": {
+        "status": "passed",
+        "execution": {
+          "eligible": true,
+          "reason": "builtin_session_with_observed_responses",
+          "successful_assistant_messages": 2,
+          "scope": "Host factory and SDK event provenance; not independent provider billing verification."
+        },
+        "metrics": {
+          "rounds": 1,
+          "verifier_calls": 4,
+          "first_pass": true,
+          "repair_pass": false,
+          "fixed_scope_valid": true,
+          "originals_preserved": true
+        },
+        "directory": "artifacts/evaluation-2026-10-27T07-30-07-118Z-5e21e2",
+        "receipt": "artifacts/rtl-repair-20261027/dma-final-online-eval.json"
+      },
+      "workflow": "artifacts/2026-10-27T07-26-49-579Z-eda_workflow_run-f2144601",
+      "acceptance": "passed",
+      "candidate": {
+        "path": "artifacts/agent-task-4509e46b-b333-4505-8418-8fe128ffbfe5/candidate/projects/rtl-from-zero/dma/z_dma.sv",
+        "sha256": "1f3375a94da0567eb988e32f51c468b0819a1a676936d0a1416f936fc0b4d238",
+        "lines": 325,
+        "bytes": 13254,
+        "author": "Native Pi via CommandCode",
+        "manual_functional_rtl_edits": 0
+      },
+      "frozen_input_hashes": {
+        "projects/rtl-from-zero/dma/SPEC.md": "9a6ac7ed3d25f1e207e6f1e7c88ddd258ae101bbd04e6f629a65288b86041eeb",
+        "projects/rtl-from-zero/dma/z_dma.sv": "94662d5460165d9c2e1e74a28ec296033dea6b13e2ca4af04f0b95fa07905689",
+        "projects/rtl-from-zero/dma/tb_z_dma.sv": "0a391e0dc33efb54ffa99603a594503a7ff8e4f30a6c25c6b67944fb5c3ef9da",
+        "projects/rtl-from-zero/dma/clocks.xdc": "27abd27e1c810b0253cb9eae0feda4321e29465eea7b94eae71620ed40d1b14d",
+        "examples/workflows/from-zero-dma.json": "6ab51002e9a9b742f1f1cc9d2e8d8030d56c82c4cc5098497760fe27b158546d",
+        "projects/a7-validation/ooc-context.tcl": "87bad1c69d5944782eb71f58a4c2ee18a21d3a4bc0b0ec0c1204803c16381c13"
+      },
+      "originals_preserved": true,
+      "functional": {
+        "acceptance": {
+          "status": "pass",
+          "pass_marker": "FROM_ZERO_PASS project=dma",
+          "marker_matches": 1,
+          "completion_observed": true,
+          "failure_diagnostic": false,
+          "scope": "Explicit testbench marker, completion and diagnostic checks; semantic assertions remain the testbench responsibility."
+        },
+        "marker": "FROM_ZERO_PASS project=dma descriptors=128 bytes=84491 protocol_checks=130590"
+      },
+      "engineering": {
+        "setup_slack_ns": 0.313,
+        "hold_slack_ns": 0.135,
+        "utilization": {
+          "Slice LUTs": 331,
+          "Slice Registers": 214,
+          "Block RAM Tile": 0,
+          "RAMB36/FIFO*": 0,
+          "RAMB18": 0,
+          "DSPs": 0
+        },
+        "route": {
+          "routable": 655,
+          "fully_routed": 655,
+          "errors": 0,
+          "status": "pass"
+        },
+        "assessment": {
+          "setup_hold": "pass",
+          "clock_and_internal_constraints": "pass",
+          "io_constraints": "pass",
+          "verified_async_reset_exceptions": [],
+          "routing": "pass",
+          "cdc": "unknown",
+          "overall_design_acceptance": "not_evaluated",
+          "board_signoff": false,
+          "scope": "Per-report diagnostics only. Positive setup/hold slack does not validate CDC, IO timing, functional correctness or hardware."
+        },
+        "drc": {
+          "errors": 0,
+          "critical_warnings": 0,
+          "warnings": 0
+        }
+      },
+      "rounds": [
+        {
+          "index": 1,
+          "run": "2026-10-27T07-26-49-579Z-eda_workflow_run-f2144601",
+          "outcome": "passed",
+          "acceptance": "passed",
+          "calls": 4,
+          "candidate_hashes": {
+            "artifacts/agent-task-4509e46b-b333-4505-8418-8fe128ffbfe5/candidate/projects/rtl-from-zero/dma/z_dma.sv": "1f3375a94da0567eb988e32f51c468b0819a1a676936d0a1416f936fc0b4d238"
+          },
+          "failure": null
+        }
+      ],
+      "history": [
+        {
+          "session": "6a2c7d0a-00dd-428e-97a1-5f2d341c4fb6",
+          "run": "artifacts/native-agent-2026-10-27T06-19-20-641Z-306460",
+          "status": "completed",
+          "provider": "commandcode",
+          "model": "deepseek/deepseek-v4-flash",
+          "error": null,
+          "rounds": 1,
+          "calls": 4,
+          "reserved_calls": 0
+        },
+        {
+          "session": "6e68be2a-84d9-4233-88f3-2fbe196372c3",
+          "run": "artifacts/native-agent-2026-10-27T06-28-09-782Z-29bd71",
+          "status": "completed",
+          "provider": "commandcode",
+          "model": "deepseek/deepseek-v4-flash",
+          "error": null,
+          "rounds": 1,
+          "calls": 4,
+          "reserved_calls": 0
+        },
+        {
+          "session": "41e5783b-1e48-42bb-8d40-55ace92ed84d",
+          "run": "artifacts/native-agent-2026-10-27T06-44-07-208Z-b3040d",
+          "status": "completed",
+          "provider": "commandcode",
+          "model": "deepseek/deepseek-v4-flash",
+          "error": null,
+          "rounds": 1,
+          "calls": 4,
+          "reserved_calls": 0
+        },
+        {
+          "session": "11e1cf29-718c-4a25-af7d-d77f05822351",
+          "run": "artifacts/native-agent-2026-10-27T06-53-08-793Z-f98fdf",
+          "status": "failed",
+          "provider": "commandcode",
+          "model": "Qwen/Qwen3.8-Max",
+          "error": "400: {\"message\":\"{/\"error/\":{/\"message/\":/\"developer is not one of ['system', 'assistant', 'user', 'tool', 'function']/\",/\"type/\":/\"invalid_request_error/\",/\"param/\":null,/\"code/\":/\"invalid_parameter_error/\"},/\"id/\":/\"chatcmpl-5ee2afa6-13ff-4e0f-bdf3-700be6faba28/\",/\"request_id/\":/\"5ee2afa6-13ff-4e0f-bdf3-700be6faba28/\"}\",\"type\":\"invalid_request_error\"}",
+          "rounds": 0,
+          "calls": 0,
+          "reserved_calls": 0
+        },
+        {
+          "session": "cc8b1711-9074-4318-b0d4-155e3e3e665f",
+          "run": "artifacts/native-agent-2026-10-27T06-55-03-444Z-230570",
+          "status": "completed",
+          "provider": "commandcode",
+          "model": "Qwen/Qwen3.8-Max",
+          "error": null,
+          "rounds": 1,
+          "calls": 4,
+          "reserved_calls": 0
+        }
+      ],
+      "budget": {
+        "cumulative_max_rounds": 12,
+        "cumulative_max_calls": 48,
+        "prior": {
+          "name": "dma",
+          "previous_round_slots": 11,
+          "previous_call_debit": 33,
+          "remaining_rounds": 1,
+          "remaining_calls": 15
+        },
+        "round_slots_debited": 12,
+        "calls_debited": 37
+      },
+      "observed_model_tool_calls": 11,
+      "known_existing_rtl_reads": [],
+      "evaluation_sha256": "54873b322ac21d89acaa35c779cf4d833af7749511ef350ef91af8fa3e5c49c1",
+      "published_candidate": {
+        "path": "projects/rtl-from-zero/repaired/dma/z_dma.sv",
+        "sha256": "1f3375a94da0567eb988e32f51c468b0819a1a676936d0a1416f936fc0b4d238"
+      }
+    },
+    {
+      "name": "packet-switch",
+      "session": "9fac0614-6a03-44be-a5cb-c1e0ac834cf5",
+      "task": "artifacts/agent-task-da52cfb3-d0d8-4256-aff9-d5ba18a2d315",
+      "native_run": "artifacts/native-agent-2026-10-27T07-51-42-524Z-dbdc72",
+      "native_status": "completed",
+      "provider": "commandcode",
+      "model": "z-ai/glm-5.3-flash",
+      "delivery": "passed",
+      "online_evaluation": {
+        "status": "passed",
+        "execution": {
+          "eligible": true,
+          "reason": "builtin_session_with_observed_responses",
+          "successful_assistant_messages": 4,
+          "scope": "Host factory and SDK event provenance; not independent provider billing verification."
+        },
+        "metrics": {
+          "rounds": 1,
+          "verifier_calls": 4,
+          "first_pass": true,
+          "repair_pass": false,
+          "fixed_scope_valid": true,
+          "originals_preserved": true
+        },
+        "directory": "artifacts/evaluation-2026-10-27T07-57-05-411Z-2f865b",
+        "receipt": "artifacts/rtl-repair-20261027/packet-switch-final-online-eval.json"
+      },
+      "workflow": "artifacts/2026-10-27T07-52-19-308Z-eda_workflow_run-cda52b50",
+      "acceptance": "passed",
+      "candidate": {
+        "path": "artifacts/agent-task-da52cfb3-d0d8-4256-aff9-d5ba18a2d315/candidate/projects/rtl-from-zero/packet-switch/z_packet_switch.sv",
+        "sha256": "b67bac27b2e4cca2abadc4b66ad292d7074d1985f2b9286abe7c40863ef2e276",
+        "lines": 395,
+        "bytes": 16108,
+        "author": "Native Pi via CommandCode",
+        "manual_functional_rtl_edits": 0
+      },
+      "frozen_input_hashes": {
+        "projects/rtl-from-zero/packet-switch/SPEC.md": "8127fb3f808ce993dc3ce6c4c4d506536d4ad06bb254b79a38271202e1ff9e23",
+        "projects/rtl-from-zero/packet-switch/z_packet_switch.sv": "2e54cb3a83165686960b42834558c225532e983df8bb157b655444a5e99bea21",
+        "projects/rtl-from-zero/packet-switch/tb_z_packet_switch.sv": "0a8eb56f3fad95741a6c9c16a75b7a213a070b3c1a216d4d693721072af759cd",
+        "projects/rtl-from-zero/packet-switch/clocks.xdc": "54dd0212fd59b151722995cd24e689e32ebfc609e3cf1da1b57e8c3638c159e3",
+        "examples/workflows/from-zero-packet-switch.json": "757f014675a09e10d76fe9832a4b409d4b4474b6625f6b293213efb7591704b4",
+        "projects/a7-validation/ooc-context.tcl": "87bad1c69d5944782eb71f58a4c2ee18a21d3a4bc0b0ec0c1204803c16381c13"
+      },
+      "originals_preserved": true,
+      "functional": {
+        "acceptance": {
+          "status": "pass",
+          "pass_marker": "FROM_ZERO_PASS project=packet-switch",
+          "marker_matches": 1,
+          "completion_observed": true,
+          "failure_diagnostic": false,
+          "scope": "Explicit testbench marker, completion and diagnostic checks; semantic assertions remain the testbench responsibility."
+        },
+        "marker": "FROM_ZERO_PASS project=packet-switch packets=1860 beats=23055 protocol_checks=513443"
+      },
+      "engineering": {
+        "setup_slack_ns": 0.684,
+        "hold_slack_ns": 0.101,
+        "utilization": {
+          "Slice LUTs": 789,
+          "Slice Registers": 644,
+          "Block RAM Tile": 0,
+          "RAMB36/FIFO*": 0,
+          "RAMB18": 0,
+          "DSPs": 0
+        },
+        "route": {
+          "routable": 1567,
+          "fully_routed": 1567,
+          "errors": 0,
+          "status": "pass"
+        },
+        "assessment": {
+          "setup_hold": "pass",
+          "clock_and_internal_constraints": "pass",
+          "io_constraints": "pass",
+          "verified_async_reset_exceptions": [],
+          "routing": "pass",
+          "cdc": "unknown",
+          "overall_design_acceptance": "not_evaluated",
+          "board_signoff": false,
+          "scope": "Per-report diagnostics only. Positive setup/hold slack does not validate CDC, IO timing, functional correctness or hardware."
+        },
+        "drc": {
+          "errors": 0,
+          "critical_warnings": 0,
+          "warnings": 0
+        }
+      },
+      "rounds": [
+        {
+          "index": 1,
+          "run": "2026-10-27T07-52-19-308Z-eda_workflow_run-cda52b50",
+          "outcome": "passed",
+          "acceptance": "passed",
+          "calls": 4,
+          "candidate_hashes": {
+            "artifacts/agent-task-da52cfb3-d0d8-4256-aff9-d5ba18a2d315/candidate/projects/rtl-from-zero/packet-switch/z_packet_switch.sv": "b67bac27b2e4cca2abadc4b66ad292d7074d1985f2b9286abe7c40863ef2e276"
+          },
+          "failure": null
+        }
+      ],
+      "history": [
+        {
+          "session": "9402f779-2fae-4150-a982-9653cb8ff7f0",
+          "run": "artifacts/native-agent-2026-10-27T06-19-22-315Z-c1be1d",
+          "status": "failed",
+          "provider": "commandcode",
+          "model": "deepseek/deepseek-v4-flash",
+          "error": "Request timed out.",
+          "rounds": 0,
+          "calls": 0,
+          "reserved_calls": 0
+        },
+        {
+          "session": "9322881c-fade-4e26-b796-c743b6c4efc3",
+          "run": "artifacts/native-agent-2026-10-27T06-23-53-493Z-9b7e13",
+          "status": "failed",
+          "provider": "commandcode",
+          "model": "deepseek/deepseek-v4-flash",
+          "error": "terminated",
+          "rounds": 0,
+          "calls": 0,
+          "reserved_calls": 0
+        },
+        {
+          "session": "abefc4f4-6486-4084-a3fc-b0d1eaaee8fc",
+          "run": "artifacts/native-agent-2026-10-27T06-28-08-380Z-64a31a",
+          "status": "failed",
+          "provider": "commandcode",
+          "model": "deepseek/deepseek-v4-flash",
+          "error": "terminated",
+          "rounds": 2,
+          "calls": 2,
+          "reserved_calls": 0
+        },
+        {
+          "session": "46625027-8dc2-48c7-95d5-7e4e3af6f8e1",
+          "run": "artifacts/native-agent-2026-10-27T06-44-04-654Z-8a5096",
+          "status": "failed",
+          "provider": "commandcode",
+          "model": "deepseek/deepseek-v4-flash",
+          "error": "terminated",
+          "rounds": 0,
+          "calls": 0,
+          "reserved_calls": 0
+        },
+        {
+          "session": "0daea100-ca4c-49f2-9589-b023285192a2",
+          "run": "artifacts/native-agent-2026-10-27T06-53-06-240Z-20a049",
+          "status": "failed",
+          "provider": "commandcode",
+          "model": "Qwen/Qwen3.8-Max",
+          "error": "400: {\"message\":\"{/\"error/\":{/\"message/\":/\"developer is not one of ['system', 'assistant', 'user', 'tool', 'function']/\",/\"type/\":/\"invalid_request_error/\",/\"param/\":null,/\"code/\":/\"invalid_parameter_error/\"},/\"id/\":/\"chatcmpl-0378fd27-3446-47cb-b9b2-5d8950c1b298/\",/\"request_id/\":/\"0378fd27-3446-47cb-b9b2-5d8950c1b298/\"}\",\"type\":\"invalid_request_error\"}",
+          "rounds": 0,
+          "calls": 0,
+          "reserved_calls": 0
+        },
+        {
+          "session": "bfeea62e-2993-4670-be0b-f62ed366b2e1",
+          "run": "artifacts/native-agent-2026-10-27T06-55-00-989Z-74c383",
+          "status": "failed",
+          "provider": "commandcode",
+          "model": "Qwen/Qwen3.8-Max",
+          "error": "Stream ended without finish_reason",
+          "rounds": 0,
+          "calls": 0,
+          "reserved_calls": 0
+        },
+        {
+          "session": "c7a5c28c-6c62-4cfa-a153-31b55404f833",
+          "run": "artifacts/native-agent-2026-10-27T07-02-56-056Z-65926d",
+          "status": "stopped",
+          "provider": "commandcode",
+          "model": "Qwen/Qwen3.8-Max",
+          "error": null,
+          "rounds": 0,
+          "calls": 0,
+          "reserved_calls": 0
+        },
+        {
+          "session": "0e30024c-cabc-4ede-84d4-b9ccfa4abfc7",
+          "run": "artifacts/native-agent-2026-10-27T07-12-57-205Z-63f4cb",
+          "status": "failed",
+          "provider": "commandcode",
+          "model": "Qwen/Qwen3.8-Max",
+          "error": "terminated",
+          "rounds": 1,
+          "calls": 1,
+          "reserved_calls": 0
+        },
+        {
+          "session": "afe91b60-aa2b-46fe-98f0-128cd002dac0",
+          "run": "artifacts/native-agent-2026-10-27T07-26-24-588Z-f92a6e",
+          "status": "failed",
+          "provider": "commandcode",
+          "model": "z-ai/glm-5.3-flash",
+          "error": "The operation was aborted due to timeout",
+          "rounds": 0,
+          "calls": 0,
+          "reserved_calls": 0
+        },
+        {
+          "session": "373d787c-359e-4efc-b742-4eaa5158d05d",
+          "run": "artifacts/native-agent-2026-10-27T07-41-36-385Z-ab9505",
+          "status": "completed",
+          "provider": "commandcode",
+          "model": "z-ai/glm-5.3-flash",
+          "error": null,
+          "rounds": 2,
+          "calls": 2,
+          "reserved_calls": 0
+        }
+      ],
+      "budget": {
+        "cumulative_max_rounds": 24,
+        "cumulative_max_calls": 48,
+        "prior": {
+          "name": "packet-switch",
+          "previous_round_slots": 18,
+          "previous_call_debit": 7,
+          "remaining_rounds": 6,
+          "remaining_calls": 41,
+          "extension_reason": "User requested continued completion; transport failures consumed generation slots. Six explicit additional slots; all earlier debits and fixed checks retained."
+        },
+        "round_slots_debited": 19,
+        "calls_debited": 11
+      },
+      "observed_model_tool_calls": 36,
+      "known_existing_rtl_reads": [],
+      "evaluation_sha256": "2a2649de24acbf0ed03045b6d2a2322c9739e7566a79719bb3cbe602f2066967",
+      "published_candidate": {
+        "path": "projects/rtl-from-zero/repaired/packet-switch/z_packet_switch.sv",
+        "sha256": "b67bac27b2e4cca2abadc4b66ad292d7074d1985f2b9286abe7c40863ef2e276"
+      }
+    }
+  ],
+  "usage": {
+    "requests": 68,
+    "known_tokens": 1322561,
+    "unknown_reserved_tokens": 6241540,
+    "cap": 10000000,
+    "known_plus_unknown_reservation": 7564101,
+    "other_provider_calls": 0,
+    "outer_codex_tokens": null
+  },
+  "cumulative_commandcode": {
+    "previous_debit": 19754450,
+    "current_debit": 7564101,
+    "total_debit": 27318551,
+    "other_server_reservation": 5000000,
+    "user_cap": 50000000
+  },
+  "provider": {
+    "requested_models": [
+      "deepseek/deepseek-v4-flash",
+      "gpt-6.1-sol",
+      "gpt-5.4-mini",
+      "Qwen/Qwen3.8-Max",
+      "z-ai/glm-5.3-flash"
+    ],
+    "observed_models": [
+      "deepseek/deepseek-v4-flash",
+      "deepseek/deepseek-v4.1-flash",
+      "Qwen/Qwen3.8-Max",
+      "qwen3.8-max",
+      "z-ai/glm-5.3-flash"
+    ],
+    "statuses": {
+      "completed": 46,
+      "transport_error": 4,
+      "stream_error": 13,
+      "http_error": 4,
+      "incomplete_stream": 1
+    }
+  },
+  "limitations": [
+    "Visible local tests with human/Codex diagnostic assistance; not blind pass@1",
+    "Single-clock A7-100T 100MHz OOC; no pin assignment, board test or formal proof",
+    "Unknown provider usage stays reserved, not claimed as measured consumption",
+    "Policy-based read scope; no OS read isolation",
+    "Provider thinking-disabled field emitted but effective disabling unproven"
+  ]
+}

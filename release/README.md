@@ -1,8 +1,10 @@
 # Publication receipts
 
+The [continued RTL repair](../docs/rtl-repair-2026-10-27.md) passes both final native Pi deliveries and fixed OOC verifiers. [Summary](summary-rtl-repair.json), [online evaluations](evaluation-rtl-repair.json) and [310 offline checks](validation-rtl-repair.json) retain separate scopes. Original failures, provider interruptions, cumulative budgets and assisted-diagnosis limits remain visible.
+
 Start with the [project README](../README.md), [workflow guide](../docs/workflows.md) and [repository comparison](../docs/history/repository-comparison-2026-10-25.md).
 
-The [two from-zero RTL tasks](../docs/from-zero-rtl-2026-10-27.md) score engineering acceptance 1/2 and autonomous Pi completion 0/2. [Summary](summary-from-zero-rtl.json) preserves original stubs, candidate hashes, frozen inputs, intermediate failures, host-only final DMA verification and usage. [305 offline tests](validation-from-zero-rtl.json) cover the trace persistence repair. The failed native sessions retain their separate [DMA](evaluation-from-zero-dma.json) and [switch](evaluation-from-zero-packet-switch.json) evaluations. Raw conversations and provider captures remain local.
+The initial batch of [two from-zero RTL tasks](../docs/from-zero-rtl-2026-10-27.md) scored engineering acceptance 1/2 and autonomous Pi completion 0/2. [Summary](summary-from-zero-rtl.json) preserves original stubs, candidate hashes, frozen inputs, intermediate failures, host-only final DMA verification and usage. [305 offline tests](validation-from-zero-rtl.json) cover the trace persistence repair. The failed native sessions retain their separate [DMA](evaluation-from-zero-dma.json) and [switch](evaluation-from-zero-packet-switch.json) evaluations. Raw conversations and provider captures remain local.
 
 The [A7-100T qualification](../docs/a7-eight-projects.md) passes eight existing projects after framework and integration repairs. [Case receipts](summary-a7-eight.json) preserve final outcomes, earlier failures, protocol hashes and cumulative usage. [Sanitized reports](summary-a7-eight-evidence.json), [seven Pi session assessments](evaluation-a7-eight.json) and [301 offline tests](validation-a7-eight.json) provide separate evidence. The cases establish OOC engineering acceptance; they do not establish blind RTL generation, complete CDC signoff or hardware operation.
 

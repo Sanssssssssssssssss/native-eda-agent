@@ -226,7 +226,7 @@ function recordingFixture(t) {
   return root;
 }
 const fakeSession = overrides => ({getSessionStats: () => ({sessionId: 'task-session'}), subscribe: () => () => {},
-  bindExtensions: async () => {}, prompt: async () => {}, dispose() {}, ...overrides});
+  bindExtensions: async () => {}, setActiveToolsByName() {}, prompt: async () => {}, dispose() {}, ...overrides});
 
 test('resumed usage records a frozen run delta separately from cumulative session totals', async t => {
   const root = recordingFixture(t), sessionDir = path.join(root, '.eda-state/pi-sessions');

@@ -2,7 +2,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import {createHash} from 'node:crypto';
-import {inspectAgentTask, taskDelivery} from './agent-task.mjs';
+import {inspectAgentTask, taskDelivery, activeTaskContext} from './agent-task.mjs';
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const fail = (message, statusCode = 400) => Object.assign(new Error(message), {statusCode});
@@ -27,7 +27,21 @@ function read(root, name) {
 export function taskFiles(root, id, registry) {
   const checked = inspectAgentTask(root, taskPath(id), registry);
   const editable = new Set(checked.contract.verification.editable_sources);
-  return {id, delivery:taskDelivery(root, taskPath(id), registry), files:Object.entries(checked.contract.mapping)
+  const delivery=taskDelivery(root,taskPath(id),registry);
+  let progress=null;
+  if(delivery.status==='running') {
+    // The open checkpoint is observational only. Never promote its verdict or
+    // budget into the sealed delivery or recovery decision.
+    try {
+      const context=activeTaskContext(root,taskPath(id),registry);
+      const budget=Object.fromEntries(Object.entries(context.budget).map(([key,value])=>[key,
+        Number.isSafeInteger(value)&&value>=0?value:null]));
+      progress={available:true,phase:context.phase,budget,observed_at:new Date().toISOString()};
+    }catch {
+      progress={available:false,observed_at:new Date().toISOString()};
+    }
+  }
+  return {id, delivery, progress, files:Object.entries(checked.contract.mapping)
     .filter(([name]) => source.test(name)).map(([original,candidate]) => ({original,candidate,
       editable:editable.has(candidate), frozen_sha256:checked.contract.original.plan.input_hashes[original]}))};
 }

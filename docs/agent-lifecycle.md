@@ -22,7 +22,7 @@ flowchart LR
 |---|---|---|
 | 准备任务 | [agent-task](../src/agent-task.mjs) 的 `prepareAgentTask`；原生 `eda_task_prepare` | 使用现有 workflow 的 checks/profile；识别固定 testbench top；保存合同和哈希 |
 | 候选隔离 | 同模块复制声明的源文件、约束和 include 文件树，重写工具路径 | 保留相对目录；检查原始输入、候选保护文件、代码与知识的漂移；不覆盖原始 RTL |
-| 生成与工具调用 | [agent-session](../src/agent-session.mjs)、[extension](../src/extension.ts) | Pi 继续使用 read/edit/write、codemode 和检索；写入只允许候选 RTL；shell、任意 MCP 与模型发起的 EDA 调用被阻止，防止绕过 verifier 预算 |
+| 生成与工具调用 | [agent-session](../src/agent-session.mjs)、[extension](../src/extension.ts) | 固定验证任务用 Pi 原生 `setActiveToolsByName` 暴露文件操作、任务检查和知识等 12 项工具；宿主 verifier 保留完整注册表。普通探索会话保持完整工具集。写入只允许候选 RTL，shell 与模型发起的 EDA 调用由原准入守卫阻止 |
 | 验证与修复 | [verifier-loop](../src/verifier-loop.mjs) | 每轮独立 workflow；宿主回读证据；原版 ACE 组件只提供修复建议；同候选同失败停止 |
 | 按证据选知识 | [task-context](../src/task-context.mjs) | 首轮 planning，后续由实际失败域选择规则与 SOP；每轮记录选择和来源哈希；检索命中不代表 SOP 已遵循 |
 | 压缩后恢复上下文 | [eda-coordinator](../src/eda-coordinator.mjs) 的 Pi `context` hook | 每次请求重建固定合同、可编辑文件、阶段、已用与预留预算；过往成功摘要不能接受新候选；保留 Pi 默认压缩 |
