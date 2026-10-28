@@ -43,21 +43,9 @@
 
 ## 架构
 
-```mermaid
-flowchart LR
-  A[Codex / Pi / CLI / 本地工作台] --> K[任务上下文 + 知识 + SOP]
-  K --> W[任务规格 + 固定 checks + 工程目标]
-  A --> W
-  W --> R[共享工具注册表]
-  R --> Q[trace + 资源队列]
-  Q --> E[XSim / Vivado / LTspice]
-  Q --> M[社区 MCP 代理]
-  E --> V[宿主回读证据 + 分领域验收]
-  M --> V
-  V --> T[结果 / checkpoint / 证据]
-  T --> A
-  T --> B[离线 / 真实 EDA / Agent 会话评测]
-```
+![EDA Agent 当前框架](docs/media/framework-overview.png)
+
+[框架总览与源码入口](docs/framework-overview.md) · [可缩放交互图](docs/media/framework-overview.html)（下载后本地打开）
 
 验证任务会按实际失败域自动检索 RAG/SOP，普通探索会话仍可按需调用知识工具。宿主执行固定参数、预算、检查与恢复条件；模型负责分析、查阅和修复。Pi 会话与 CLI 共用驱动，支持会话续接和公开事件。仓库默认关闭模型 API；授权后在本机配置提供商。原生 Pi 1.4、CommandCode 与真实 XSim/Vivado 的限定实测见 [稳定性记录](docs/stability-2026-10-26.md)。向量索引、自动答案引用核验与强沙箱尚未提供。
 

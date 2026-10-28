@@ -7,6 +7,7 @@
 | 想了解什么 | 当前入口 |
 |---|---|
 | 项目能做什么、怎样启动 | [项目 README](../README.md) |
+| 当前框架架构图、任务闭环和模块职责 | [框架总览](framework-overview.md) |
 | 8 个 A7-100T 工程的完整验收、失败修复和用量 | [工程实测](a7-eight-projects.md) · [复跑流程](../projects/a7-validation/README.md) |
 | 两项从零 RTL 修复闭环与提供商设置 | [续修验收](rtl-repair-2026-10-27.md) · [Pi 配置](pi-provider-tuning.md) |
 | 两项从零 RTL 的生成、固定 verifier、失败与用量 | [从零实测](from-zero-rtl-2026-10-27.md) · [空壳与最终提交](../projects/rtl-from-zero/README.md) |
