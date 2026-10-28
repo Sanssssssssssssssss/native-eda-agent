@@ -2,9 +2,22 @@
 
 当前框架以 **原生 Pi 1.4 会话负责生成与修复，以宿主 verifier 负责工程验收**。工作台、CLI 和 MCP 共用工具合同、执行调度与证据体系。下图按 2026-10-28 本地源码整理，描述逻辑模块；各节点不代表独立服务或数据库。
 
-![EDA Agent 框架](media/framework-overview.png)
-
-[交互图 HTML](media/framework-overview.html)（下载后本地打开，可缩放、搜索和导出） · [图源 JSON](media/framework-overview.architecture.json) · [图的验证回执](../release/validation-framework-overview.json)
+```mermaid
+flowchart TD
+  U["用户 / CLI / 工作台"] --> T["任务合同：固定输入、检查与预算"]
+  T --> P["Pi Agent 运行循环"]
+  K["RAG / SOP：按阶段选择上下文"] -.-> P
+  P --> M["主模型：分析、生成或修复 RTL"]
+  M --> C["隔离候选 RTL"]
+  C --> V["宿主 Verifier：固定工作流与独立验收"]
+  V --> E["EDA 执行器：XSim / Vivado"]
+  E --> R["证据回读：功能、时序、DRC、布线"]
+  R -->|失败证据 / ACE-RTL 反馈| P
+  R -->|通过| D["交付：RTL、报告、delivery.json"]
+  E -.-> L["Trace / 产物 / 分类评测"]
+  classDef default fill:transparent,stroke:#777,stroke-width:1px
+  linkStyle default stroke:#888,stroke-width:1px
+```
 
 ## 一次任务怎样闭环
 
@@ -37,4 +50,4 @@
 
 当前知识库没有向量索引或模型重排；自然语言 SOP 遵循率、答案引用忠实度尚未独立评分。修改范围属于工具策略约束，没有操作系统级强沙箱。工作台面向本机单用户；Synopsys 在独立项目中，商业执行需要授权。社区、Ross 和 LTspice 的安装与连接状态需按本机检查，图中出现后端不表示当前会话全部连通。
 
-本次整理只核对源码、既有回执和架构图显示，没有新增模型 API 调用或 EDA 实跑。图由 Archify 2.16 生成，附带[许可](media/ARCHIFY-LICENSE.txt)。更多细节：[任务生命周期](agent-lifecycle.md) · [RAG 与 SOP](knowledge-and-sops.md) · [工作流与 trace 合同](agent-workflow-and-trace-contract.md) · [协作与 trace 文档](agent-framework-and-traces.md)。
+本次整理只核对源码、既有回执和架构图显示，没有新增模型 API 调用或 EDA 实跑。图直接使用 Mermaid，在 README 与本文中渲染。更多细节：[任务生命周期](agent-lifecycle.md) · [RAG 与 SOP](knowledge-and-sops.md) · [工作流与 trace 合同](agent-workflow-and-trace-contract.md) · [协作与 trace 文档](agent-framework-and-traces.md)。

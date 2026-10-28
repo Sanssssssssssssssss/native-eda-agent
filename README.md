@@ -43,9 +43,24 @@
 
 ## 架构
 
-![EDA Agent 当前框架](docs/media/framework-overview.png)
+```mermaid
+flowchart TD
+  U["用户 / CLI / 工作台"] --> T["任务合同：固定输入、检查与预算"]
+  T --> P["Pi Agent 运行循环"]
+  K["RAG / SOP：按阶段选择上下文"] -.-> P
+  P --> M["主模型：分析、生成或修复 RTL"]
+  M --> C["隔离候选 RTL"]
+  C --> V["宿主 Verifier：固定工作流与独立验收"]
+  V --> E["EDA 执行器：XSim / Vivado"]
+  E --> R["证据回读：功能、时序、DRC、布线"]
+  R -->|失败证据 / ACE-RTL 反馈| P
+  R -->|通过| D["交付：RTL、报告、delivery.json"]
+  E -.-> L["Trace / 产物 / 分类评测"]
+  classDef default fill:transparent,stroke:#777,stroke-width:1px
+  linkStyle default stroke:#888,stroke-width:1px
+```
 
-[框架总览与源码入口](docs/framework-overview.md) · [可缩放交互图](docs/media/framework-overview.html)（下载后本地打开）
+[框架总览与源码入口](docs/framework-overview.md)
 
 验证任务会按实际失败域自动检索 RAG/SOP，普通探索会话仍可按需调用知识工具。宿主执行固定参数、预算、检查与恢复条件；模型负责分析、查阅和修复。Pi 会话与 CLI 共用驱动，支持会话续接和公开事件。仓库默认关闭模型 API；授权后在本机配置提供商。原生 Pi 1.4、CommandCode 与真实 XSim/Vivado 的限定实测见 [稳定性记录](docs/stability-2026-10-26.md)。向量索引、自动答案引用核验与强沙箱尚未提供。
 
